@@ -24,6 +24,7 @@ from .control import (
     finite_horizon_nominal_policy,
     point_in_convex_polygon,
     spectral_radius,
+    synthesize_hinf,
 )
 from .model import EvaporatorModel
 
@@ -79,6 +80,11 @@ class OnlineThetaLearner:
         self.refinement_uncovered_count = 0
         self.refinement_max_excess = 0.0
         self.refinement_relative_rpi_change = float("nan")
+        self.robust_region_search_diagnostics: list[dict[str, object]] = []
+        self.last_feasible_scale = float("nan")
+        self.first_infeasible_scale = float("nan")
+        self.robust_region_max_sample_residual_norm = float("nan")
+        self.self_consistency_s_plus_z_passed = False
 
     def observe_transition(
         self,
@@ -184,6 +190,17 @@ class OnlineThetaLearner:
             * invariant_area / max(self.initial_invariant_area, 1e-12)
         )
 
+    @staticmethod
+    def _region_kwargs(design: SafetyDesign) -> dict[str, object]:
+        """Propagate the certified X_R/U_R through every M/K rebuild."""
+        return {
+            "robust_state_lower": design.robust_state_lower,
+            "robust_state_upper": design.robust_state_upper,
+            "robust_input_lower": design.robust_input_lower,
+            "robust_input_upper": design.robust_input_upper,
+            "robust_region_scale": design.robust_region_scale,
+        }
+
     def _static_candidate_admissible(self, design: SafetyDesign) -> bool:
         """Keep the optimized geometry Pareto-safe relative to its seed."""
         rpi_area = _polygon_area(design.rpi_boundary, self.cfg.state_scale)
@@ -217,6 +234,7 @@ class OnlineThetaLearner:
                     theta_p=design.theta_p,
                     theta_k=design.k,
                     w_inflation=self.cfg.rpi_inflation,
+                    **self._region_kwargs(design),
                 )
             except RuntimeError:
                 continue
@@ -265,6 +283,7 @@ class OnlineThetaLearner:
                         theta_p=best.theta_p,
                         theta_k=proposed_k,
                         w_inflation=self.cfg.rpi_inflation,
+                        **self._region_kwargs(best),
                     )
                 except RuntimeError:
                     continue
@@ -306,27 +325,54 @@ class OnlineThetaLearner:
             design = self._static_k_search(design, pass_index)
         return design, self.metrics(design)
 
-    def _sample_refinement_residuals(
+    def _robust_region_bounds(
+        self, design: SafetyDesign, scale: float
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """Return normalized X_R/U_R bounds clipped by physical constraints."""
+        safe_input = self.model.physical_input(design.v_ref)
+        state_lower = np.maximum(
+            self.cfg.state_lower,
+            self.cfg.safe_center_state
+            - float(scale) * self.cfg.robust_region_initial_state_half_range,
+        )
+        state_upper = np.minimum(
+            self.cfg.state_upper,
+            self.cfg.safe_center_state
+            + float(scale) * self.cfg.robust_region_initial_state_half_range,
+        )
+        input_lower = np.maximum(
+            self.cfg.input_lower,
+            safe_input
+            - float(scale) * self.cfg.robust_region_initial_input_half_range,
+        )
+        input_upper = np.minimum(
+            self.cfg.input_upper,
+            safe_input
+            + float(scale) * self.cfg.robust_region_initial_input_half_range,
+        )
+        return (
+            self.model.normalized_state(state_lower),
+            self.model.normalized_state(state_upper),
+            self.model.normalized_input(input_lower),
+            self.model.normalized_input(input_upper),
+        )
+
+    def _sample_robust_region_residuals(
         self,
         design: SafetyDesign,
-        iteration: int,
+        state_lower: np.ndarray,
+        state_upper: np.ndarray,
+        input_lower: np.ndarray,
+        input_upper: np.ndarray,
+        attempt_index: int,
     ) -> np.ndarray:
-        """Sample nonlinear mismatch on the current conservative S plus Z tube."""
-        x_lower = np.maximum(
-            self.model.normalized_state(self.cfg.state_lower),
-            design.invariant_lower - design.rpi_support_lower,
+        """Certify mismatch only on the declared X_R x U_R x D domain."""
+        disturbance_lower = (
+            self.cfg.disturbance_nominal - self.cfg.disturbance_half_range
         )
-        x_upper = np.minimum(
-            self.model.normalized_state(self.cfg.state_upper),
-            design.invariant_upper + design.rpi_support_upper,
+        disturbance_upper = (
+            self.cfg.disturbance_nominal + self.cfg.disturbance_half_range
         )
-        # Use the complete physical input constraint box.  This is more
-        # conservative than a controller-specific empirical envelope and
-        # therefore cannot underestimate W through input-region truncation.
-        u_lower = self.model.normalized_input(self.cfg.input_lower)
-        u_upper = self.model.normalized_input(self.cfg.input_upper)
-        d_lower = self.cfg.disturbance_nominal - self.cfg.disturbance_half_range
-        d_upper = self.cfg.disturbance_nominal + self.cfg.disturbance_half_range
         residuals: list[np.ndarray] = []
 
         def observe(x: np.ndarray, u: np.ndarray, disturbance: np.ndarray) -> None:
@@ -339,107 +385,322 @@ class OnlineThetaLearner:
                 next_state - (design.a @ x + design.b @ u + design.affine)
             )
 
-        for x in product(*zip(x_lower, x_upper)):
-            for u in product(*zip(u_lower, u_upper)):
-                for disturbance in product(*zip(d_lower, d_upper)):
+        for state in product(*zip(state_lower, state_upper)):
+            for control in product(*zip(input_lower, input_upper)):
+                for disturbance in product(
+                    *zip(disturbance_lower, disturbance_upper)
+                ):
                     observe(
-                        np.asarray(x, dtype=float),
-                        np.asarray(u, dtype=float),
+                        np.asarray(state, dtype=float),
+                        np.asarray(control, dtype=float),
                         np.asarray(disturbance, dtype=float),
                     )
 
         rng = np.random.default_rng(
-            self.cfg.seed + 81000 + int(iteration)
+            self.cfg.seed + 81000 + int(attempt_index)
         )
-        for _ in range(int(self.cfg.robust_set_refinement_samples)):
+        for _ in range(int(self.cfg.robust_region_random_samples)):
             observe(
-                rng.uniform(x_lower, x_upper),
-                rng.uniform(u_lower, u_upper),
-                rng.uniform(d_lower, d_upper),
+                rng.uniform(state_lower, state_upper),
+                rng.uniform(input_lower, input_upper),
+                rng.uniform(disturbance_lower, disturbance_upper),
             )
         return np.asarray(residuals, dtype=float)
+
+    def _candidate_region_diagnostics(
+        self,
+        scale: float,
+        seed_design: SafetyDesign,
+        attempt_index: int,
+    ) -> tuple[SafetyDesign | None, dict[str, object]]:
+        """Build and fully self-check one candidate robust operating region."""
+        tolerance = float(self.cfg.robust_region_membership_tolerance)
+        state_lower, state_upper, input_lower, input_upper = (
+            self._robust_region_bounds(seed_design, scale)
+        )
+        residuals = self._sample_robust_region_residuals(
+            seed_design,
+            state_lower,
+            state_upper,
+            input_lower,
+            input_upper,
+            attempt_index,
+        )
+        data_hull = _convex_hull(np.vstack([
+            np.zeros((1, 2)), residuals
+        ]))
+        diagnostic: dict[str, object] = {
+            "attempt": int(attempt_index),
+            "scale": float(scale),
+            "state_region": self.model.physical_state(
+                np.vstack([state_lower, state_upper])
+            ).tolist(),
+            "input_region": self.model.physical_input(
+                np.vstack([input_lower, input_upper])
+            ).tolist(),
+            "w_hull_vertex_count": int(len(data_hull)),
+            "max_residual_norm": float(np.max(np.linalg.norm(residuals, axis=1))),
+            "hinf_feasible": False,
+            "rpi_feasible": False,
+            "x_tightening_feasible": False,
+            "u_tightening_feasible": False,
+            "invariant_feasible": False,
+            "s_plus_z_contained": False,
+            "input_tube_contained": False,
+            "residual_membership_passed": False,
+            "safe_center_feasible": False,
+            "v_ref_feasible": False,
+            "feasible": False,
+            "failure_reason": "no feasible M/K seed",
+        }
+        angle_limit = float(self.cfg.theta_m_max_angle_degrees)
+        angle_step = float(self.cfg.theta_m_angle_step_degrees)
+        angles = [float(seed_design.theta_m_angle)] + [
+            float(value) for value in np.deg2rad(np.arange(
+                -angle_limit, angle_limit + 0.5 * angle_step, angle_step
+            ))
+            if abs(float(value) - float(seed_design.theta_m_angle)) > 1e-12
+        ]
+        gain_seeds = [np.asarray(seed_design.k, dtype=float)]
+        configured_gain = np.asarray(self.cfg.theta_k_initial_gain, dtype=float)
+        if not np.allclose(configured_gain, gain_seeds[0]):
+            gain_seeds.append(configured_gain)
+        try:
+            synthesized_gain, _, _ = synthesize_hinf(
+                self.cfg, seed_design.a, seed_design.b
+            )
+        except RuntimeError:
+            synthesized_gain = None
+        if synthesized_gain is not None and not any(
+            np.allclose(synthesized_gain, gain) for gain in gain_seeds
+        ):
+            gain_seeds.append(synthesized_gain)
+
+        rebuilt: SafetyDesign | None = None
+        for gain_index, gain in enumerate(gain_seeds):
+            for angle_index, angle in enumerate(angles):
+                gate: dict[str, object] = {}
+                try:
+                    candidate = build_safety_design(
+                        self.cfg,
+                        self.model,
+                        np.random.default_rng(
+                            self.cfg.seed + 82000 + 1000 * attempt_index
+                            + 100 * gain_index + angle_index
+                        ),
+                        w_data_hull=data_hull,
+                        theta_m_angle=angle,
+                        theta_h=seed_design.theta_h,
+                        theta_p=seed_design.theta_p,
+                        theta_k=gain,
+                        w_inflation=self.cfg.rpi_inflation,
+                        robust_state_lower=state_lower,
+                        robust_state_upper=state_upper,
+                        robust_input_lower=input_lower,
+                        robust_input_upper=input_upper,
+                        robust_region_scale=float(scale),
+                        diagnostics=gate,
+                    )
+                except RuntimeError:
+                    for key in (
+                        "hinf_feasible", "rpi_feasible",
+                        "x_tightening_feasible", "u_tightening_feasible",
+                        "invariant_feasible", "safe_center_feasible",
+                        "v_ref_feasible",
+                    ):
+                        diagnostic[key] = bool(
+                            diagnostic[key] or gate.get(key, False)
+                        )
+                    continue
+                rebuilt = candidate
+                diagnostic.update(gate)
+                break
+            if rebuilt is not None:
+                break
+        if rebuilt is None:
+            failed = [
+                key for key in (
+                    "hinf_feasible", "rpi_feasible",
+                    "x_tightening_feasible", "u_tightening_feasible",
+                    "invariant_feasible", "safe_center_feasible",
+                    "v_ref_feasible",
+                )
+                if not bool(diagnostic[key])
+            ]
+            diagnostic["failure_reason"] = ",".join(failed)
+            return None, diagnostic
+
+        candidate_learner = OnlineThetaLearner(
+            self.cfg,
+            self.model,
+            rebuilt,
+            np.random.default_rng(self.cfg.seed + 83000 + attempt_index),
+        )
+        refined, _ = candidate_learner.optimize_static_safety_design(rebuilt)
+        self.set_update_attempts += candidate_learner.set_update_attempts
+        self.set_update_accepts += candidate_learner.set_update_accepts
+        self.k_update_attempts += candidate_learner.k_update_attempts
+        self.k_update_accepts += candidate_learner.k_update_accepts
+
+        s_subset_tightened = bool(
+            np.all(refined.invariant_lower >= refined.x_lower_tight - tolerance)
+            and np.all(refined.invariant_upper <= refined.x_upper_tight + tolerance)
+        )
+        s_plus_z_contained = bool(
+            np.all(
+                refined.invariant_lower - refined.rpi_support_lower
+                >= refined.robust_state_lower - tolerance
+            )
+            and np.all(
+                refined.invariant_upper + refined.rpi_support_upper
+                <= refined.robust_state_upper + tolerance
+            )
+        )
+        input_tube_contained = bool(
+            np.all(
+                refined.u_lower_tight - refined.input_rpi_support_lower
+                >= refined.robust_input_lower - tolerance
+            )
+            and np.all(
+                refined.u_upper_tight + refined.input_rpi_support_upper
+                <= refined.robust_input_upper + tolerance
+            )
+        )
+        residual_membership = bool(all(
+            point_in_convex_polygon(point, refined.w_vertices, tol=tolerance)
+            for point in residuals
+        ))
+        safe_center_feasible = bool(
+            np.all(refined.z_ref > refined.robust_state_lower + tolerance)
+            and np.all(refined.z_ref < refined.robust_state_upper - tolerance)
+        )
+        v_ref_feasible = bool(
+            np.all(refined.v_ref >= refined.u_lower_tight - tolerance)
+            and np.all(refined.v_ref <= refined.u_upper_tight + tolerance)
+        )
+        feasible = bool(
+            s_subset_tightened
+            and s_plus_z_contained
+            and input_tube_contained
+            and residual_membership
+            and safe_center_feasible
+            and v_ref_feasible
+        )
+        diagnostic.update({
+            "s_subset_tightened": s_subset_tightened,
+            "s_plus_z_contained": s_plus_z_contained,
+            "input_tube_contained": input_tube_contained,
+            "residual_membership_passed": residual_membership,
+            "safe_center_feasible": safe_center_feasible,
+            "v_ref_feasible": v_ref_feasible,
+            "rpi_area": _polygon_area(
+                refined.rpi_boundary, self.cfg.state_scale
+            ),
+            "x_minus_z_area": float(np.prod(
+                (refined.x_upper_tight - refined.x_lower_tight)
+                * self.cfg.state_scale
+            )),
+            "invariant_area": float(np.prod(
+                (refined.invariant_upper - refined.invariant_lower)
+                * self.cfg.state_scale
+            )),
+            "feasible": feasible,
+            "failure_reason": "" if feasible else "self-consistency check",
+        })
+        return (refined if feasible else None), diagnostic
+
+    def build_certified_robust_operating_design(
+        self,
+        initial_design: SafetyDesign,
+    ) -> tuple[SafetyDesign, dict[str, float]]:
+        """Expand X_R/U_R, then bisect back to the largest certified scale."""
+        growth = float(self.cfg.robust_region_growth_factor)
+        maximum = float(self.cfg.robust_region_max_scale)
+        if growth <= 1.0 or maximum < 1.0:
+            raise ValueError(
+                "robust region growth_factor must exceed one and max_scale "
+                "must be at least one"
+            )
+        self.robust_region_search_diagnostics = []
+        attempt_index = 0
+
+        def attempt(
+            scale: float, seed: SafetyDesign
+        ) -> SafetyDesign | None:
+            nonlocal attempt_index
+            attempt_index += 1
+            candidate, diagnostic = self._candidate_region_diagnostics(
+                scale, seed, attempt_index
+            )
+            self.robust_region_search_diagnostics.append(diagnostic)
+            return candidate
+
+        scale = 1.0
+        first = attempt(scale, initial_design)
+        if first is None:
+            row = self.robust_region_search_diagnostics[-1]
+            raise RuntimeError(
+                "Initial robust operating region scale=1.0 is infeasible: "
+                f"reason={row['failure_reason']}, "
+                f"X_R={row['state_region']}, U_R={row['input_region']}, "
+                f"W_hull_vertices={row['w_hull_vertex_count']}, "
+                f"max_residual_norm={row['max_residual_norm']:.6g}."
+            )
+        last_feasible_design = first
+        last_feasible_scale = 1.0
+        first_infeasible_scale = float("nan")
+
+        while last_feasible_scale < maximum - 1e-12:
+            candidate_scale = min(maximum, last_feasible_scale * growth)
+            candidate = attempt(candidate_scale, last_feasible_design)
+            if candidate is None:
+                first_infeasible_scale = candidate_scale
+                break
+            last_feasible_design = candidate
+            last_feasible_scale = candidate_scale
+            if candidate_scale >= maximum - 1e-12:
+                break
+
+        if np.isfinite(first_infeasible_scale):
+            lower = last_feasible_scale
+            upper = first_infeasible_scale
+            for _ in range(int(self.cfg.robust_region_bisection_iterations)):
+                middle = 0.5 * (lower + upper)
+                candidate = attempt(middle, last_feasible_design)
+                if candidate is None:
+                    upper = middle
+                else:
+                    lower = middle
+                    last_feasible_scale = middle
+                    last_feasible_design = candidate
+
+        self.last_feasible_scale = float(last_feasible_scale)
+        self.first_infeasible_scale = float(first_infeasible_scale)
+        self.refinement_iterations = int(attempt_index)
+        self.refinement_uncovered_count = 0
+        self.refinement_max_excess = 0.0
+        self.refinement_relative_rpi_change = float("nan")
+        self.data_hull = np.asarray(
+            last_feasible_design.w_data_hull, dtype=float
+        ).copy()
+        feasible_rows = [
+            row for row in self.robust_region_search_diagnostics
+            if bool(row["feasible"])
+        ]
+        self.robust_region_max_sample_residual_norm = float(
+            feasible_rows[-1]["max_residual_norm"]
+        )
+        self.self_consistency_s_plus_z_passed = bool(
+            feasible_rows[-1]["s_plus_z_contained"]
+        )
+        return last_feasible_design, self.metrics(last_feasible_design)
 
     def build_self_consistent_proposed_design(
         self,
         initial_design: SafetyDesign,
     ) -> tuple[SafetyDesign, dict[str, float]]:
-        """Iterate W, RPI, tightening and invariant geometry before SAC starts."""
-        design, _ = self.optimize_static_safety_design(initial_design)
-        previous_area = _polygon_area(design.rpi_boundary, self.cfg.state_scale)
-        last_uncovered = 0
-        last_excess = 0.0
-        for iteration in range(1, int(self.cfg.robust_set_refinement_max_iterations) + 1):
-            sampled = self._sample_refinement_residuals(design, iteration)
-            merged_hull = _convex_hull(np.vstack([
-                self.data_hull,
-                sampled,
-                np.zeros((1, 2)),
-            ]))
-            current_excess = design.theta_m_matrix @ sampled.T - design.theta_m_bound[:, None]
-            last_uncovered = int(np.sum(np.any(current_excess > 1e-8, axis=0)))
-            last_excess = float(max(0.0, np.max(current_excess)))
-            try:
-                rebuilt = build_safety_design(
-                    self.cfg,
-                    self.model,
-                    np.random.default_rng(self.cfg.seed + 82000 + iteration),
-                    w_data_hull=merged_hull,
-                    theta_m_angle=design.theta_m_angle,
-                    theta_h=design.theta_h,
-                    theta_p=design.theta_p,
-                    theta_k=design.k,
-                    w_inflation=self.cfg.rpi_inflation,
-                )
-            except RuntimeError as exc:
-                raise RuntimeError(
-                    "Self-consistent robust-set refinement became infeasible: "
-                    f"iteration={iteration}, uncovered={last_uncovered}, "
-                    f"max_excess={last_excess:.6g}, "
-                    f"rpi_area={previous_area:.6g}, "
-                    f"x_minus_z_area={float(np.prod((design.x_upper_tight - design.x_lower_tight) * self.cfg.state_scale)):.6g}."
-                ) from exc
-
-            iteration_learner = OnlineThetaLearner(
-                self.cfg,
-                self.model,
-                rebuilt,
-                np.random.default_rng(self.cfg.seed + 83000 + iteration),
-            )
-            refined, _ = iteration_learner.optimize_static_safety_design(rebuilt)
-            new_area = _polygon_area(refined.rpi_boundary, self.cfg.state_scale)
-            relative_change = abs(new_area - previous_area) / max(previous_area, 1e-12)
-            uncovered_after = sum(
-                not point_in_convex_polygon(point, refined.w_vertices, tol=1e-8)
-                for point in sampled
-            )
-            excess_after = refined.theta_m_matrix @ sampled.T - refined.theta_m_bound[:, None]
-            max_excess_after = float(max(0.0, np.max(excess_after)))
-            self.refinement_iterations = iteration
-            self.refinement_uncovered_count = int(uncovered_after)
-            self.refinement_max_excess = max_excess_after
-            self.refinement_relative_rpi_change = float(relative_change)
-            self.data_hull = np.asarray(refined.w_data_hull, dtype=float).copy()
-            self.set_update_attempts += iteration_learner.set_update_attempts
-            self.set_update_accepts += iteration_learner.set_update_accepts
-            self.k_update_attempts += iteration_learner.k_update_attempts
-            self.k_update_accepts += iteration_learner.k_update_accepts
-            design = refined
-            if (
-                uncovered_after == 0
-                and relative_change < float(self.cfg.robust_set_refinement_tolerance)
-            ):
-                return design, self.metrics(design)
-            previous_area = new_area
-
-        raise RuntimeError(
-            "Self-consistent robust-set refinement did not converge: "
-            f"iteration={self.refinement_iterations}, "
-            f"uncovered={self.refinement_uncovered_count}, "
-            f"max_excess={self.refinement_max_excess:.6g}, "
-            f"relative_rpi_change={self.refinement_relative_rpi_change:.6g}, "
-            f"rpi_area={_polygon_area(design.rpi_boundary, self.cfg.state_scale):.6g}, "
-            f"x_minus_z_area={float(np.prod((design.x_upper_tight - design.x_lower_tight) * self.cfg.state_scale)):.6g}."
-        )
+        """Backward-compatible alias for robust operating-region certification."""
+        return self.build_certified_robust_operating_design(initial_design)
 
     def _safe_set_update(
         self,
@@ -474,6 +735,7 @@ class OnlineThetaLearner:
                     theta_h=design.theta_h,
                     theta_p=design.theta_p,
                     theta_k=design.k,
+                    **self._region_kwargs(design),
                 ))
             except RuntimeError:
                 pass
@@ -487,6 +749,7 @@ class OnlineThetaLearner:
                 theta_h=design.theta_h,
                 theta_p=design.theta_p,
                 theta_k=design.k,
+                **self._region_kwargs(design),
             ))
         except RuntimeError:
             pass
@@ -553,6 +816,7 @@ class OnlineThetaLearner:
                     theta_h=design.theta_h,
                     theta_p=design.theta_p,
                     theta_k=proposed_k,
+                    **self._region_kwargs(design),
                 )
             except RuntimeError:
                 continue
@@ -645,5 +909,19 @@ class OnlineThetaLearner:
             "robust_refinement_max_excess": float(self.refinement_max_excess),
             "robust_refinement_relative_rpi_change": float(
                 self.refinement_relative_rpi_change
+            ),
+            "robust_region_search_attempts": float(
+                len(self.robust_region_search_diagnostics)
+            ),
+            "last_feasible_scale": float(self.last_feasible_scale),
+            "first_infeasible_scale": float(self.first_infeasible_scale),
+            "robust_region_residual_hull_vertices": float(
+                len(design.w_data_hull)
+            ),
+            "robust_region_max_sample_residual_norm": float(
+                self.robust_region_max_sample_residual_norm
+            ),
+            "self_consistency_S_plus_Z_passed": float(
+                self.self_consistency_s_plus_z_passed
             ),
         }

@@ -411,6 +411,11 @@ class SafetyDesign:
     input_rpi_support: np.ndarray
     input_rpi_support_lower: np.ndarray
     input_rpi_support_upper: np.ndarray
+    robust_state_lower: np.ndarray
+    robust_state_upper: np.ndarray
+    robust_input_lower: np.ndarray
+    robust_input_upper: np.ndarray
+    robust_region_scale: float
     x_lower_tight: np.ndarray
     x_upper_tight: np.ndarray
     u_lower_tight: np.ndarray
@@ -505,6 +510,12 @@ def build_safety_design(
     theta_p: np.ndarray | None = None,
     theta_k: np.ndarray | None = None,
     w_inflation: float | None = None,
+    robust_state_lower: np.ndarray | None = None,
+    robust_state_upper: np.ndarray | None = None,
+    robust_input_lower: np.ndarray | None = None,
+    robust_input_upper: np.ndarray | None = None,
+    robust_region_scale: float = 1.0,
+    diagnostics: dict[str, object] | None = None,
 ) -> SafetyDesign:
     # Zanon-Gros evaporation setup: identify the affine nominal model at the
     # economic optimum, while keeping the terminal/safety center in the
@@ -547,12 +558,48 @@ def build_safety_design(
         np.zeros(2, dtype=float)
         if theta_p is None else np.asarray(theta_p, dtype=float)
     )
-    x_lo = model.normalized_state(cfg.state_lower)
-    x_hi = model.normalized_state(cfg.state_upper)
-    u_lo = model.normalized_input(cfg.input_lower)
-    u_hi = model.normalized_input(cfg.input_upper)
+    physical_x_lo = cfg.state_lower.copy()
+    physical_x_hi = cfg.state_upper.copy()
+    physical_u_lo = cfg.input_lower.copy()
+    physical_u_hi = cfg.input_upper.copy()
+    if robust_state_lower is not None:
+        physical_x_lo = np.maximum(
+            physical_x_lo, model.physical_state(robust_state_lower)
+        )
+    if robust_state_upper is not None:
+        physical_x_hi = np.minimum(
+            physical_x_hi, model.physical_state(robust_state_upper)
+        )
+    if robust_input_lower is not None:
+        physical_u_lo = np.maximum(
+            physical_u_lo, model.physical_input(robust_input_lower)
+        )
+    if robust_input_upper is not None:
+        physical_u_hi = np.minimum(
+            physical_u_hi, model.physical_input(robust_input_upper)
+        )
+    if np.any(physical_x_hi <= physical_x_lo):
+        raise ValueError("Certified robust state region is empty.")
+    if np.any(physical_u_hi <= physical_u_lo):
+        raise ValueError("Certified robust input region is empty.")
+    x_lo = model.normalized_state(physical_x_lo)
+    x_hi = model.normalized_state(physical_x_hi)
+    u_lo = model.normalized_input(physical_u_lo)
+    u_hi = model.normalized_input(physical_u_hi)
     z_ref = model.normalized_state(cfg.safe_center_state)
     v_ref = model.normalized_input(safe_u)
+    if diagnostics is not None:
+        diagnostics.update({
+            "hinf_feasible": False,
+            "rpi_feasible": False,
+            "x_tightening_feasible": False,
+            "u_tightening_feasible": False,
+            "invariant_feasible": False,
+            "safe_center_feasible": bool(
+                np.all(z_ref > x_lo) and np.all(z_ref < x_hi)
+            ),
+            "v_ref_feasible": False,
+        })
 
     # K is an explicit continuous component of theta.  The configured seed was
     # obtained by a continuous constrained search for the paper center; later
@@ -578,12 +625,16 @@ def build_safety_design(
         )
         if sampled_norm >= cfg.hinf_gamma:
             continue
+        if diagnostics is not None:
+            diagnostics["hinf_feasible"] = True
         try:
             boundary = rpi_polygon(acl, w_vertices)
             support_upper = _rpi_support(acl, w_vertices, np.eye(2))
             support_lower = _rpi_support(acl, w_vertices, -np.eye(2))
         except RuntimeError:
             continue
+        if diagnostics is not None:
+            diagnostics["rpi_feasible"] = True
         input_support_upper = _rpi_support(acl, w_vertices, k)
         input_support_lower = _rpi_support(acl, w_vertices, -k)
         support = np.maximum(support_lower, support_upper)
@@ -594,10 +645,23 @@ def build_safety_design(
         x_hi_t = x_hi - support_upper
         u_lo_t = u_lo + input_support_lower
         u_hi_t = u_hi - input_support_upper
+        x_tightening_feasible = bool(np.all(x_hi_t > x_lo_t))
+        u_tightening_feasible = bool(np.all(u_hi_t > u_lo_t))
+        if diagnostics is not None:
+            diagnostics["x_tightening_feasible"] = bool(
+                diagnostics["x_tightening_feasible"] or x_tightening_feasible
+            )
+            diagnostics["u_tightening_feasible"] = bool(
+                diagnostics["u_tightening_feasible"] or u_tightening_feasible
+            )
+        if not x_tightening_feasible or not u_tightening_feasible:
+            continue
         if np.any(z_ref <= x_lo_t) or np.any(z_ref >= x_hi_t):
             continue
         if np.any(v_ref <= u_lo_t) or np.any(v_ref >= u_hi_t):
             continue
+        if diagnostics is not None:
+            diagnostics["v_ref_feasible"] = True
 
         # Find a controlled-invariant subset of X-Z in the declared learning
         # region.  Runtime checks continue to report any sampled nonlinear
@@ -631,6 +695,8 @@ def build_safety_design(
         )
         if invariant is None:
             continue
+        if diagnostics is not None:
+            diagnostics["invariant_feasible"] = True
         invariant_lower, invariant_upper, invariant_scale = invariant
 
         physical_boundary = boundary * cfg.state_scale
@@ -748,6 +814,11 @@ def build_safety_design(
         input_rpi_support=np.asarray(selected["input_support"]),
         input_rpi_support_lower=np.asarray(selected["input_support_lower"]),
         input_rpi_support_upper=np.asarray(selected["input_support_upper"]),
+        robust_state_lower=x_lo.copy(),
+        robust_state_upper=x_hi.copy(),
+        robust_input_lower=u_lo.copy(),
+        robust_input_upper=u_hi.copy(),
+        robust_region_scale=float(robust_region_scale),
         x_lower_tight=np.asarray(selected["x_lo_t"]),
         x_upper_tight=np.asarray(selected["x_hi_t"]),
         u_lower_tight=np.asarray(selected["u_lo_t"]),
@@ -863,7 +934,9 @@ class SafeController:
             nominal = np.clip(base, d.u_lower_tight, d.u_upper_tight)
         ancillary = d.k @ e
         actual_n = nominal + ancillary
-        actual_n = np.clip(actual_n, self.model.normalized_input(self.cfg.input_lower), self.model.normalized_input(self.cfg.input_upper))
+        actual_n = np.clip(
+            actual_n, d.robust_input_lower, d.robust_input_upper
+        )
         control = self.model.physical_input(actual_n)
         z_next = d.a @ self.z + d.b @ nominal + d.affine
         info = {

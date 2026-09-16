@@ -161,6 +161,17 @@ class ExperimentConfig:
     robust_set_refinement_samples: int = 10000
     robust_set_refinement_max_iterations: int = 6
     robust_set_refinement_tolerance: float = 1e-3
+    robust_region_initial_state_half_range: np.ndarray = field(
+        default_factory=lambda: np.array([2.0, 3.0], dtype=float)
+    )
+    robust_region_initial_input_half_range: np.ndarray = field(
+        default_factory=lambda: np.array([35.0, 30.0], dtype=float)
+    )
+    robust_region_growth_factor: float = 1.25
+    robust_region_max_scale: float = 4.0
+    robust_region_bisection_iterations: int = 8
+    robust_region_random_samples: int = 10000
+    robust_region_membership_tolerance: float = 1e-8
     nominal_mpc_horizon: int = 10
     nominal_mpc_stage_hessian: np.ndarray = field(
         default_factory=lambda: np.diag([1.0, 0.6, 0.02, 0.02])

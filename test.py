@@ -1,6 +1,7 @@
 """Fast deterministic checks for the independent evaporator implementation."""
 from __future__ import annotations
 
+from dataclasses import replace
 from itertools import product
 import inspect
 import numpy as np
@@ -256,9 +257,13 @@ def main() -> None:
             "residual_execution_ratio_mean",
         )
     )
+    episode_source = inspect.getsource(run_episode)
+    assert "(reward_reference_cost - cost) / cfg.reward_cost_scale" in episode_source
+    assert "total_return += reward" in episode_source
 
     safe_stat = {
         "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
         "rpi_violation_rate": 0.0,
         "qp_infeasible_rate": 0.0,
         "disturbance_bound_exceedance_rate": 0.0,
@@ -329,9 +334,9 @@ def main() -> None:
     )
     refinement_cfg = ExperimentConfig(
         disturbance_bound_samples=20,
-        robust_set_refinement_samples=30,
-        robust_set_refinement_max_iterations=2,
-        robust_set_refinement_tolerance=1.0,
+        robust_region_random_samples=30,
+        robust_region_max_scale=1.25,
+        robust_region_bisection_iterations=2,
         theta_static_k_max_iterations=2,
         theta_static_outer_iterations=1,
         theta_m_max_angle_degrees=0.0,
@@ -368,15 +373,157 @@ def main() -> None:
         np.random.default_rng(808),
     )
     refinement_design, refinement_metrics = (
-        refinement_learner.build_self_consistent_proposed_design(
+        refinement_learner.build_certified_robust_operating_design(
             refinement_initial
         )
     )
     assert refinement_metrics["robust_refinement_uncovered_count"] == 0.0
+    assert refinement_design.robust_region_scale >= 1.0
+    tol = refinement_cfg.robust_region_membership_tolerance
+    assert np.all(
+        refinement_design.invariant_lower
+        >= refinement_design.x_lower_tight - tol
+    )
+    assert np.all(
+        refinement_design.invariant_upper
+        <= refinement_design.x_upper_tight + tol
+    )
+    assert np.all(
+        refinement_design.invariant_lower
+        - refinement_design.rpi_support_lower
+        >= refinement_design.robust_state_lower - tol
+    )
+    assert np.all(
+        refinement_design.invariant_upper
+        + refinement_design.rpi_support_upper
+        <= refinement_design.robust_state_upper + tol
+    )
+    assert np.allclose(
+        refinement_design.u_lower_tight,
+        refinement_design.robust_input_lower
+        + refinement_design.input_rpi_support_lower,
+    )
+    assert np.allclose(
+        refinement_design.u_upper_tight,
+        refinement_design.robust_input_upper
+        - refinement_design.input_rpi_support_upper,
+    )
+    region_rng = np.random.default_rng(1203)
+    for _ in range(50):
+        z = region_rng.uniform(
+            refinement_design.invariant_lower,
+            refinement_design.invariant_upper,
+        )
+        e = (
+            region_rng.uniform(0.0, 1.0)
+            * refinement_design.rpi_boundary[
+                region_rng.integers(len(refinement_design.rpi_boundary))
+            ]
+        )
+        actual_state = z + e
+        assert np.all(
+            actual_state >= refinement_design.robust_state_lower - tol
+        )
+        assert np.all(
+            actual_state <= refinement_design.robust_state_upper + tol
+        )
+        nominal_input = region_rng.uniform(
+            refinement_design.u_lower_tight,
+            refinement_design.u_upper_tight,
+        )
+        actual_input = nominal_input + refinement_design.k @ e
+        assert np.all(
+            actual_input >= refinement_design.robust_input_lower - tol
+        )
+        assert np.all(
+            actual_input <= refinement_design.robust_input_upper + tol
+        )
+    certified_residuals = refinement_learner._sample_robust_region_residuals(
+        refinement_design,
+        refinement_design.robust_state_lower,
+        refinement_design.robust_state_upper,
+        refinement_design.robust_input_lower,
+        refinement_design.robust_input_upper,
+        999,
+    )
     assert all(
         point_in_convex_polygon(point, refinement_design.w_vertices, tol=1e-8)
-        for point in refinement_design.w_data_hull
+        for point in certified_residuals
     )
+    assert np.all(
+        model.physical_state(refinement_design.robust_state_lower)
+        >= refinement_cfg.state_lower - tol
+    )
+    assert np.all(
+        model.physical_state(refinement_design.robust_state_upper)
+        <= refinement_cfg.state_upper + tol
+    )
+    assert np.all(
+        model.physical_input(refinement_design.robust_input_lower)
+        >= refinement_cfg.input_lower - tol
+    )
+    assert np.all(
+        model.physical_input(refinement_design.robust_input_upper)
+        <= refinement_cfg.input_upper + tol
+    )
+
+    class ExpansionFallbackLearner(OnlineThetaLearner):
+        def _candidate_region_diagnostics(self, scale, seed_design, attempt_index):
+            feasible = float(scale) <= 1.10
+            diagnostic = {
+                "attempt": int(attempt_index),
+                "scale": float(scale),
+                "state_region": [],
+                "input_region": [],
+                "w_hull_vertex_count": len(seed_design.w_data_hull),
+                "max_residual_norm": 0.0,
+                "s_plus_z_contained": feasible,
+                "feasible": feasible,
+                "failure_reason": "" if feasible else "synthetic limit",
+            }
+            return (
+                replace(seed_design, robust_region_scale=float(scale))
+                if feasible else None,
+                diagnostic,
+            )
+
+    fallback_cfg = replace(
+        refinement_cfg,
+        robust_region_growth_factor=1.25,
+        robust_region_max_scale=1.25,
+        robust_region_bisection_iterations=4,
+    )
+    fallback_learner = ExpansionFallbackLearner(
+        fallback_cfg,
+        refinement_model,
+        refinement_initial,
+        np.random.default_rng(900),
+    )
+    fallback_design, _ = fallback_learner.build_certified_robust_operating_design(
+        refinement_initial
+    )
+    assert 1.0 <= fallback_design.robust_region_scale <= 1.10
+    assert np.isclose(fallback_learner.first_infeasible_scale, 1.25)
+
+    class InitialFailureLearner(ExpansionFallbackLearner):
+        def _candidate_region_diagnostics(self, scale, seed_design, attempt_index):
+            _, diagnostic = super()._candidate_region_diagnostics(
+                1.25, seed_design, attempt_index
+            )
+            diagnostic["scale"] = float(scale)
+            return None, diagnostic
+
+    failed_as_required = False
+    try:
+        InitialFailureLearner(
+            fallback_cfg,
+            refinement_model,
+            refinement_initial,
+            np.random.default_rng(901),
+        ).build_certified_robust_operating_design(refinement_initial)
+    except RuntimeError as exc:
+        failed_as_required = "scale=1.0" in str(exc)
+    assert failed_as_required
     learner = OnlineThetaLearner(
         theta_cfg, theta_model, theta_design, np.random.default_rng(7)
     )
@@ -450,6 +597,48 @@ def main() -> None:
         for before, after in zip(actor_before, sac_agent.actor.parameters())
     )
     assert not np.isclose(sac_agent.alpha, alpha_before)
+    rpi_area = 0.5 * abs(float(np.sum(
+        (refinement_design.rpi_boundary * refinement_cfg.state_scale)[:, 0]
+        * np.roll(
+            (refinement_design.rpi_boundary * refinement_cfg.state_scale)[:, 1],
+            -1,
+        )
+        - (refinement_design.rpi_boundary * refinement_cfg.state_scale)[:, 1]
+        * np.roll(
+            (refinement_design.rpi_boundary * refinement_cfg.state_scale)[:, 0],
+            -1,
+        )
+    )))
+    print("offline robust design diagnostic")
+    print(f"  robust region scale: {refinement_design.robust_region_scale:.6g}")
+    print(
+        "  X_R:",
+        refinement_model.physical_state(refinement_design.robust_state_lower),
+        refinement_model.physical_state(refinement_design.robust_state_upper),
+    )
+    print(
+        "  U_R:",
+        refinement_model.physical_input(refinement_design.robust_input_lower),
+        refinement_model.physical_input(refinement_design.robust_input_upper),
+    )
+    print(f"  W hull vertices: {len(refinement_design.w_data_hull)}")
+    print(f"  RPI area: {rpi_area:.6g}")
+    print(
+        "  X_R-minus-Z area:",
+        float(np.prod(
+            (refinement_design.x_upper_tight - refinement_design.x_lower_tight)
+            * refinement_cfg.state_scale
+        )),
+    )
+    print(
+        "  invariant area:",
+        float(np.prod(
+            (refinement_design.invariant_upper - refinement_design.invariant_lower)
+            * refinement_cfg.state_scale
+        )),
+    )
+    print(f"  last feasible scale: {refinement_learner.last_feasible_scale:.6g}")
+    print(f"  first infeasible scale: {refinement_learner.first_infeasible_scale}")
     print("evaporation_safe_sac tests passed")
 
 

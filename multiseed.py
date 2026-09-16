@@ -98,6 +98,13 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "holdout_constraint_violation_rate": float(
                 metrics["robustness_evaluation_best_policy"]["violation_rate"]
             ),
+            "robust_region_scale": float(metrics["robust_region_scale"]),
+            "robust_operating_region_violation_rate": float(
+                metrics["robust_operating_region_violation_rate"]
+            ),
+            "holdout_robust_operating_region_violation_rate": float(
+                metrics["holdout_robust_operating_region_violation_rate"]
+            ),
             "qp_intervention_rate": float(metrics["evaluation"]["intervention_rate"]),
             "safe_action_mapping_rate": float(
                 metrics["evaluation"]["feasible_action_mapping_rate"]

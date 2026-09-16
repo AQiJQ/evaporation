@@ -206,6 +206,7 @@ def run_episode(
 
     total_return = 0.0
     violations = 0
+    robust_region_violations = 0
     rpi_violations = 0
     bound_exceedances = 0
     interventions = 0
@@ -337,6 +338,16 @@ def run_episode(
         next_disturbance = advance_disturbance(
             cfg, rng, disturbance, disturbance_age + 1
         )
+        robust_state_bad = bool(
+            np.any(x_next_n < controller.d.robust_state_lower - 1e-8)
+            or np.any(x_next_n > controller.d.robust_state_upper + 1e-8)
+        )
+        actual_normalized = np.asarray(info["actual_norm"])
+        robust_input_bad = bool(
+            np.any(actual_normalized < controller.d.robust_input_lower - 1e-8)
+            or np.any(actual_normalized > controller.d.robust_input_upper + 1e-8)
+        )
+        robust_region_violation = robust_state_bad or robust_input_bad
         next_obs = observation(
             model,
             controller,
@@ -359,6 +370,7 @@ def run_episode(
                     last_losses = agent.update(replay, cfg.batch_size)
 
         violations += int(violation)
+        robust_region_violations += int(robust_region_violation)
         rpi_violations += int(rpi_bad)
         bound_exceedances += int(bound_bad)
         interventions += int(projection > cfg.qp_intervention_tolerance)
@@ -417,6 +429,9 @@ def run_episode(
             "input_excess_squared": input_excess_squared,
             "rpi_excess_squared": rpi_excess_squared,
             "violation": violation,
+            "robust_state_violation": robust_state_bad,
+            "robust_input_violation": robust_input_bad,
+            "robust_region_violation": robust_region_violation,
             "rpi_violation": rpi_bad,
             "projection_gap": projection,
             "candidate": np.asarray(info["candidate"]).copy(),
@@ -486,6 +501,9 @@ def run_episode(
             rpi_excess_squared_sum / cfg.steps_per_episode
         ),
         "violation_rate": violations / cfg.steps_per_episode,
+        "robust_operating_region_violation_rate": (
+            robust_region_violations / cfg.steps_per_episode
+        ),
         "rpi_violation_rate": rpi_violations / cfg.steps_per_episode,
         "disturbance_bound_exceedance_rate": (
             bound_exceedances / cfg.steps_per_episode
@@ -517,6 +535,8 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "move_penalty", "safety_penalty", "state_excess_squared",
         "input_excess_squared", "rpi_excess_squared",
         "violation", "rpi_violation", "projection_gap",
+        "robust_state_violation", "robust_input_violation",
+        "robust_region_violation",
         "candidate", "nominal", "error", "effective_w",
     ]
     return {key: np.asarray([record[key] for record in records]) for key in keys}
@@ -527,6 +547,26 @@ def save_csv(path: Path, header: list[str], rows) -> None:
         writer = csv.writer(stream)
         writer.writerow(header)
         writer.writerows(rows)
+
+
+def save_robust_region_search(
+    path: Path, diagnostics: list[dict[str, object]]
+) -> None:
+    """Persist every expansion/bisection attempt with explicit gate results."""
+    if not diagnostics:
+        return
+    header = list(dict.fromkeys(
+        key for diagnostic in diagnostics for key in diagnostic
+    ))
+    rows = []
+    for diagnostic in diagnostics:
+        rows.append([
+            json.dumps(diagnostic.get(key), ensure_ascii=False)
+            if isinstance(diagnostic.get(key), (list, dict))
+            else diagnostic.get(key, "")
+            for key in header
+        ])
+    save_csv(path, header, rows)
 
 
 def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
@@ -550,6 +590,8 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "projection_penalty", "mapping_penalty", "move_penalty", "safety_penalty",
             "state_excess_squared", "input_excess_squared", "rpi_excess_squared",
             "violation", "rpi_violation", "projection_gap",
+            "robust_state_violation", "robust_input_violation",
+            "robust_region_violation",
             "e_X2_norm", "e_P2_norm", "w_X2_norm", "w_P2_norm",
         ],
         (
@@ -587,6 +629,9 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 rollout["violation"][i],
                 rollout["rpi_violation"][i],
                 rollout["projection_gap"][i],
+                rollout["robust_state_violation"][i],
+                rollout["robust_input_violation"][i],
+                rollout["robust_region_violation"][i],
                 *rollout["error"][i],
                 *rollout["effective_w"][i],
             ]
@@ -617,6 +662,11 @@ def save_theta_design(path: Path, design) -> None:
         x_upper_tight=design.x_upper_tight,
         u_lower_tight=design.u_lower_tight,
         u_upper_tight=design.u_upper_tight,
+        robust_state_lower=design.robust_state_lower,
+        robust_state_upper=design.robust_state_upper,
+        robust_input_lower=design.robust_input_lower,
+        robust_input_upper=design.robust_input_upper,
+        robust_region_scale=design.robust_region_scale,
         invariant_lower=design.invariant_lower,
         invariant_upper=design.invariant_upper,
         nominal_policy_gain=design.nominal_policy_gain,
@@ -819,6 +869,7 @@ def hard_safety_passed(stat: dict[str, float]) -> bool:
     """Hard gate used by final checkpoint selection and certification."""
     return bool(
         stat["violation_rate"] == 0.0
+        and stat["robust_operating_region_violation_rate"] == 0.0
         and stat["rpi_violation_rate"] == 0.0
         and stat["qp_infeasible_rate"] == 0.0
         and stat["disturbance_bound_exceedance_rate"] == 0.0
@@ -1046,6 +1097,11 @@ def save_feedback_law(
         "v_reference_normalized": design.v_ref.tolist(),
         "controlled_invariant_lower_normalized": design.invariant_lower.tolist(),
         "controlled_invariant_upper_normalized": design.invariant_upper.tolist(),
+        "robust_state_lower_normalized": design.robust_state_lower.tolist(),
+        "robust_state_upper_normalized": design.robust_state_upper.tolist(),
+        "robust_input_lower_normalized": design.robust_input_lower.tolist(),
+        "robust_input_upper_normalized": design.robust_input_upper.tolist(),
+        "robust_region_scale": float(design.robust_region_scale),
         "sac_residual_scale_normalized": cfg.residual_action_scale.tolist(),
         "selected_policy_output_scale": float(policy_output_scale),
         "hinf_gamma_design": design.gamma_design,
@@ -1155,6 +1211,15 @@ def main() -> None:
     design = build_safety_design(cfg, model, rng)
     if args.resume_theta is not None:
         with np.load(args.resume_theta) as saved_theta:
+            robust_kwargs = {}
+            if "robust_state_lower" in saved_theta.files:
+                robust_kwargs = {
+                    "robust_state_lower": saved_theta["robust_state_lower"],
+                    "robust_state_upper": saved_theta["robust_state_upper"],
+                    "robust_input_lower": saved_theta["robust_input_lower"],
+                    "robust_input_upper": saved_theta["robust_input_upper"],
+                    "robust_region_scale": float(saved_theta["robust_region_scale"]),
+                }
             design = build_safety_design(
                 cfg,
                 model,
@@ -1164,6 +1229,7 @@ def main() -> None:
                 theta_h=saved_theta["h"],
                 theta_p=saved_theta["p"],
                 theta_k=saved_theta["K"],
+                **robust_kwargs,
             )
     initial_fixed_design = copy.deepcopy(design)
     theta_learner = OnlineThetaLearner(
@@ -1173,7 +1239,17 @@ def main() -> None:
         np.random.default_rng(cfg.seed + 17001),
     )
     if cfg.experiment_mode == "proposed":
-        design, _ = theta_learner.build_self_consistent_proposed_design(design)
+        try:
+            design, _ = theta_learner.build_certified_robust_operating_design(
+                design
+            )
+        finally:
+            # Preserve the limiting gate even when the mandatory scale=1
+            # region is infeasible and the run must stop.
+            save_robust_region_search(
+                cfg.output_dir / "robust_region_search.csv",
+                theta_learner.robust_region_search_diagnostics,
+            )
     optimized_fixed_design = copy.deepcopy(design)
     controller = SafeController(cfg, model, design)
     sac_cfg = SACConfig(
@@ -1226,6 +1302,17 @@ def main() -> None:
     print(f"  nominal linearized : economic steady state {cfg.linearization_state.tolist()}")
     print(f"  safety anchor      : {cfg.safe_center_state.tolist()}")
     print(f"  experiment mode    : {cfg.experiment_mode}")
+    print(f"  robust region scale: {design.robust_region_scale:.6g}")
+    print(
+        "  robust X_R physical: "
+        f"{model.physical_state(design.robust_state_lower).tolist()} to "
+        f"{model.physical_state(design.robust_state_upper).tolist()}"
+    )
+    print(
+        "  robust U_R physical: "
+        f"{model.physical_input(design.robust_input_lower).tolist()} to "
+        f"{model.physical_input(design.robust_input_upper).tolist()}"
+    )
     print(
         "  theta path         : "
         + (
@@ -1453,6 +1540,11 @@ def main() -> None:
             theta_h=design.theta_h,
             theta_p=design.theta_p,
             theta_k=design.k,
+            robust_state_lower=design.robust_state_lower,
+            robust_state_upper=design.robust_state_upper,
+            robust_input_lower=design.robust_input_lower,
+            robust_input_upper=design.robust_input_upper,
+            robust_region_scale=design.robust_region_scale,
         )
     uncovered_final_vertices = sum(
         not point_in_convex_polygon(point, design.w_vertices, tol=1e-8)
@@ -1531,6 +1623,9 @@ def main() -> None:
                 "incremental_return_per_step": incremental_return,
                 "economic_cost_reduction_percent": cost_reduction_percent,
                 "violation_rate": float(candidate_stat["violation_rate"]),
+                "robust_operating_region_violation_rate": float(
+                    candidate_stat["robust_operating_region_violation_rate"]
+                ),
                 "rpi_violation_rate": float(candidate_stat["rpi_violation_rate"]),
                 "qp_infeasible_rate": float(candidate_stat["qp_infeasible_rate"]),
                 "disturbance_bound_exceedance_rate": float(
@@ -1669,6 +1764,11 @@ def main() -> None:
         invariant_scale=design.invariant_scale,
         gain_state_weight_scale=design.gain_state_weight_scale,
         gain_input_weight_scale=design.gain_input_weight_scale,
+        robust_state_lower=design.robust_state_lower,
+        robust_state_upper=design.robust_state_upper,
+        robust_input_lower=design.robust_input_lower,
+        robust_input_upper=design.robust_input_upper,
+        robust_region_scale=design.robust_region_scale,
     )
 
     boundary = design.rpi_boundary
@@ -1958,6 +2058,31 @@ def main() -> None:
         ),
         "initial_invariant_area": initial_invariant_area,
         "optimized_invariant_area": optimized_invariant_area,
+        "robust_region_scale": float(design.robust_region_scale),
+        "robust_state_lower_physical": model.physical_state(
+            design.robust_state_lower
+        ).tolist(),
+        "robust_state_upper_physical": model.physical_state(
+            design.robust_state_upper
+        ).tolist(),
+        "robust_input_lower_physical": model.physical_input(
+            design.robust_input_lower
+        ).tolist(),
+        "robust_input_upper_physical": model.physical_input(
+            design.robust_input_upper
+        ).tolist(),
+        "robust_region_search_attempts": int(
+            len(theta_learner.robust_region_search_diagnostics)
+        ),
+        "last_feasible_scale": float(theta_learner.last_feasible_scale),
+        "first_infeasible_scale": float(theta_learner.first_infeasible_scale),
+        "robust_region_residual_hull_vertices": int(len(design.w_data_hull)),
+        "robust_region_max_sample_residual_norm": float(
+            theta_learner.robust_region_max_sample_residual_norm
+        ),
+        "self_consistency_S_plus_Z_passed": bool(
+            theta_learner.self_consistency_s_plus_z_passed
+        ),
         "theta_only_economic_cost_mean": float(theta_only_stat["economic_cost_mean"]),
         "safe_sac_economic_cost_mean": float(final_stat["economic_cost_mean"]),
         "holdout_theta_only_economic_cost_mean": float(
@@ -1980,6 +2105,12 @@ def main() -> None:
         },
         "constraint_violation_rate": float(final_stat["violation_rate"]),
         "holdout_constraint_violation_rate": float(holdout_best_stat["violation_rate"]),
+        "robust_operating_region_violation_rate": float(
+            final_stat["robust_operating_region_violation_rate"]
+        ),
+        "holdout_robust_operating_region_violation_rate": float(
+            holdout_best_stat["robust_operating_region_violation_rate"]
+        ),
         "rpi_violation_rate": float(final_stat["rpi_violation_rate"]),
         "qp_infeasible_rate": float(final_stat["qp_infeasible_rate"]),
         "qp_intervention_rate": float(final_stat["intervention_rate"]),
@@ -2182,6 +2313,9 @@ def main() -> None:
         "training_constraint_violation_step_rate": float(
             np.mean(log_arrays["violation_rate"][training_mask])
         ),
+        "training_robust_operating_region_violation_step_rate": float(
+            np.mean(log_arrays["robust_operating_region_violation_rate"][training_mask])
+        ),
         "training_rpi_violation_step_rate": float(
             np.mean(log_arrays["rpi_violation_rate"][training_mask])
         ),
@@ -2291,10 +2425,10 @@ def main() -> None:
             peak_w_negative.tolist()
         ),
         "disturbance_bound_method": (
-            "self-consistent four-facet asymmetric W_theta={w|Mw<=m}; "
-            "complete S-plus-Z/state, physical-input and D corners plus fixed-"
-            "seed random refinement samples are iterated with RPI, tightening, "
-            "invariant-set, M and K rebuilds before proposed SAC training"
+            "four-facet asymmetric W_theta={w|Mw<=m} certified on the final "
+            "robust operating region X_R x U_R x D; region scale is expanded "
+            "geometrically and backed off by bisection at the first infeasible "
+            "H-infinity/RPI/tightening/invariant candidate"
         ),
         "disturbance_polytope_vertex_count": int(len(design.w_vertices)),
         "qp_intervention_tolerance_normalized": cfg.qp_intervention_tolerance,
