@@ -13,6 +13,9 @@ class ExperimentConfig:
     episodes: int = 300
     steps_per_episode: int = 2000
     dt_min: float = 0.20
+    # ``proposed`` freezes an offline-optimized safety design during SAC.
+    # ``joint_theta`` retains the original online h/p/M/K learner for ablation.
+    experiment_mode: str = "proposed"
 
     # Wang-Cameron / Zanon-Gros benchmark constants.
     liquid_holdup: float = 20.0
@@ -99,6 +102,7 @@ class ExperimentConfig:
     invariant_nominal_half_range_physical: np.ndarray = field(
         default_factory=lambda: np.array([1.0, 1.0], dtype=float)
     )
+    restrict_invariant_to_local_window: bool = False
     theta_initial_safe_state_half_range: np.ndarray = field(
         default_factory=lambda: np.array([0.5, 0.5], dtype=float)
     )
@@ -147,8 +151,10 @@ class ExperimentConfig:
     theta_k_evaluation_steps: int = 250
     theta_k_evaluation_seed_count: int = 2
     theta_rpi_area_weight: float = 1.0
-    theta_x_minus_z_area_weight: float = 2e-3
-    theta_invariant_area_weight: float = 1e-3
+    theta_x_minus_z_area_weight: float = 0.5
+    theta_invariant_area_weight: float = 0.2
+    theta_static_k_max_iterations: int = 100
+    theta_static_outer_iterations: int = 2
     nominal_mpc_horizon: int = 10
     nominal_mpc_stage_hessian: np.ndarray = field(
         default_factory=lambda: np.diag([1.0, 0.6, 0.02, 0.02])
@@ -191,15 +197,22 @@ class ExperimentConfig:
     # an over-aggressive residual actor from being deployed unchanged.
     sac_selection_scales: tuple[float, ...] = (0.0, 0.25, 0.50, 0.75, 1.0)
     sac_min_incremental_return_per_step: float = 0.0
-    # Re-certify the ten strongest common-seed periodic actors under final W/theta;
-    # the zero-residual fallback and raw last actor are always added separately.
-    sac_final_candidate_count: int = 10
+    # Zero means re-certify every periodic checkpoint under the same fixed design.
+    sac_final_candidate_count: int = 0
+
+    # Evaluation-only nominal safe steady-state reference. It never enters the
+    # SAC reward or replay buffer.
+    safe_reference_grid_points: int = 81
+    safe_reference_derivative_tolerance: float = 1e-7
 
     # Cover most of the certified nominal controlled-invariant set during training. A
     # smaller evaluation fraction keeps all policy comparisons repeatable and
     # representative of normal operation.
     training_initial_radius_fraction: float = 0.90
     evaluation_initial_radius_fraction: float = 0.75
+    # Episode resets must remain inside the state window explicitly included
+    # in the offline nonlinear-mismatch data hull. This does not restrict S.
+    reset_within_disturbance_identification_window: bool = True
     training_boundary_start_probability: float = 0.30
     # Long 2000-step episodes otherwise spend almost all samples near one
     # steady state.  Treat every segment as a replay-terminal subtrajectory and

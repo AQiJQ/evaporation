@@ -8,14 +8,22 @@ from .config import ExperimentConfig
 from .control import (
     SafeController,
     build_safety_design,
+    estimate_hinf_norm,
     point_in_convex_polygon,
     project_qp_2d,
     spectral_radius,
 )
 from .model import EvaporatorModel
-from .multiseed import DEFAULT_SEEDS, T_975_DF2
+from .multiseed import DEFAULT_SEEDS, T_975_DF2, _moving_average
+from .sac import ReplayBuffer, SACAgent, SACConfig
 from .theta_learning import OnlineThetaLearner
-from .train import OBS_DIM, observation
+from .train import (
+    OBS_DIM,
+    ZeroResidualPolicy,
+    compute_safe_steady_reference,
+    observation,
+    run_episode,
+)
 
 
 def main() -> None:
@@ -23,8 +31,13 @@ def main() -> None:
     assert cfg.episodes == 300
     assert len(DEFAULT_SEEDS) == 3 and 42 in DEFAULT_SEEDS
     assert np.isclose(T_975_DF2, 4.302652729911275)
+    moving = _moving_average(np.arange(25, dtype=float), window=20)
+    assert np.all(np.isnan(moving[:19])) and np.all(np.isfinite(moving[19:]))
     assert cfg.replay_capacity == 100000
     assert cfg.training_segment_steps == 200
+    assert cfg.experiment_mode == "proposed"
+    assert not cfg.restrict_invariant_to_local_window
+    assert cfg.sac_final_candidate_count == 0
     assert np.allclose(cfg.residual_action_scale, [0.12, 0.10])
     model = EvaporatorModel(cfg)
     next_state = model.step(cfg.linearization_state, cfg.linearization_input, cfg.disturbance_nominal)
@@ -82,6 +95,12 @@ def main() -> None:
     assert np.all(design.x_upper_tight > design.x_lower_tight)
     assert np.all(design.invariant_lower >= design.x_lower_tight - 1e-10)
     assert np.all(design.invariant_upper <= design.x_upper_tight + 1e-10)
+    invariant_lower_physical = model.physical_state(design.invariant_lower)
+    invariant_upper_physical = model.physical_state(design.invariant_upper)
+    assert bool(
+        np.any(invariant_lower_physical < cfg.safe_center_state - 1.0 - 1e-6)
+        or np.any(invariant_upper_physical > cfg.safe_center_state + 1.0 + 1e-6)
+    )
     for vertex in product(*zip(design.invariant_lower, design.invariant_upper)):
         z = np.asarray(vertex)
         center_next = design.a @ z + design.affine
@@ -131,16 +150,93 @@ def main() -> None:
         selected_x_minus_z_area
         >= design.reference_x_minus_z_area_physical - 1e-9
     )
+    assert estimate_hinf_norm(
+        design.a, design.b, design.k, cfg.hinf_q, cfg.hinf_r, points=128
+    ) < cfg.hinf_gamma
+    reference = compute_safe_steady_reference(
+        ExperimentConfig(
+            disturbance_bound_samples=50,
+            safe_reference_grid_points=21,
+        ),
+        model,
+        design,
+    )
+    assert np.isfinite(reference["cost"])
+    assert np.all(reference["state"] >= cfg.state_lower - 1e-10)
+    assert np.all(reference["state"] <= cfg.state_upper + 1e-10)
+    assert np.all(reference["input"] >= cfg.input_lower - 1e-10)
+    assert np.all(reference["input"] <= cfg.input_upper + 1e-10)
+
+    episode_cfg = ExperimentConfig(
+        disturbance_bound_samples=20,
+        steps_per_episode=4,
+    )
+    episode_model = EvaporatorModel(episode_cfg)
+    episode_design = build_safety_design(
+        episode_cfg, episode_model, np.random.default_rng(11)
+    )
+    episode_stat, _, _ = run_episode(
+        episode_cfg,
+        episode_model,
+        SafeController(episode_cfg, episode_model, episode_design),
+        ZeroResidualPolicy(),
+        None,
+        np.random.default_rng(12),
+        training=False,
+        global_step=0,
+    )
+    for reward_field in (
+        "return", "return_per_step", "economic_reward_mean",
+        "projection_penalty_mean", "mapping_penalty_mean",
+        "move_penalty_mean", "safety_penalty_mean",
+    ):
+        assert reward_field in episode_stat
     theta_cfg = ExperimentConfig(
         disturbance_bound_samples=20,
         theta_min_transition_samples=4,
         theta_batch_size=4,
         theta_set_update_every_episodes=999,
         theta_k_update_every_episodes=1,
+        theta_static_k_max_iterations=8,
+        theta_static_outer_iterations=1,
+        theta_m_max_angle_degrees=3.0,
     )
     theta_model = EvaporatorModel(theta_cfg)
     theta_design = build_safety_design(
         theta_cfg, theta_model, np.random.default_rng(theta_cfg.seed)
+    )
+    static_learner = OnlineThetaLearner(
+        theta_cfg, theta_model, theta_design, np.random.default_rng(7)
+    )
+    optimized_design, _ = static_learner.optimize_static_safety_design(theta_design)
+    optimized_rpi_area = 0.5 * abs(float(np.sum(
+        (optimized_design.rpi_boundary * theta_cfg.state_scale)[:, 0]
+        * np.roll((optimized_design.rpi_boundary * theta_cfg.state_scale)[:, 1], -1)
+        - (optimized_design.rpi_boundary * theta_cfg.state_scale)[:, 1]
+        * np.roll((optimized_design.rpi_boundary * theta_cfg.state_scale)[:, 0], -1)
+    )))
+    initial_rpi_area = 0.5 * abs(float(np.sum(
+        (theta_design.rpi_boundary * theta_cfg.state_scale)[:, 0]
+        * np.roll((theta_design.rpi_boundary * theta_cfg.state_scale)[:, 1], -1)
+        - (theta_design.rpi_boundary * theta_cfg.state_scale)[:, 1]
+        * np.roll((theta_design.rpi_boundary * theta_cfg.state_scale)[:, 0], -1)
+    )))
+    assert optimized_rpi_area <= initial_rpi_area + 1e-9
+    assert float(np.prod(
+        (optimized_design.x_upper_tight - optimized_design.x_lower_tight)
+        * theta_cfg.state_scale
+    )) >= float(np.prod(
+        (theta_design.x_upper_tight - theta_design.x_lower_tight)
+        * theta_cfg.state_scale
+    )) - 1e-9
+    assert spectral_radius(optimized_design.a + optimized_design.b @ optimized_design.k) < 1.0
+    assert estimate_hinf_norm(
+        optimized_design.a, optimized_design.b, optimized_design.k,
+        theta_cfg.hinf_q, theta_cfg.hinf_r, points=128,
+    ) < theta_cfg.hinf_gamma
+    assert all(
+        point_in_convex_polygon(vertex, optimized_design.w_vertices, tol=1e-8)
+        for vertex in optimized_design.w_data_hull
     )
     learner = OnlineThetaLearner(
         theta_cfg, theta_model, theta_design, np.random.default_rng(7)
@@ -174,6 +270,47 @@ def main() -> None:
     assert theta_metrics["theta_K_update_attempts"] == 1.0
     assert theta_metrics["theta_K_update_accepts"] == 1.0
     assert not np.allclose(learned_design.k, theta_design.k)
+
+    sac_agent = SACAgent(
+        obs_dim=3,
+        action_dim=2,
+        cfg=SACConfig(
+            hidden_dim=16,
+            auto_entropy_tuning=True,
+            entropy_tuning_warmup_updates=0,
+        ),
+        device="cpu",
+    )
+    sac_replay = ReplayBuffer(3, 2, 64, sac_agent.device)
+    sac_rng = np.random.default_rng(99)
+    for _ in range(32):
+        sac_replay.add(
+            sac_rng.normal(size=3),
+            np.tanh(sac_rng.normal(size=2)),
+            float(sac_rng.normal()),
+            sac_rng.normal(size=3),
+            False,
+            execution_mask=1.0,
+        )
+    q1_before = [parameter.detach().clone() for parameter in sac_agent.q1.parameters()]
+    q2_before = [parameter.detach().clone() for parameter in sac_agent.q2.parameters()]
+    actor_before = [parameter.detach().clone() for parameter in sac_agent.actor.parameters()]
+    alpha_before = sac_agent.alpha
+    losses = sac_agent.update(sac_replay, 16)
+    assert all(np.isfinite(losses[key]) for key in ("q1_loss", "q2_loss", "actor_loss", "alpha"))
+    assert any(
+        not np.allclose(before.numpy(), after.detach().numpy())
+        for before, after in zip(q1_before, sac_agent.q1.parameters())
+    )
+    assert any(
+        not np.allclose(before.numpy(), after.detach().numpy())
+        for before, after in zip(q2_before, sac_agent.q2.parameters())
+    )
+    assert any(
+        not np.allclose(before.numpy(), after.detach().numpy())
+        for before, after in zip(actor_before, sac_agent.actor.parameters())
+    )
+    assert not np.isclose(sac_agent.alpha, alpha_before)
     print("evaporation_safe_sac tests passed")
 
 

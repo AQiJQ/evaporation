@@ -504,6 +504,7 @@ def build_safety_design(
     theta_h: np.ndarray | None = None,
     theta_p: np.ndarray | None = None,
     theta_k: np.ndarray | None = None,
+    w_inflation: float | None = None,
 ) -> SafetyDesign:
     # Zanon-Gros evaporation setup: identify the affine nominal model at the
     # economic optimum, while keeping the terminal/safety center in the
@@ -531,7 +532,10 @@ def build_safety_design(
             four_facet_outer_approximation(
                 data_hull,
                 angle=float(theta_m_angle),
-                inflation=cfg.theta_w_online_inflation,
+                inflation=(
+                    cfg.theta_w_online_inflation
+                    if w_inflation is None else float(w_inflation)
+                ),
             )
         )
         w_bound = np.maximum(np.max(np.abs(w_vertices), axis=0), 1e-8)
@@ -598,14 +602,19 @@ def build_safety_design(
         # Find a controlled-invariant subset of X-Z in the declared learning
         # region.  Runtime checks continue to report any sampled nonlinear
         # mismatch that leaves the offline disturbance polytope.
-        learning_x_lo = model.normalized_state(
-            cfg.safe_center_state - cfg.invariant_nominal_half_range_physical
-        )
-        learning_x_hi = model.normalized_state(
-            cfg.safe_center_state + cfg.invariant_nominal_half_range_physical
-        )
-        verified_x_lo = np.maximum(x_lo_t, learning_x_lo)
-        verified_x_hi = np.minimum(x_hi_t, learning_x_hi)
+        if cfg.restrict_invariant_to_local_window:
+            learning_x_lo = model.normalized_state(
+                cfg.safe_center_state - cfg.invariant_nominal_half_range_physical
+            )
+            learning_x_hi = model.normalized_state(
+                cfg.safe_center_state + cfg.invariant_nominal_half_range_physical
+            )
+            verified_x_lo = np.maximum(x_lo_t, learning_x_lo)
+            verified_x_hi = np.minimum(x_hi_t, learning_x_hi)
+        else:
+            # Default proposed method searches the complete tightened set X-Z.
+            verified_x_lo = x_lo_t.copy()
+            verified_x_hi = x_hi_t.copy()
         if np.any(verified_x_hi <= verified_x_lo):
             continue
         invariant = _controlled_invariant_box(

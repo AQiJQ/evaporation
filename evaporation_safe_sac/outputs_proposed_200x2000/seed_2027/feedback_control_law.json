@@ -1,0 +1,108 @@
+{
+  "control_structure": "v_theta = first affine action of the learned finite-horizon quadratic nominal value model; base = safe projection(v_theta); candidate = feasible_ray_map(base, residual_SAC); v_qp = safety verification projection(candidate); u_normalized = v_qp + K(x-z)",
+  "safety_filter_type": "learned finite-horizon nominal guidance plus RPI tightening and one-step invariant QP",
+  "disturbance_available_to_sac": false,
+  "K_parameterization": "continuous real 2x2 gain with H-infinity/RPI/QP safety-gated offline geometry search and fixed SAC deployment",
+  "terminal_center_source": "Zanon-Gros-2020 evaporation example",
+  "K_normalized": [
+    [
+      -8.140658712530293,
+      -2.4558957500000003
+    ],
+    [
+      -0.6279559903889103,
+      2.141070026245
+    ]
+  ],
+  "theta_h": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "theta_p": [
+    0.0,
+    0.0
+  ],
+  "theta_M": [
+    [
+      61.320737531367385,
+      7.529239832031206
+    ],
+    [
+      -29.379265778662603,
+      239.274918300967
+    ],
+    [
+      -60.43071706764013,
+      -7.419959060197855
+    ],
+    [
+      29.950823590907625,
+      -243.92988312750572
+    ]
+  ],
+  "theta_m": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "K_physical_input_per_physical_state": [
+    [
+      -54.27105808353529,
+      -12.279478750000003
+    ],
+    [
+      -4.186373269259402,
+      10.705350131225002
+    ]
+  ],
+  "state_order": [
+    "X2_percent",
+    "P2_kPa"
+  ],
+  "input_order": [
+    "P100_kPa",
+    "F200_kg_per_min"
+  ],
+  "state_normalization_offset": [
+    25.0,
+    49.74
+  ],
+  "state_normalization_scale": [
+    15.0,
+    20.0
+  ],
+  "input_normalization_offset": [
+    191.71,
+    215.89
+  ],
+  "input_normalization_scale": [
+    100.0,
+    100.0
+  ],
+  "z_reference_normalized": [
+    0.26666666666666666,
+    0.19149999999999992
+  ],
+  "v_reference_normalized": [
+    0.3206223903209684,
+    0.05679061276133012
+  ],
+  "controlled_invariant_lower_normalized": [
+    0.22206114421360848,
+    0.029843014447093363
+  ],
+  "controlled_invariant_upper_normalized": [
+    4.595085742748606,
+    0.9600533314306214
+  ],
+  "sac_residual_scale_normalized": [
+    0.12,
+    0.1
+  ],
+  "selected_policy_output_scale": 0.0,
+  "hinf_gamma_design": 500.0,
+  "hinf_norm_frequency_grid": 182.85320569082953
+}

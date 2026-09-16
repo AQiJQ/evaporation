@@ -24,6 +24,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     parser.add_argument("--device", default="auto")
     parser.add_argument(
+        "--experiment-mode",
+        choices=("proposed", "joint_theta"),
+        default="proposed",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path(
@@ -46,6 +51,8 @@ def _moving_average(values: np.ndarray, window: int = 20) -> np.ndarray:
 def _write_aggregate(root: Path, seeds: list[int]) -> None:
     rows: list[dict[str, float]] = []
     reward_curves: list[np.ndarray] = []
+    gap_curves: list[np.ndarray] = []
+    reduction_curves: list[np.ndarray] = []
     episode_axis: np.ndarray | None = None
     for seed in seeds:
         seed_dir = root / f"seed_{seed}"
@@ -97,6 +104,40 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
                 certification["sac_positive_increment_learned"]
             ),
             "training_seconds": float(metrics["training_seconds"]),
+            "initial_rpi_area": float(metrics["initial_rpi_area"]),
+            "optimized_rpi_area": float(metrics["optimized_rpi_area"]),
+            "rpi_area_reduction_percent": float(metrics["rpi_area_reduction_percent"]),
+            "initial_x_minus_z_area": float(metrics["initial_x_minus_z_area"]),
+            "optimized_x_minus_z_area": float(metrics["optimized_x_minus_z_area"]),
+            "x_minus_z_area_increase_percent": float(metrics["x_minus_z_area_increase_percent"]),
+            "initial_invariant_area": float(metrics["initial_invariant_area"]),
+            "optimized_invariant_area": float(metrics["optimized_invariant_area"]),
+            "theta_only_economic_cost_mean": float(metrics["theta_only_economic_cost_mean"]),
+            "safe_sac_economic_cost_mean": float(metrics["safe_sac_economic_cost_mean"]),
+            "safe_reference_cost": float(metrics["safe_reference_cost"]),
+            "normalized_safe_performance_gap": float(metrics["normalized_safe_performance_gap"]),
+            "rpi_violation_rate": float(metrics["rpi_violation_rate"]),
+            "qp_infeasible_rate": float(metrics["qp_infeasible_rate"]),
+            "disturbance_bound_exceedance_rate": float(
+                metrics["disturbance_bound_exceedance_rate"]
+            ),
+            "best_nonzero_policy_episode": float(metrics["best_nonzero_policy_episode"]),
+            "best_nonzero_policy_scale": float(metrics["best_nonzero_policy_scale"]),
+            "best_nonzero_cost_reduction_percent": float(
+                metrics["best_nonzero_cost_reduction_percent"]
+            ),
+            "best_nonzero_incremental_return": float(
+                metrics["best_nonzero_incremental_return"]
+            ),
+            "best_nonzero_violation_rate": float(
+                metrics["best_nonzero_violation_rate"]
+            ),
+            "best_nonzero_intervention_rate": float(
+                metrics["best_nonzero_intervention_rate"]
+            ),
+            "best_nonzero_mapping_rate": float(
+                metrics["best_nonzero_mapping_rate"]
+            ),
         })
         with (seed_dir / "training_log.csv").open(
             newline="", encoding="utf-8"
@@ -108,6 +149,14 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
         if episode_axis is None:
             episode_axis = episodes[mask]
         reward_curves.append(_moving_average(returns[mask]))
+        gap_curves.append(np.asarray([
+            float(row["evaluation_normalized_safe_performance_gap"])
+            for row in records
+        ])[mask])
+        reduction_curves.append(np.asarray([
+            float(row["evaluation_sac_incremental_cost_reduction_percent"])
+            for row in records
+        ])[mask])
 
     header = list(rows[0])
     with (root / "multi_seed_summary.csv").open(
@@ -174,9 +223,67 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     fig.savefig(root / "multi_seed_learning_curve.png", dpi=180)
     plt.close(fig)
 
+    def plot_evaluation_curves(
+        curves_in: list[np.ndarray], ylabel: str, title: str, filename: str
+    ) -> None:
+        curves_array = np.vstack(curves_in)
+        valid_columns = np.all(np.isfinite(curves_array), axis=0)
+        x = episode_axis[valid_columns]
+        y = curves_array[:, valid_columns]
+        if y.shape[1] == 0:
+            figure, axis = plt.subplots(figsize=(8.4, 4.8))
+            axis.set_xlabel("Episode")
+            axis.set_ylabel(ylabel)
+            axis.set_title(title)
+            axis.text(
+                0.5, 0.5,
+                "Metric undefined: J_base - J_safe_ref <= 0",
+                ha="center", va="center", transform=axis.transAxes,
+            )
+            axis.grid(True, color="#dddddd", linewidth=0.6)
+            figure.tight_layout()
+            figure.savefig(root / filename, dpi=180)
+            plt.close(figure)
+            return
+        curve_mean = np.mean(y, axis=0)
+        curve_std = np.std(y, axis=0, ddof=1)
+        half_width = T_975_DF2 * curve_std / np.sqrt(len(seeds))
+        figure, axis = plt.subplots(figsize=(8.4, 4.8))
+        for seed, curve in zip(seeds, y):
+            axis.plot(x, curve, linewidth=0.9, alpha=0.45, label=f"seed {seed}")
+        axis.plot(x, curve_mean, color="#2f6fb3", linewidth=2.1, label="mean")
+        axis.fill_between(
+            x, curve_mean - half_width, curve_mean + half_width,
+            color="#2f6fb3", alpha=0.16, label="pointwise 95% CI",
+        )
+        axis.set_xlabel("Episode")
+        axis.set_ylabel(ylabel)
+        axis.set_title(title)
+        axis.grid(True, color="#dddddd", linewidth=0.6)
+        axis.legend(frameon=True)
+        figure.tight_layout()
+        figure.savefig(root / filename, dpi=180)
+        plt.close(figure)
+
+    plot_evaluation_curves(
+        gap_curves,
+        "Normalized safe performance gap",
+        "Paired deterministic SAC performance gap",
+        "multi_seed_sac_performance_gap.png",
+    )
+    plot_evaluation_curves(
+        reduction_curves,
+        "SAC incremental economic cost reduction [%]",
+        "Paired deterministic SAC cost reduction",
+        "multi_seed_sac_cost_reduction.png",
+    )
+
 
 def main() -> None:
     args = parse_args()
+    package_dir = Path(__file__).resolve().parent
+    package_name = package_dir.name
+    args.output_dir = args.output_dir.resolve()
     if len(args.seeds) != 3:
         raise ValueError("The 95% confidence-interval protocol requires exactly three seeds")
     if len(set(args.seeds)) != len(args.seeds):
@@ -189,15 +296,16 @@ def main() -> None:
         command = [
             sys.executable,
             "-m",
-            "evaporation_safe_sac.train",
+            f"{package_name}.train",
             "--episodes", str(args.episodes),
             "--steps", str(args.steps),
             "--seed", str(seed),
             "--device", str(args.device),
+            "--experiment-mode", str(args.experiment_mode),
             "--output-dir", str(seed_dir),
         ]
         print(f"\n=== evaporator safe-SAC seed {seed} ===", flush=True)
-        subprocess.run(command, check=True)
+        subprocess.run(command, check=True, cwd=package_dir.parent)
     _write_aggregate(args.output_dir, list(args.seeds))
     print(f"\nThree-seed summary: {args.output_dir.resolve()}", flush=True)
 

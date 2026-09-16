@@ -117,6 +117,20 @@ def run_episode(
     initial_upper = controller.d.z_ref + initial_fraction * (
         controller.d.invariant_upper - controller.d.z_ref
     )
+    if cfg.reset_within_disturbance_identification_window:
+        identified_lower = model.normalized_state(
+            cfg.safe_center_state - cfg.theta_initial_safe_state_half_range
+        )
+        identified_upper = model.normalized_state(
+            cfg.safe_center_state + cfg.theta_initial_safe_state_half_range
+        )
+        initial_lower = np.maximum(initial_lower, identified_lower)
+        initial_upper = np.minimum(initial_upper, identified_upper)
+        if np.any(initial_upper <= initial_lower):
+            raise RuntimeError(
+                "Disturbance-identified reset window does not intersect the "
+                "controlled-invariant set."
+            )
     def reset_segment():
         z0 = rng.uniform(initial_lower, initial_upper)
         if training and rng.random() < cfg.training_boundary_start_probability:
@@ -540,6 +554,72 @@ def evaluate_policy(
     return aggregate, representative, samples
 
 
+def compute_safe_steady_reference(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+) -> dict[str, object]:
+    """Grid-search a nominal safe steady reference for evaluation only."""
+    points = int(cfg.safe_reference_grid_points)
+    if points < 2:
+        raise ValueError("safe_reference_grid_points must be at least two")
+    axes = [
+        np.linspace(design.invariant_lower[i], design.invariant_upper[i], points)
+        for i in range(2)
+    ]
+    best: dict[str, object] | None = None
+    for x0 in axes[0]:
+        for x1 in axes[1]:
+            state_n = np.array([x0, x1], dtype=float)
+            state = model.physical_state(state_n)
+            control = model.steady_input(state, cfg.disturbance_nominal)
+            if not np.all(np.isfinite(control)):
+                continue
+            derivative = model.derivative(state, control, cfg.disturbance_nominal)
+            control_n = model.normalized_input(control)
+            feasible = bool(
+                np.max(np.abs(derivative))
+                <= float(cfg.safe_reference_derivative_tolerance)
+                and np.all(control_n >= design.u_lower_tight - 1e-10)
+                and np.all(control_n <= design.u_upper_tight + 1e-10)
+                and np.all(state_n >= design.invariant_lower - 1e-10)
+                and np.all(state_n <= design.invariant_upper + 1e-10)
+                and np.all(state >= cfg.state_lower - 1e-10)
+                and np.all(state <= cfg.state_upper + 1e-10)
+                and np.all(control >= cfg.input_lower - 1e-10)
+                and np.all(control <= cfg.input_upper + 1e-10)
+            )
+            if not feasible:
+                continue
+            cost = model.economic_cost(state, control, cfg.disturbance_nominal)
+            if np.isfinite(cost) and (best is None or cost < float(best["cost"])):
+                best = {
+                    "state": state.copy(),
+                    "input": control.copy(),
+                    "cost": float(cost),
+                    "derivative_inf_norm": float(np.max(np.abs(derivative))),
+                }
+    if best is None:
+        raise RuntimeError("No feasible nominal safe steady reference was found.")
+    return best
+
+
+def _paired_economic_metrics(
+    baseline: dict[str, float],
+    sac: dict[str, float],
+    safe_reference_cost: float,
+) -> tuple[float, float]:
+    base_cost = float(baseline["economic_cost_mean"])
+    sac_cost = float(sac["economic_cost_mean"])
+    reduction = 100.0 * (base_cost - sac_cost) / max(abs(base_cost), 1e-12)
+    denominator = base_cost - float(safe_reference_cost)
+    gap = (
+        -(sac_cost - float(safe_reference_cost)) / denominator
+        if denominator > 1e-12 else float("nan")
+    )
+    return float(reduction), float(gap)
+
+
 def evaluate_sac_policy_map(
     cfg: ExperimentConfig,
     model: EvaporatorModel,
@@ -617,8 +697,12 @@ def save_feedback_law(
         ),
         "disturbance_available_to_sac": False,
         "K_parameterization": (
-            "continuous real 2x2 theta parameter with H-infinity/RPI/QP "
-            "safety-gated two-sided policy search"
+            "continuous real 2x2 gain with H-infinity/RPI/QP safety-gated "
+            + (
+                "offline geometry search and fixed SAC deployment"
+                if cfg.experiment_mode == "proposed"
+                else "online two-sided policy search"
+            )
         ),
         "terminal_center_source": "Zanon-Gros-2020 evaporation example",
         "K_normalized": design.k.tolist(),
@@ -685,6 +769,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--episodes", type=int, default=300)
     parser.add_argument("--steps", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--experiment-mode",
+        choices=("proposed", "joint_theta"),
+        default="proposed",
+    )
     parser.add_argument("--device", default="auto", help="auto, cpu, cuda, cuda:0, ...")
     parser.add_argument("--resume", type=Path, default=None)
     parser.add_argument(
@@ -703,7 +792,10 @@ def main() -> None:
         episodes=args.episodes,
         steps_per_episode=args.steps,
         seed=args.seed,
+        experiment_mode=args.experiment_mode,
     )
+    if cfg.experiment_mode not in {"proposed", "joint_theta"}:
+        raise ValueError("experiment_mode must be 'proposed' or 'joint_theta'")
     if args.output_dir is not None:
         cfg.output_dir = args.output_dir
     cfg.output_dir.mkdir(parents=True, exist_ok=True)
@@ -727,13 +819,16 @@ def main() -> None:
                 theta_k=saved_theta["K"],
             )
     initial_fixed_design = copy.deepcopy(design)
-    controller = SafeController(cfg, model, design)
     theta_learner = OnlineThetaLearner(
         cfg,
         model,
         design,
         np.random.default_rng(cfg.seed + 17001),
     )
+    if cfg.experiment_mode == "proposed":
+        design, _ = theta_learner.optimize_static_safety_design(design)
+    optimized_fixed_design = copy.deepcopy(design)
+    controller = SafeController(cfg, model, design)
     sac_cfg = SACConfig(
         gamma=cfg.gamma_rl,
         tau=cfg.tau,
@@ -778,7 +873,15 @@ def main() -> None:
     print(f"  disturbance input  : hidden from SAC, applied to plant")
     print(f"  nominal linearized : economic steady state {cfg.linearization_state.tolist()}")
     print(f"  safety anchor      : {cfg.safe_center_state.tolist()}")
-    print(f"  online theta       : h, p, four-facet M, K (safety-gated)")
+    print(f"  experiment mode    : {cfg.experiment_mode}")
+    print(
+        "  theta path         : "
+        + (
+            "offline M/K geometry optimization; fixed during SAC"
+            if cfg.experiment_mode == "proposed"
+            else "online h, p, four-facet M, K (paper-inspired baseline)"
+        )
+    )
     print(f"  safe subtrajectory : {cfg.training_segment_steps} training steps")
     print(f"  theta set interval : {cfg.theta_set_update_every_episodes} episodes")
     print(f"  continuous K interval: {cfg.theta_k_update_every_episodes} episodes")
@@ -789,6 +892,9 @@ def main() -> None:
     evaluation_seeds = [
         cfg.seed + 10000 + index for index in range(cfg.evaluation_seed_count)
     ]
+    no_rl_policy = ZeroResidualPolicy()
+    safe_reference = compute_safe_steady_reference(cfg, model, design)
+    safe_reference_cost = float(safe_reference["cost"])
     # Direct continuous policy search for K uses the same hidden-disturbance
     # seeds and the paper center for every proposal.  This avoids confounding a
     # gain change with a different random initial state.  Unsafe rollouts are
@@ -826,6 +932,12 @@ def main() -> None:
     initial_stat, _, _ = evaluate_policy(
         cfg, model, design, agent, evaluation_seeds
     )
+    initial_baseline_stat, _, _ = evaluate_policy(
+        cfg, model, design, no_rl_policy, evaluation_seeds
+    )
+    initial_reduction, initial_gap = _paired_economic_metrics(
+        initial_baseline_stat, initial_stat, safe_reference_cost
+    )
     initial_theta_metrics = theta_learner.metrics(design)
     logs: list[dict[str, float]] = [{
         "episode": 0,
@@ -834,6 +946,11 @@ def main() -> None:
         "evaluation_return": initial_stat["return"],
         "evaluation_return_per_step": initial_stat["return_per_step"],
         "evaluation_economic_cost_mean": initial_stat["economic_cost_mean"],
+        "evaluation_theta_only_economic_cost_mean": initial_baseline_stat["economic_cost_mean"],
+        "evaluation_safe_sac_economic_cost_mean": initial_stat["economic_cost_mean"],
+        "evaluation_sac_incremental_cost_reduction_percent": initial_reduction,
+        "evaluation_normalized_safe_performance_gap": initial_gap,
+        "safe_reference_cost": safe_reference_cost,
     }]
     global_step = 0
     best_eval_return_per_step = float(initial_stat["return_per_step"])
@@ -848,6 +965,7 @@ def main() -> None:
     agent.save_actor(model_dir / "best_actor.pth")
     agent.save_checkpoint(model_dir / "best_checkpoint.pth")
     save_theta_design(model_dir / "initial_theta.npz", initial_fixed_design)
+    save_theta_design(model_dir / "optimized_theta.npz", optimized_fixed_design)
     save_theta_design(model_dir / "best_theta.npz", best_design)
     print(
         "episode=000/"
@@ -869,14 +987,23 @@ def main() -> None:
             theta_learner=theta_learner,
         )
         agent.update_actor_ema()
-        design, theta_metrics = theta_learner.update_after_episode(
-            episode, design, design_evaluator=evaluate_continuous_k
-        )
-        controller = SafeController(cfg, model, design)
+        if cfg.experiment_mode == "joint_theta":
+            design, theta_metrics = theta_learner.update_after_episode(
+                episode, design, design_evaluator=evaluate_continuous_k
+            )
+            controller = SafeController(cfg, model, design)
+        else:
+            # Transitions are retained for diagnostics, but the optimized
+            # H-infinity/RPI/QP design is immutable throughout SAC training.
+            theta_metrics = theta_learner.metrics(design)
 
         eval_return = float("nan")
         eval_return_per_step = float("nan")
         eval_economic_cost_mean = float("nan")
+        eval_theta_only_cost = float("nan")
+        eval_sac_cost = float("nan")
+        eval_cost_reduction = float("nan")
+        eval_safe_gap = float("nan")
         if (
             episode == 1
             or episode % cfg.evaluation_every == 0
@@ -888,6 +1015,14 @@ def main() -> None:
             eval_return = float(eval_stat["return"])
             eval_return_per_step = float(eval_stat["return_per_step"])
             eval_economic_cost_mean = float(eval_stat["economic_cost_mean"])
+            eval_baseline_stat, _, _ = evaluate_policy(
+                cfg, model, design, no_rl_policy, evaluation_seeds
+            )
+            eval_theta_only_cost = float(eval_baseline_stat["economic_cost_mean"])
+            eval_sac_cost = eval_economic_cost_mean
+            eval_cost_reduction, eval_safe_gap = _paired_economic_metrics(
+                eval_baseline_stat, eval_stat, safe_reference_cost
+            )
             eval_safe = (
                 eval_stat["violation_rate"] == 0.0
                 and eval_stat["rpi_violation_rate"] == 0.0
@@ -919,6 +1054,11 @@ def main() -> None:
             "evaluation_return": eval_return,
             "evaluation_return_per_step": eval_return_per_step,
             "evaluation_economic_cost_mean": eval_economic_cost_mean,
+            "evaluation_theta_only_economic_cost_mean": eval_theta_only_cost,
+            "evaluation_safe_sac_economic_cost_mean": eval_sac_cost,
+            "evaluation_sac_incremental_cost_reduction_percent": eval_cost_reduction,
+            "evaluation_normalized_safe_performance_gap": eval_safe_gap,
+            "safe_reference_cost": safe_reference_cost,
         })
         if episode == 1 or episode % 10 == 0:
             eval_text = (
@@ -951,36 +1091,41 @@ def main() -> None:
     )
     training_gradient_updates = int(agent.total_updates)
 
-    # Rebuild theta against the final hull before choosing an actor.  An older
-    # online-best theta is never deployed after later residuals have enlarged
-    # the data set.  This makes the selected checkpoint conditional on every
-    # transition retained by the completed run, not only data seen when that
-    # actor happened to be saved.
+    # The joint-theta ablation rebuilds against its final hull.  The proposed
+    # mode deliberately keeps the offline design fixed and only audits newly
+    # observed residuals against it.
     final_data_hull = np.asarray(theta_learner.data_hull, dtype=float).copy()
-    design = build_safety_design(
-        cfg,
-        model,
-        np.random.default_rng(cfg.seed + 51001),
-        w_data_hull=final_data_hull,
-        theta_m_angle=design.theta_m_angle,
-        theta_h=design.theta_h,
-        theta_p=design.theta_p,
-        theta_k=design.k,
-    )
+    if cfg.experiment_mode == "joint_theta":
+        design = build_safety_design(
+            cfg,
+            model,
+            np.random.default_rng(cfg.seed + 51001),
+            w_data_hull=final_data_hull,
+            theta_m_angle=design.theta_m_angle,
+            theta_h=design.theta_h,
+            theta_p=design.theta_p,
+            theta_k=design.k,
+        )
     uncovered_final_vertices = sum(
         not point_in_convex_polygon(point, design.w_vertices, tol=1e-8)
         for point in final_data_hull
     )
-    if uncovered_final_vertices:
+    if uncovered_final_vertices and cfg.experiment_mode == "joint_theta":
         raise RuntimeError(
             "Final safety design does not contain every retained disturbance "
             f"vertex ({uncovered_final_vertices} uncovered)."
+        )
+    if uncovered_final_vertices and cfg.experiment_mode == "proposed":
+        print(
+            "WARNING: fixed proposed safety design did not contain all observed "
+            f"effective-disturbance hull vertices ({uncovered_final_vertices}); "
+            "final certification will be marked failed.",
+            flush=True,
         )
 
     # Select the SAC policy only after all candidates have been placed behind
     # the same final certified theta.  The paired zero-residual result is a
     # hard lower-performance gate; scale=0 remains an honest safe fallback.
-    no_rl_policy = ZeroResidualPolicy()
     theta_only_stat, theta_only_records, _ = evaluate_policy(
         cfg, model, design, no_rl_policy, evaluation_seeds
     )
@@ -1004,7 +1149,7 @@ def main() -> None:
         candidate_scales = (
             (0.0,)
             if bool(candidate.get("zero_fallback", False))
-            else tuple(scale for scale in cfg.sac_selection_scales if scale > 0.0)
+            else tuple(cfg.sac_selection_scales)
         )
         for policy_scale in candidate_scales:
             agent.set_policy_output_scale(policy_scale)
@@ -1020,21 +1165,43 @@ def main() -> None:
                 and candidate_stat["rpi_violation_rate"] == 0.0
                 and candidate_stat["qp_infeasible_rate"] == 0.0
             )
-            eligible = bool(
-                safe
+            positive_increment = bool(
+                policy_scale > 0.0
+                and safe
+                and candidate_stat["economic_cost_mean"]
+                < theta_only_stat["economic_cost_mean"] - 1e-12
                 and incremental_return
                 >= float(cfg.sac_min_incremental_return_per_step) - 1e-12
-                and candidate_stat["economic_cost_mean"]
-                <= theta_only_stat["economic_cost_mean"] + 1e-12
             )
+            zero_fallback = bool(
+                policy_scale == 0.0 and candidate.get("zero_fallback", False)
+            )
+            eligible = bool(zero_fallback or positive_increment)
+            cost_reduction_percent = float(
+                100.0
+                * (theta_only_stat["economic_cost_mean"] - candidate_stat["economic_cost_mean"])
+                / max(abs(theta_only_stat["economic_cost_mean"]), 1e-12)
+            )
+            # Always retain an honest scale=0 diagnostic fallback.  It is not
+            # mislabeled as certified when the fixed design itself is violated.
+            eligible = bool(zero_fallback or (safe and eligible))
             audit_row = {
                 "episode": float(candidate["episode"]),
                 "policy_scale": float(policy_scale),
                 "return_per_step": float(candidate_stat["return_per_step"]),
                 "economic_cost_mean": float(candidate_stat["economic_cost_mean"]),
                 "incremental_return_per_step": incremental_return,
+                "economic_cost_reduction_percent": cost_reduction_percent,
+                "violation_rate": float(candidate_stat["violation_rate"]),
+                "rpi_violation_rate": float(candidate_stat["rpi_violation_rate"]),
+                "qp_infeasible_rate": float(candidate_stat["qp_infeasible_rate"]),
+                "disturbance_bound_exceedance_rate": float(
+                    candidate_stat["disturbance_bound_exceedance_rate"]
+                ),
                 "intervention_rate": float(candidate_stat["intervention_rate"]),
+                "mapping_rate": float(candidate_stat["feasible_action_mapping_rate"]),
                 "safe": float(safe),
+                "positive_increment": float(positive_increment),
                 "eligible": float(eligible),
             }
             candidate_audit.append(audit_row)
@@ -1093,6 +1260,18 @@ def main() -> None:
     )
     holdout_no_rl_stat, _, _ = evaluate_policy(
         cfg, model, initial_fixed_design, no_rl_policy, holdout_seeds
+    )
+    nonzero_audit = [
+        row for row in candidate_audit if float(row["policy_scale"]) > 0.0
+    ]
+    best_nonzero = min(
+        nonzero_audit,
+        key=lambda row: (
+            float(row["economic_cost_mean"]),
+            float(row["violation_rate"]),
+            float(row["intervention_rate"]),
+        ),
+        default=None,
     )
 
     rollout = records_to_arrays(final_records)
@@ -1177,6 +1356,9 @@ def main() -> None:
     invariant_width = (
         design.invariant_upper - design.invariant_lower
     ) * cfg.state_scale
+    initial_invariant_width = (
+        initial_fixed_design.invariant_upper - initial_fixed_design.invariant_lower
+    ) * cfg.state_scale
     peak_w_positive = np.max(rollout["effective_w"], axis=0)
     peak_w_negative = -np.min(rollout["effective_w"], axis=0)
     training_mask = log_arrays["episode"] >= 1.0
@@ -1193,6 +1375,16 @@ def main() -> None:
         cfg.disturbance_nominal,
     )
     state_constraint_area = float(np.prod(cfg.state_upper - cfg.state_lower))
+    initial_x_minus_z_area = float(np.prod(initial_x_minus_z_width))
+    optimized_x_minus_z_area = float(np.prod(x_minus_z_width))
+    initial_invariant_area = float(np.prod(initial_invariant_width))
+    optimized_invariant_area = float(np.prod(invariant_width))
+    final_cost_reduction, final_safe_gap = _paired_economic_metrics(
+        theta_only_stat, final_stat, safe_reference_cost
+    )
+    holdout_cost_reduction, _ = _paired_economic_metrics(
+        holdout_theta_only_stat, holdout_best_stat, safe_reference_cost
+    )
     feedback_law = save_feedback_law(
         cfg, design, cfg.output_dir, agent.policy_output_scale
     )
@@ -1221,6 +1413,29 @@ def main() -> None:
             "larger values demonstrate state-dependent actor feedback"
         ),
     }
+    requested_state_dependence_norm = float(np.linalg.norm(np.ptp(
+        requested_map, axis=(0, 1)
+    )))
+    applied_state_dependence_norm = float(np.linalg.norm(np.ptp(
+        applied_map, axis=(0, 1)
+    )))
+    selected_positive_increment = bool(
+        agent.policy_output_scale > 0.0
+        and final_stat["economic_cost_mean"]
+        < theta_only_stat["economic_cost_mean"] - 1e-12
+        and holdout_best_stat["economic_cost_mean"]
+        < holdout_theta_only_stat["economic_cost_mean"] - 1e-12
+        and final_stat["violation_rate"] == 0.0
+        and holdout_best_stat["violation_rate"] == 0.0
+        and final_stat["rpi_violation_rate"] == 0.0
+        and holdout_best_stat["rpi_violation_rate"] == 0.0
+        and final_stat["qp_infeasible_rate"] == 0.0
+        and holdout_best_stat["qp_infeasible_rate"] == 0.0
+        and final_stat["disturbance_bound_exceedance_rate"] == 0.0
+        and holdout_best_stat["disturbance_bound_exceedance_rate"] == 0.0
+        and uncovered_final_vertices == 0
+        and applied_state_dependence_norm > 0.0
+    )
     save_csv(
         cfg.output_dir / "sac_residual_policy_map.csv",
         [
@@ -1285,8 +1500,8 @@ def main() -> None:
     rl_vs_no_rl = {
         "comparison_design": (
             "paired seeds and identical hidden disturbances; safe_SAC uses "
-            "learned theta, theta_only removes SAC but retains learned theta, "
-            "and no_RL fixes the initial theta and sets the SAC residual to zero"
+            "the same optimized fixed safety design as theta_only; only the "
+            "SAC residual differs. no_RL uses the initial unoptimized design"
         ),
         "safe_sac": final_stat,
         "theta_only_no_sac": theta_only_stat,
@@ -1305,9 +1520,7 @@ def main() -> None:
             / max(abs(no_rl_stat["economic_cost_mean"]), 1e-12)
         ),
         "sac_incremental_cost_reduction_vs_theta_only_percent": float(
-            100.0
-            * (theta_only_stat["economic_cost_mean"] - final_stat["economic_cost_mean"])
-            / max(abs(theta_only_stat["economic_cost_mean"]), 1e-12)
+            final_cost_reduction
         ),
         "return_improvement": float(final_stat["return"] - no_rl_stat["return"]),
         "intervention_rate_change": float(
@@ -1319,13 +1532,94 @@ def main() -> None:
     ) as stream:
         json.dump(rl_vs_no_rl, stream, indent=2, ensure_ascii=False)
     metrics = {
-        "algorithm": "enhanced_continuous_sac_plus_online_theta_with_final_hull_certification",
-        "experiment_scope": "paper_center_safe_SAC_with_continuous_h_p_M_K_updates",
-        "selected_policy": "final_hull_certified_paired_best_checkpoint",
+        "algorithm": (
+            "static_hinf_rpi_geometry_plus_fixed_qp_residual_sac"
+            if cfg.experiment_mode == "proposed"
+            else "joint_theta_residual_sac_ablation"
+        ),
+        "experiment_mode": cfg.experiment_mode,
+        "experiment_scope": (
+            "offline_static_hinf_rpi_geometry_then_fixed_safe_residual_sac"
+            if cfg.experiment_mode == "proposed"
+            else "paper_inspired_online_h_p_M_K_ablation"
+        ),
+        "selected_policy": "fixed_design_paired_checkpoint_scale_audit",
         "best_evaluation_episode": int(best_eval_episode),
+        "best_episode": int(best_eval_episode),
         "selected_policy_output_scale": float(agent.policy_output_scale),
+        "selected_policy_scale": float(agent.policy_output_scale),
+        "initial_rpi_area": float(initial_rpi_area),
+        "optimized_rpi_area": float(rpi_area),
+        "rpi_area_reduction_percent": float(
+            100.0 * (initial_rpi_area - rpi_area) / max(initial_rpi_area, 1e-12)
+        ),
+        "initial_x_minus_z_area": initial_x_minus_z_area,
+        "optimized_x_minus_z_area": optimized_x_minus_z_area,
+        "x_minus_z_area_increase_percent": float(
+            100.0 * (optimized_x_minus_z_area - initial_x_minus_z_area)
+            / max(initial_x_minus_z_area, 1e-12)
+        ),
+        "initial_invariant_area": initial_invariant_area,
+        "optimized_invariant_area": optimized_invariant_area,
+        "theta_only_economic_cost_mean": float(theta_only_stat["economic_cost_mean"]),
+        "safe_sac_economic_cost_mean": float(final_stat["economic_cost_mean"]),
+        "holdout_theta_only_economic_cost_mean": float(
+            holdout_theta_only_stat["economic_cost_mean"]
+        ),
+        "holdout_safe_sac_economic_cost_mean": float(
+            holdout_best_stat["economic_cost_mean"]
+        ),
+        "sac_incremental_cost_reduction_percent": final_cost_reduction,
+        "holdout_sac_incremental_cost_reduction_percent": holdout_cost_reduction,
+        "safe_reference_cost": safe_reference_cost,
+        "normalized_safe_performance_gap": final_safe_gap,
+        "nominal_safe_steady_reference": {
+            "state": np.asarray(safe_reference["state"]).tolist(),
+            "input": np.asarray(safe_reference["input"]).tolist(),
+            "cost": safe_reference_cost,
+            "derivative_inf_norm": float(safe_reference["derivative_inf_norm"]),
+            "interpretation": "evaluation-only nominal safe steady reference, not a global optimal policy",
+        },
+        "constraint_violation_rate": float(final_stat["violation_rate"]),
+        "holdout_constraint_violation_rate": float(holdout_best_stat["violation_rate"]),
+        "rpi_violation_rate": float(final_stat["rpi_violation_rate"]),
+        "qp_infeasible_rate": float(final_stat["qp_infeasible_rate"]),
+        "qp_intervention_rate": float(final_stat["intervention_rate"]),
+        "safe_action_mapping_rate": float(final_stat["feasible_action_mapping_rate"]),
+        "requested_residual_state_dependence_norm": requested_state_dependence_norm,
+        "applied_residual_state_dependence_norm": applied_state_dependence_norm,
+        "disturbance_bound_exceedance_rate": float(
+            final_stat["disturbance_bound_exceedance_rate"]
+        ),
+        "sac_positive_increment_learned": selected_positive_increment,
+        "best_nonzero_policy_episode": (
+            float(best_nonzero["episode"]) if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_policy_scale": (
+            float(best_nonzero["policy_scale"]) if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_incremental_return": (
+            float(best_nonzero["incremental_return_per_step"])
+            if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_cost_reduction_percent": (
+            float(best_nonzero["economic_cost_reduction_percent"])
+            if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_violation_rate": (
+            float(best_nonzero["violation_rate"]) if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_intervention_rate": (
+            float(best_nonzero["intervention_rate"]) if best_nonzero is not None else float("nan")
+        ),
+        "best_nonzero_mapping_rate": (
+            float(best_nonzero["mapping_rate"]) if best_nonzero is not None else float("nan")
+        ),
         "final_checkpoint_certification": {
-            "uses_final_retained_disturbance_hull": True,
+            "checked_against_final_retained_disturbance_hull": True,
+            "safety_design_rebuilt_from_final_hull": bool(
+                cfg.experiment_mode == "joint_theta"
+            ),
             "final_data_hull_vertex_count": int(len(final_data_hull)),
             "uncovered_final_hull_vertices": int(uncovered_final_vertices),
             "candidate_count_before_prescreen": int(len(policy_candidates)),
@@ -1345,10 +1639,12 @@ def main() -> None:
                 - final_stat["economic_cost_mean"]
             ),
             "sac_positive_increment_learned": bool(
-                final_stat["return_per_step"]
-                > theta_only_stat["return_per_step"] + 1e-12
-                and final_stat["economic_cost_mean"]
-                < theta_only_stat["economic_cost_mean"] - 1e-12
+                selected_positive_increment
+            ),
+            "fixed_design_disturbance_bound_certified": bool(
+                uncovered_final_vertices == 0
+                and final_stat["disturbance_bound_exceedance_rate"] == 0.0
+                and holdout_best_stat["disturbance_bound_exceedance_rate"] == 0.0
             ),
             "audit_file": "final_checkpoint_audit.csv",
         },
@@ -1378,6 +1674,7 @@ def main() -> None:
             "cost_normalization_scale": cfg.theta_cost_scale,
             "set_update_every_episodes": cfg.theta_set_update_every_episodes,
             "continuous_K_update_every_episodes": cfg.theta_k_update_every_episodes,
+            "frozen_during_sac": bool(cfg.experiment_mode == "proposed"),
             "continuous_K_evaluation_steps": cfg.theta_k_evaluation_steps,
             "continuous_K_parameterization": (
                 "direct unconstrained real 2x2 entries with two-sided pattern "
@@ -1389,6 +1686,8 @@ def main() -> None:
             ),
         },
         "paper_2020_comparison": {
+            "name": "paper_inspired_theta_baseline",
+            "exact_2020_reproduction": False,
             "scope": (
                 "paper-aligned center, linear steady input, disturbance ranges, "
                 "constraints, economic cost, and theta=(h,p,M,K); SAC replaces "
@@ -1403,7 +1702,11 @@ def main() -> None:
             "implemented_training_interactions": cfg.episodes * cfg.steps_per_episode,
             "comparison_training_point": "completed_training_run",
             "paper_parameters_learned": ["h", "p", "M", "K"],
-            "implemented_parameters_learned": ["h", "p", "M", "K", "SAC_actor_critic"],
+            "implemented_parameters_learned": (
+                ["SAC_actor_critic"]
+                if cfg.experiment_mode == "proposed"
+                else ["h", "p", "M", "K"]
+            ),
             "K_search_space": "continuous_real_2_by_2_with_safety_gated_pattern_search",
             "initial_K": initial_fixed_design.k.tolist(),
             "final_K": design.k.tolist(),
@@ -1551,8 +1854,9 @@ def main() -> None:
         ),
         "disturbance_bound_method": (
             "four-facet asymmetric W_theta={w|Mw<=m}; initial local corner/"
-            "sample hull at the economic linearization point, followed by "
-            "online state-transition residual compression and safe M updates"
+            "sample hull at the economic linearization point; observed "
+            "state-transition residuals are audited without changing the fixed "
+            "design in proposed mode"
         ),
         "disturbance_polytope_vertex_count": int(len(design.w_vertices)),
         "qp_intervention_tolerance_normalized": cfg.qp_intervention_tolerance,

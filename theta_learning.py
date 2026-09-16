@@ -56,6 +56,14 @@ class OnlineThetaLearner:
         self.initial_rpi_area = _polygon_area(
             initial_design.rpi_boundary, cfg.state_scale
         )
+        self.initial_x_minus_z_area = float(np.prod(
+            (initial_design.x_upper_tight - initial_design.x_lower_tight)
+            * cfg.state_scale
+        ))
+        self.initial_invariant_area = float(np.prod(
+            (initial_design.invariant_upper - initial_design.invariant_lower)
+            * cfg.state_scale
+        ))
         self.set_update_attempts = 0
         self.set_update_accepts = 0
         self.k_update_attempts = 0
@@ -163,10 +171,135 @@ class OnlineThetaLearner:
             (design.invariant_upper - design.invariant_lower) * self.cfg.state_scale
         ))
         return (
-            self.cfg.theta_rpi_area_weight * rpi_area
-            - self.cfg.theta_x_minus_z_area_weight * x_minus_z_area
-            - self.cfg.theta_invariant_area_weight * invariant_area
+            self.cfg.theta_rpi_area_weight
+            * rpi_area / max(self.initial_rpi_area, 1e-12)
+            - self.cfg.theta_x_minus_z_area_weight
+            * x_minus_z_area / max(self.initial_x_minus_z_area, 1e-12)
+            - self.cfg.theta_invariant_area_weight
+            * invariant_area / max(self.initial_invariant_area, 1e-12)
         )
+
+    def _static_candidate_admissible(self, design: SafetyDesign) -> bool:
+        """Keep the optimized geometry Pareto-safe relative to its seed."""
+        rpi_area = _polygon_area(design.rpi_boundary, self.cfg.state_scale)
+        x_minus_z_area = float(np.prod(
+            (design.x_upper_tight - design.x_lower_tight) * self.cfg.state_scale
+        ))
+        return bool(
+            rpi_area <= self.initial_rpi_area + 1e-10
+            and x_minus_z_area >= self.initial_x_minus_z_area - 1e-10
+        )
+
+    def _static_angle_search(self, design: SafetyDesign, pass_index: int) -> SafetyDesign:
+        """Exhaustively scan the configured four-facet orientation range."""
+        limit = float(self.cfg.theta_m_max_angle_degrees)
+        step = float(self.cfg.theta_m_angle_step_degrees)
+        angles = np.deg2rad(np.arange(-limit, limit + 0.5 * step, step))
+        best = design
+        best_score = self._design_score(design)
+        for index, angle in enumerate(angles):
+            self.set_update_attempts += 1
+            try:
+                candidate = build_safety_design(
+                    self.cfg,
+                    self.model,
+                    np.random.default_rng(
+                        self.cfg.seed + 61000 + 1000 * pass_index + index
+                    ),
+                    w_data_hull=self.data_hull,
+                    theta_m_angle=float(angle),
+                    theta_h=design.theta_h,
+                    theta_p=design.theta_p,
+                    theta_k=design.k,
+                    w_inflation=self.cfg.rpi_inflation,
+                )
+            except RuntimeError:
+                continue
+            if not all(
+                point_in_convex_polygon(point, candidate.w_vertices, tol=1e-8)
+                for point in self.data_hull
+            ):
+                continue
+            if not self._static_candidate_admissible(candidate):
+                continue
+            score = self._design_score(candidate)
+            if score < best_score - float(self.cfg.theta_k_acceptance_tolerance):
+                best, best_score = candidate, score
+        if best is not design:
+            self.set_update_accepts += 1
+        return best
+
+    def _static_k_search(self, design: SafetyDesign, pass_index: int) -> SafetyDesign:
+        """Safety-gated two-sided coordinate search using geometry only."""
+        steps = np.asarray(self.cfg.theta_k_initial_step, dtype=float).copy()
+        best = design
+        max_iterations = int(self.cfg.theta_static_k_max_iterations)
+        tolerance = float(self.cfg.theta_k_acceptance_tolerance)
+        for iteration in range(max_iterations):
+            if np.all(steps <= float(self.cfg.theta_k_min_step) + 1e-15):
+                break
+            coordinate = iteration % best.k.size
+            self.k_update_attempts += 1
+            self.last_k_coordinate = coordinate
+            current_score = self._design_score(best)
+            proposals: list[tuple[float, SafetyDesign]] = []
+            for sign_index, sign in enumerate((-1.0, 1.0)):
+                proposed_k = np.asarray(best.k, dtype=float).copy()
+                proposed_k.flat[coordinate] += sign * float(steps.flat[coordinate])
+                try:
+                    candidate = build_safety_design(
+                        self.cfg,
+                        self.model,
+                        np.random.default_rng(
+                            self.cfg.seed + 71000 + 10000 * pass_index
+                            + 10 * iteration + sign_index
+                        ),
+                        w_data_hull=self.data_hull,
+                        theta_m_angle=best.theta_m_angle,
+                        theta_h=best.theta_h,
+                        theta_p=best.theta_p,
+                        theta_k=proposed_k,
+                        w_inflation=self.cfg.rpi_inflation,
+                    )
+                except RuntimeError:
+                    continue
+                if all(
+                    point_in_convex_polygon(point, candidate.w_vertices, tol=1e-8)
+                    for point in self.data_hull
+                ) and self._static_candidate_admissible(candidate):
+                    proposals.append((self._design_score(candidate), candidate))
+            score, candidate = min(
+                proposals, key=lambda item: item[0],
+                default=(float("inf"), best),
+            )
+            if score < current_score - tolerance:
+                best = candidate
+                self.k_update_accepts += 1
+                self.last_k_score = -score
+                steps.flat[coordinate] = min(
+                    float(self.cfg.theta_k_max_step),
+                    float(steps.flat[coordinate])
+                    * float(self.cfg.theta_k_step_growth),
+                )
+            else:
+                self.last_k_score = -current_score
+                steps.flat[coordinate] = max(
+                    float(self.cfg.theta_k_min_step),
+                    float(steps.flat[coordinate])
+                    * float(self.cfg.theta_k_step_shrink),
+                )
+        self.k_steps = steps
+        return best
+
+    def optimize_static_safety_design(
+        self, initial_design: SafetyDesign
+    ) -> tuple[SafetyDesign, dict[str, float]]:
+        """Optimize M and K before SAC without using rollout return."""
+        design = initial_design
+        for pass_index in range(int(self.cfg.theta_static_outer_iterations)):
+            design = self._static_angle_search(design, pass_index)
+            design = self._static_k_search(design, pass_index)
+        return design, self.metrics(design)
 
     def _safe_set_update(
         self,
