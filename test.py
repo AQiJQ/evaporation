@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from itertools import product
+import inspect
 import numpy as np
 
 from .config import ExperimentConfig
@@ -20,10 +21,15 @@ from .theta_learning import OnlineThetaLearner
 from .train import (
     OBS_DIM,
     ZeroResidualPolicy,
+    advance_disturbance,
     compute_safe_steady_reference,
+    economic_policy_eligible,
+    formal_safety_certified,
+    hard_safety_passed,
     observation,
     run_episode,
 )
+from . import train as train_module
 
 
 def main() -> None:
@@ -38,7 +44,25 @@ def main() -> None:
     assert cfg.experiment_mode == "proposed"
     assert not cfg.restrict_invariant_to_local_window
     assert cfg.sac_final_candidate_count == 0
+    assert cfg.disturbance_mode == "piecewise_constant"
+    assert cfg.disturbance_hold_steps == 50
+    assert cfg.residual_parameterization == "state_dependent_box"
+    assert cfg.proposed_nominal_controller == "safe_center_tracking"
+    assert not cfg.reset_within_disturbance_identification_window
     assert np.allclose(cfg.residual_action_scale, [0.12, 0.10])
+    disturbance_rng = np.random.default_rng(991)
+    held = cfg.disturbance_nominal.copy()
+    for completed_steps in range(1, cfg.disturbance_hold_steps):
+        advanced = advance_disturbance(
+            cfg, disturbance_rng, held, completed_steps
+        )
+        assert np.array_equal(advanced, held)
+    changed = advance_disturbance(
+        cfg, disturbance_rng, held, cfg.disturbance_hold_steps
+    )
+    assert not np.array_equal(changed, held)
+    assert np.all(changed >= cfg.disturbance_nominal - cfg.disturbance_half_range)
+    assert np.all(changed <= cfg.disturbance_nominal + cfg.disturbance_half_range)
     model = EvaporatorModel(cfg)
     next_state = model.step(cfg.linearization_state, cfg.linearization_input, cfg.disturbance_nominal)
     assert np.max(np.abs(next_state - cfg.linearization_state)) < 2e-3, next_state
@@ -75,7 +99,21 @@ def main() -> None:
         cfg.safe_center_state,
         design.v_ref,
     )
-    assert OBS_DIM == 17 and obs.shape == (17,)
+    assert OBS_DIM == 19 and obs.shape == (19,)
+    assert np.allclose(obs[-2:], 0.0)
+    supplied_w_est = np.array([0.25, -0.5]) * design.w_bound
+    estimated_obs = observation(
+        model, controller, cfg.safe_center_state, design.v_ref, supplied_w_est
+    )
+    assert np.allclose(estimated_obs[-2:], [0.25, -0.5])
+    assert observation.__code__.co_varnames[:5] == (
+        "model", "controller", "state", "previous_u", "disturbance_estimate"
+    )
+    controller.reset(cfg.safe_center_state)
+    _, tracking_info = controller.act(
+        cfg.safe_center_state, np.zeros(2), action_is_normalized=True
+    )
+    assert np.allclose(tracking_info["base"], design.v_ref, atol=1e-9)
     acl = design.a + design.b @ design.k
     assert spectral_radius(acl) < 1.0
     assert all(
@@ -118,17 +156,31 @@ def main() -> None:
         z = test_rng.uniform(design.invariant_lower, design.invariant_upper)
         state = model.physical_state(z)
         controller.reset(state)
-        requested_residual = test_rng.uniform(-0.25, 0.25, 2)
-        _, info = controller.act(state, requested_residual)
+        raw_action = test_rng.uniform(-1.0, 1.0, 2)
+        _, info = controller.act(
+            state, raw_action, action_is_normalized=True
+        )
         assert info["qp_feasible"]
         assert 0.0 <= info["feasible_action_mapping_scale"] <= 1.0
+        assert info["feasible_action_mapping_gap"] == 0.0
         assert info["projection_gap"] < 1e-7
         assert np.allclose(
             info["candidate"] - info["base"],
-            info["feasible_action_mapping_scale"] * requested_residual,
+            info["feasible_action_mapping_scale"]
+            * cfg.residual_action_scale * raw_action,
+        )
+        assert np.all(
+            info["a_q"] @ info["candidate"] <= info["b_q"] + 1e-8
         )
         assert np.all(info["z_next"] >= design.invariant_lower - 1e-8)
         assert np.all(info["z_next"] <= design.invariant_upper + 1e-8)
+        emergency_projection, emergency_feasible = project_qp_2d(
+            np.array([1e6, -1e6]), info["a_q"], info["b_q"]
+        )
+        assert emergency_feasible
+        assert np.all(
+            info["a_q"] @ emergency_projection <= info["b_q"] + 1e-8
+        )
     selected_boundary = design.rpi_boundary
     selected_physical = selected_boundary * cfg.state_scale
     selected_area = 0.5 * abs(float(np.sum(
@@ -175,7 +227,7 @@ def main() -> None:
     episode_design = build_safety_design(
         episode_cfg, episode_model, np.random.default_rng(11)
     )
-    episode_stat, _, _ = run_episode(
+    episode_stat, episode_records, _ = run_episode(
         episode_cfg,
         episode_model,
         SafeController(episode_cfg, episode_model, episode_design),
@@ -191,6 +243,43 @@ def main() -> None:
         "move_penalty_mean", "safety_penalty_mean",
     ):
         assert reward_field in episode_stat
+    assert np.all(np.isfinite(episode_records[0]["w_est"]))
+    assert np.allclose(
+        episode_records[0]["w_est"],
+        (1.0 - episode_cfg.disturbance_estimate_ema)
+        * episode_records[0]["w_hat"],
+    )
+    assert all(
+        key in episode_stat for key in (
+            "residual_feasible_scale_mean", "residual_feasible_scale_min",
+            "residual_requested_norm_mean", "residual_applied_norm_mean",
+            "residual_execution_ratio_mean",
+        )
+    )
+
+    safe_stat = {
+        "violation_rate": 0.0,
+        "rpi_violation_rate": 0.0,
+        "qp_infeasible_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0,
+        "economic_cost_mean": 9.0,
+        "return_per_step": -100.0,
+    }
+    assert hard_safety_passed(safe_stat)
+    assert economic_policy_eligible(safe_stat, 10.0, 1.0)
+    eligibility_source = inspect.getsource(economic_policy_eligible)
+    assert "return_per_step" not in eligibility_source
+    assert "incremental_return" not in eligibility_source
+    unsafe_stat = dict(safe_stat, disturbance_bound_exceedance_rate=0.01)
+    assert not economic_policy_eligible(unsafe_stat, 10.0, 1.0)
+    assert formal_safety_certified(0, safe_stat, safe_stat)
+    assert not formal_safety_certified(1, safe_stat, safe_stat)
+    main_source = inspect.getsource(train_module.main)
+    selection_source = main_source[
+        main_source.index("selected_candidate:"):
+        main_source.index("if selected_candidate is None:")
+    ]
+    assert "holdout" not in selection_source
     theta_cfg = ExperimentConfig(
         disturbance_bound_samples=20,
         theta_min_transition_samples=4,
@@ -237,6 +326,56 @@ def main() -> None:
     assert all(
         point_in_convex_polygon(vertex, optimized_design.w_vertices, tol=1e-8)
         for vertex in optimized_design.w_data_hull
+    )
+    refinement_cfg = ExperimentConfig(
+        disturbance_bound_samples=20,
+        robust_set_refinement_samples=30,
+        robust_set_refinement_max_iterations=2,
+        robust_set_refinement_tolerance=1.0,
+        theta_static_k_max_iterations=2,
+        theta_static_outer_iterations=1,
+        theta_m_max_angle_degrees=0.0,
+    )
+    nonlinear_reference_model = EvaporatorModel(refinement_cfg)
+    linear_a, linear_b, linear_affine = nonlinear_reference_model.linearize(
+        refinement_cfg.linearization_state, refinement_cfg.linearization_input
+    )
+
+    class ExactLinearTestModel(EvaporatorModel):
+        def linearize(self, state, control):
+            del state, control
+            return linear_a.copy(), linear_b.copy(), linear_affine.copy()
+
+        def step(self, state, control, disturbance):
+            del disturbance
+            next_normalized = (
+                linear_a @ self.normalized_state(state)
+                + linear_b @ self.normalized_input(control)
+                + linear_affine
+            )
+            return self.physical_state(next_normalized)
+
+    refinement_model = ExactLinearTestModel(refinement_cfg)
+    refinement_initial = build_safety_design(
+        refinement_cfg,
+        refinement_model,
+        np.random.default_rng(refinement_cfg.seed),
+    )
+    refinement_learner = OnlineThetaLearner(
+        refinement_cfg,
+        refinement_model,
+        refinement_initial,
+        np.random.default_rng(808),
+    )
+    refinement_design, refinement_metrics = (
+        refinement_learner.build_self_consistent_proposed_design(
+            refinement_initial
+        )
+    )
+    assert refinement_metrics["robust_refinement_uncovered_count"] == 0.0
+    assert all(
+        point_in_convex_polygon(point, refinement_design.w_vertices, tol=1e-8)
+        for point in refinement_design.w_data_hull
     )
     learner = OnlineThetaLearner(
         theta_cfg, theta_model, theta_design, np.random.default_rng(7)

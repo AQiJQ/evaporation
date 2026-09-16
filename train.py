@@ -16,6 +16,7 @@ from .control import SafeController, build_safety_design, point_in_convex_polygo
 from .model import EvaporatorModel
 from .plot import (
     close_all_plots,
+    plot_disturbance_adaptation,
     plot_disturbance_response,
     plot_disturbances,
     plot_economic_performance,
@@ -33,7 +34,7 @@ from .sac import ReplayBuffer, SACAgent, SACConfig, set_seed
 from .theta_learning import OnlineThetaLearner
 
 
-OBS_DIM = 17
+OBS_DIM = 19
 ACTION_DIM = 2
 
 
@@ -53,6 +54,7 @@ def observation(
     controller: SafeController,
     state: np.ndarray,
     previous_u: np.ndarray,
+    disturbance_estimate: np.ndarray | None = None,
 ) -> np.ndarray:
     """Plant feedback plus known controller context; disturbance stays hidden.
 
@@ -75,12 +77,19 @@ def observation(
         design.theta_p / parameter_clip,
         [design.theta_m_angle / angle_limit],
     ])
+    w_est = (
+        np.zeros(2, dtype=float)
+        if disturbance_estimate is None
+        else np.asarray(disturbance_estimate, dtype=float)
+    )
+    normalized_w_est = w_est / np.maximum(design.w_bound, 1e-12)
     return np.clip(
         np.concatenate([
             x - controller.d.z_ref,
             e,
             previous_u - controller.d.v_ref,
             controller_context,
+            normalized_w_est,
         ]),
         -4.0,
         4.0,
@@ -93,6 +102,25 @@ def sample_disturbance(cfg: ExperimentConfig, rng: np.random.Generator) -> np.nd
         cfg.disturbance_nominal - cfg.disturbance_half_range,
         cfg.disturbance_nominal + cfg.disturbance_half_range,
     )
+
+
+def advance_disturbance(
+    cfg: ExperimentConfig,
+    rng: np.random.Generator,
+    current: np.ndarray,
+    completed_steps: int,
+) -> np.ndarray:
+    """Advance the configured bounded hidden-disturbance process."""
+    if cfg.disturbance_mode == "iid":
+        return sample_disturbance(cfg, rng)
+    if cfg.disturbance_mode != "piecewise_constant":
+        raise ValueError("disturbance_mode must be 'iid' or 'piecewise_constant'")
+    hold = int(cfg.disturbance_hold_steps)
+    if hold <= 0:
+        raise ValueError("disturbance_hold_steps must be positive")
+    if completed_steps % hold == 0:
+        return sample_disturbance(cfg, rng)
+    return np.asarray(current, dtype=float).copy()
 
 
 def run_episode(
@@ -143,14 +171,21 @@ def run_episode(
         segment_previous_u = controller.d.v_ref.copy()
         segment_previous_residual = np.zeros(ACTION_DIM, dtype=float)
         segment_disturbance = sample_disturbance(cfg, rng)
+        segment_w_est = np.zeros(2, dtype=float)
         segment_obs = observation(
-            model, controller, segment_state, segment_previous_u
+            model,
+            controller,
+            segment_state,
+            segment_previous_u,
+            segment_w_est,
         )
         return (
             segment_state,
             segment_previous_u,
             segment_previous_residual,
             segment_disturbance,
+            segment_w_est,
+            0,
             segment_obs,
         )
 
@@ -159,6 +194,8 @@ def run_episode(
         previous_u,
         previous_applied_residual,
         disturbance,
+        w_est,
+        disturbance_age,
         obs,
     ) = reset_segment()
     reward_reference_cost = model.economic_cost(
@@ -184,6 +221,11 @@ def run_episode(
     input_excess_squared_sum = 0.0
     rpi_excess_squared_sum = 0.0
     rpi_utilization_peak = 0.0
+    residual_feasible_scale_sum = 0.0
+    residual_feasible_scale_min = 1.0
+    residual_requested_norm_sum = 0.0
+    residual_applied_norm_sum = 0.0
+    residual_execution_ratio_sum = 0.0
     records: list[dict[str, object]] = []
     last_losses: dict[str, float] | None = None
 
@@ -198,13 +240,24 @@ def run_episode(
 
         # The critic stores the original continuous actor command in [-1,1]^2.
         # The environment maps it to a physical residual before the safety QP.
-        residual = cfg.residual_action_scale * raw_action
-        control, info = controller.act(state, residual)
+        control, info = controller.act(
+            state, raw_action, action_is_normalized=True
+        )
+        residual = np.asarray(info["requested_residual"], dtype=float)
         next_state = model.step(state, control, disturbance)
         x_next_n = model.normalized_state(next_state)
         e_next = x_next_n - controller.z
         acl = controller.d.a + controller.d.b @ controller.d.k
-        effective_w = e_next - acl @ np.asarray(info["e"])
+        w_hat = x_next_n - (
+            controller.d.a @ np.asarray(info["x_norm"])
+            + controller.d.b @ np.asarray(info["actual_norm"])
+            + controller.d.affine
+        )
+        effective_w = w_hat.copy()
+        beta = float(cfg.disturbance_estimate_ema)
+        if not 0.0 <= beta < 1.0:
+            raise ValueError("disturbance_estimate_ema must be in [0, 1)")
+        next_w_est = beta * w_est + (1.0 - beta) * w_hat
 
         state_bad = bool(
             np.any(next_state < cfg.state_lower - 1e-8)
@@ -225,6 +278,9 @@ def run_episode(
         mapping_scale = float(info["feasible_action_mapping_scale"])
         mapping_gap = float(info["feasible_action_mapping_gap"])
         applied_residual = np.asarray(info["nominal"]) - np.asarray(info["base"])
+        requested_norm = float(np.linalg.norm(residual))
+        applied_norm = float(np.linalg.norm(applied_residual))
+        execution_ratio = applied_norm / max(requested_norm, 1e-12)
         # The ray mapper is now part of the declared action parameterization,
         # so its safe result is the action attributed to SAC.  Only an actual
         # QP fallback suppresses learning credit.
@@ -278,12 +334,15 @@ def run_episode(
             and (step + 1) % int(cfg.training_segment_steps) == 0
         )
         done = bool(step == cfg.steps_per_episode - 1 or segment_done)
-        next_disturbance = sample_disturbance(cfg, rng)
+        next_disturbance = advance_disturbance(
+            cfg, rng, disturbance, disturbance_age + 1
+        )
         next_obs = observation(
             model,
             controller,
             next_state,
             np.asarray(info["actual_norm"]),
+            next_w_est,
         )
 
         if training:
@@ -308,7 +367,15 @@ def run_episode(
         economic_reward_sum += economic_reward
         projection_penalty_sum += projection_penalty
         mapping_penalty_sum += mapping_penalty
-        mapping_activations += int(mapping_scale < 1.0 - 1e-10)
+        mapping_activations += int(
+            cfg.residual_parameterization == "legacy_ray"
+            and mapping_scale < 1.0 - 1e-10
+        )
+        residual_feasible_scale_sum += mapping_scale
+        residual_feasible_scale_min = min(residual_feasible_scale_min, mapping_scale)
+        residual_requested_norm_sum += requested_norm
+        residual_applied_norm_sum += applied_norm
+        residual_execution_ratio_sum += execution_ratio
         move_penalty_sum += move_penalty
         safety_penalty_sum += safety_penalty
         state_excess_squared_sum += state_excess_squared
@@ -327,6 +394,12 @@ def run_episode(
             "raw_action": raw_action.copy(),
             "residual": residual.copy(),
             "applied_residual": applied_residual.copy(),
+            "w_hat": w_hat.copy(),
+            "w_est": next_w_est.copy(),
+            "residual_feasible_scale": mapping_scale,
+            "residual_requested_norm": requested_norm,
+            "residual_applied_norm": applied_norm,
+            "residual_execution_ratio": execution_ratio,
             "execution_mask": execution_mask,
             "feasible_action_mapping_scale": mapping_scale,
             "feasible_action_mapping_gap": mapping_gap,
@@ -357,12 +430,16 @@ def run_episode(
                 previous_u,
                 previous_applied_residual,
                 disturbance,
+                w_est,
+                disturbance_age,
                 obs,
             ) = reset_segment()
         else:
             state = next_state
             obs = next_obs
             disturbance = next_disturbance
+            w_est = next_w_est
+            disturbance_age += 1
             previous_u = np.asarray(info["actual_norm"])
             previous_applied_residual = applied_residual
         global_step += 1
@@ -384,6 +461,19 @@ def run_episode(
         "projection_penalty_mean": projection_penalty_sum / cfg.steps_per_episode,
         "mapping_penalty_mean": mapping_penalty_sum / cfg.steps_per_episode,
         "feasible_action_mapping_rate": mapping_activations / cfg.steps_per_episode,
+        "residual_feasible_scale_mean": (
+            residual_feasible_scale_sum / cfg.steps_per_episode
+        ),
+        "residual_feasible_scale_min": residual_feasible_scale_min,
+        "residual_requested_norm_mean": (
+            residual_requested_norm_sum / cfg.steps_per_episode
+        ),
+        "residual_applied_norm_mean": (
+            residual_applied_norm_sum / cfg.steps_per_episode
+        ),
+        "residual_execution_ratio_mean": (
+            residual_execution_ratio_sum / cfg.steps_per_episode
+        ),
         "move_penalty_mean": move_penalty_sum / cfg.steps_per_episode,
         "safety_penalty_mean": safety_penalty_sum / cfg.steps_per_episode,
         "state_excess_squared_mean": (
@@ -417,7 +507,9 @@ def run_episode(
 def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]:
     keys = [
         "time", "state", "control", "disturbance", "raw_action", "residual",
-        "applied_residual", "execution_mask",
+        "applied_residual", "w_hat", "w_est",
+        "residual_feasible_scale", "residual_requested_norm",
+        "residual_applied_norm", "residual_execution_ratio", "execution_mask",
         "feasible_action_mapping_scale", "feasible_action_mapping_gap",
         "base", "nominal_control", "ancillary",
         "reward", "economic_cost", "economic_reward", "projection_penalty",
@@ -446,6 +538,9 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "F1", "X1", "T1", "T200",
             "actor_a1", "actor_a2", "residual_P100", "residual_F200",
             "applied_residual_P100", "applied_residual_F200", "execution_mask",
+            "w_hat_1", "w_hat_2", "w_est_1", "w_est_2",
+            "residual_feasible_scale", "residual_requested_norm",
+            "residual_applied_norm", "residual_execution_ratio",
             "feasible_action_mapping_scale", "feasible_action_mapping_gap",
             "base_P100_norm", "base_F200_norm",
             "candidate_P100_norm", "candidate_F200_norm",
@@ -467,6 +562,12 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 *rollout["residual"][i],
                 *rollout["applied_residual"][i],
                 rollout["execution_mask"][i],
+                *rollout["w_hat"][i],
+                *rollout["w_est"][i],
+                rollout["residual_feasible_scale"][i],
+                rollout["residual_requested_norm"][i],
+                rollout["residual_applied_norm"][i],
+                rollout["residual_execution_ratio"][i],
                 rollout["feasible_action_mapping_scale"][i],
                 rollout["feasible_action_mapping_gap"][i],
                 *rollout["base"][i],
@@ -651,11 +752,16 @@ def evaluate_sac_policy_map(
             state = model.physical_state(state_n)
             controller = SafeController(cfg, model, design)
             controller.reset(state)
-            obs = observation(model, controller, state, design.v_ref)
+            obs = observation(
+                model, controller, state, design.v_ref, np.zeros(2, dtype=float)
+            )
             raw_action = agent.select_action(obs, deterministic=True)
-            residual = cfg.residual_action_scale * raw_action
-            _, info = controller.act(state, residual)
-            requested[row, column] = residual * cfg.input_scale
+            _, info = controller.act(
+                state, raw_action, action_is_normalized=True
+            )
+            requested[row, column] = (
+                np.asarray(info["requested_residual"]) * cfg.input_scale
+            )
             applied[row, column] = (
                 np.asarray(info["nominal"]) - np.asarray(info["base"])
             ) * cfg.input_scale
@@ -669,6 +775,224 @@ def evaluate_sac_policy_map(
         "applied_physical": applied,
         "mapping_scale": mapping_scale,
     }
+
+
+def evaluate_disturbance_estimate_policy_map(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    agent,
+) -> dict[str, np.ndarray]:
+    """Scan actor dependence on estimates computed from prior transitions."""
+    grid = np.array([-1.0, 0.0, 1.0], dtype=float)
+    estimates: list[np.ndarray] = []
+    requested: list[np.ndarray] = []
+    applied: list[np.ndarray] = []
+    state = cfg.safe_center_state.copy()
+    for w1 in grid:
+        for w2 in grid:
+            normalized_estimate = np.array([w1, w2], dtype=float)
+            w_est = normalized_estimate * design.w_bound
+            controller = SafeController(cfg, model, design)
+            controller.reset(state)
+            obs = observation(model, controller, state, design.v_ref, w_est)
+            raw_action = agent.select_action(obs, deterministic=True)
+            _, info = controller.act(
+                state, raw_action, action_is_normalized=True
+            )
+            estimates.append(normalized_estimate)
+            requested.append(
+                np.asarray(info["requested_residual"]) * cfg.input_scale
+            )
+            applied.append(
+                (np.asarray(info["nominal"]) - np.asarray(info["base"]))
+                * cfg.input_scale
+            )
+    return {
+        "normalized_w_est": np.asarray(estimates),
+        "requested_physical": np.asarray(requested),
+        "applied_physical": np.asarray(applied),
+    }
+
+
+def hard_safety_passed(stat: dict[str, float]) -> bool:
+    """Hard gate used by final checkpoint selection and certification."""
+    return bool(
+        stat["violation_rate"] == 0.0
+        and stat["rpi_violation_rate"] == 0.0
+        and stat["qp_infeasible_rate"] == 0.0
+        and stat["disturbance_bound_exceedance_rate"] == 0.0
+    )
+
+
+def formal_safety_certified(
+    uncovered_final_hull_vertices: int,
+    evaluation_stat: dict[str, float],
+    holdout_stat: dict[str, float],
+) -> bool:
+    """Formal result is true only when W coverage and both safety audits pass."""
+    return bool(
+        uncovered_final_hull_vertices == 0
+        and hard_safety_passed(evaluation_stat)
+        and hard_safety_passed(holdout_stat)
+    )
+
+
+def economic_policy_eligible(
+    candidate_stat: dict[str, float],
+    baseline_economic_cost: float,
+    policy_scale: float,
+    numerical_tolerance: float = 1e-12,
+) -> bool:
+    """Select by economic cost under hard safety, never by shaped return."""
+    return bool(
+        policy_scale > 0.0
+        and hard_safety_passed(candidate_stat)
+        and candidate_stat["economic_cost_mean"]
+        < baseline_economic_cost - numerical_tolerance
+    )
+
+
+def fixed_adaptation_disturbance(
+    cfg: ExperimentConfig, step: int
+) -> np.ndarray:
+    """Deterministic bounded schedule used only for adaptation evaluation."""
+    nominal = cfg.disturbance_nominal.copy()
+    lower = nominal - cfg.disturbance_half_range
+    upper = nominal + cfg.disturbance_half_range
+    segment = int(step) // max(int(cfg.disturbance_adaptation_switch_steps), 1)
+    disturbance = nominal.copy()
+    if segment == 1:
+        disturbance[0] = upper[0]
+    elif segment == 2:
+        disturbance[1] = upper[1]
+    elif segment == 3:
+        disturbance[2] = lower[2]
+    elif segment == 4:
+        disturbance[3] = upper[3]
+    elif segment == 5:
+        disturbance[:] = [upper[0], upper[1], lower[2], upper[3]]
+    return disturbance
+
+
+def _rollout_fixed_adaptation_schedule(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    policy,
+) -> dict[str, object]:
+    controller = SafeController(cfg, model, design)
+    state = cfg.safe_center_state.copy()
+    controller.reset(state)
+    previous_u = design.v_ref.copy()
+    w_est = np.zeros(2, dtype=float)
+    beta = float(cfg.disturbance_estimate_ema)
+    arrays: dict[str, list] = {
+        "state": [], "control": [], "economic_cost": [], "w_est": [],
+        "residual": [], "violation": [], "disturbance": [],
+    }
+    for step in range(int(cfg.disturbance_adaptation_steps)):
+        disturbance = fixed_adaptation_disturbance(cfg, step)
+        obs = observation(model, controller, state, previous_u, w_est)
+        raw_action = policy.select_action(obs, deterministic=True)
+        control, info = controller.act(
+            state, raw_action, action_is_normalized=True
+        )
+        next_state = model.step(state, control, disturbance)
+        x_next_n = model.normalized_state(next_state)
+        w_hat = x_next_n - (
+            design.a @ np.asarray(info["x_norm"])
+            + design.b @ np.asarray(info["actual_norm"])
+            + design.affine
+        )
+        w_est = beta * w_est + (1.0 - beta) * w_hat
+        violation = bool(
+            np.any(next_state < cfg.state_lower - 1e-8)
+            or np.any(next_state > cfg.state_upper + 1e-8)
+            or np.any(control < cfg.input_lower - 1e-8)
+            or np.any(control > cfg.input_upper + 1e-8)
+        )
+        arrays["state"].append(next_state.copy())
+        arrays["control"].append(control.copy())
+        arrays["economic_cost"].append(
+            model.economic_cost(next_state, control, disturbance)
+        )
+        arrays["w_est"].append(w_est.copy())
+        arrays["residual"].append(
+            np.asarray(info["nominal"]) - np.asarray(info["base"])
+        )
+        arrays["violation"].append(violation)
+        arrays["disturbance"].append(disturbance.copy())
+        state = next_state
+        previous_u = np.asarray(info["actual_norm"])
+    result: dict[str, object] = {
+        key: np.asarray(value) for key, value in arrays.items()
+    }
+    costs = np.asarray(result["economic_cost"])
+    recovery_horizon = min(50, int(cfg.disturbance_adaptation_switch_steps))
+    switch_steps = range(
+        int(cfg.disturbance_adaptation_switch_steps),
+        int(cfg.disturbance_adaptation_steps),
+        int(cfg.disturbance_adaptation_switch_steps),
+    )
+    result.update({
+        "mean_economic_cost": float(np.mean(costs)),
+        "cumulative_economic_cost": float(np.sum(costs)),
+        "recovery_cost_after_switches": [
+            float(np.sum(costs[start:min(start + recovery_horizon, len(costs))]))
+            for start in switch_steps
+        ],
+        "constraint_violation_rate": float(np.mean(result["violation"])),
+    })
+    return result
+
+
+def evaluate_disturbance_adaptation(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    agent,
+    baseline_policy,
+) -> tuple[dict[str, np.ndarray], dict[str, object]]:
+    """Paired SAC/baseline evaluation on one fixed disturbance sequence."""
+    baseline = _rollout_fixed_adaptation_schedule(
+        cfg, model, design, baseline_policy
+    )
+    sac = _rollout_fixed_adaptation_schedule(cfg, model, design, agent)
+    steps = int(cfg.disturbance_adaptation_steps)
+    comparison = {
+        "time": np.arange(steps, dtype=float) * cfg.dt_min,
+        "disturbance": np.asarray(sac["disturbance"]),
+        "baseline_state": np.asarray(baseline["state"]),
+        "sac_state": np.asarray(sac["state"]),
+        "baseline_control": np.asarray(baseline["control"]),
+        "sac_control": np.asarray(sac["control"]),
+        "baseline_cost": np.asarray(baseline["economic_cost"]),
+        "sac_cost": np.asarray(sac["economic_cost"]),
+        "baseline_cumulative_cost": np.cumsum(
+            np.asarray(baseline["economic_cost"])
+        ),
+        "sac_cumulative_cost": np.cumsum(np.asarray(sac["economic_cost"])),
+        "baseline_w_est": np.asarray(baseline["w_est"]),
+        "sac_w_est": np.asarray(sac["w_est"]),
+        "baseline_residual": np.asarray(baseline["residual"]),
+        "sac_residual": np.asarray(sac["residual"]),
+    }
+    summary = {
+        "baseline": {
+            key: baseline[key] for key in (
+                "mean_economic_cost", "cumulative_economic_cost",
+                "recovery_cost_after_switches", "constraint_violation_rate",
+            )
+        },
+        "sac": {
+            key: sac[key] for key in (
+                "mean_economic_cost", "cumulative_economic_cost",
+                "recovery_cost_after_switches", "constraint_violation_rate",
+            )
+        },
+    }
+    return comparison, summary
 
 
 def save_feedback_law(
@@ -685,9 +1009,10 @@ def save_feedback_law(
     )
     payload = {
         "control_structure": (
-            "v_theta = first affine action of the learned finite-horizon "
-            "quadratic nominal value model; base = safe projection(v_theta); "
-            "candidate = feasible_ray_map(base, residual_SAC); "
+            "v_base is safe-center finite-horizon tracking in proposed mode "
+            "(learned affine h,p guidance in joint_theta); base = safe "
+            "projection(v_base); candidate = declared feasible residual "
+            "parameterization(base, actor_action); "
             "v_qp = safety verification projection(candidate); "
             "u_normalized = v_qp + K(x-z)"
         ),
@@ -739,9 +1064,9 @@ def save_feedback_law(
         "  e   = x_n - z",
         "",
         "Control sequence:",
-        "  v_theta   = K_nominal(theta_h, theta_p) @ z + k_nominal(theta_h, theta_p)",
-        "  base      = safe_projection(v_theta)",
-        "  candidate = feasible_ray_map(base, residual_SAC, U-KZ, S)",
+        "  v_base    = v_ref + L_track @ (z-z_ref)  [proposed]",
+        "  base      = safe_projection(v_base)",
+        "  candidate = state_dependent_feasible_residual(base, actor_action)",
         "  v_qp      = Euclidean projection with v_qp in U-KZ and z_next in S",
         "  u_n       = v_qp + K @ e",
         "  u         = u_offset + u_scale * u_n",
@@ -752,8 +1077,8 @@ def save_feedback_law(
         f"S_upper_norm = {np.array2string(design.invariant_upper, precision=9)}",
         f"selected_SAC_output_scale = {float(policy_output_scale):.6g}",
         "",
-        "The four exogenous disturbances act on the plant but are not inputs "
-        "to the SAC observation.",
+        "The four true exogenous disturbances act on the plant but are not "
+        "SAC inputs; only an EMA of completed-transition model residuals is observed.",
     ]
     with (output_dir / "feedback_control_law.txt").open(
         "w", encoding="utf-8"
@@ -774,6 +1099,17 @@ def parse_args() -> argparse.Namespace:
         choices=("proposed", "joint_theta"),
         default="proposed",
     )
+    parser.add_argument(
+        "--disturbance-mode",
+        choices=("iid", "piecewise_constant"),
+        default="piecewise_constant",
+    )
+    parser.add_argument("--disturbance-hold-steps", type=int, default=50)
+    parser.add_argument(
+        "--residual-parameterization",
+        choices=("state_dependent_box", "legacy_ray"),
+        default="state_dependent_box",
+    )
     parser.add_argument("--device", default="auto", help="auto, cpu, cuda, cuda:0, ...")
     parser.add_argument("--resume", type=Path, default=None)
     parser.add_argument(
@@ -793,9 +1129,20 @@ def main() -> None:
         steps_per_episode=args.steps,
         seed=args.seed,
         experiment_mode=args.experiment_mode,
+        disturbance_mode=args.disturbance_mode,
+        disturbance_hold_steps=args.disturbance_hold_steps,
+        residual_parameterization=args.residual_parameterization,
     )
     if cfg.experiment_mode not in {"proposed", "joint_theta"}:
         raise ValueError("experiment_mode must be 'proposed' or 'joint_theta'")
+    if cfg.disturbance_mode not in {"iid", "piecewise_constant"}:
+        raise ValueError("disturbance_mode must be 'iid' or 'piecewise_constant'")
+    if cfg.residual_parameterization not in {
+        "state_dependent_box", "legacy_ray"
+    }:
+        raise ValueError(
+            "residual_parameterization must be 'state_dependent_box' or 'legacy_ray'"
+        )
     if args.output_dir is not None:
         cfg.output_dir = args.output_dir
     cfg.output_dir.mkdir(parents=True, exist_ok=True)
@@ -826,7 +1173,7 @@ def main() -> None:
         np.random.default_rng(cfg.seed + 17001),
     )
     if cfg.experiment_mode == "proposed":
-        design, _ = theta_learner.optimize_static_safety_design(design)
+        design, _ = theta_learner.build_self_consistent_proposed_design(design)
     optimized_fixed_design = copy.deepcopy(design)
     controller = SafeController(cfg, model, design)
     sac_cfg = SACConfig(
@@ -871,6 +1218,11 @@ def main() -> None:
     print(f"  entropy alpha floor: {cfg.alpha_min}")
     print(f"  training init span : {cfg.training_initial_radius_fraction:.0%} of invariant set")
     print(f"  disturbance input  : hidden from SAC, applied to plant")
+    print(
+        f"  disturbance process: {cfg.disturbance_mode}, "
+        f"hold={cfg.disturbance_hold_steps} steps"
+    )
+    print(f"  residual mapping   : {cfg.residual_parameterization}")
     print(f"  nominal linearized : economic steady state {cfg.linearization_state.tolist()}")
     print(f"  safety anchor      : {cfg.safe_center_state.tolist()}")
     print(f"  experiment mode    : {cfg.experiment_mode}")
@@ -1023,11 +1375,7 @@ def main() -> None:
             eval_cost_reduction, eval_safe_gap = _paired_economic_metrics(
                 eval_baseline_stat, eval_stat, safe_reference_cost
             )
-            eval_safe = (
-                eval_stat["violation_rate"] == 0.0
-                and eval_stat["rpi_violation_rate"] == 0.0
-                and eval_stat["qp_infeasible_rate"] == 0.0
-            )
+            eval_safe = hard_safety_passed(eval_stat)
             policy_candidates.append({
                 "episode": int(episode),
                 "online_return_per_step": eval_return_per_step,
@@ -1129,17 +1477,9 @@ def main() -> None:
     theta_only_stat, theta_only_records, _ = evaluate_policy(
         cfg, model, design, no_rl_policy, evaluation_seeds
     )
-    ranked_candidates = sorted(
-        policy_candidates,
-        key=lambda item: float(item["online_return_per_step"]),
-        reverse=True,
-    )
-    if int(cfg.sac_final_candidate_count) > 0:
-        ranked_candidates = ranked_candidates[:int(cfg.sac_final_candidate_count)]
-    if not any(bool(item.get("zero_fallback", False)) for item in ranked_candidates):
-        ranked_candidates.append(policy_candidates[0])
-    if not any(int(item["episode"]) == cfg.episodes for item in ranked_candidates):
-        ranked_candidates.append(policy_candidates[-1])
+    # Every periodic evaluation checkpoint is audited.  Prescreening by shaped
+    # training return would incorrectly discard economically better policies.
+    ranked_candidates = list(policy_candidates)
 
     selected_candidate: dict[str, object] | None = None
     candidate_audit: list[dict[str, float]] = []
@@ -1160,18 +1500,11 @@ def main() -> None:
                 candidate_stat["return_per_step"]
                 - theta_only_stat["return_per_step"]
             )
-            safe = bool(
-                candidate_stat["violation_rate"] == 0.0
-                and candidate_stat["rpi_violation_rate"] == 0.0
-                and candidate_stat["qp_infeasible_rate"] == 0.0
-            )
-            positive_increment = bool(
-                policy_scale > 0.0
-                and safe
-                and candidate_stat["economic_cost_mean"]
-                < theta_only_stat["economic_cost_mean"] - 1e-12
-                and incremental_return
-                >= float(cfg.sac_min_incremental_return_per_step) - 1e-12
+            safe = hard_safety_passed(candidate_stat)
+            positive_increment = economic_policy_eligible(
+                candidate_stat,
+                float(theta_only_stat["economic_cost_mean"]),
+                float(policy_scale),
             )
             zero_fallback = bool(
                 policy_scale == 0.0 and candidate.get("zero_fallback", False)
@@ -1181,6 +1514,11 @@ def main() -> None:
                 100.0
                 * (theta_only_stat["economic_cost_mean"] - candidate_stat["economic_cost_mean"])
                 / max(abs(theta_only_stat["economic_cost_mean"]), 1e-12)
+            )
+            practically_significant = bool(
+                positive_increment
+                and cost_reduction_percent
+                >= float(cfg.sac_min_economic_improvement_percent) - 1e-12
             )
             # Always retain an honest scale=0 diagnostic fallback.  It is not
             # mislabeled as certified when the fixed design itself is violated.
@@ -1202,6 +1540,7 @@ def main() -> None:
                 "mapping_rate": float(candidate_stat["feasible_action_mapping_rate"]),
                 "safe": float(safe),
                 "positive_increment": float(positive_increment),
+                "practically_significant": float(practically_significant),
                 "eligible": float(eligible),
             }
             candidate_audit.append(audit_row)
@@ -1419,22 +1758,29 @@ def main() -> None:
     applied_state_dependence_norm = float(np.linalg.norm(np.ptp(
         applied_map, axis=(0, 1)
     )))
+    disturbance_map = evaluate_disturbance_estimate_policy_map(
+        cfg, model, design, agent
+    )
+    requested_disturbance_dependence_norm = float(np.linalg.norm(np.ptp(
+        disturbance_map["requested_physical"], axis=0
+    )))
+    applied_disturbance_dependence_norm = float(np.linalg.norm(np.ptp(
+        disturbance_map["applied_physical"], axis=0
+    )))
+    formal_safety_certification_passed = formal_safety_certified(
+        uncovered_final_vertices, final_stat, holdout_best_stat
+    )
     selected_positive_increment = bool(
         agent.policy_output_scale > 0.0
-        and final_stat["economic_cost_mean"]
-        < theta_only_stat["economic_cost_mean"] - 1e-12
+        and final_cost_reduction
+        >= float(cfg.sac_min_economic_improvement_percent) - 1e-12
         and holdout_best_stat["economic_cost_mean"]
         < holdout_theta_only_stat["economic_cost_mean"] - 1e-12
-        and final_stat["violation_rate"] == 0.0
-        and holdout_best_stat["violation_rate"] == 0.0
-        and final_stat["rpi_violation_rate"] == 0.0
-        and holdout_best_stat["rpi_violation_rate"] == 0.0
-        and final_stat["qp_infeasible_rate"] == 0.0
-        and holdout_best_stat["qp_infeasible_rate"] == 0.0
-        and final_stat["disturbance_bound_exceedance_rate"] == 0.0
-        and holdout_best_stat["disturbance_bound_exceedance_rate"] == 0.0
-        and uncovered_final_vertices == 0
-        and applied_state_dependence_norm > 0.0
+        and formal_safety_certification_passed
+        and (
+            applied_state_dependence_norm > 0.0
+            or applied_disturbance_dependence_norm > 0.0
+        )
     )
     save_csv(
         cfg.output_dir / "sac_residual_policy_map.csv",
@@ -1454,6 +1800,56 @@ def main() -> None:
             for column in range(policy_map["X2"].shape[1])
         ),
     )
+    save_csv(
+        cfg.output_dir / "sac_disturbance_estimate_policy_map.csv",
+        [
+            "w_est_1_normalized", "w_est_2_normalized",
+            "requested_delta_P100", "requested_delta_F200",
+            "applied_delta_P100", "applied_delta_F200",
+        ],
+        (
+            [
+                *disturbance_map["normalized_w_est"][index],
+                *disturbance_map["requested_physical"][index],
+                *disturbance_map["applied_physical"][index],
+            ]
+            for index in range(len(disturbance_map["normalized_w_est"]))
+        ),
+    )
+    adaptation_comparison, adaptation_summary = evaluate_disturbance_adaptation(
+        cfg, model, design, agent, no_rl_policy
+    )
+    save_csv(
+        cfg.output_dir / "disturbance_adaptation_comparison.csv",
+        [
+            "time_min", "F1", "X1", "T1", "T200",
+            "baseline_X2", "baseline_P2", "sac_X2", "sac_P2",
+            "baseline_P100", "baseline_F200", "sac_P100", "sac_F200",
+            "baseline_economic_cost", "sac_economic_cost",
+            "baseline_cumulative_economic_cost", "sac_cumulative_economic_cost",
+            "baseline_w_est_1", "baseline_w_est_2",
+            "sac_w_est_1", "sac_w_est_2",
+            "sac_residual_P100_normalized", "sac_residual_F200_normalized",
+        ],
+        (
+            [
+                adaptation_comparison["time"][index],
+                *adaptation_comparison["disturbance"][index],
+                *adaptation_comparison["baseline_state"][index],
+                *adaptation_comparison["sac_state"][index],
+                *adaptation_comparison["baseline_control"][index],
+                *adaptation_comparison["sac_control"][index],
+                adaptation_comparison["baseline_cost"][index],
+                adaptation_comparison["sac_cost"][index],
+                adaptation_comparison["baseline_cumulative_cost"][index],
+                adaptation_comparison["sac_cumulative_cost"][index],
+                *adaptation_comparison["baseline_w_est"][index],
+                *adaptation_comparison["sac_w_est"][index],
+                *adaptation_comparison["sac_residual"][index],
+            ]
+            for index in range(len(adaptation_comparison["time"]))
+        ),
+    )
     plot_learning(log_arrays, cfg.output_dir)
     plot_theta_learning(log_arrays, cfg.output_dir)
     plot_empirical_regret(log_arrays, cfg.output_dir)
@@ -1471,6 +1867,7 @@ def main() -> None:
     plot_economic_performance(rollout, safe_center_cost, cfg.output_dir)
     plot_feedback_components(rollout, cfg.output_dir)
     plot_sac_policy_map(policy_map, cfg.output_dir)
+    plot_disturbance_adaptation(adaptation_comparison, cfg.output_dir)
     plot_rl_comparison(
         cfg, rollout, theta_only_rollout, no_rl_rollout, cfg.output_dir
     )
@@ -1573,6 +1970,7 @@ def main() -> None:
         "holdout_sac_incremental_cost_reduction_percent": holdout_cost_reduction,
         "safe_reference_cost": safe_reference_cost,
         "normalized_safe_performance_gap": final_safe_gap,
+        "safe_reference_is_dynamic_lower_bound": False,
         "nominal_safe_steady_reference": {
             "state": np.asarray(safe_reference["state"]).tolist(),
             "input": np.asarray(safe_reference["input"]).tolist(),
@@ -1586,12 +1984,40 @@ def main() -> None:
         "qp_infeasible_rate": float(final_stat["qp_infeasible_rate"]),
         "qp_intervention_rate": float(final_stat["intervention_rate"]),
         "safe_action_mapping_rate": float(final_stat["feasible_action_mapping_rate"]),
+        "residual_feasible_scale_mean": float(
+            final_stat["residual_feasible_scale_mean"]
+        ),
+        "residual_feasible_scale_min": float(
+            final_stat["residual_feasible_scale_min"]
+        ),
+        "residual_requested_norm_mean": float(
+            final_stat["residual_requested_norm_mean"]
+        ),
+        "residual_applied_norm_mean": float(
+            final_stat["residual_applied_norm_mean"]
+        ),
+        "residual_execution_ratio_mean": float(
+            final_stat["residual_execution_ratio_mean"]
+        ),
         "requested_residual_state_dependence_norm": requested_state_dependence_norm,
         "applied_residual_state_dependence_norm": applied_state_dependence_norm,
+        "requested_residual_disturbance_estimate_dependence_norm": (
+            requested_disturbance_dependence_norm
+        ),
+        "applied_residual_disturbance_estimate_dependence_norm": (
+            applied_disturbance_dependence_norm
+        ),
         "disturbance_bound_exceedance_rate": float(
             final_stat["disturbance_bound_exceedance_rate"]
         ),
         "sac_positive_increment_learned": selected_positive_increment,
+        "sac_min_economic_improvement_percent": float(
+            cfg.sac_min_economic_improvement_percent
+        ),
+        "formal_safety_certification_passed": (
+            formal_safety_certification_passed
+        ),
+        "uncovered_final_hull_vertices": int(uncovered_final_vertices),
         "best_nonzero_policy_episode": (
             float(best_nonzero["episode"]) if best_nonzero is not None else float("nan")
         ),
@@ -1646,12 +2072,19 @@ def main() -> None:
                 and final_stat["disturbance_bound_exceedance_rate"] == 0.0
                 and holdout_best_stat["disturbance_bound_exceedance_rate"] == 0.0
             ),
+            "formal_safety_certification_passed": (
+                formal_safety_certification_passed
+            ),
             "audit_file": "final_checkpoint_audit.csv",
         },
         "device": str(agent.device),
         "observation_includes_current_disturbance": False,
+        "observation_includes_true_disturbance": False,
+        "observation_includes_disturbance_estimate": True,
         "disturbance_is_applied_to_plant": True,
-        "disturbance_model": "independent_bounded_uniform_hidden_input",
+        "disturbance_model": cfg.disturbance_mode,
+        "disturbance_hold_steps": int(cfg.disturbance_hold_steps),
+        "disturbance_estimate_ema": float(cfg.disturbance_estimate_ema),
         "observation_dimension": OBS_DIM,
         "episodes": cfg.episodes,
         "steps_per_episode": cfg.steps_per_episode,
@@ -1732,6 +2165,8 @@ def main() -> None:
             ),
         },
         "training_seconds": time.time() - start,
+        "training_final_return": float(training_returns[-1]),
+        "evaluation_return": float(final_stat["return"]),
         "evaluation": final_stat,
         "initial_untrained_evaluation": initial_stat,
         "raw_last_actor_evaluation": last_stat,
@@ -1739,6 +2174,7 @@ def main() -> None:
         "robustness_evaluation_raw_last_policy": holdout_last_stat,
         "rl_vs_no_rl": rl_vs_no_rl,
         "sac_state_dependence": policy_map_metrics,
+        "disturbance_adaptation_evaluation": adaptation_summary,
         "representative_rollout_economic_performance": economic_performance,
         "training_any_constraint_violation_episode_rate": float(
             np.mean(log_arrays["violation_rate"][training_mask] > 0.0)
@@ -1798,6 +2234,8 @@ def main() -> None:
         "feedback_control_law": feedback_law,
         "hinf_gamma_design": design.gamma_design,
         "hinf_norm_frequency_grid": design.gamma_sampled,
+        "hinf_gamma": design.gamma_design,
+        "hinf_sampled_norm": design.gamma_sampled,
         "hinf_gain_parameterization": "continuous_direct_K_with_safety_gate",
         "hinf_state_weight_scale_selected": design.gain_state_weight_scale,
         "hinf_input_weight_scale_selected": design.gain_input_weight_scale,
@@ -1853,10 +2291,10 @@ def main() -> None:
             peak_w_negative.tolist()
         ),
         "disturbance_bound_method": (
-            "four-facet asymmetric W_theta={w|Mw<=m}; initial local corner/"
-            "sample hull at the economic linearization point; observed "
-            "state-transition residuals are audited without changing the fixed "
-            "design in proposed mode"
+            "self-consistent four-facet asymmetric W_theta={w|Mw<=m}; "
+            "complete S-plus-Z/state, physical-input and D corners plus fixed-"
+            "seed random refinement samples are iterated with RPI, tightening, "
+            "invariant-set, M and K rebuilds before proposed SAC training"
         ),
         "disturbance_polytope_vertex_count": int(len(design.w_vertices)),
         "qp_intervention_tolerance_normalized": cfg.qp_intervention_tolerance,
@@ -1878,13 +2316,16 @@ def main() -> None:
         "critic_learning_rate": cfg.critic_learning_rate,
         "entropy_learning_rate": cfg.entropy_learning_rate,
         "residual_action_scale_normalized": cfg.residual_action_scale.tolist(),
+        "residual_parameterization": cfg.residual_parameterization,
+        "proposed_nominal_controller": cfg.proposed_nominal_controller,
         "replay_action_execution_mask": (
-            "one for the declared feasible-ray action mapping; zero only if the "
+            "one for the declared feasible action parameterization; zero only if the "
             "verification QP fails and its fallback replaces the action"
         ),
         "safe_action_parameterization": (
-            "state-dependent ray from the feasible theta base to the boundary "
-            "of the tightened-input and one-step invariant polytope"
+            "state-dependent symmetric residual box scaled by current polytope "
+            "slack" if cfg.residual_parameterization == "state_dependent_box"
+            else "legacy state-dependent ray to the current polytope boundary"
         ),
         "input_move_penalty_scope": (
             "change in executed SAC residual only; excludes nominal and H-infinity motion"

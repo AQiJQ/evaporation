@@ -29,6 +29,17 @@ def parse_args() -> argparse.Namespace:
         default="proposed",
     )
     parser.add_argument(
+        "--disturbance-mode",
+        choices=("iid", "piecewise_constant"),
+        default="piecewise_constant",
+    )
+    parser.add_argument("--disturbance-hold-steps", type=int, default=50)
+    parser.add_argument(
+        "--residual-parameterization",
+        choices=("state_dependent_box", "legacy_ray"),
+        default="state_dependent_box",
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path(
@@ -65,6 +76,8 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "seed": float(seed),
             "best_episode": float(metrics["best_evaluation_episode"]),
             "selected_policy_scale": float(metrics["selected_policy_output_scale"]),
+            "training_final_return": float(metrics["training_final_return"]),
+            "evaluation_return": float(metrics["evaluation"]["return"]),
             "evaluation_return_per_step": float(metrics["evaluation"]["return_per_step"]),
             "evaluation_economic_cost_mean": float(metrics["evaluation"]["economic_cost_mean"]),
             "sac_incremental_cost_reduction_percent": float(
@@ -95,10 +108,28 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "applied_residual_state_dependence_norm": float(np.linalg.norm(
                 state_dependence["applied_residual_peak_to_peak_physical"]
             )),
+            "requested_residual_disturbance_estimate_dependence_norm": float(
+                metrics["requested_residual_disturbance_estimate_dependence_norm"]
+            ),
+            "applied_residual_disturbance_estimate_dependence_norm": float(
+                metrics["applied_residual_disturbance_estimate_dependence_norm"]
+            ),
+            "residual_feasible_scale_mean": float(
+                metrics["residual_feasible_scale_mean"]
+            ),
+            "residual_feasible_scale_min": float(
+                metrics["residual_feasible_scale_min"]
+            ),
+            "residual_execution_ratio_mean": float(
+                metrics["residual_execution_ratio_mean"]
+            ),
             "rpi_area": float(metrics["rpi_polygon_area_percent_kpa"]),
             "x_minus_z_area": float(metrics["x_minus_z_area_percent_kpa"]),
             "uncovered_final_hull_vertices": float(
                 certification["uncovered_final_hull_vertices"]
+            ),
+            "formal_safety_certification_passed": float(
+                metrics["formal_safety_certification_passed"]
             ),
             "sac_positive_increment_learned": float(
                 certification["sac_positive_increment_learned"]
@@ -112,8 +143,16 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "x_minus_z_area_increase_percent": float(metrics["x_minus_z_area_increase_percent"]),
             "initial_invariant_area": float(metrics["initial_invariant_area"]),
             "optimized_invariant_area": float(metrics["optimized_invariant_area"]),
+            "hinf_sampled_norm": float(metrics["hinf_sampled_norm"]),
+            "hinf_gamma": float(metrics["hinf_gamma"]),
             "theta_only_economic_cost_mean": float(metrics["theta_only_economic_cost_mean"]),
             "safe_sac_economic_cost_mean": float(metrics["safe_sac_economic_cost_mean"]),
+            "holdout_theta_only_economic_cost_mean": float(
+                metrics["holdout_theta_only_economic_cost_mean"]
+            ),
+            "holdout_safe_sac_economic_cost_mean": float(
+                metrics["holdout_safe_sac_economic_cost_mean"]
+            ),
             "safe_reference_cost": float(metrics["safe_reference_cost"]),
             "normalized_safe_performance_gap": float(metrics["normalized_safe_performance_gap"]),
             "rpi_violation_rate": float(metrics["rpi_violation_rate"]),
@@ -181,6 +220,9 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
         },
         "all_final_hulls_certified": bool(all(
             row["uncovered_final_hull_vertices"] == 0.0 for row in rows
+        )),
+        "all_fixed_designs_certified": bool(all(
+            row["formal_safety_certification_passed"] > 0.5 for row in rows
         )),
         "seeds_with_positive_sac_increment": int(sum(
             row["sac_positive_increment_learned"] > 0.5 for row in rows
@@ -302,6 +344,9 @@ def main() -> None:
             "--seed", str(seed),
             "--device", str(args.device),
             "--experiment-mode", str(args.experiment_mode),
+            "--disturbance-mode", str(args.disturbance_mode),
+            "--disturbance-hold-steps", str(args.disturbance_hold_steps),
+            "--residual-parameterization", str(args.residual_parameterization),
             "--output-dir", str(seed_dir),
         ]
         print(f"\n=== evaporator safe-SAC seed {seed} ===", flush=True)

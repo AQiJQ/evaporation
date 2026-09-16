@@ -495,3 +495,42 @@ def plot_rl_comparison(
     for ax in axes.flat:
         ax.set_xlim(float(time[0]), float(time[-1]))
     _save(fig, out_dir / "rl_vs_no_rl.png")
+
+
+def plot_disturbance_adaptation(
+    comparison: dict[str, np.ndarray], out_dir: Path
+) -> None:
+    """Compare baseline and SAC on the fixed piecewise disturbance schedule."""
+    time = comparison["time"]
+    fig, axes = plt.subplots(4, 2, figsize=(11.0, 12.0), constrained_layout=True)
+    panels = [
+        ("baseline_state", "sac_state", 0, r"$X_2$", "%"),
+        ("baseline_state", "sac_state", 1, r"$P_2$", "kPa"),
+        ("baseline_control", "sac_control", 0, r"$P_{100}$", "kPa"),
+        ("baseline_control", "sac_control", 1, r"$F_{200}$", r"kg min$^{-1}$"),
+        ("baseline_w_est", "sac_w_est", 0, r"Estimated $w_1$", "normalized"),
+        ("baseline_w_est", "sac_w_est", 1, r"Estimated $w_2$", "normalized"),
+    ]
+    for ax, (base_key, sac_key, index, title, ylabel) in zip(axes.flat[:6], panels):
+        ax.plot(time, comparison[base_key][:, index], color=BLUE, label="Zero residual")
+        ax.plot(time, comparison[sac_key][:, index], color=GREEN, label="Residual SAC")
+        _style_axis(ax, title, "Time [min]", ylabel)
+        _legend(ax)
+    axes[3, 0].plot(
+        time, comparison["baseline_cumulative_cost"], color=BLUE,
+        label="Zero residual",
+    )
+    axes[3, 0].plot(
+        time, comparison["sac_cumulative_cost"], color=GREEN,
+        label="Residual SAC",
+    )
+    _style_axis(axes[3, 0], "Cumulative economic cost", "Time [min]", "Cost")
+    _legend(axes[3, 0])
+    residual = comparison["sac_residual"]
+    axes[3, 1].plot(time, residual[:, 0], color=ORANGE, label=r"$\Delta P_{100}$")
+    axes[3, 1].plot(time, residual[:, 1], color=RED, label=r"$\Delta F_{200}$")
+    _style_axis(
+        axes[3, 1], "Applied SAC residual", "Time [min]", "Normalized input"
+    )
+    _legend(axes[3, 1])
+    _save(fig, out_dir / "disturbance_adaptation_comparison.png")

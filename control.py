@@ -711,9 +711,23 @@ def build_safety_design(
         box_boundary_physical[:, 0] * np.roll(box_boundary_physical[:, 1], -1)
         - box_boundary_physical[:, 1] * np.roll(box_boundary_physical[:, 0], -1)
     )))
-    nominal_gain, nominal_offset = finite_horizon_nominal_policy(
-        cfg, a, b, affine, learned_h, learned_p
-    )
+    if (
+        cfg.experiment_mode == "proposed"
+        and cfg.proposed_nominal_controller == "safe_center_tracking"
+    ):
+        nominal_gain, _ = finite_horizon_nominal_policy(
+            cfg,
+            a,
+            b,
+            np.zeros_like(affine),
+            np.zeros_like(learned_h),
+            np.zeros_like(learned_p),
+        )
+        nominal_offset = v_ref - nominal_gain @ z_ref
+    else:
+        nominal_gain, nominal_offset = finite_horizon_nominal_policy(
+            cfg, a, b, affine, learned_h, learned_p
+        )
     return SafetyDesign(
         a=a,
         b=b,
@@ -769,14 +783,20 @@ class SafeController:
     def reset(self, state: np.ndarray) -> None:
         self.z = self.model.normalized_state(state)
 
-    def act(self, state: np.ndarray, residual: np.ndarray) -> tuple[np.ndarray, dict[str, object]]:
+    def act(
+        self,
+        state: np.ndarray,
+        residual: np.ndarray,
+        *,
+        action_is_normalized: bool = False,
+    ) -> tuple[np.ndarray, dict[str, object]]:
         d = self.d
         x = self.model.normalized_state(state)
         e = x - self.z
 
-        # The learned h,p policy supplies finite-horizon nominal guidance.
-        # Current-input constraints and one-step membership in the certified
-        # controlled-invariant set remain the final hard safety gate.
+        # Proposed mode uses finite-horizon deviation tracking around the paper
+        # safe center.  The joint-theta ablation retains learned h,p guidance.
+        # Input and one-step invariant constraints remain the hard safety gate.
         z_center_next = d.a @ self.z + d.affine
         rows = [np.eye(2), -np.eye(2), d.b, -d.b]
         bounds = [
@@ -793,28 +813,51 @@ class SafeController:
             base, theta_feasible = project_qp_2d(d.v_ref, aq, bq)
         if not theta_feasible:
             base = np.clip(d.v_ref, d.u_lower_tight, d.u_upper_tight)
-        requested_residual = np.asarray(residual, dtype=float)
+        action = np.asarray(residual, dtype=float)
+        requested_residual = (
+            self.cfg.residual_action_scale * action
+            if action_is_normalized else action
+        )
         requested_candidate = base + requested_residual
-
-        # State-dependent safe action parameterization.  Move from the known
-        # feasible base along the SAC-requested ray only as far as the current
-        # tightened-input/invariant polytope permits.  Unlike an orthogonal QP
-        # projection, this preserves the actor's requested direction and makes
-        # the executed action a deterministic function of (observation, action).
-        ray_denominator = aq @ requested_residual
-        outward = ray_denominator > 1e-12
-        mapping_scale = 1.0
-        if np.any(outward):
-            slack = bq - aq @ base
-            mapping_scale = min(
-                1.0,
-                max(0.0, float(np.min(
-                    slack[outward] / ray_denominator[outward]
-                ))),
+        slack = np.maximum(bq - aq @ base, 0.0)
+        if (
+            action_is_normalized
+            and self.cfg.residual_parameterization == "state_dependent_box"
+        ):
+            denominator = np.abs(aq) @ np.asarray(
+                self.cfg.residual_action_scale, dtype=float
             )
-        if mapping_scale < 1.0:
-            mapping_scale *= float(self.cfg.invariant_set_margin)
-        candidate = base + mapping_scale * requested_residual
+            constrained = denominator > 1e-12
+            feasible_scale = 1.0
+            if np.any(constrained):
+                feasible_scale = float(np.clip(
+                    np.min(slack[constrained] / denominator[constrained]),
+                    0.0,
+                    1.0,
+                ))
+            if feasible_scale < 1.0:
+                feasible_scale *= float(self.cfg.invariant_set_margin)
+            parameterized_residual = feasible_scale * requested_residual
+            candidate = base + parameterized_residual
+            mapping_scale = feasible_scale
+            mapping_gap = 0.0
+        else:
+            # Legacy ray mapping retained for ablation.
+            ray_denominator = aq @ requested_residual
+            outward = ray_denominator > 1e-12
+            mapping_scale = 1.0
+            if np.any(outward):
+                mapping_scale = min(
+                    1.0,
+                    max(0.0, float(np.min(
+                        slack[outward] / ray_denominator[outward]
+                    ))),
+                )
+            if mapping_scale < 1.0:
+                mapping_scale *= float(self.cfg.invariant_set_margin)
+            parameterized_residual = mapping_scale * requested_residual
+            candidate = base + parameterized_residual
+            mapping_gap = float(np.linalg.norm(candidate - requested_candidate))
         nominal, feasible = project_qp_2d(candidate, aq, bq)
         if not feasible:
             nominal = np.clip(base, d.u_lower_tight, d.u_upper_tight)
@@ -829,13 +872,16 @@ class SafeController:
             "theta_projection_gap": float(np.linalg.norm(base - theta_candidate)),
             "base": base.copy(), "requested_candidate": requested_candidate.copy(),
             "candidate": candidate.copy(), "nominal": nominal.copy(),
+            "requested_residual": requested_residual.copy(),
+            "parameterized_residual": parameterized_residual.copy(),
             "ancillary": ancillary.copy(), "actual_norm": actual_n.copy(),
             "z_next": z_next.copy(), "qp_feasible": bool(feasible),
             "projection_gap": float(np.linalg.norm(nominal - candidate)),
             "feasible_action_mapping_scale": float(mapping_scale),
-            "feasible_action_mapping_gap": float(np.linalg.norm(
-                candidate - requested_candidate
-            )),
+            "residual_feasible_scale": float(mapping_scale),
+            "feasible_action_mapping_gap": mapping_gap,
+            "a_q": aq.copy(),
+            "b_q": bq.copy(),
         }
         self.z = z_next
         return control, info

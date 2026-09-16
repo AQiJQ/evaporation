@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import replace
+from itertools import product
 from typing import Callable, Deque
 
 import numpy as np
@@ -74,6 +75,10 @@ class OnlineThetaLearner:
         self.cost_updates = 0
         self.membership_exceedances = 0
         self.last_td_error = float("nan")
+        self.refinement_iterations = 0
+        self.refinement_uncovered_count = 0
+        self.refinement_max_excess = 0.0
+        self.refinement_relative_rpi_change = float("nan")
 
     def observe_transition(
         self,
@@ -301,6 +306,141 @@ class OnlineThetaLearner:
             design = self._static_k_search(design, pass_index)
         return design, self.metrics(design)
 
+    def _sample_refinement_residuals(
+        self,
+        design: SafetyDesign,
+        iteration: int,
+    ) -> np.ndarray:
+        """Sample nonlinear mismatch on the current conservative S plus Z tube."""
+        x_lower = np.maximum(
+            self.model.normalized_state(self.cfg.state_lower),
+            design.invariant_lower - design.rpi_support_lower,
+        )
+        x_upper = np.minimum(
+            self.model.normalized_state(self.cfg.state_upper),
+            design.invariant_upper + design.rpi_support_upper,
+        )
+        # Use the complete physical input constraint box.  This is more
+        # conservative than a controller-specific empirical envelope and
+        # therefore cannot underestimate W through input-region truncation.
+        u_lower = self.model.normalized_input(self.cfg.input_lower)
+        u_upper = self.model.normalized_input(self.cfg.input_upper)
+        d_lower = self.cfg.disturbance_nominal - self.cfg.disturbance_half_range
+        d_upper = self.cfg.disturbance_nominal + self.cfg.disturbance_half_range
+        residuals: list[np.ndarray] = []
+
+        def observe(x: np.ndarray, u: np.ndarray, disturbance: np.ndarray) -> None:
+            next_state = self.model.normalized_state(self.model.step(
+                self.model.physical_state(x),
+                self.model.physical_input(u),
+                disturbance,
+            ))
+            residuals.append(
+                next_state - (design.a @ x + design.b @ u + design.affine)
+            )
+
+        for x in product(*zip(x_lower, x_upper)):
+            for u in product(*zip(u_lower, u_upper)):
+                for disturbance in product(*zip(d_lower, d_upper)):
+                    observe(
+                        np.asarray(x, dtype=float),
+                        np.asarray(u, dtype=float),
+                        np.asarray(disturbance, dtype=float),
+                    )
+
+        rng = np.random.default_rng(
+            self.cfg.seed + 81000 + int(iteration)
+        )
+        for _ in range(int(self.cfg.robust_set_refinement_samples)):
+            observe(
+                rng.uniform(x_lower, x_upper),
+                rng.uniform(u_lower, u_upper),
+                rng.uniform(d_lower, d_upper),
+            )
+        return np.asarray(residuals, dtype=float)
+
+    def build_self_consistent_proposed_design(
+        self,
+        initial_design: SafetyDesign,
+    ) -> tuple[SafetyDesign, dict[str, float]]:
+        """Iterate W, RPI, tightening and invariant geometry before SAC starts."""
+        design, _ = self.optimize_static_safety_design(initial_design)
+        previous_area = _polygon_area(design.rpi_boundary, self.cfg.state_scale)
+        last_uncovered = 0
+        last_excess = 0.0
+        for iteration in range(1, int(self.cfg.robust_set_refinement_max_iterations) + 1):
+            sampled = self._sample_refinement_residuals(design, iteration)
+            merged_hull = _convex_hull(np.vstack([
+                self.data_hull,
+                sampled,
+                np.zeros((1, 2)),
+            ]))
+            current_excess = design.theta_m_matrix @ sampled.T - design.theta_m_bound[:, None]
+            last_uncovered = int(np.sum(np.any(current_excess > 1e-8, axis=0)))
+            last_excess = float(max(0.0, np.max(current_excess)))
+            try:
+                rebuilt = build_safety_design(
+                    self.cfg,
+                    self.model,
+                    np.random.default_rng(self.cfg.seed + 82000 + iteration),
+                    w_data_hull=merged_hull,
+                    theta_m_angle=design.theta_m_angle,
+                    theta_h=design.theta_h,
+                    theta_p=design.theta_p,
+                    theta_k=design.k,
+                    w_inflation=self.cfg.rpi_inflation,
+                )
+            except RuntimeError as exc:
+                raise RuntimeError(
+                    "Self-consistent robust-set refinement became infeasible: "
+                    f"iteration={iteration}, uncovered={last_uncovered}, "
+                    f"max_excess={last_excess:.6g}, "
+                    f"rpi_area={previous_area:.6g}, "
+                    f"x_minus_z_area={float(np.prod((design.x_upper_tight - design.x_lower_tight) * self.cfg.state_scale)):.6g}."
+                ) from exc
+
+            iteration_learner = OnlineThetaLearner(
+                self.cfg,
+                self.model,
+                rebuilt,
+                np.random.default_rng(self.cfg.seed + 83000 + iteration),
+            )
+            refined, _ = iteration_learner.optimize_static_safety_design(rebuilt)
+            new_area = _polygon_area(refined.rpi_boundary, self.cfg.state_scale)
+            relative_change = abs(new_area - previous_area) / max(previous_area, 1e-12)
+            uncovered_after = sum(
+                not point_in_convex_polygon(point, refined.w_vertices, tol=1e-8)
+                for point in sampled
+            )
+            excess_after = refined.theta_m_matrix @ sampled.T - refined.theta_m_bound[:, None]
+            max_excess_after = float(max(0.0, np.max(excess_after)))
+            self.refinement_iterations = iteration
+            self.refinement_uncovered_count = int(uncovered_after)
+            self.refinement_max_excess = max_excess_after
+            self.refinement_relative_rpi_change = float(relative_change)
+            self.data_hull = np.asarray(refined.w_data_hull, dtype=float).copy()
+            self.set_update_attempts += iteration_learner.set_update_attempts
+            self.set_update_accepts += iteration_learner.set_update_accepts
+            self.k_update_attempts += iteration_learner.k_update_attempts
+            self.k_update_accepts += iteration_learner.k_update_accepts
+            design = refined
+            if (
+                uncovered_after == 0
+                and relative_change < float(self.cfg.robust_set_refinement_tolerance)
+            ):
+                return design, self.metrics(design)
+            previous_area = new_area
+
+        raise RuntimeError(
+            "Self-consistent robust-set refinement did not converge: "
+            f"iteration={self.refinement_iterations}, "
+            f"uncovered={self.refinement_uncovered_count}, "
+            f"max_excess={self.refinement_max_excess:.6g}, "
+            f"relative_rpi_change={self.refinement_relative_rpi_change:.6g}, "
+            f"rpi_area={_polygon_area(design.rpi_boundary, self.cfg.state_scale):.6g}, "
+            f"x_minus_z_area={float(np.prod((design.x_upper_tight - design.x_lower_tight) * self.cfg.state_scale)):.6g}."
+        )
+
     def _safe_set_update(
         self,
         design: SafetyDesign,
@@ -497,5 +637,13 @@ class OnlineThetaLearner:
             "theta_rpi_area_change_percent": float(
                 100.0 * (rpi_area - self.initial_rpi_area)
                 / max(self.initial_rpi_area, 1e-12)
+            ),
+            "robust_refinement_iterations": float(self.refinement_iterations),
+            "robust_refinement_uncovered_count": float(
+                self.refinement_uncovered_count
+            ),
+            "robust_refinement_max_excess": float(self.refinement_max_excess),
+            "robust_refinement_relative_rpi_change": float(
+                self.refinement_relative_rpi_change
             ),
         }

@@ -41,6 +41,9 @@ class ExperimentConfig:
     disturbance_half_range: np.ndarray = field(
         default_factory=lambda: np.array([0.5, 0.5, 4.0, 5.0], dtype=float)
     )
+    disturbance_mode: str = "piecewise_constant"
+    disturbance_hold_steps: int = 50
+    disturbance_estimate_ema: float = 0.8
 
     # Paper constraints: (25,40) <= (X2,P2) <= (100,80), 100 <= u <= 400.
     state_lower: np.ndarray = field(
@@ -155,6 +158,9 @@ class ExperimentConfig:
     theta_invariant_area_weight: float = 0.2
     theta_static_k_max_iterations: int = 100
     theta_static_outer_iterations: int = 2
+    robust_set_refinement_samples: int = 10000
+    robust_set_refinement_max_iterations: int = 6
+    robust_set_refinement_tolerance: float = 1e-3
     nominal_mpc_horizon: int = 10
     nominal_mpc_stage_hessian: np.ndarray = field(
         default_factory=lambda: np.diag([1.0, 0.6, 0.02, 0.02])
@@ -168,6 +174,8 @@ class ExperimentConfig:
     residual_action_scale: np.ndarray = field(
         default_factory=lambda: np.array([0.12, 0.10], dtype=float)
     )
+    residual_parameterization: str = "state_dependent_box"
+    proposed_nominal_controller: str = "safe_center_tracking"
     # The evaporation comparison in Zanon-Gros (2020) uses gamma=0.99.
     gamma_rl: float = 0.99
     tau: float = 0.005
@@ -197,6 +205,7 @@ class ExperimentConfig:
     # an over-aggressive residual actor from being deployed unchanged.
     sac_selection_scales: tuple[float, ...] = (0.0, 0.25, 0.50, 0.75, 1.0)
     sac_min_incremental_return_per_step: float = 0.0
+    sac_min_economic_improvement_percent: float = 1e-3
     # Zero means re-certify every periodic checkpoint under the same fixed design.
     sac_final_candidate_count: int = 0
 
@@ -210,14 +219,16 @@ class ExperimentConfig:
     # representative of normal operation.
     training_initial_radius_fraction: float = 0.90
     evaluation_initial_radius_fraction: float = 0.75
-    # Episode resets must remain inside the state window explicitly included
-    # in the offline nonlinear-mismatch data hull. This does not restrict S.
-    reset_within_disturbance_identification_window: bool = True
+    # After self-consistent S-plus-Z refinement, proposed resets can use the
+    # configured fractions of the complete certified invariant set.
+    reset_within_disturbance_identification_window: bool = False
     training_boundary_start_probability: float = 0.30
     # Long 2000-step episodes otherwise spend almost all samples near one
     # steady state.  Treat every segment as a replay-terminal subtrajectory and
     # safely resample inside S, while keeping the requested episode accounting.
     training_segment_steps: int = 200
+    disturbance_adaptation_steps: int = 2000
+    disturbance_adaptation_switch_steps: int = 250
 
     # Negative-square penalties for quantities whose desired value is zero.
     # The event terms remain separate because squaring a Boolean changes nothing.
