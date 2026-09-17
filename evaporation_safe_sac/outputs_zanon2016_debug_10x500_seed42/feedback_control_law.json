@@ -1,0 +1,125 @@
+{
+  "control_structure": "v_base is safe-center finite-horizon tracking in proposed mode (learned affine h,p guidance in joint_theta); base = safe projection(v_base); candidate = declared feasible residual parameterization(base, actor_action); v_qp = safety verification projection(candidate); u_normalized = v_qp + K(x-z)",
+  "safety_filter_type": "learned finite-horizon nominal guidance plus RPI tightening and one-step invariant QP",
+  "disturbance_available_to_sac": false,
+  "K_parameterization": "continuous real 2x2 gain with H-infinity/RPI/QP safety-gated offline geometry search and fixed SAC deployment",
+  "terminal_center_source": "Zanon-Gros-2020 evaporation example",
+  "K_normalized": [
+    [
+      -8.44154403,
+      -1.84758159
+    ],
+    [
+      -0.36378081000000007,
+      1.85887715
+    ]
+  ],
+  "theta_h": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "theta_p": [
+    0.0,
+    0.0
+  ],
+  "theta_M": [
+    [
+      1833.0434462667881,
+      128.17888435138192
+    ],
+    [
+      -827.8081989240811,
+      11838.20877738308
+    ],
+    [
+      -1614.2799240988181,
+      -112.88144867664234
+    ],
+    [
+      1158.0784128528041,
+      -16561.2928813106
+    ]
+  ],
+  "theta_m": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "K_physical_input_per_physical_state": [
+    [
+      -56.27696019999999,
+      -9.23790795
+    ],
+    [
+      -2.4252054000000007,
+      9.294385750000002
+    ]
+  ],
+  "state_order": [
+    "X2_percent",
+    "P2_kPa"
+  ],
+  "input_order": [
+    "P100_kPa",
+    "F200_kg_per_min"
+  ],
+  "state_normalization_offset": [
+    29.0,
+    53.57
+  ],
+  "state_normalization_scale": [
+    15.0,
+    20.0
+  ],
+  "input_normalization_offset": [
+    222.62265879,
+    215.15014494
+  ],
+  "input_normalization_scale": [
+    100.0,
+    100.0
+  ],
+  "z_reference_normalized": [
+    0.0,
+    0.0
+  ],
+  "v_reference_normalized": [
+    3.3261642329307505e-11,
+    4.959076704835752e-11
+  ],
+  "controlled_invariant_lower_normalized": [
+    -0.1007201038206078,
+    -0.04126118299097591
+  ],
+  "controlled_invariant_upper_normalized": [
+    0.11412227556500563,
+    1.3693254693039613e-06
+  ],
+  "robust_state_lower_normalized": [
+    -0.16731770833333334,
+    -0.188232421875
+  ],
+  "robust_state_upper_normalized": [
+    0.16731770833333334,
+    0.188232421875
+  ],
+  "robust_input_lower_normalized": [
+    -0.4392089843417384,
+    -0.3764648437004092
+  ],
+  "robust_input_upper_normalized": [
+    0.43920898440826195,
+    0.3764648437995908
+  ],
+  "robust_region_scale": 1.2548828125,
+  "sac_residual_scale_normalized": [
+    0.12,
+    0.1
+  ],
+  "selected_policy_output_scale": 1.0,
+  "hinf_gamma_design": 3000.0,
+  "hinf_norm_frequency_grid": 2216.468716243615
+}

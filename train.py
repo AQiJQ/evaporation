@@ -13,6 +13,10 @@ import numpy as np
 
 from .config import ExperimentConfig
 from .control import SafeController, build_safety_design, point_in_convex_polygon
+from .disturbance_experiments import (
+    run_disturbance_scale_scan,
+    run_full_disturbance_stress_test,
+)
 from .model import EvaporatorModel
 from .plot import (
     close_all_plots,
@@ -705,6 +709,60 @@ def evaluate_policy(
     return aggregate, representative, samples
 
 
+def evaluate_paper_nominal_pressure_policy(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    agent,
+) -> dict[str, float]:
+    """Deterministic 300 s nominal-disturbance paper pressure experiment."""
+    if cfg.benchmark_profile != "zanon2016":
+        return {
+            "economic_cost_mean": float("nan"),
+            "economic_cost_total": float("nan"),
+            "violation_rate": float("nan"),
+        }
+    controller = SafeController(cfg, model, design)
+    state = np.asarray(cfg.paper2016_steady_state, dtype=float).copy()
+    controller.reset(state)
+    previous_u = design.v_ref.copy()
+    w_est = np.zeros(2, dtype=float)
+    costs: list[float] = []
+    violations: list[bool] = []
+    for second in range(int(cfg.paper2016_simulation_seconds)):
+        if second in (0, 20, 40):
+            state = state.copy()
+            state[1] += 1.0
+        obs = observation(model, controller, state, previous_u, w_est)
+        action = agent.select_action(obs, deterministic=True)
+        control, info = controller.act(
+            state, action, action_is_normalized=True
+        )
+        costs.append(model.economic_cost(
+            state, control, cfg.disturbance_nominal
+        ))
+        violations.append(bool(
+            np.any(state < cfg.state_lower - 1e-9)
+            or np.any(state > cfg.state_upper + 1e-9)
+            or np.any(control < cfg.input_lower - 1e-9)
+            or np.any(control > cfg.input_upper + 1e-9)
+        ))
+        x_n = model.normalized_state(state)
+        u_n = model.normalized_input(control)
+        next_state = model.step(state, control, cfg.disturbance_nominal)
+        next_n = model.normalized_state(next_state)
+        w_hat = next_n - (design.a @ x_n + design.b @ u_n + design.affine)
+        beta = float(cfg.disturbance_estimate_ema)
+        w_est = beta * w_est + (1.0 - beta) * w_hat
+        previous_u = np.asarray(info["nominal"], dtype=float)
+        state = next_state
+    return {
+        "economic_cost_mean": float(np.mean(costs)),
+        "economic_cost_total": float(np.sum(costs)),
+        "violation_rate": float(np.mean(violations)),
+    }
+
+
 def compute_safe_steady_reference(
     cfg: ExperimentConfig,
     model: EvaporatorModel,
@@ -1151,6 +1209,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--steps", type=int, default=2000)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
+        "--benchmark-profile",
+        choices=("default", "zanon2016"),
+        default="default",
+    )
+    parser.add_argument(
         "--experiment-mode",
         choices=("proposed", "joint_theta"),
         default="proposed",
@@ -1184,6 +1247,7 @@ def main() -> None:
         episodes=args.episodes,
         steps_per_episode=args.steps,
         seed=args.seed,
+        benchmark_profile=args.benchmark_profile,
         experiment_mode=args.experiment_mode,
         disturbance_mode=args.disturbance_mode,
         disturbance_hold_steps=args.disturbance_hold_steps,
@@ -1207,8 +1271,58 @@ def main() -> None:
 
     set_seed(cfg.seed)
     rng = np.random.default_rng(cfg.seed)
-    model = EvaporatorModel(cfg)
-    design = build_safety_design(cfg, model, rng)
+    scan_result = None
+    full_disturbance_stress_summary = None
+    if (
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.experiment_mode == "proposed"
+        and cfg.disturbance_scale_scan_enabled
+        and args.resume_theta is None
+    ):
+        scan_result = run_disturbance_scale_scan(cfg, cfg.output_dir)
+        cfg.disturbance_half_range = (
+            scan_result.alpha_max_certified
+            * np.asarray(cfg.disturbance_full_half_range, dtype=float)
+        )
+        model = EvaporatorModel(cfg)
+        initial_fixed_design = copy.deepcopy(
+            scan_result.selected_initial_design
+        )
+        design = copy.deepcopy(scan_result.selected_design)
+        theta_learner = OnlineThetaLearner(
+            cfg, model, design, np.random.default_rng(cfg.seed + 17001)
+        )
+        source_learner = scan_result.selected_learner
+        for attribute in (
+            "robust_region_search_diagnostics", "first_feasible_scale",
+            "minimum_certified_scale", "maximum_certified_scale",
+            "last_lower_infeasible_scale", "first_upper_infeasible_scale",
+            "last_feasible_scale", "first_infeasible_scale",
+            "robust_region_max_sample_residual_norm",
+            "self_consistency_s_plus_z_passed", "refinement_iterations",
+        ):
+            if hasattr(source_learner, attribute):
+                setattr(theta_learner, attribute, copy.deepcopy(
+                    getattr(source_learner, attribute)
+                ))
+        save_robust_region_search(
+            cfg.output_dir / "robust_region_search.csv",
+            theta_learner.robust_region_search_diagnostics,
+        )
+        if not scan_result.full_disturbance_formal_certified:
+            full_disturbance_stress_summary = run_full_disturbance_stress_test(
+                cfg, model, design, cfg.output_dir
+            )
+    else:
+        model = EvaporatorModel(cfg)
+        design = build_safety_design(cfg, model, rng)
+        initial_fixed_design = copy.deepcopy(design)
+        theta_learner = OnlineThetaLearner(
+            cfg,
+            model,
+            design,
+            np.random.default_rng(cfg.seed + 17001),
+        )
     if args.resume_theta is not None:
         with np.load(args.resume_theta) as saved_theta:
             robust_kwargs = {}
@@ -1231,14 +1345,7 @@ def main() -> None:
                 theta_k=saved_theta["K"],
                 **robust_kwargs,
             )
-    initial_fixed_design = copy.deepcopy(design)
-    theta_learner = OnlineThetaLearner(
-        cfg,
-        model,
-        design,
-        np.random.default_rng(cfg.seed + 17001),
-    )
-    if cfg.experiment_mode == "proposed":
+    if cfg.experiment_mode == "proposed" and scan_result is None:
         try:
             design, _ = theta_learner.build_certified_robust_operating_design(
                 design
@@ -1280,6 +1387,14 @@ def main() -> None:
     print("Continuous evaporator SAC training setup:")
     print(f"  device             : {agent.device}")
     print(f"  episodes x steps   : {cfg.episodes} x {cfg.steps_per_episode}")
+    print(f"  benchmark profile  : {cfg.benchmark_profile} (dt={cfg.dt_min * 60:g} s)")
+    print(
+        "  certified disturbance alpha: "
+        + (
+            f"{scan_result.alpha_max_certified:.9g}"
+            if scan_result is not None else "not scanned"
+        )
+    )
     print(f"  total interactions : {cfg.episodes * cfg.steps_per_episode}")
     print(f"  obs/action dim     : {OBS_DIM}/{ACTION_DIM}")
     print(f"  hidden layers      : {cfg.hidden_dim}, {cfg.hidden_dim}")
@@ -1299,9 +1414,29 @@ def main() -> None:
         f"hold={cfg.disturbance_hold_steps} steps"
     )
     print(f"  residual mapping   : {cfg.residual_parameterization}")
-    print(f"  nominal linearized : economic steady state {cfg.linearization_state.tolist()}")
+    print(f"  safety linearization: state {cfg.linearization_state.tolist()}")
     print(f"  safety anchor      : {cfg.safe_center_state.tolist()}")
     print(f"  experiment mode    : {cfg.experiment_mode}")
+    robust_rpi_physical = design.rpi_boundary * cfg.state_scale
+    robust_rpi_area = 0.5 * abs(float(np.sum(
+        robust_rpi_physical[:, 0] * np.roll(robust_rpi_physical[:, 1], -1)
+        - robust_rpi_physical[:, 1] * np.roll(robust_rpi_physical[:, 0], -1)
+    )))
+    robust_invariant_area = float(np.prod(
+        (design.invariant_upper - design.invariant_lower) * cfg.state_scale
+    ))
+    print(
+        "  first feasible scale: "
+        f"{theta_learner.first_feasible_scale:.9g}"
+    )
+    print(
+        "  minimum certified scale: "
+        f"{theta_learner.minimum_certified_scale:.9g}"
+    )
+    print(
+        "  maximum certified scale: "
+        f"{theta_learner.maximum_certified_scale:.9g}"
+    )
     print(f"  robust region scale: {design.robust_region_scale:.6g}")
     print(
         "  robust X_R physical: "
@@ -1312,6 +1447,18 @@ def main() -> None:
         "  robust U_R physical: "
         f"{model.physical_input(design.robust_input_lower).tolist()} to "
         f"{model.physical_input(design.robust_input_upper).tolist()}"
+    )
+    print(
+        "  robust W max residual norm: "
+        f"{theta_learner.robust_region_max_sample_residual_norm:.6g}"
+    )
+    print(
+        "  robust RPI area: "
+        f"{robust_rpi_area:.6g}"
+    )
+    print(
+        "  robust invariant area: "
+        f"{robust_invariant_area:.6g}"
     )
     print(
         "  theta path         : "
@@ -1377,6 +1524,20 @@ def main() -> None:
     initial_reduction, initial_gap = _paired_economic_metrics(
         initial_baseline_stat, initial_stat, safe_reference_cost
     )
+    initial_nominal_stat = evaluate_paper_nominal_pressure_policy(
+        cfg, model, design, agent
+    )
+    initial_nominal_baseline = evaluate_paper_nominal_pressure_policy(
+        cfg, model, design, no_rl_policy
+    )
+    initial_nominal_improvement = float(
+        100.0
+        * (
+            initial_nominal_baseline["economic_cost_total"]
+            - initial_nominal_stat["economic_cost_total"]
+        )
+        / max(abs(initial_nominal_baseline["economic_cost_total"]), 1e-12)
+    )
     initial_theta_metrics = theta_learner.metrics(design)
     logs: list[dict[str, float]] = [{
         "episode": 0,
@@ -1388,6 +1549,8 @@ def main() -> None:
         "evaluation_theta_only_economic_cost_mean": initial_baseline_stat["economic_cost_mean"],
         "evaluation_safe_sac_economic_cost_mean": initial_stat["economic_cost_mean"],
         "evaluation_sac_incremental_cost_reduction_percent": initial_reduction,
+        "evaluation_robust_sac_improvement_percent": initial_reduction,
+        "evaluation_nominal_sac_improvement_percent": initial_nominal_improvement,
         "evaluation_normalized_safe_performance_gap": initial_gap,
         "safe_reference_cost": safe_reference_cost,
     }]
@@ -1442,6 +1605,7 @@ def main() -> None:
         eval_theta_only_cost = float("nan")
         eval_sac_cost = float("nan")
         eval_cost_reduction = float("nan")
+        eval_nominal_improvement = float("nan")
         eval_safe_gap = float("nan")
         if (
             episode == 1
@@ -1461,6 +1625,22 @@ def main() -> None:
             eval_sac_cost = eval_economic_cost_mean
             eval_cost_reduction, eval_safe_gap = _paired_economic_metrics(
                 eval_baseline_stat, eval_stat, safe_reference_cost
+            )
+            nominal_stat = evaluate_paper_nominal_pressure_policy(
+                cfg, model, design, agent
+            )
+            nominal_baseline_stat = evaluate_paper_nominal_pressure_policy(
+                cfg, model, design, no_rl_policy
+            )
+            eval_nominal_improvement = float(
+                100.0
+                * (
+                    nominal_baseline_stat["economic_cost_total"]
+                    - nominal_stat["economic_cost_total"]
+                )
+                / max(
+                    abs(nominal_baseline_stat["economic_cost_total"]), 1e-12
+                )
             )
             eval_safe = hard_safety_passed(eval_stat)
             policy_candidates.append({
@@ -1492,6 +1672,8 @@ def main() -> None:
             "evaluation_theta_only_economic_cost_mean": eval_theta_only_cost,
             "evaluation_safe_sac_economic_cost_mean": eval_sac_cost,
             "evaluation_sac_incremental_cost_reduction_percent": eval_cost_reduction,
+            "evaluation_robust_sac_improvement_percent": eval_cost_reduction,
+            "evaluation_nominal_sac_improvement_percent": eval_nominal_improvement,
             "evaluation_normalized_safe_performance_gap": eval_safe_gap,
             "safe_reference_cost": safe_reference_cost,
         })
@@ -2028,6 +2210,63 @@ def main() -> None:
         "w", encoding="utf-8"
     ) as stream:
         json.dump(rl_vs_no_rl, stream, indent=2, ensure_ascii=False)
+    evaluation_improvements = log_arrays[
+        "evaluation_sac_incremental_cost_reduction_percent"
+    ]
+    evaluation_improvements = evaluation_improvements[
+        np.isfinite(evaluation_improvements)
+    ]
+    early_count = min(20, len(training_returns))
+    late_count = min(20, len(training_returns))
+    early_return_mean = float(np.mean(training_returns[:early_count]))
+    late_return_mean = float(np.mean(training_returns[-late_count:]))
+    evaluation_window = min(5, len(evaluation_improvements))
+    training_trend_summary = {
+        "early_return_mean": early_return_mean,
+        "late_return_mean": late_return_mean,
+        "return_improvement_absolute": late_return_mean - early_return_mean,
+        "return_improvement_percent": float(
+            100.0 * (late_return_mean - early_return_mean)
+            / max(abs(early_return_mean), 1e-12)
+        ),
+        "positive_training_trend": bool(late_return_mean > early_return_mean),
+        "early_eval_sac_improvement": (
+            float(np.mean(evaluation_improvements[:evaluation_window]))
+            if evaluation_window else float("nan")
+        ),
+        "late_eval_sac_improvement": (
+            float(np.mean(evaluation_improvements[-evaluation_window:]))
+            if evaluation_window else float("nan")
+        ),
+        "best_eval_sac_improvement": (
+            float(np.max(evaluation_improvements))
+            if len(evaluation_improvements) else float("nan")
+        ),
+        "fraction_of_evaluations_positive": (
+            float(np.mean(evaluation_improvements > 0.0))
+            if len(evaluation_improvements) else float("nan")
+        ),
+        "final_5_eval_mean_improvement": (
+            float(np.mean(evaluation_improvements[-5:]))
+            if len(evaluation_improvements) else float("nan")
+        ),
+        "evaluation_source": (
+            "fixed-seed paired deterministic Hinf-RPI zero-residual versus SAC"
+        ),
+    }
+    proposed_design_unchanged = bool(
+        cfg.experiment_mode == "proposed"
+        and np.array_equal(design.k, optimized_fixed_design.k)
+        and np.array_equal(design.theta_m_matrix, optimized_fixed_design.theta_m_matrix)
+        and np.array_equal(design.w_vertices, optimized_fixed_design.w_vertices)
+        and np.array_equal(design.rpi_boundary, optimized_fixed_design.rpi_boundary)
+        and np.array_equal(design.invariant_lower, optimized_fixed_design.invariant_lower)
+        and np.array_equal(design.invariant_upper, optimized_fixed_design.invariant_upper)
+        and np.array_equal(design.robust_state_lower, optimized_fixed_design.robust_state_lower)
+        and np.array_equal(design.robust_state_upper, optimized_fixed_design.robust_state_upper)
+        and np.array_equal(design.robust_input_lower, optimized_fixed_design.robust_input_lower)
+        and np.array_equal(design.robust_input_upper, optimized_fixed_design.robust_input_upper)
+    )
     metrics = {
         "algorithm": (
             "static_hinf_rpi_geometry_plus_fixed_qp_residual_sac"
@@ -2035,6 +2274,52 @@ def main() -> None:
             else "joint_theta_residual_sac_ablation"
         ),
         "experiment_mode": cfg.experiment_mode,
+        "benchmark_profile": cfg.benchmark_profile,
+        "dt_min": float(cfg.dt_min),
+        "alpha_max_certified": (
+            float(scan_result.alpha_max_certified)
+            if scan_result is not None else 1.0
+        ),
+        "training_disturbance_half_range": np.asarray(
+            cfg.disturbance_half_range, dtype=float
+        ).tolist(),
+        "full_disturbance_formal_certified": (
+            bool(scan_result.full_disturbance_formal_certified)
+            if scan_result is not None else True
+        ),
+        "full_disturbance_all_corners_steady_feasible": (
+            bool(scan_result.corner_summary[
+                "full_disturbance_all_corners_steady_feasible"
+            ]) if scan_result is not None else None
+        ),
+        "max_required_P100": (
+            float(scan_result.corner_summary["max_required_P100"])
+            if scan_result is not None else float("nan")
+        ),
+        "max_required_F200": (
+            float(scan_result.corner_summary["max_required_F200"])
+            if scan_result is not None else float("nan")
+        ),
+        "min_required_P100": (
+            float(scan_result.corner_summary["min_required_P100"])
+            if scan_result is not None else float("nan")
+        ),
+        "min_required_F200": (
+            float(scan_result.corner_summary["min_required_F200"])
+            if scan_result is not None else float("nan")
+        ),
+        "full_disturbance_stress_test": full_disturbance_stress_summary,
+        "safety_design_frozen_during_training": proposed_design_unchanged,
+        "safety_design_frozen_during_evaluation": True,
+        "actor_frozen_during_evaluation": True,
+        "online_theta_updates": bool(cfg.experiment_mode == "joint_theta"),
+        "online_K_updates": bool(cfg.experiment_mode == "joint_theta"),
+        "online_W_updates": bool(cfg.experiment_mode == "joint_theta"),
+        "training_description": (
+            "offline safety-layer design plus simulation-based Residual SAC "
+            "pre-training; this is not fixed-dataset offline RL"
+        ),
+        "training_trend_summary": training_trend_summary,
         "experiment_scope": (
             "offline_static_hinf_rpi_geometry_then_fixed_safe_residual_sac"
             if cfg.experiment_mode == "proposed"
@@ -2076,6 +2361,19 @@ def main() -> None:
         ),
         "last_feasible_scale": float(theta_learner.last_feasible_scale),
         "first_infeasible_scale": float(theta_learner.first_infeasible_scale),
+        "first_feasible_scale": float(theta_learner.first_feasible_scale),
+        "minimum_certified_scale": float(
+            theta_learner.minimum_certified_scale
+        ),
+        "maximum_certified_scale": float(
+            theta_learner.maximum_certified_scale
+        ),
+        "last_lower_infeasible_scale": float(
+            theta_learner.last_lower_infeasible_scale
+        ),
+        "first_upper_infeasible_scale": float(
+            theta_learner.first_upper_infeasible_scale
+        ),
         "robust_region_residual_hull_vertices": int(len(design.w_data_hull)),
         "robust_region_max_sample_residual_norm": float(
             theta_learner.robust_region_max_sample_residual_norm
@@ -2249,8 +2547,10 @@ def main() -> None:
                 "tightened input/state sets and controlled-invariant set"
             ),
         },
-        "paper_2020_comparison": {
-            "name": "paper_inspired_theta_baseline",
+        "legacy_2020_ablation_context": {
+            "name": "paper_inspired_theta_ablation",
+            "role": "joint_theta_ablation_only",
+            "included_in_paper2016_main_comparison": False,
             "exact_2020_reproduction": False,
             "scope": (
                 "paper-aligned center, linear steady input, disturbance ranges, "
@@ -2293,6 +2593,23 @@ def main() -> None:
             "comparison_limit": (
                 "the paper plots initial/final sets but does not tabulate their "
                 "areas; no numeric paper area is fabricated"
+            ),
+        },
+        "paper2016_comparison": {
+            "entrypoint": "python -m evaporation.paper2016_compare",
+            "formal_profile": "zanon2016",
+            "formal_prediction_horizon": int(
+                cfg.paper2016_prediction_horizon
+            ),
+            "reference_example_smoke_horizon": int(
+                cfg.paper2016_smoke_horizon
+            ),
+            "formal_simulation_seconds": int(
+                cfg.paper2016_simulation_seconds
+            ),
+            "training_checkpoint_eligible": bool(
+                cfg.benchmark_profile == "zanon2016"
+                and cfg.experiment_mode == "proposed"
             ),
         },
         "training_seconds": time.time() - start,
@@ -2479,6 +2796,10 @@ def main() -> None:
     }
     with (cfg.output_dir / "metrics.json").open("w", encoding="utf-8") as stream:
         json.dump(metrics, stream, indent=2, ensure_ascii=False)
+    print(
+        "formal safety certification: "
+        f"{formal_safety_certification_passed}"
+    )
     print(json.dumps(metrics, indent=2, ensure_ascii=False))
     close_all_plots()
 

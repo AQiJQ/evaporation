@@ -12,6 +12,7 @@ class ExperimentConfig:
     seed: int = 42
     episodes: int = 300
     steps_per_episode: int = 2000
+    benchmark_profile: str = "default"
     dt_min: float = 0.20
     # ``proposed`` freezes an offline-optimized safety design during SAC.
     # ``joint_theta`` retains the original online h/p/M/K learner for ablation.
@@ -41,6 +42,27 @@ class ExperimentConfig:
     disturbance_half_range: np.ndarray = field(
         default_factory=lambda: np.array([0.5, 0.5, 4.0, 5.0], dtype=float)
     )
+    # Immutable reference envelope used by the independent certification scan.
+    # ``disturbance_half_range`` is replaced by alpha_max times this vector for
+    # the formal proposed training distribution.
+    disturbance_full_half_range: np.ndarray = field(
+        default_factory=lambda: np.array([0.5, 0.5, 4.0, 5.0], dtype=float)
+    )
+    disturbance_scale_scan_enabled: bool = True
+    disturbance_scale_scan_grid: tuple[float, ...] = (
+        0.0, 0.25, 0.5, 0.75, 1.0,
+    )
+    disturbance_scale_bisection_iterations: int = 8
+    disturbance_scale_scan_seed: int = 420016
+    disturbance_scale_random_samples: int = 2000
+    # One independent offline M/K design pass is run for every alpha before
+    # robust-region certification.  The resulting gain is never warm-started
+    # from a neighbouring alpha or from an earlier scan artifact.
+    disturbance_scale_static_outer_iterations: int = 1
+    disturbance_scale_k_max_iterations: int = 8
+    disturbance_scale_m_angle_max_degrees: float = 8.0
+    disturbance_scale_m_angle_step_degrees: float = 4.0
+    full_disturbance_stress_steps: int = 2000
     disturbance_mode: str = "piecewise_constant"
     disturbance_hold_steps: int = 50
     disturbance_estimate_ema: float = 0.8
@@ -94,6 +116,7 @@ class ExperimentConfig:
         0.50, 0.75, 1.0, 1.50, 2.0, 3.0, 4.0,
     )
     rpi_inflation: float = 1.20
+    rpi_series_max_terms: int = 5000
     disturbance_bound_samples: int = 8000
     invariant_set_margin: float = 0.995
     safety_design_state_half_range: np.ndarray = field(
@@ -263,3 +286,41 @@ class ExperimentConfig:
     output_dir: Path = Path(
         "evaporation_safe_sac/outputs_state_dependent_safe_sac_300x2000/seed_42"
     )
+
+    # Zanon, Gros & Diehl (2016) formal-comparison protocol.  The TuneMPC
+    # example uses N=20 only as a reference/smoke-test setting; paper results
+    # use a one-second sample, N=200 and a 300-second closed loop.
+    paper2016_steady_state: np.ndarray = field(
+        default_factory=lambda: np.array([25.0, 49.743], dtype=float)
+    )
+    paper2016_steady_input: np.ndarray = field(
+        default_factory=lambda: np.array([191.713, 215.888], dtype=float)
+    )
+    paper2016_prediction_horizon: int = 200
+    paper2016_smoke_horizon: int = 20
+    paper2016_simulation_seconds: int = 300
+
+    def __post_init__(self) -> None:
+        if self.benchmark_profile == "zanon2016":
+            # Model derivatives are expressed per minute, so 1 s = 1/60 min.
+            self.dt_min = 1.0 / 60.0
+            # The robust tube is local to the interior safety anchor.  Keep the
+            # paper economic steady state separately for Experiment I, while
+            # eliminating a persistent affine mismatch caused by linearizing
+            # the safety model at a different operating point.
+            self.linearization_state = self.safe_center_state.copy()
+            self.linearization_input = np.array(
+                [222.62265879, 215.15014494], dtype=float
+            )
+            # The one-second discrete closed loop contains a deliberately slow
+            # mode.  Its RPI support series needs more terms than the 12-second
+            # default; control.py encloses its omitted infinite RPI tail with a
+            # certified eigenbasis box bound.  Its unweighted discrete-time l2
+            # gain also scales with the finer sampling grid.  Both quantities
+            # are re-certified rather than reusing the default certificate.
+            self.rpi_series_max_terms = 5000
+            self.hinf_gamma = 3000.0
+        elif self.benchmark_profile != "default":
+            raise ValueError(
+                "benchmark_profile must be 'default' or 'zanon2016'"
+            )

@@ -255,19 +255,37 @@ def _rpi_support(
     tol: float = 1e-11,
     max_terms: int = 5000,
 ) -> np.ndarray:
-    """Support of sum Acl^i W in selected row-vector directions."""
+    """Certified support of ``sum Acl^i W`` in selected directions.
+
+    If a very slow stable mode has not reached the numerical cutoff after the
+    finite sum, the omitted infinite tail is enclosed by an eigenbasis box
+    bound.  This avoids declaring a one-second model infeasible merely because
+    a brute-force series would need tens of thousands of Python iterations.
+    """
     directions = np.atleast_2d(np.asarray(directions, dtype=float))
     power = np.eye(acl.shape[0])
     support = np.zeros(len(directions))
+    converged = False
     for index in range(max_terms):
         transformed = directions @ power
         term = np.max(transformed @ w_vertices.T, axis=1)
         support += term
         power = power @ acl
         if index > 20 and float(np.max(np.abs(term))) < tol:
+            converged = True
             break
-    else:
-        raise RuntimeError("RPI support series did not converge.")
+    if not converged:
+        eigenvalues, eigenvectors = np.linalg.eig(acl)
+        radii = np.abs(eigenvalues)
+        if np.max(radii) >= 1.0 - 1e-13:
+            raise RuntimeError("RPI support series has no stable tail bound.")
+        inverse = np.linalg.inv(eigenvectors)
+        w_box = np.max(np.abs(np.asarray(w_vertices, dtype=float)), axis=0)
+        modal_w_bound = np.abs(inverse) @ w_box
+        modal_direction = np.abs(directions @ eigenvectors)
+        tail_factors = radii ** max_terms / np.maximum(1.0 - radii, 1e-15)
+        tail = np.real(modal_direction @ (tail_factors * modal_w_bound))
+        support += (1.0 + 1e-10) * np.maximum(tail, 0.0)
     return support
 
 
@@ -275,11 +293,14 @@ def rpi_polygon(
     acl: np.ndarray,
     w_vertices: np.ndarray,
     directions: int = 720,
+    max_terms: int = 5000,
 ) -> np.ndarray:
     """Safe outer polygon from densely sampled RPI support half-spaces."""
     angles = np.linspace(0.0, 2.0 * np.pi, directions, endpoint=False)
     normals = np.column_stack([np.cos(angles), np.sin(angles)])
-    supports = _rpi_support(acl, w_vertices, normals)
+    supports = _rpi_support(
+        acl, w_vertices, normals, max_terms=int(max_terms)
+    )
     vertices = np.empty((directions, 2), dtype=float)
     for index in range(directions):
         next_index = (index + 1) % directions
@@ -628,15 +649,27 @@ def build_safety_design(
         if diagnostics is not None:
             diagnostics["hinf_feasible"] = True
         try:
-            boundary = rpi_polygon(acl, w_vertices)
-            support_upper = _rpi_support(acl, w_vertices, np.eye(2))
-            support_lower = _rpi_support(acl, w_vertices, -np.eye(2))
+            boundary = rpi_polygon(
+                acl, w_vertices, max_terms=cfg.rpi_series_max_terms
+            )
+            support_upper = _rpi_support(
+                acl, w_vertices, np.eye(2),
+                max_terms=cfg.rpi_series_max_terms,
+            )
+            support_lower = _rpi_support(
+                acl, w_vertices, -np.eye(2),
+                max_terms=cfg.rpi_series_max_terms,
+            )
         except RuntimeError:
             continue
         if diagnostics is not None:
             diagnostics["rpi_feasible"] = True
-        input_support_upper = _rpi_support(acl, w_vertices, k)
-        input_support_lower = _rpi_support(acl, w_vertices, -k)
+        input_support_upper = _rpi_support(
+            acl, w_vertices, k, max_terms=cfg.rpi_series_max_terms
+        )
+        input_support_lower = _rpi_support(
+            acl, w_vertices, -k, max_terms=cfg.rpi_series_max_terms
+        )
         support = np.maximum(support_lower, support_upper)
         input_support = np.maximum(
             input_support_lower, input_support_upper
@@ -769,10 +802,30 @@ def build_safety_design(
             -float(item["invariant_area"]),
         ),
     )
-    box_generators, box_support = rpi_generators(
-        a + b @ np.asarray(selected["k"]), w_bound
-    )
-    box_boundary_physical = zonotope_boundary(box_generators) * cfg.state_scale
+    selected_acl = a + b @ np.asarray(selected["k"])
+    if cfg.benchmark_profile != "zanon2016":
+        box_generators, box_support = rpi_generators(
+            selected_acl, w_bound, max_terms=cfg.rpi_series_max_terms
+        )
+        box_boundary = zonotope_boundary(box_generators)
+    else:
+        box_vertices = np.asarray(list(product(*zip(-w_bound, w_bound))))
+        box_boundary = rpi_polygon(
+            selected_acl,
+            box_vertices,
+            max_terms=cfg.rpi_series_max_terms,
+        )
+        box_support = np.maximum(
+            _rpi_support(
+                selected_acl, box_vertices, np.eye(2),
+                max_terms=cfg.rpi_series_max_terms,
+            ),
+            _rpi_support(
+                selected_acl, box_vertices, -np.eye(2),
+                max_terms=cfg.rpi_series_max_terms,
+            ),
+        )
+    box_boundary_physical = box_boundary * cfg.state_scale
     box_area = 0.5 * abs(float(np.sum(
         box_boundary_physical[:, 0] * np.roll(box_boundary_physical[:, 1], -1)
         - box_boundary_physical[:, 1] * np.roll(box_boundary_physical[:, 0], -1)

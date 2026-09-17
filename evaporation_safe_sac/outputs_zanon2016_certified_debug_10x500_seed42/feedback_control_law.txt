@@ -1,0 +1,24 @@
+Evaporator safe-SAC feedback law
+
+Normalized coordinates:
+  x_n = (x - x_offset) / x_scale
+  u_n = (u - u_offset) / u_scale
+  e   = x_n - z
+
+Control sequence:
+  v_base    = v_ref + L_track @ (z-z_ref)  [proposed]
+  base      = safe_projection(v_base)
+  candidate = state_dependent_feasible_residual(base, actor_action)
+  v_qp      = Euclidean projection with v_qp in U-KZ and z_next in S
+  u_n       = v_qp + K @ e
+  u         = u_offset + u_scale * u_n
+
+K_normalized = [[-8.02154403 -1.67958159]
+ [-0.30078081  1.75387715]]
+K_physical   = [[-53.4769602   -8.39790795]
+ [ -2.0052054    8.76938575]]
+S_lower_norm = [-0.097923106 -0.039282107]
+S_upper_norm = [1.104960986e-01 9.874842384e-06]
+selected_SAC_output_scale = 1
+
+The four true exogenous disturbances act on the plant but are not SAC inputs; only an EMA of completed-transition model residuals is observed.

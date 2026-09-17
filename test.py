@@ -4,11 +4,13 @@ from __future__ import annotations
 from dataclasses import replace
 from itertools import product
 import inspect
+from pathlib import Path
 import numpy as np
 
 from .config import ExperimentConfig
 from .control import (
     SafeController,
+    _rpi_support,
     build_safety_design,
     estimate_hinf_norm,
     point_in_convex_polygon,
@@ -17,6 +19,18 @@ from .control import (
 )
 from .model import EvaporatorModel
 from .multiseed import DEFAULT_SEEDS, T_975_DF2, _moving_average
+from .paper2016_adapter import (
+    DEFAULT_TUNEMPC_PATH,
+    dependency_diagnostics,
+    reference_derivative,
+    reference_economic_cost,
+    reference_intermediate,
+)
+from .paper2016_compare import apply_state_shock, economic_metric_g, _rollout
+from .disturbance_experiments import (
+    disturbance_corner_feasibility,
+    run_disturbance_scale_scan,
+)
 from .sac import ReplayBuffer, SACAgent, SACConfig
 from .theta_learning import OnlineThetaLearner
 from .train import (
@@ -25,6 +39,7 @@ from .train import (
     advance_disturbance,
     compute_safe_steady_reference,
     economic_policy_eligible,
+    evaluate_paper_nominal_pressure_policy,
     formal_safety_certified,
     hard_safety_passed,
     observation,
@@ -35,9 +50,140 @@ from . import train as train_module
 
 def main() -> None:
     cfg = ExperimentConfig(disturbance_bound_samples=50)
+    assert cfg.benchmark_profile == "default"
+    assert np.isclose(cfg.dt_min, 0.20)
+    paper_cfg = ExperimentConfig(
+        benchmark_profile="zanon2016", disturbance_bound_samples=50
+    )
+    assert np.isclose(paper_cfg.dt_min, 1.0 / 60.0)
+    path_diagnostics = dependency_diagnostics(DEFAULT_TUNEMPC_PATH)
+    assert path_diagnostics["reference_files_present"], path_diagnostics
+    paper_model = EvaporatorModel(paper_cfg)
+    consistency_state = np.array([28.4, 54.2])
+    consistency_input = np.array([225.0, 240.0])
+    current_flows = paper_model.algebraic(
+        consistency_state, consistency_input, paper_cfg.disturbance_nominal
+    )
+    reference_flows = reference_intermediate(consistency_state, consistency_input)
+    assert np.allclose(
+        [current_flows.f2, current_flows.f4, current_flows.f5,
+         current_flows.f100, current_flows.q100, current_flows.q200],
+        [reference_flows["F2"], reference_flows["F4"], reference_flows["F5"],
+         reference_flows["F100"], reference_flows["Q100"], reference_flows["Q200"]],
+        rtol=1e-12, atol=1e-12,
+    )
+    assert np.allclose(
+        paper_model.derivative(
+            consistency_state, consistency_input, paper_cfg.disturbance_nominal
+        ),
+        reference_derivative(consistency_state, consistency_input),
+        rtol=1e-12, atol=1e-12,
+    )
+    assert np.isclose(
+        paper_model.economic_cost(
+            consistency_state, consistency_input, paper_cfg.disturbance_nominal
+        ),
+        reference_economic_cost(consistency_state, consistency_input),
+        rtol=1e-12, atol=1e-12,
+    )
+    assert np.max(np.abs(paper_model.derivative(
+        paper_cfg.paper2016_steady_state,
+        paper_cfg.paper2016_steady_input,
+        paper_cfg.disturbance_nominal,
+    ))) < 2e-5
+    nominal_state = paper_cfg.paper2016_steady_state
+    for second in (0, 20, 40):
+        assert np.allclose(
+            apply_state_shock(nominal_state, "pressure_positive", second),
+            nominal_state + [0.0, 1.0],
+        )
+        assert np.allclose(
+            apply_state_shock(nominal_state, "pressure_negative", second),
+            nominal_state + [0.0, -1.0],
+        )
+        assert np.allclose(
+            apply_state_shock(nominal_state, "concentration_positive", second),
+            nominal_state + [1.0, 0.0],
+        )
+    assert np.allclose(
+        apply_state_shock(nominal_state, "pressure_positive", 1), nominal_state
+    )
+    assert economic_metric_g(100.0, 100.0, 10, 2.0) == 0.0
+    assert economic_metric_g(100.0, 110.0, 10, 2.0) < 0.0
+    rollout_source = inspect.getsource(_rollout)
+    assert ".update(" not in rollout_source
+    nominal_evaluation_source = inspect.getsource(
+        evaluate_paper_nominal_pressure_policy
+    )
+    assert "cfg.disturbance_nominal" in nominal_evaluation_source
+    assert "second in (0, 20, 40)" in nominal_evaluation_source
+
+    temporary_path = (
+        Path(__file__).resolve().parent
+        / "evaporation_safe_sac"
+        / "test_disturbance_scan_tmp"
+    )
+    temporary_path.mkdir(parents=True, exist_ok=True)
+    if True:
+        corner_summary = disturbance_corner_feasibility(
+            paper_cfg,
+            paper_model,
+            temporary_path / "disturbance_corner_feasibility.csv",
+        )
+        corner_rows = np.genfromtxt(
+            temporary_path / "disturbance_corner_feasibility.csv",
+            delimiter=",", names=True, dtype=None, encoding="utf-8",
+        )
+        assert len(corner_rows) == 16
+        assert not corner_summary[
+            "full_disturbance_all_corners_steady_feasible"
+        ]
+        assert corner_summary["max_required_F200"] > paper_cfg.input_upper[1]
+
+        scan_cfg = ExperimentConfig(
+            benchmark_profile="zanon2016",
+            disturbance_scale_scan_grid=(0.0,),
+            disturbance_scale_bisection_iterations=0,
+            disturbance_scale_random_samples=50,
+            disturbance_bound_samples=50,
+            robust_region_random_samples=50,
+            robust_region_bisection_iterations=1,
+            theta_static_outer_iterations=0,
+            disturbance_scale_static_outer_iterations=0,
+            disturbance_scale_m_angle_max_degrees=0.0,
+        )
+        scan = run_disturbance_scale_scan(scan_cfg, temporary_path / "scan")
+        assert scan.alpha_max_certified == 0.0
+        assert any(
+            row["alpha"] == 0.0
+            and row["formal_certification_passed"]
+            for row in scan.rows
+        )
+        assert np.allclose(
+            scan.alpha_max_certified * scan_cfg.disturbance_full_half_range,
+            scan.selected_cfg.disturbance_half_range,
+        )
+        assert scan.selected_design.robust_region_scale > 0.0
+        # A full-box failure is metadata for Experiment III and does not alter
+        # the nominal paper model or prevent Experiment I state shocks.
+        assert np.array_equal(
+            scan.selected_model.cfg.disturbance_nominal,
+            scan_cfg.disturbance_nominal,
+        )
     assert cfg.episodes == 300
     assert len(DEFAULT_SEEDS) == 3 and 42 in DEFAULT_SEEDS
     assert np.isclose(T_975_DF2, 4.302652729911275)
+    # A deliberately slow diagonal closed loop forces the finite-series path
+    # to use its certified eigenbasis tail.  For a symmetric box the exact
+    # coordinate support is known analytically.
+    slow_acl = np.diag([0.999, 0.8])
+    slow_w = np.asarray(list(product((-0.01, 0.01), (-0.02, 0.02))))
+    slow_support = _rpi_support(
+        slow_acl, slow_w, np.eye(2), max_terms=100
+    )
+    exact_slow_support = np.array([0.01 / (1.0 - 0.999), 0.02 / (1.0 - 0.8)])
+    assert np.all(slow_support >= exact_slow_support - 1e-10)
+    assert np.allclose(slow_support, exact_slow_support, rtol=1e-9, atol=1e-9)
     moving = _moving_average(np.arange(25, dtype=float), window=20)
     assert np.all(np.isnan(moving[:19])) and np.all(np.isfinite(moving[19:]))
     assert cfg.replay_capacity == 100000
@@ -467,9 +613,9 @@ def main() -> None:
         <= refinement_cfg.input_upper + tol
     )
 
-    class ExpansionFallbackLearner(OnlineThetaLearner):
+    class FeasibleIntervalLearner(OnlineThetaLearner):
         def _candidate_region_diagnostics(self, scale, seed_design, attempt_index):
-            feasible = float(scale) <= 1.10
+            feasible = 1.30 <= float(scale) <= 1.80
             diagnostic = {
                 "attempt": int(attempt_index),
                 "scale": float(scale),
@@ -477,9 +623,18 @@ def main() -> None:
                 "input_region": [],
                 "w_hull_vertex_count": len(seed_design.w_data_hull),
                 "max_residual_norm": 0.0,
+                "hinf_feasible": feasible,
+                "rpi_feasible": feasible,
+                "x_tightening_feasible": feasible,
+                "u_tightening_feasible": feasible,
+                "invariant_feasible": feasible,
                 "s_plus_z_contained": feasible,
+                "input_tube_contained": feasible,
+                "residual_membership_passed": feasible,
+                "safe_center_feasible": feasible,
+                "v_ref_feasible": feasible,
                 "feasible": feasible,
-                "failure_reason": "" if feasible else "synthetic limit",
+                "failure_reason": "" if feasible else "outside synthetic interval",
             }
             return (
                 replace(seed_design, robust_region_scale=float(scale))
@@ -490,10 +645,10 @@ def main() -> None:
     fallback_cfg = replace(
         refinement_cfg,
         robust_region_growth_factor=1.25,
-        robust_region_max_scale=1.25,
+        robust_region_max_scale=2.5,
         robust_region_bisection_iterations=4,
     )
-    fallback_learner = ExpansionFallbackLearner(
+    fallback_learner = FeasibleIntervalLearner(
         fallback_cfg,
         refinement_model,
         refinement_initial,
@@ -502,27 +657,65 @@ def main() -> None:
     fallback_design, _ = fallback_learner.build_certified_robust_operating_design(
         refinement_initial
     )
-    assert 1.0 <= fallback_design.robust_region_scale <= 1.10
-    assert np.isclose(fallback_learner.first_infeasible_scale, 1.25)
+    assert fallback_learner.first_feasible_scale > 1.0
+    assert np.isclose(fallback_learner.first_feasible_scale, 1.5625)
+    assert np.isclose(fallback_learner.last_lower_infeasible_scale, 1.25)
+    assert np.isclose(fallback_learner.first_upper_infeasible_scale, 1.953125)
+    assert 1.30 <= fallback_learner.minimum_certified_scale <= 1.32
+    assert 1.78 <= fallback_learner.maximum_certified_scale <= 1.80
+    assert np.isclose(
+        fallback_design.robust_region_scale,
+        fallback_learner.maximum_certified_scale,
+    )
+    selected_row = [
+        row for row in fallback_learner.robust_region_search_diagnostics
+        if np.isclose(row["scale"], fallback_design.robust_region_scale)
+    ][-1]
+    assert selected_row["feasible"]
+    assert np.all(
+        fallback_design.invariant_lower
+        - fallback_design.rpi_support_lower
+        >= fallback_design.robust_state_lower - tol
+    )
+    assert np.all(
+        fallback_design.invariant_upper
+        + fallback_design.rpi_support_upper
+        <= fallback_design.robust_state_upper + tol
+    )
+    assert np.all(
+        fallback_design.u_lower_tight
+        - fallback_design.input_rpi_support_lower
+        >= fallback_design.robust_input_lower - tol
+    )
+    assert np.all(
+        fallback_design.u_upper_tight
+        + fallback_design.input_rpi_support_upper
+        <= fallback_design.robust_input_upper + tol
+    )
 
-    class InitialFailureLearner(ExpansionFallbackLearner):
+    class AllScalesInfeasibleLearner(FeasibleIntervalLearner):
         def _candidate_region_diagnostics(self, scale, seed_design, attempt_index):
             _, diagnostic = super()._candidate_region_diagnostics(
-                1.25, seed_design, attempt_index
+                1.0, seed_design, attempt_index
             )
             diagnostic["scale"] = float(scale)
             return None, diagnostic
 
     failed_as_required = False
     try:
-        InitialFailureLearner(
+        AllScalesInfeasibleLearner(
             fallback_cfg,
             refinement_model,
             refinement_initial,
             np.random.default_rng(901),
         ).build_certified_robust_operating_design(refinement_initial)
     except RuntimeError as exc:
-        failed_as_required = "scale=1.0" in str(exc)
+        message = str(exc)
+        failed_as_required = (
+            "No feasible robust operating region" in message
+            and "scale=1" in message
+            and "scale=2.5" in message
+        )
     assert failed_as_required
     learner = OnlineThetaLearner(
         theta_cfg, theta_model, theta_design, np.random.default_rng(7)
@@ -637,8 +830,23 @@ def main() -> None:
             * refinement_cfg.state_scale
         )),
     )
-    print(f"  last feasible scale: {refinement_learner.last_feasible_scale:.6g}")
-    print(f"  first infeasible scale: {refinement_learner.first_infeasible_scale}")
+    print(f"  first feasible scale: {refinement_learner.first_feasible_scale:.6g}")
+    print(
+        "  minimum certified scale: "
+        f"{refinement_learner.minimum_certified_scale:.6g}"
+    )
+    print(
+        "  maximum certified scale: "
+        f"{refinement_learner.maximum_certified_scale:.6g}"
+    )
+    print(
+        "  last lower infeasible scale: "
+        f"{refinement_learner.last_lower_infeasible_scale}"
+    )
+    print(
+        "  first upper infeasible scale: "
+        f"{refinement_learner.first_upper_infeasible_scale}"
+    )
     print("evaporation_safe_sac tests passed")
 
 

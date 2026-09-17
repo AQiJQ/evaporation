@@ -1,0 +1,1039 @@
+{
+  "algorithm": "static_hinf_rpi_geometry_plus_fixed_qp_residual_sac",
+  "experiment_mode": "proposed",
+  "benchmark_profile": "zanon2016",
+  "dt_min": 0.016666666666666666,
+  "alpha_max_certified": 0.1484375,
+  "training_disturbance_half_range": [
+    0.07421875,
+    0.07421875,
+    0.59375,
+    0.7421875
+  ],
+  "full_disturbance_formal_certified": false,
+  "full_disturbance_all_corners_steady_feasible": false,
+  "max_required_P100": 239.12837671827342,
+  "max_required_F200": 1093.9492589010044,
+  "min_required_P100": 206.48412377313593,
+  "min_required_F200": 112.43401635256147,
+  "full_disturbance_stress_test": {
+    "experiment_label": "out-of-certified-envelope stress test",
+    "formal_certification_passed": false,
+    "state_violation_rate": 0.0,
+    "input_violation_rate": 0.0,
+    "rpi_violation_rate": 0.032,
+    "qp_infeasible_rate": 0.0,
+    "W_exceedance_rate": 0.5,
+    "economic_cost_mean": 6423.395246177899
+  },
+  "safety_design_frozen_during_training": true,
+  "safety_design_frozen_during_evaluation": true,
+  "actor_frozen_during_evaluation": true,
+  "online_theta_updates": false,
+  "online_K_updates": false,
+  "online_W_updates": false,
+  "training_description": "offline safety-layer design plus simulation-based Residual SAC pre-training; this is not fixed-dataset offline RL",
+  "training_trend_summary": {
+    "early_return_mean": 113.38286553527205,
+    "late_return_mean": 113.38286553527205,
+    "return_improvement_absolute": 0.0,
+    "return_improvement_percent": 0.0,
+    "positive_training_trend": false,
+    "early_eval_sac_improvement": 0.10344086270920314,
+    "late_eval_sac_improvement": 0.10344086270920314,
+    "best_eval_sac_improvement": 0.14530385599757548,
+    "fraction_of_evaluations_positive": 0.75,
+    "final_5_eval_mean_improvement": 0.10344086270920314,
+    "evaluation_source": "fixed-seed paired deterministic Hinf-RPI zero-residual versus SAC"
+  },
+  "experiment_scope": "offline_static_hinf_rpi_geometry_then_fixed_safe_residual_sac",
+  "selected_policy": "fixed_design_paired_checkpoint_scale_audit",
+  "best_evaluation_episode": 1,
+  "best_episode": 1,
+  "selected_policy_output_scale": 1.0,
+  "selected_policy_scale": 1.0,
+  "initial_rpi_area": 1.3854523310060358,
+  "optimized_rpi_area": 2.060567583122406,
+  "rpi_area_reduction_percent": -48.72886904929746,
+  "initial_x_minus_z_area": 2528.499229372789,
+  "optimized_x_minus_z_area": 2.481514193753861,
+  "x_minus_z_area_increase_percent": -99.90185821830885,
+  "initial_invariant_area": 2503.2774495597955,
+  "optimized_invariant_area": 2.4567610896711662,
+  "robust_region_scale": 1.2099609375,
+  "robust_state_lower_physical": [
+    26.580078125,
+    49.9401171875
+  ],
+  "robust_state_upper_physical": [
+    31.419921875,
+    57.1998828125
+  ],
+  "robust_input_lower_physical": [
+    180.27402598082617,
+    178.85131681995907
+  ],
+  "robust_input_upper_physical": [
+    264.9712916058262,
+    251.44897306995907
+  ],
+  "robust_region_search_attempts": 10,
+  "last_feasible_scale": 1.2099609375,
+  "first_infeasible_scale": 1.25,
+  "first_feasible_scale": 1.0,
+  "minimum_certified_scale": 1.0,
+  "maximum_certified_scale": 1.2099609375,
+  "last_lower_infeasible_scale": NaN,
+  "first_upper_infeasible_scale": 1.25,
+  "robust_region_residual_hull_vertices": 17,
+  "robust_region_max_sample_residual_norm": 0.00048055395751798503,
+  "self_consistency_S_plus_Z_passed": true,
+  "theta_only_economic_cost_mean": 6390.476468930253,
+  "safe_sac_economic_cost_mean": 6381.1908602042795,
+  "holdout_theta_only_economic_cost_mean": 6422.265617111009,
+  "holdout_safe_sac_economic_cost_mean": 6412.936445894641,
+  "sac_incremental_cost_reduction_percent": 0.14530385599757548,
+  "holdout_sac_incremental_cost_reduction_percent": 0.14526293013344452,
+  "safe_reference_cost": 6349.95896208802,
+  "normalized_safe_performance_gap": -0.7708247755191451,
+  "safe_reference_is_dynamic_lower_bound": false,
+  "nominal_safe_steady_reference": {
+    "state": [
+      27.531153409732035,
+      52.784357857384066
+    ],
+    "input": [
+      213.94297878731314,
+      210.3832421604733
+    ],
+    "cost": 6349.95896208802,
+    "derivative_inf_norm": 1.7763568394002505e-15,
+    "interpretation": "evaluation-only nominal safe steady reference, not a global optimal policy"
+  },
+  "constraint_violation_rate": 0.0,
+  "holdout_constraint_violation_rate": 0.0,
+  "robust_operating_region_violation_rate": 0.0,
+  "holdout_robust_operating_region_violation_rate": 0.0,
+  "rpi_violation_rate": 0.0,
+  "qp_infeasible_rate": 0.0,
+  "qp_intervention_rate": 0.0,
+  "safe_action_mapping_rate": 0.0,
+  "residual_feasible_scale_mean": 0.27329547379093194,
+  "residual_feasible_scale_min": 0.2726746829295663,
+  "residual_requested_norm_mean": 0.09948387782665784,
+  "residual_applied_norm_mean": 0.027188723138808154,
+  "residual_execution_ratio_mean": 0.27329547379093194,
+  "requested_residual_state_dependence_norm": 0.24039543533761337,
+  "applied_residual_state_dependence_norm": 2.848706151522548,
+  "requested_residual_disturbance_estimate_dependence_norm": 1.6668289355071473,
+  "applied_residual_disturbance_estimate_dependence_norm": 0.14813500892272524,
+  "disturbance_bound_exceedance_rate": 0.0,
+  "sac_positive_increment_learned": true,
+  "sac_min_economic_improvement_percent": 0.001,
+  "formal_safety_certification_passed": true,
+  "uncovered_final_hull_vertices": 0,
+  "best_nonzero_policy_episode": 1.0,
+  "best_nonzero_policy_scale": 1.0,
+  "best_nonzero_incremental_return": 0.046428028945922545,
+  "best_nonzero_cost_reduction_percent": 0.14530385599757548,
+  "best_nonzero_violation_rate": 0.0,
+  "best_nonzero_intervention_rate": 0.0,
+  "best_nonzero_mapping_rate": 0.0,
+  "final_checkpoint_certification": {
+    "checked_against_final_retained_disturbance_hull": true,
+    "safety_design_rebuilt_from_final_hull": false,
+    "final_data_hull_vertex_count": 17,
+    "uncovered_final_hull_vertices": 0,
+    "candidate_count_before_prescreen": 4,
+    "candidate_count_after_prescreen": 4,
+    "policy_scales_tested": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "paired_theta_only_return_per_step": 0.14901872176792388,
+    "paired_theta_only_economic_cost_mean": 6390.476468930253,
+    "selected_incremental_return_per_step": 0.046428028945922545,
+    "selected_incremental_economic_cost_reduction": 9.285608725973361,
+    "sac_positive_increment_learned": true,
+    "fixed_design_disturbance_bound_certified": true,
+    "formal_safety_certification_passed": true,
+    "audit_file": "final_checkpoint_audit.csv"
+  },
+  "device": "cpu",
+  "observation_includes_current_disturbance": false,
+  "observation_includes_true_disturbance": false,
+  "observation_includes_disturbance_estimate": true,
+  "disturbance_is_applied_to_plant": true,
+  "disturbance_model": "piecewise_constant",
+  "disturbance_hold_steps": 50,
+  "disturbance_estimate_ema": 0.8,
+  "observation_dimension": 19,
+  "episodes": 10,
+  "steps_per_episode": 500,
+  "total_interactions": 5000,
+  "gradient_updates": 4745,
+  "training_segment_steps": 200,
+  "training_subtrajectories_per_episode": 3,
+  "theta_learning": {
+    "theta_cost_updates": 0.0,
+    "theta_set_update_attempts": 0.0,
+    "theta_set_update_accepts": 0.0,
+    "theta_K_update_attempts": 0.0,
+    "theta_K_update_accepts": 0.0,
+    "theta_K_last_coordinate": -1.0,
+    "theta_K_step_norm": 0.223159136044214,
+    "theta_K_last_policy_score": NaN,
+    "theta_transition_samples": 5000.0,
+    "theta_data_hull_vertices": 17.0,
+    "theta_membership_exceedances": 1.0,
+    "theta_pending_uncovered_hull_vertices": 0.0,
+    "theta_h_norm": 0.0,
+    "theta_p_norm": 0.0,
+    "theta_M_norm": 21986.254697835575,
+    "theta_K_change_norm": 0.0,
+    "theta_M_angle_deg": 4.0,
+    "theta_td_error_abs_mean": NaN,
+    "theta_rpi_area": 2.0605675831230617,
+    "theta_rpi_area_change_percent": 0.0,
+    "robust_refinement_iterations": 10.0,
+    "robust_refinement_uncovered_count": 0.0,
+    "robust_refinement_max_excess": 0.0,
+    "robust_refinement_relative_rpi_change": NaN,
+    "robust_region_search_attempts": 10.0,
+    "last_feasible_scale": 1.2099609375,
+    "first_infeasible_scale": 1.25,
+    "first_feasible_scale": 1.0,
+    "minimum_certified_scale": 1.0,
+    "maximum_certified_scale": 1.2099609375,
+    "last_lower_infeasible_scale": NaN,
+    "first_upper_infeasible_scale": 1.25,
+    "robust_region_residual_hull_vertices": 17.0,
+    "robust_region_max_sample_residual_norm": 0.00048055395751798503,
+    "self_consistency_S_plus_Z_passed": 1.0,
+    "h": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "p": [
+      0.0,
+      0.0
+    ],
+    "M": [
+      [
+        1965.9297903441993,
+        137.4712027435437
+      ],
+      [
+        -886.8425241096627,
+        12682.438959552286
+      ],
+      [
+        -1733.0974026359145,
+        -121.18997615390795
+      ],
+      [
+        1237.7844626680978,
+        -17701.142498359968
+      ]
+    ],
+    "m": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "K": [
+      [
+        -8.02154403,
+        -1.67958159
+      ],
+      [
+        -0.30078081,
+        1.75387715
+      ]
+    ],
+    "W_data_hull_vertex_count": 17,
+    "W_theta_vertex_count": 4,
+    "cost_learning_rate": 0.01,
+    "cost_normalization_scale": 600.0,
+    "set_update_every_episodes": 5,
+    "continuous_K_update_every_episodes": 5,
+    "frozen_during_sac": true,
+    "continuous_K_evaluation_steps": 250,
+    "continuous_K_parameterization": "direct unconstrained real 2x2 entries with two-sided pattern search; acceptance constrained by the complete safety gate",
+    "safe_acceptance_gate": "all retained residuals in W_theta; stable A+BK; nonempty tightened input/state sets and controlled-invariant set"
+  },
+  "legacy_2020_ablation_context": {
+    "name": "paper_inspired_theta_ablation",
+    "role": "joint_theta_ablation_only",
+    "included_in_paper2016_main_comparison": false,
+    "exact_2020_reproduction": false,
+    "scope": "paper-aligned center, linear steady input, disturbance ranges, constraints, economic cost, and theta=(h,p,M,K); SAC replaces the paper's Q-learning and the one-step invariant QP replaces its full robust MPC horizon",
+    "paper_terminal_center": [
+      29.0,
+      53.57
+    ],
+    "paper_terminal_input_reported": [
+      223.76,
+      221.61
+    ],
+    "implemented_linear_terminal_input": [
+      222.62265879332617,
+      215.15014494495907
+    ],
+    "paper_discount_factor": 0.99,
+    "implemented_discount_factor": 0.99,
+    "implemented_training_interactions": 5000,
+    "comparison_training_point": "completed_training_run",
+    "paper_parameters_learned": [
+      "h",
+      "p",
+      "M",
+      "K"
+    ],
+    "implemented_parameters_learned": [
+      "SAC_actor_critic"
+    ],
+    "K_search_space": "continuous_real_2_by_2_with_safety_gated_pattern_search",
+    "initial_K": [
+      [
+        -8.02154403,
+        -1.67958159
+      ],
+      [
+        -0.30078081,
+        1.75387715
+      ]
+    ],
+    "final_K": [
+      [
+        -8.02154403,
+        -1.67958159
+      ],
+      [
+        -0.30078081,
+        1.75387715
+      ]
+    ],
+    "K_change_frobenius_norm": 0.0,
+    "initial_rpi_area_percent_kpa": 1.3854523310060358,
+    "final_rpi_area_percent_kpa": 2.060567583122406,
+    "rpi_area_change_percent": 48.72886904929746,
+    "initial_x_minus_z_width_physical": [
+      73.54724566127489,
+      34.37925114174778
+    ],
+    "final_x_minus_z_width_physical": [
+      3.1419980601518214,
+      0.7897885823754947
+    ],
+    "initial_x_minus_z_area_percent_kpa": 2528.499229372789,
+    "final_x_minus_z_area_percent_kpa": 2.481514193753861,
+    "numeric_paper_set_areas_available": false,
+    "comparison_limit": "the paper plots initial/final sets but does not tabulate their areas; no numeric paper area is fabricated"
+  },
+  "paper2016_comparison": {
+    "entrypoint": "python -m evaporation.paper2016_compare",
+    "formal_profile": "zanon2016",
+    "formal_prediction_horizon": 200,
+    "reference_example_smoke_horizon": 20,
+    "formal_simulation_seconds": 300,
+    "training_checkpoint_eligible": true
+  },
+  "training_seconds": 56.391191720962524,
+  "training_final_return": 93.17225351761809,
+  "evaluation_return": 97.72337535692321,
+  "evaluation": {
+    "return": 97.72337535692321,
+    "return_per_step": 0.19544675071384643,
+    "economic_cost_mean": 6381.1908602042795,
+    "economic_reward_mean": 0.19544676539777384,
+    "projection_penalty_mean": 0.0,
+    "mapping_penalty_mean": 0.0,
+    "feasible_action_mapping_rate": 0.0,
+    "residual_feasible_scale_mean": 0.27329547379093194,
+    "residual_feasible_scale_min": 0.2726746829295663,
+    "residual_requested_norm_mean": 0.09948387782665784,
+    "residual_applied_norm_mean": 0.027188723138808154,
+    "residual_execution_ratio_mean": 0.27329547379093194,
+    "move_penalty_mean": 1.4683927529634211e-08,
+    "safety_penalty_mean": 0.0,
+    "state_excess_squared_mean": 0.0,
+    "input_excess_squared_mean": 0.0,
+    "rpi_excess_squared_mean": 0.0,
+    "violation_rate": 0.0,
+    "robust_operating_region_violation_rate": 0.0,
+    "rpi_violation_rate": 0.0,
+    "disturbance_bound_exceedance_rate": 0.0,
+    "intervention_rate": 0.0,
+    "qp_infeasible_rate": 0.0,
+    "rpi_utilization_peak": 0.0406822922110707,
+    "alpha": 0.07800030708312988,
+    "entropy": NaN,
+    "q_loss": NaN,
+    "actor_loss": NaN,
+    "execution_mask_mean": 1.0
+  },
+  "initial_untrained_evaluation": {
+    "return": 74.50936088396195,
+    "return_per_step": 0.14901872176792388,
+    "economic_cost_mean": 6390.476468930253,
+    "economic_reward_mean": 0.14901872176792388,
+    "projection_penalty_mean": 0.0,
+    "mapping_penalty_mean": 0.0,
+    "feasible_action_mapping_rate": 0.0,
+    "residual_feasible_scale_mean": 0.27298174477891196,
+    "residual_feasible_scale_min": 0.2724194838406362,
+    "residual_requested_norm_mean": 0.0,
+    "residual_applied_norm_mean": 0.0,
+    "residual_execution_ratio_mean": 0.0,
+    "move_penalty_mean": 0.0,
+    "safety_penalty_mean": 0.0,
+    "state_excess_squared_mean": 0.0,
+    "input_excess_squared_mean": 0.0,
+    "rpi_excess_squared_mean": 0.0,
+    "violation_rate": 0.0,
+    "robust_operating_region_violation_rate": 0.0,
+    "rpi_violation_rate": 0.0,
+    "disturbance_bound_exceedance_rate": 0.0,
+    "intervention_rate": 0.0,
+    "qp_infeasible_rate": 0.0,
+    "rpi_utilization_peak": 0.04069291479086773,
+    "alpha": 0.10000000000000002,
+    "entropy": NaN,
+    "q_loss": NaN,
+    "actor_loss": NaN,
+    "execution_mask_mean": 1.0
+  },
+  "raw_last_actor_evaluation": {
+    "return": 96.24852511745694,
+    "return_per_step": 0.1924970502349139,
+    "economic_cost_mean": 6381.78079650804,
+    "economic_reward_mean": 0.1924970838789888,
+    "projection_penalty_mean": 0.0,
+    "mapping_penalty_mean": 0.0,
+    "feasible_action_mapping_rate": 0.0,
+    "residual_feasible_scale_mean": 0.27359286830851315,
+    "residual_feasible_scale_min": 0.27274683706747876,
+    "residual_requested_norm_mean": 0.12214740383168009,
+    "residual_applied_norm_mean": 0.033422285381196515,
+    "residual_execution_ratio_mean": 0.27359286830851315,
+    "move_penalty_mean": 3.3644074932047305e-08,
+    "safety_penalty_mean": 0.0,
+    "state_excess_squared_mean": 0.0,
+    "input_excess_squared_mean": 0.0,
+    "rpi_excess_squared_mean": 0.0,
+    "violation_rate": 0.0,
+    "robust_operating_region_violation_rate": 0.0,
+    "rpi_violation_rate": 0.0,
+    "disturbance_bound_exceedance_rate": 0.0,
+    "intervention_rate": 0.0,
+    "qp_infeasible_rate": 0.0,
+    "rpi_utilization_peak": 0.04067629594417608,
+    "alpha": 0.07800030708312988,
+    "entropy": NaN,
+    "q_loss": NaN,
+    "actor_loss": NaN,
+    "execution_mask_mean": 1.0
+  },
+  "robustness_evaluation_best_policy": {
+    "return": 18.359411328826607,
+    "return_per_step": 0.03671882265765321,
+    "economic_cost_mean": 6412.936445894641,
+    "economic_reward_mean": 0.03671883694598321,
+    "projection_penalty_mean": 0.0,
+    "mapping_penalty_mean": 0.0,
+    "feasible_action_mapping_rate": 0.0,
+    "residual_feasible_scale_mean": 0.27399238065390596,
+    "residual_feasible_scale_min": 0.26437754905330474,
+    "residual_requested_norm_mean": 0.09957167112013293,
+    "residual_applied_norm_mean": 0.027281478548724182,
+    "residual_execution_ratio_mean": 0.27399238065390596,
+    "move_penalty_mean": 1.4288330022001652e-08,
+    "safety_penalty_mean": 0.0,
+    "state_excess_squared_mean": 0.0,
+    "input_excess_squared_mean": 0.0,
+    "rpi_excess_squared_mean": 0.0,
+    "violation_rate": 0.0,
+    "robust_operating_region_violation_rate": 0.0,
+    "rpi_violation_rate": 0.0,
+    "disturbance_bound_exceedance_rate": 0.0,
+    "intervention_rate": 0.0,
+    "qp_infeasible_rate": 0.0,
+    "rpi_utilization_peak": 0.032893223331295705,
+    "alpha": 0.07800030708312988,
+    "entropy": NaN,
+    "q_loss": NaN,
+    "actor_loss": NaN,
+    "execution_mask_mean": 1.0
+  },
+  "robustness_evaluation_raw_last_policy": {
+    "return": 17.176156820133347,
+    "return_per_step": 0.0343523136402667,
+    "economic_cost_mean": 6413.409743962472,
+    "economic_reward_mean": 0.034352346606832396,
+    "projection_penalty_mean": 0.0,
+    "mapping_penalty_mean": 0.0,
+    "feasible_action_mapping_rate": 0.0,
+    "residual_feasible_scale_mean": 0.2742261116578435,
+    "residual_feasible_scale_min": 0.2646723559311877,
+    "residual_requested_norm_mean": 0.11925068022089313,
+    "residual_applied_norm_mean": 0.03269934045521393,
+    "residual_execution_ratio_mean": 0.2742261116578435,
+    "move_penalty_mean": 3.296656575728275e-08,
+    "safety_penalty_mean": 0.0,
+    "state_excess_squared_mean": 0.0,
+    "input_excess_squared_mean": 0.0,
+    "rpi_excess_squared_mean": 0.0,
+    "violation_rate": 0.0,
+    "robust_operating_region_violation_rate": 0.0,
+    "rpi_violation_rate": 0.0,
+    "disturbance_bound_exceedance_rate": 0.0,
+    "intervention_rate": 0.0,
+    "qp_infeasible_rate": 0.0,
+    "rpi_utilization_peak": 0.03288463361610731,
+    "alpha": 0.07800030708312988,
+    "entropy": NaN,
+    "q_loss": NaN,
+    "actor_loss": NaN,
+    "execution_mask_mean": 1.0
+  },
+  "rl_vs_no_rl": {
+    "comparison_design": "paired seeds and identical hidden disturbances; safe_SAC uses the same optimized fixed safety design as theta_only; only the SAC residual differs. no_RL uses the initial unoptimized design",
+    "safe_sac": {
+      "return": 97.72337535692321,
+      "return_per_step": 0.19544675071384643,
+      "economic_cost_mean": 6381.1908602042795,
+      "economic_reward_mean": 0.19544676539777384,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.27329547379093194,
+      "residual_feasible_scale_min": 0.2726746829295663,
+      "residual_requested_norm_mean": 0.09948387782665784,
+      "residual_applied_norm_mean": 0.027188723138808154,
+      "residual_execution_ratio_mean": 0.27329547379093194,
+      "move_penalty_mean": 1.4683927529634211e-08,
+      "safety_penalty_mean": 0.0,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 0.0406822922110707,
+      "alpha": 0.07800030708312988,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "theta_only_no_sac": {
+      "return": 74.50936088396195,
+      "return_per_step": 0.14901872176792388,
+      "economic_cost_mean": 6390.476468930253,
+      "economic_reward_mean": 0.14901872176792388,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.27298174477891196,
+      "residual_feasible_scale_min": 0.2724194838406362,
+      "residual_requested_norm_mean": 0.0,
+      "residual_applied_norm_mean": 0.0,
+      "residual_execution_ratio_mean": 0.0,
+      "move_penalty_mean": 0.0,
+      "safety_penalty_mean": 0.0,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 0.04069291479086773,
+      "alpha": 0.0,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "no_rl_fixed_theta_hinf_rpi_qp": {
+      "return": -20415.129152173442,
+      "return_per_step": -40.83025830434688,
+      "economic_cost_mean": 5388.053016862658,
+      "economic_reward_mean": 5.161135982105897,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.6551617157556732,
+      "residual_feasible_scale_min": 0.0,
+      "residual_requested_norm_mean": 0.0,
+      "residual_applied_norm_mean": 0.0,
+      "residual_execution_ratio_mean": 0.0,
+      "move_penalty_mean": 0.0,
+      "safety_penalty_mean": 45.99139428645278,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.18902363809893066,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.4093333333333333,
+      "disturbance_bound_exceedance_rate": 0.35733333333333334,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 2.18859736111788,
+      "alpha": 0.0,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "safe_sac_holdout": {
+      "return": 18.359411328826607,
+      "return_per_step": 0.03671882265765321,
+      "economic_cost_mean": 6412.936445894641,
+      "economic_reward_mean": 0.03671883694598321,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.27399238065390596,
+      "residual_feasible_scale_min": 0.26437754905330474,
+      "residual_requested_norm_mean": 0.09957167112013293,
+      "residual_applied_norm_mean": 0.027281478548724182,
+      "residual_execution_ratio_mean": 0.27399238065390596,
+      "move_penalty_mean": 1.4288330022001652e-08,
+      "safety_penalty_mean": 0.0,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 0.032893223331295705,
+      "alpha": 0.07800030708312988,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "theta_only_no_sac_holdout": {
+      "return": -4.963509567930848,
+      "return_per_step": -0.009927019135861699,
+      "economic_cost_mean": 6422.265617111009,
+      "economic_reward_mean": -0.009927019135861699,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.2736760918499671,
+      "residual_feasible_scale_min": 0.26403835009693727,
+      "residual_requested_norm_mean": 0.0,
+      "residual_applied_norm_mean": 0.0,
+      "residual_execution_ratio_mean": 0.0,
+      "move_penalty_mean": 0.0,
+      "safety_penalty_mean": 0.0,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 0.03291054223022089,
+      "alpha": 0.0,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "no_rl_holdout": {
+      "return": -12097.385427305202,
+      "return_per_step": -24.1947708546104,
+      "economic_cost_mean": 5684.745162975189,
+      "economic_reward_mean": 3.677675251543248,
+      "projection_penalty_mean": 0.0,
+      "mapping_penalty_mean": 0.0,
+      "feasible_action_mapping_rate": 0.0,
+      "residual_feasible_scale_mean": 0.7279144223702863,
+      "residual_feasible_scale_min": 0.15,
+      "residual_requested_norm_mean": 0.0,
+      "residual_applied_norm_mean": 0.0,
+      "residual_execution_ratio_mean": 0.0,
+      "move_penalty_mean": 0.0,
+      "safety_penalty_mean": 27.872446106153653,
+      "state_excess_squared_mean": 0.0,
+      "input_excess_squared_mean": 0.0,
+      "rpi_excess_squared_mean": 0.10947223053076824,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "rpi_violation_rate": 0.2989,
+      "disturbance_bound_exceedance_rate": 0.2577,
+      "intervention_rate": 0.0,
+      "qp_infeasible_rate": 0.0,
+      "rpi_utilization_peak": 1.4225854511547484,
+      "alpha": 0.0,
+      "entropy": NaN,
+      "q_loss": NaN,
+      "actor_loss": NaN,
+      "execution_mask_mean": 1.0
+    },
+    "economic_cost_reduction_percent": -18.432221068231115,
+    "theta_only_cost_reduction_vs_fixed_theta_percent": -18.6045580644877,
+    "sac_incremental_cost_reduction_vs_theta_only_percent": 0.14530385599757548,
+    "return_improvement": 20512.852527530365,
+    "intervention_rate_change": 0.0
+  },
+  "sac_state_dependence": {
+    "requested_residual_peak_to_peak_physical": [
+      0.23990106582641602,
+      0.015409216284751892
+    ],
+    "applied_residual_peak_to_peak_physical": [
+      2.8456521579901306,
+      0.13187317183004352
+    ],
+    "requested_residual_state_grid_std_physical": [
+      0.06587526883941162,
+      0.004036442012561067
+    ],
+    "applied_residual_state_grid_std_physical": [
+      1.28899409549183,
+      0.05955214124866818
+    ],
+    "safe_mapping_active_grid_fraction": 1.0,
+    "interpretation": "near-zero requested peak-to-peak means a constant residual bias; larger values demonstrate state-dependent actor feedback"
+  },
+  "disturbance_adaptation_evaluation": {
+    "baseline": {
+      "mean_economic_cost": 6428.3715853479,
+      "cumulative_economic_cost": 12856743.1706958,
+      "recovery_cost_after_switches": [
+        322485.3529551033,
+        321102.1898131832,
+        320987.1225854613,
+        321057.4116201651,
+        322135.241886634,
+        321465.569785869,
+        321079.1027793259
+      ],
+      "constraint_violation_rate": 0.0
+    },
+    "sac": {
+      "mean_economic_cost": 6422.9189028995725,
+      "cumulative_economic_cost": 12845837.805799145,
+      "recovery_cost_after_switches": [
+        322275.5639513004,
+        320880.0367242377,
+        320774.489385053,
+        320880.44069737615,
+        321925.4208015982,
+        321221.1308533735,
+        320866.41309503344
+      ],
+      "constraint_violation_rate": 0.0
+    }
+  },
+  "representative_rollout_economic_performance": {
+    "stage_cost_mean": 6375.472715659464,
+    "stage_cost_std": 40.69299104255683,
+    "stage_cost_min": 6136.59787163834,
+    "stage_cost_max": 6404.8934102626445,
+    "stage_cost_total": 3187736.357829732,
+    "last_10_percent_stage_cost_mean": 6394.725325829745,
+    "safe_center_nominal_stage_cost": 6420.280213366035,
+    "nominal_economic_reference_cost": 6420.280213283838,
+    "stage_cost_gap_to_nominal_reference_percent": -0.6979056386303142,
+    "state_mean": [
+      29.01206087581971,
+      53.208538563366325
+    ],
+    "state_std": [
+      0.08410892153312689,
+      0.01751593332094763
+    ],
+    "control_mean": [
+      219.57809429177138,
+      214.84259467228375
+    ],
+    "control_std": [
+      1.5984482535834568,
+      0.19882719006386354
+    ]
+  },
+  "training_any_constraint_violation_episode_rate": 0.0,
+  "training_constraint_violation_step_rate": 0.0,
+  "training_robust_operating_region_violation_step_rate": 0.0,
+  "training_rpi_violation_step_rate": 0.0,
+  "training_disturbance_bound_exceedance_step_rate": 0.0,
+  "training_state_excess_squared_mean": 0.0,
+  "training_input_excess_squared_mean": 0.0,
+  "training_rpi_excess_squared_mean": 0.0,
+  "training_feasible_action_mapping_rate": 0.0,
+  "first_20_return_mean": 113.38286553527205,
+  "last_20_return_mean": 113.38286553527205,
+  "reward_formula": "(J_nominal_economic-J_current)/reward_cost_scale - lambda_qp*||v_qp-v_candidate||_2^2 - lambda_map*||v_safe_ray-v_requested||_2^2 - lambda_du*||delta_residual_executed||_2^2 - violation_event_penalties - normalized_hinge_excess_penalties",
+  "economic_reward_form": "linear_monotone_decreasing_in_observed_economic_stage_cost",
+  "continuous_penalty_form": "negative_weighted_squared_L2; state/input/RPI use normalized positive-part excess beyond their bounds",
+  "event_penalty_form": "fixed_nonnegative_penalty; squaring a Boolean indicator is identical",
+  "reward_can_be_positive": true,
+  "reward_sign_note": "positive reward only means the observed stage cost improvement over the fixed nominal-economic baseline exceeds the nonnegative penalties; the economic action ordering remains unambiguous",
+  "reward_reference": "fixed_nominal_economic_point_independent_of_terminal_center",
+  "reward_reference_cost": 6420.280213283838,
+  "economic_optimum_precomputed_for_sac": false,
+  "reward_uses_observed_stage_cost": true,
+  "economic_optimum_is_actor_observation": false,
+  "safety_anchor_used_for_observation_centering": true,
+  "feedback_control_law": {
+    "control_structure": "v_base is safe-center finite-horizon tracking in proposed mode (learned affine h,p guidance in joint_theta); base = safe projection(v_base); candidate = declared feasible residual parameterization(base, actor_action); v_qp = safety verification projection(candidate); u_normalized = v_qp + K(x-z)",
+    "safety_filter_type": "learned finite-horizon nominal guidance plus RPI tightening and one-step invariant QP",
+    "disturbance_available_to_sac": false,
+    "K_parameterization": "continuous real 2x2 gain with H-infinity/RPI/QP safety-gated offline geometry search and fixed SAC deployment",
+    "terminal_center_source": "Zanon-Gros-2020 evaporation example",
+    "K_normalized": [
+      [
+        -8.02154403,
+        -1.67958159
+      ],
+      [
+        -0.30078081,
+        1.75387715
+      ]
+    ],
+    "theta_h": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "theta_p": [
+      0.0,
+      0.0
+    ],
+    "theta_M": [
+      [
+        1965.9297903441993,
+        137.4712027435437
+      ],
+      [
+        -886.8425241096627,
+        12682.438959552286
+      ],
+      [
+        -1733.0974026359145,
+        -121.18997615390795
+      ],
+      [
+        1237.7844626680978,
+        -17701.142498359968
+      ]
+    ],
+    "theta_m": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "K_physical_input_per_physical_state": [
+      [
+        -53.47696019999999,
+        -8.39790795
+      ],
+      [
+        -2.0052054,
+        8.769385750000001
+      ]
+    ],
+    "state_order": [
+      "X2_percent",
+      "P2_kPa"
+    ],
+    "input_order": [
+      "P100_kPa",
+      "F200_kg_per_min"
+    ],
+    "state_normalization_offset": [
+      29.0,
+      53.57
+    ],
+    "state_normalization_scale": [
+      15.0,
+      20.0
+    ],
+    "input_normalization_offset": [
+      222.62265879,
+      215.15014494
+    ],
+    "input_normalization_scale": [
+      100.0,
+      100.0
+    ],
+    "z_reference_normalized": [
+      0.0,
+      0.0
+    ],
+    "v_reference_normalized": [
+      3.3261642329307505e-11,
+      4.959076704835752e-11
+    ],
+    "controlled_invariant_lower_normalized": [
+      -0.09792310601786441,
+      -0.039282107130796794
+    ],
+    "controlled_invariant_upper_normalized": [
+      0.11049609863887307,
+      9.874842384062222e-06
+    ],
+    "robust_state_lower_normalized": [
+      -0.161328125,
+      -0.181494140625
+    ],
+    "robust_state_upper_normalized": [
+      0.161328125,
+      0.181494140625
+    ],
+    "robust_input_lower_normalized": [
+      -0.42348632809173836,
+      -0.3629882812004092
+    ],
+    "robust_input_upper_normalized": [
+      0.4234863281582619,
+      0.36298828129959076
+    ],
+    "robust_region_scale": 1.2099609375,
+    "sac_residual_scale_normalized": [
+      0.12,
+      0.1
+    ],
+    "selected_policy_output_scale": 1.0,
+    "hinf_gamma_design": 3000.0,
+    "hinf_norm_frequency_grid": 2215.926043303027
+  },
+  "hinf_gamma_design": 3000.0,
+  "hinf_norm_frequency_grid": 2215.926043303027,
+  "hinf_gamma": 3000.0,
+  "hinf_sampled_norm": 2215.926043303027,
+  "hinf_gain_parameterization": "continuous_direct_K_with_safety_gate",
+  "hinf_state_weight_scale_selected": 1.0,
+  "hinf_input_weight_scale_selected": 1.0,
+  "hinf_gain_candidates_feasible": 1,
+  "closed_loop_spectral_radius": 0.9993901525949904,
+  "rpi_support_normalized": [
+    0.06291294307249806,
+    0.1814842161602924
+  ],
+  "rpi_support_lower_normalized": [
+    0.06291294307249806,
+    0.14201463597093286
+  ],
+  "rpi_support_upper_normalized": [
+    0.05027676958404716,
+    0.1814842161602924
+  ],
+  "rpi_bounding_width_physical": [
+    1.6978456898481782,
+    6.469977042624505
+  ],
+  "rpi_polygon_area_percent_kpa": 2.060567583122406,
+  "rpi_polygon_area_as_percent_of_X": 0.06868558610408021,
+  "axis_aligned_box_rpi_width_physical_same_gain": [
+    2.8673779819799905,
+    11.79386514800865
+  ],
+  "axis_aligned_box_rpi_area_same_gain": 4.139456693220856,
+  "correlation_aware_rpi_area_reduction_percent": 50.221303522827625,
+  "x_minus_z_width_physical": [
+    3.1419980601518214,
+    0.7897885823754947
+  ],
+  "x_minus_z_area_percent_kpa": 2.481514193753861,
+  "x_minus_z_area_retention_percent_of_X": 0.08271713979179537,
+  "controlled_invariant_lower_physical": [
+    27.531153409732035,
+    52.784357857384066
+  ],
+  "controlled_invariant_upper_physical": [
+    30.657441479583095,
+    53.57019749684768
+  ],
+  "controlled_invariant_width_physical": [
+    3.126288069851062,
+    0.7858396394636171
+  ],
+  "controlled_invariant_area_percent_kpa": 2.4567610896711662,
+  "controlled_invariant_homothetic_scale": 0.995,
+  "safe_center_state": [
+    29.0,
+    53.57
+  ],
+  "safe_center_input": [
+    222.62265879332617,
+    215.15014494495907
+  ],
+  "safe_center_cost": 6420.280213366035,
+  "nominal_economic_reference_state": [
+    29.0,
+    53.57
+  ],
+  "nominal_economic_reference_input": [
+    222.62265879,
+    215.15014494
+  ],
+  "disturbance_box_normalized": [
+    0.0005796807877417648,
+    0.00011386176361668947
+  ],
+  "evaluation_peak_positive_effective_disturbance_normalized": [
+    9.076413283025007e-05,
+    2.1304743025075262e-05
+  ],
+  "evaluation_peak_negative_effective_disturbance_normalized": [
+    0.00011029775803114011,
+    2.108639811337215e-05
+  ],
+  "disturbance_bound_method": "four-facet asymmetric W_theta={w|Mw<=m} certified on the final robust operating region X_R x U_R x D; region scale is expanded geometrically and backed off by bisection at the first infeasible H-infinity/RPI/tightening/invariant candidate",
+  "disturbance_polytope_vertex_count": 4,
+  "qp_intervention_tolerance_normalized": 0.001,
+  "reward_penalty_weights": {
+    "projection_squared": 5.0,
+    "feasible_action_mapping_squared": 0.2,
+    "input_move_squared": 0.01,
+    "state_violation_event": 100.0,
+    "input_violation_event": 100.0,
+    "rpi_violation_event": 20.0,
+    "qp_infeasible_event": 5.0,
+    "state_normalized_excess_squared": 1000.0,
+    "input_normalized_excess_squared": 1000.0,
+    "rpi_relative_excess_squared": 200.0
+  },
+  "actor_learning_rate": 0.0003,
+  "critic_learning_rate": 0.0003,
+  "entropy_learning_rate": 0.0003,
+  "residual_action_scale_normalized": [
+    0.12,
+    0.1
+  ],
+  "residual_parameterization": "state_dependent_box",
+  "proposed_nominal_controller": "safe_center_tracking",
+  "replay_action_execution_mask": "one for the declared feasible action parameterization; zero only if the verification QP fails and its fallback replaces the action",
+  "safe_action_parameterization": "state-dependent symmetric residual box scaled by current polytope slack",
+  "input_move_penalty_scope": "change in executed SAC residual only; excludes nominal and H-infinity motion",
+  "warmup_update_order": "use uniform random actions until warmup_steps while SAC updates begin as soon as replay contains one minibatch",
+  "training_initial_radius_fraction": 0.9,
+  "alpha_floor": 0.005,
+  "entropy_tuning_warmup_updates": 2000,
+  "empirical_regret_definition": "post-hoc normalized gap of best-so-far fixed-seed deterministic evaluation to the best evaluation observed in this run; it is not the training reward or a theoretical optimality certificate"
+}

@@ -1,0 +1,2 @@
+phase,alpha,disturbance_half_F1,disturbance_half_X1,disturbance_half_T1,disturbance_half_T200,hinf_feasible,rpi_feasible,x_tight_feasible,u_tight_feasible,invariant_feasible,v_ref_feasible,formal_certification_passed,rpi_area,x_minus_z_area,invariant_area,robust_region_scale,max_residual_norm,K_00,K_01,K_10,K_11,independent_K_design_passes,failure_reason
+grid,0.0,0.0,0.0,0.0,0.0,True,True,True,True,True,True,True,6.876353190818421,13.381520120661607,13.248039457458004,2.197265625,0.001034020674622339,-8.02154403,-1.67958159,-0.30078081,1.75387715,0,

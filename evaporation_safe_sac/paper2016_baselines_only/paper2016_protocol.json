@@ -1,0 +1,30 @@
+{
+  "benchmark_profile": "zanon2016",
+  "dt_seconds": 1.0,
+  "prediction_horizon": 200,
+  "simulation_seconds": 300,
+  "formal_result": true,
+  "comparison_uses_common_input_lower_bounds": true,
+  "paper_native_constraint_validation": false,
+  "controller_parameters_frozen_during_evaluation": true,
+  "actor_gradient_updates_during_evaluation": 0,
+  "theta_updates_during_evaluation": 0,
+  "K_updates_during_evaluation": 0,
+  "M_updates_during_evaluation": 0,
+  "W_updates_during_evaluation": 0,
+  "tunempc": {
+    "path": "C:\\Users\\cushy\\PycharmProjects\\tunempc",
+    "reference_files_present": true,
+    "missing_reference_files": [],
+    "python_version": "3.12.14",
+    "legacy_python_range_satisfied": false,
+    "dependencies": {
+      "casadi": false,
+      "scipy": false,
+      "picos": false,
+      "cvxopt": false
+    },
+    "direct_api_available": false,
+    "note": "TuneMPC declares Python >=3.5,<3.8 and pins casadi==3.5.1 and picos==1.2.0.post32. A newer interpreter may work only with a separately validated compatibility environment."
+  }
+}

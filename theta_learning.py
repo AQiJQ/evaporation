@@ -81,6 +81,12 @@ class OnlineThetaLearner:
         self.refinement_max_excess = 0.0
         self.refinement_relative_rpi_change = float("nan")
         self.robust_region_search_diagnostics: list[dict[str, object]] = []
+        self.first_feasible_scale = float("nan")
+        self.minimum_certified_scale = float("nan")
+        self.maximum_certified_scale = float("nan")
+        self.last_lower_infeasible_scale = float("nan")
+        self.first_upper_infeasible_scale = float("nan")
+        # Backward-compatible aliases retained in existing metrics.
         self.last_feasible_scale = float("nan")
         self.first_infeasible_scale = float("nan")
         self.robust_region_max_sample_residual_norm = float("nan")
@@ -613,7 +619,7 @@ class OnlineThetaLearner:
         self,
         initial_design: SafetyDesign,
     ) -> tuple[SafetyDesign, dict[str, float]]:
-        """Expand X_R/U_R, then bisect back to the largest certified scale."""
+        """Find the feasible scale interval and return its largest design."""
         growth = float(self.cfg.robust_region_growth_factor)
         maximum = float(self.cfg.robust_region_max_scale)
         if growth <= 1.0 or maximum < 1.0:
@@ -622,6 +628,11 @@ class OnlineThetaLearner:
                 "must be at least one"
             )
         self.robust_region_search_diagnostics = []
+        self.first_feasible_scale = float("nan")
+        self.minimum_certified_scale = float("nan")
+        self.maximum_certified_scale = float("nan")
+        self.last_lower_infeasible_scale = float("nan")
+        self.first_upper_infeasible_scale = float("nan")
         attempt_index = 0
 
         def attempt(
@@ -633,37 +644,90 @@ class OnlineThetaLearner:
                 scale, seed, attempt_index
             )
             self.robust_region_search_diagnostics.append(diagnostic)
+            if candidate is None or not bool(diagnostic.get("feasible", False)):
+                return None
             return candidate
 
+        # Phase A: scale=1 may be too narrow to contain Z/KZ.  Continue the
+        # geometric scan until the first independently certified scale appears.
         scale = 1.0
-        first = attempt(scale, initial_design)
-        if first is None:
-            row = self.robust_region_search_diagnostics[-1]
-            raise RuntimeError(
-                "Initial robust operating region scale=1.0 is infeasible: "
-                f"reason={row['failure_reason']}, "
-                f"X_R={row['state_region']}, U_R={row['input_region']}, "
-                f"W_hull_vertices={row['w_hull_vertex_count']}, "
-                f"max_residual_norm={row['max_residual_norm']:.6g}."
-            )
-        last_feasible_design = first
-        last_feasible_scale = 1.0
-        first_infeasible_scale = float("nan")
+        first_feasible_design: SafetyDesign | None = None
+        first_feasible_scale = float("nan")
+        last_lower_infeasible_scale = float("nan")
+        while scale <= maximum + 1e-12:
+            candidate = attempt(scale, initial_design)
+            if candidate is not None:
+                first_feasible_design = candidate
+                first_feasible_scale = scale
+                break
+            last_lower_infeasible_scale = scale
+            if scale >= maximum - 1e-12:
+                break
+            scale = min(maximum, scale * growth)
 
+        if first_feasible_design is None:
+            gates = []
+            for row in self.robust_region_search_diagnostics:
+                gates.append(
+                    "scale={scale:.9g}: hinf={hinf}, rpi={rpi}, "
+                    "x_tight={x_tight}, u_tight={u_tight}, "
+                    "invariant={invariant}, v_ref={v_ref}, "
+                    "max_residual_norm={residual:.6g}".format(
+                        scale=float(row["scale"]),
+                        hinf=bool(row.get("hinf_feasible", False)),
+                        rpi=bool(row.get("rpi_feasible", False)),
+                        x_tight=bool(row.get("x_tightening_feasible", False)),
+                        u_tight=bool(row.get("u_tightening_feasible", False)),
+                        invariant=bool(row.get("invariant_feasible", False)),
+                        v_ref=bool(row.get("v_ref_feasible", False)),
+                        residual=float(row["max_residual_norm"]),
+                    )
+                )
+            raise RuntimeError(
+                "No feasible robust operating region was found on the "
+                f"configured scale range [1, {maximum:.9g}].\n  "
+                + "\n  ".join(gates)
+            )
+
+        # Phase B: grow from the first feasible coarse point.  Every attempt
+        # reconstructs its own X_R/U_R samples and W inside _candidate_... .
+        last_feasible_design = first_feasible_design
+        last_feasible_scale = first_feasible_scale
+        first_upper_infeasible_scale = float("nan")
         while last_feasible_scale < maximum - 1e-12:
             candidate_scale = min(maximum, last_feasible_scale * growth)
             candidate = attempt(candidate_scale, last_feasible_design)
             if candidate is None:
-                first_infeasible_scale = candidate_scale
+                first_upper_infeasible_scale = candidate_scale
                 break
             last_feasible_design = candidate
             last_feasible_scale = candidate_scale
             if candidate_scale >= maximum - 1e-12:
                 break
 
-        if np.isfinite(first_infeasible_scale):
+        # Phase C (lower bracket): only bisect the adjacent observed
+        # infeasible->feasible pair.  The returned controller does not use this
+        # boundary; it is retained as a useful feasibility diagnostic.
+        minimum_certified_scale = first_feasible_scale
+        if np.isfinite(last_lower_infeasible_scale):
+            lower = last_lower_infeasible_scale
+            upper = first_feasible_scale
+            upper_design = first_feasible_design
+            for _ in range(int(self.cfg.robust_region_bisection_iterations)):
+                middle = 0.5 * (lower + upper)
+                candidate = attempt(middle, upper_design)
+                if candidate is None:
+                    lower = middle
+                else:
+                    upper = middle
+                    upper_design = candidate
+            minimum_certified_scale = upper
+
+        # Phase C (upper bracket): likewise bisect only the adjacent observed
+        # feasible->infeasible pair, and keep the largest certified design.
+        if np.isfinite(first_upper_infeasible_scale):
             lower = last_feasible_scale
-            upper = first_infeasible_scale
+            upper = first_upper_infeasible_scale
             for _ in range(int(self.cfg.robust_region_bisection_iterations)):
                 middle = 0.5 * (lower + upper)
                 candidate = attempt(middle, last_feasible_design)
@@ -674,8 +738,15 @@ class OnlineThetaLearner:
                     last_feasible_scale = middle
                     last_feasible_design = candidate
 
-        self.last_feasible_scale = float(last_feasible_scale)
-        self.first_infeasible_scale = float(first_infeasible_scale)
+        self.first_feasible_scale = float(first_feasible_scale)
+        self.minimum_certified_scale = float(minimum_certified_scale)
+        self.maximum_certified_scale = float(last_feasible_scale)
+        self.last_lower_infeasible_scale = float(last_lower_infeasible_scale)
+        self.first_upper_infeasible_scale = float(
+            first_upper_infeasible_scale
+        )
+        self.last_feasible_scale = self.maximum_certified_scale
+        self.first_infeasible_scale = self.first_upper_infeasible_scale
         self.refinement_iterations = int(attempt_index)
         self.refinement_uncovered_count = 0
         self.refinement_max_excess = 0.0
@@ -915,6 +986,15 @@ class OnlineThetaLearner:
             ),
             "last_feasible_scale": float(self.last_feasible_scale),
             "first_infeasible_scale": float(self.first_infeasible_scale),
+            "first_feasible_scale": float(self.first_feasible_scale),
+            "minimum_certified_scale": float(self.minimum_certified_scale),
+            "maximum_certified_scale": float(self.maximum_certified_scale),
+            "last_lower_infeasible_scale": float(
+                self.last_lower_infeasible_scale
+            ),
+            "first_upper_infeasible_scale": float(
+                self.first_upper_infeasible_scale
+            ),
             "robust_region_residual_hull_vertices": float(
                 len(design.w_data_hull)
             ),

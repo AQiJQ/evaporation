@@ -24,6 +24,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     parser.add_argument("--device", default="auto")
     parser.add_argument(
+        "--benchmark-profile",
+        choices=("default", "zanon2016"),
+        default="default",
+    )
+    parser.add_argument(
         "--experiment-mode",
         choices=("proposed", "joint_theta"),
         default="proposed",
@@ -61,9 +66,12 @@ def _moving_average(values: np.ndarray, window: int = 20) -> np.ndarray:
 
 def _write_aggregate(root: Path, seeds: list[int]) -> None:
     rows: list[dict[str, float]] = []
+    raw_reward_curves: list[np.ndarray] = []
     reward_curves: list[np.ndarray] = []
     gap_curves: list[np.ndarray] = []
     reduction_curves: list[np.ndarray] = []
+    nominal_improvement_curves: list[np.ndarray] = []
+    robust_improvement_curves: list[np.ndarray] = []
     episode_axis: np.ndarray | None = None
     for seed in seeds:
         seed_dir = root / f"seed_{seed}"
@@ -99,6 +107,19 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
                 metrics["robustness_evaluation_best_policy"]["violation_rate"]
             ),
             "robust_region_scale": float(metrics["robust_region_scale"]),
+            "first_feasible_scale": float(metrics["first_feasible_scale"]),
+            "minimum_certified_scale": float(
+                metrics["minimum_certified_scale"]
+            ),
+            "maximum_certified_scale": float(
+                metrics["maximum_certified_scale"]
+            ),
+            "last_lower_infeasible_scale": float(
+                metrics["last_lower_infeasible_scale"]
+            ),
+            "first_upper_infeasible_scale": float(
+                metrics["first_upper_infeasible_scale"]
+            ),
             "robust_operating_region_violation_rate": float(
                 metrics["robust_operating_region_violation_rate"]
             ),
@@ -194,6 +215,7 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
         mask = episodes >= 1.0
         if episode_axis is None:
             episode_axis = episodes[mask]
+        raw_reward_curves.append(returns[mask])
         reward_curves.append(_moving_average(returns[mask]))
         gap_curves.append(np.asarray([
             float(row["evaluation_normalized_safe_performance_gap"])
@@ -201,6 +223,14 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
         ])[mask])
         reduction_curves.append(np.asarray([
             float(row["evaluation_sac_incremental_cost_reduction_percent"])
+            for row in records
+        ])[mask])
+        nominal_improvement_curves.append(np.asarray([
+            float(row["evaluation_nominal_sac_improvement_percent"])
+            for row in records
+        ])[mask])
+        robust_improvement_curves.append(np.asarray([
+            float(row["evaluation_robust_sac_improvement_percent"])
             for row in records
         ])[mask])
 
@@ -244,6 +274,65 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     ) as stream:
         json.dump(aggregate, stream, indent=2, ensure_ascii=False)
 
+    curve_summaries = []
+    for seed, values in zip(seeds, raw_reward_curves):
+        window = min(20, len(values))
+        early = float(np.mean(values[:window]))
+        late = float(np.mean(values[-window:]))
+        curve_summaries.append({
+            "seed": int(seed),
+            "first_20_mean": early,
+            "last_20_mean": late,
+            "absolute_improvement": late - early,
+            "relative_improvement": float(
+                100.0 * (late - early) / max(abs(early), 1e-12)
+            ),
+            "first_20_episode_mean_return": early,
+            "last_20_episode_mean_return": late,
+            "return_improvement_absolute": late - early,
+            "return_improvement_percent": float(
+                100.0 * (late - early) / max(abs(early), 1e-12)
+            ),
+            "positive_training_trend": bool(late > early),
+            "episodes_in_window": int(window),
+        })
+    early_values = np.asarray([
+        item["first_20_episode_mean_return"] for item in curve_summaries
+    ])
+    late_values = np.asarray([
+        item["last_20_episode_mean_return"] for item in curve_summaries
+    ])
+    early_mean = float(np.mean(early_values))
+    late_mean = float(np.mean(late_values))
+    learning_summary = {
+        "seeds": seeds,
+        "moving_average_episodes": 20,
+        "per_seed": curve_summaries,
+        "aggregate": {
+            "first_20_mean": early_mean,
+            "last_20_mean": late_mean,
+            "absolute_improvement": late_mean - early_mean,
+            "relative_improvement": float(
+                100.0 * (late_mean - early_mean) / max(abs(early_mean), 1e-12)
+            ),
+            "first_20_episode_mean_return": early_mean,
+            "last_20_episode_mean_return": late_mean,
+            "return_improvement_absolute": late_mean - early_mean,
+            "return_improvement_percent": float(
+                100.0 * (late_mean - early_mean) / max(abs(early_mean), 1e-12)
+            ),
+            "positive_training_trend": bool(late_mean > early_mean),
+        },
+        "interpretation": (
+            "Unmodified episode cumulative training return; the trend flag is "
+            "diagnostic and is never forced to be positive."
+        ),
+    }
+    with (root / "learning_curve_summary.json").open(
+        "w", encoding="utf-8"
+    ) as stream:
+        json.dump(learning_summary, stream, indent=2, ensure_ascii=False)
+
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -256,15 +345,19 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     std = np.std(plot_curves, axis=0, ddof=1)
     ci95_half_width = T_975_DF2 * std / np.sqrt(len(seeds))
     fig, ax = plt.subplots(figsize=(8.4, 4.8))
-    for seed, curve in zip(seeds, plot_curves):
-        ax.plot(plot_episodes, curve, linewidth=0.9, alpha=0.45, label=f"seed {seed}")
+    for seed, raw_curve, curve in zip(seeds, raw_reward_curves, plot_curves):
+        ax.plot(
+            episode_axis, raw_curve, linewidth=0.45, alpha=0.16,
+            color="#777777",
+        )
+        ax.plot(plot_episodes, curve, linewidth=0.9, alpha=0.55, label=f"seed {seed}")
     ax.plot(plot_episodes, mean, color="#2f6fb3", linewidth=2.1, label="mean")
     ax.fill_between(
         plot_episodes, mean - ci95_half_width, mean + ci95_half_width,
         color="#2f6fb3", alpha=0.16, label="pointwise 95% CI",
     )
     ax.set_xlabel("Episode")
-    ax.set_ylabel("20-episode moving-average reward")
+    ax.set_ylabel("Episode cumulative training return")
     ax.set_title("Three-seed SAC learning curve")
     ax.grid(True, color="#dddddd", linewidth=0.6)
     ax.legend(frameon=True)
@@ -322,9 +415,21 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     )
     plot_evaluation_curves(
         reduction_curves,
-        "SAC incremental economic cost reduction [%]",
-        "Paired deterministic SAC cost reduction",
-        "multi_seed_sac_cost_reduction.png",
+        "SAC economic improvement over H∞–RPI [%]",
+        "Paired deterministic SAC economic improvement",
+        "multi_seed_sac_economic_improvement_curve.png",
+    )
+    plot_evaluation_curves(
+        nominal_improvement_curves,
+        "SAC economic improvement over H∞–RPI [%]",
+        "Nominal paper-shock SAC economic improvement",
+        "multi_seed_nominal_economic_improvement.png",
+    )
+    plot_evaluation_curves(
+        robust_improvement_curves,
+        "SAC economic improvement over H∞–RPI [%]",
+        "Certified-disturbance SAC economic improvement",
+        "multi_seed_robust_economic_improvement.png",
     )
 
 
@@ -350,6 +455,7 @@ def main() -> None:
             "--steps", str(args.steps),
             "--seed", str(seed),
             "--device", str(args.device),
+            "--benchmark-profile", str(args.benchmark_profile),
             "--experiment-mode", str(args.experiment_mode),
             "--disturbance-mode", str(args.disturbance_mode),
             "--disturbance-hold-steps", str(args.disturbance_hold_steps),

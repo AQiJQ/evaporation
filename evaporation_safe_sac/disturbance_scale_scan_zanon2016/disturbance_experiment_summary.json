@@ -1,0 +1,21 @@
+{
+  "alpha_max_certified": 0.1484375,
+  "full_disturbance_formal_certified": false,
+  "full_disturbance_all_corners_steady_feasible": false,
+  "steady_feasible_corner_count": 12,
+  "corner_count": 16,
+  "max_required_P100": 239.12837671827342,
+  "max_required_F200": 1093.9492589010044,
+  "min_required_P100": 206.48412377313593,
+  "min_required_F200": 112.43401635256147,
+  "full_disturbance_stress_test": {
+    "experiment_label": "out-of-certified-envelope stress test",
+    "formal_certification_passed": false,
+    "state_violation_rate": 0.0,
+    "input_violation_rate": 0.0,
+    "rpi_violation_rate": 0.056,
+    "qp_infeasible_rate": 0.0,
+    "W_exceedance_rate": 0.7,
+    "economic_cost_mean": 6367.640196553288
+  }
+}
