@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import replace
 from itertools import product
 import inspect
+import json
 from pathlib import Path
 import numpy as np
 
@@ -26,7 +27,13 @@ from .paper2016_adapter import (
     reference_economic_cost,
     reference_intermediate,
 )
-from .paper2016_compare import apply_state_shock, economic_metric_g, _rollout
+from .paper2016_compare import (
+    PAPER2016_DISTURBANCE_PROTOCOL,
+    SCENARIOS as PAPER2016_SCENARIOS,
+    apply_state_shock,
+    economic_metric_g,
+    _rollout,
+)
 from .disturbance_experiments import (
     disturbance_corner_feasibility,
     run_disturbance_scale_scan,
@@ -37,6 +44,7 @@ from .train import (
     OBS_DIM,
     ZeroResidualPolicy,
     advance_disturbance,
+    balanced_random_paper2016_schedule,
     compute_safe_steady_reference,
     economic_policy_eligible,
     evaluate_paper_nominal_pressure_policy,
@@ -44,8 +52,10 @@ from .train import (
     hard_safety_passed,
     observation,
     run_episode,
+    summarize_training_trend,
 )
 from . import train as train_module
+from . import paper2016_compare as paper2016_compare_module
 
 
 def main() -> None:
@@ -56,6 +66,11 @@ def main() -> None:
         benchmark_profile="zanon2016", disturbance_bound_samples=50
     )
     assert np.isclose(paper_cfg.dt_min, 1.0 / 60.0)
+    assert paper_cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    assert np.array_equal(paper_cfg.disturbance_half_range, np.zeros(4))
+    assert paper_cfg.paper2016_training_scenarios == (
+        "pressure_positive", "pressure_negative", "concentration_positive"
+    )
     path_diagnostics = dependency_diagnostics(DEFAULT_TUNEMPC_PATH)
     assert path_diagnostics["reference_files_present"], path_diagnostics
     paper_model = EvaporatorModel(paper_cfg)
@@ -108,6 +123,58 @@ def main() -> None:
     assert np.allclose(
         apply_state_shock(nominal_state, "pressure_positive", 1), nominal_state
     )
+    assert PAPER2016_DISTURBANCE_PROTOCOL["uses_rho_d_scaling"] is False
+    assert PAPER2016_DISTURBANCE_PROTOCOL["external_conditions"] == "nominal"
+    assert PAPER2016_DISTURBANCE_PROTOCOL["state_shock_scaling"] == 1.0
+    assert PAPER2016_DISTURBANCE_PROTOCOL["pressure_positive_shock_kpa"] == 1.0
+    assert PAPER2016_DISTURBANCE_PROTOCOL["pressure_negative_shock_kpa"] == -1.0
+    assert (
+        PAPER2016_DISTURBANCE_PROTOCOL[
+            "concentration_positive_shock_percentage_point"
+        ] == 1.0
+    )
+    assert PAPER2016_DISTURBANCE_PROTOCOL["shock_times_seconds"] == [0, 20, 40]
+    rho_one_half_range = 1.0 * paper_cfg.disturbance_full_half_range
+    assert np.allclose(
+        paper_cfg.disturbance_nominal - rho_one_half_range,
+        [9.5, 4.5, 36.0, 20.0],
+    )
+    assert np.allclose(
+        paper_cfg.disturbance_nominal + rho_one_half_range,
+        [10.5, 5.5, 44.0, 30.0],
+    )
+    # rho_d scales only external [F1,X1,T1,T200] uncertainty.  It is not an
+    # argument to the paper state-shock function and cannot change amplitude.
+    for rho_d in (0.0, 0.158203125, 1.0):
+        rho_cfg = replace(
+            paper_cfg,
+            disturbance_half_range=(
+                rho_d * paper_cfg.disturbance_full_half_range
+            ),
+        )
+        assert np.allclose(
+            apply_state_shock(
+                rho_cfg.paper2016_steady_state, "pressure_positive", 0
+            ) - rho_cfg.paper2016_steady_state,
+            [0.0, 1.0],
+        )
+        assert np.allclose(
+            apply_state_shock(
+                rho_cfg.paper2016_steady_state, "pressure_negative", 0
+            ) - rho_cfg.paper2016_steady_state,
+            [0.0, -1.0],
+        )
+        assert np.allclose(
+            apply_state_shock(
+                rho_cfg.paper2016_steady_state, "concentration_positive", 0
+            ) - rho_cfg.paper2016_steady_state,
+            [1.0, 0.0],
+        )
+    paper_compare_source = inspect.getsource(paper2016_compare_module)
+    assert "run_disturbance_scale_scan" not in paper_compare_source
+    training_source = inspect.getsource(train_module.main)
+    assert "run_disturbance_scale_scan" not in training_source
+    assert "run_full_disturbance_stress_test" not in training_source
     assert economic_metric_g(100.0, 100.0, 10, 2.0) == 0.0
     assert economic_metric_g(100.0, 110.0, 10, 2.0) < 0.0
     rollout_source = inspect.getsource(_rollout)
@@ -117,6 +184,39 @@ def main() -> None:
     )
     assert "cfg.disturbance_nominal" in nominal_evaluation_source
     assert "second in (0, 20, 40)" in nominal_evaluation_source
+    paper_rollout_source = inspect.getsource(_rollout)
+    assert "cfg.disturbance_nominal" in paper_rollout_source
+
+    class RecordingPaperModel:
+        def __init__(self, wrapped):
+            self.wrapped = wrapped
+            self.disturbances: list[np.ndarray] = []
+
+        def economic_cost(self, state, control, disturbance):
+            self.disturbances.append(np.asarray(disturbance, dtype=float).copy())
+            return self.wrapped.economic_cost(state, control, disturbance)
+
+        def step(self, state, control, disturbance):
+            self.disturbances.append(np.asarray(disturbance, dtype=float).copy())
+            return self.wrapped.step(state, control, disturbance)
+
+    short_paper_cfg = replace(
+        paper_cfg,
+        paper2016_simulation_seconds=2,
+        disturbance_half_range=paper_cfg.disturbance_full_half_range.copy(),
+    )
+    recording_model = RecordingPaperModel(EvaporatorModel(short_paper_cfg))
+    _rollout(
+        short_paper_cfg,
+        recording_model,
+        "pressure_positive",
+        lambda state: (short_paper_cfg.paper2016_steady_input.copy(), {}),
+    )
+    assert recording_model.disturbances
+    assert all(
+        np.array_equal(value, short_paper_cfg.disturbance_nominal)
+        for value in recording_model.disturbances
+    )
 
     temporary_path = (
         Path(__file__).resolve().parent
@@ -153,14 +253,14 @@ def main() -> None:
             disturbance_scale_m_angle_max_degrees=0.0,
         )
         scan = run_disturbance_scale_scan(scan_cfg, temporary_path / "scan")
-        assert scan.alpha_max_certified == 0.0
+        assert scan.rho_d_max_certified == 0.0
         assert any(
-            row["alpha"] == 0.0
+            row["rho_d"] == 0.0
             and row["formal_certification_passed"]
             for row in scan.rows
         )
         assert np.allclose(
-            scan.alpha_max_certified * scan_cfg.disturbance_full_half_range,
+            scan.rho_d_max_certified * scan_cfg.disturbance_full_half_range,
             scan.selected_cfg.disturbance_half_range,
         )
         assert scan.selected_design.robust_region_scale > 0.0
@@ -170,7 +270,125 @@ def main() -> None:
             scan.selected_model.cfg.disturbance_nominal,
             scan_cfg.disturbance_nominal,
         )
-    assert cfg.episodes == 300
+        with (temporary_path / "scan" / "disturbance_scale_summary.json").open(
+            encoding="utf-8"
+        ) as stream:
+            robustness_summary = json.load(stream)
+        assert robustness_summary["rho_d_max_certified"] == 0.0
+        assert robustness_summary[
+            "related_to_paper_state_shock_scaling"
+        ] is False
+        assert robustness_summary["disturbance_variables"] == [
+            "F1", "X1", "T1", "T200"
+        ]
+        scan_header = (
+            temporary_path / "scan" / "disturbance_scale_scan.csv"
+        ).read_text(encoding="utf-8").splitlines()[0].split(",")
+        assert "rho_d" in scan_header and "alpha" not in scan_header
+
+        paper_episode_cfg = replace(
+            scan.selected_cfg,
+            steps_per_episode=41,
+            paper2016_simulation_seconds=41,
+        )
+        paper_stat, paper_records, _ = run_episode(
+            paper_episode_cfg,
+            scan.selected_model,
+            SafeController(
+                paper_episode_cfg, scan.selected_model, scan.selected_design
+            ),
+            ZeroResidualPolicy(),
+            None,
+            np.random.default_rng(2016),
+            training=False,
+            global_step=0,
+            paper_scenario="pressure_positive",
+        )
+        assert len(paper_records) == 41
+        assert np.isfinite(paper_stat["economic_cost_mean"])
+        assert all(
+            np.array_equal(record["disturbance"], paper_cfg.disturbance_nominal)
+            for record in paper_records
+        )
+        assert all(
+            record["paper2016_scenario"] == "pressure_positive"
+            for record in paper_records
+        )
+        shock_seconds = [
+            index for index, record in enumerate(paper_records)
+            if np.any(record["paper_state_shock"] != 0.0)
+        ]
+        assert shock_seconds == [0, 20, 40]
+        assert all(
+            np.array_equal(paper_records[index]["paper_state_shock"], [0.0, 1.0])
+            for index in shock_seconds
+        )
+        # A zero actor residual must pass the actual online verification QP,
+        # even though the paper initial state lies outside the local nominal
+        # invariant set.  reset() projects only z; the physical state remains
+        # unchanged and is handled through the ancillary error feedback.
+        assert paper_stat["qp_infeasible_rate"] == 0.0
+        assert paper_stat["execution_mask_mean"] == 1.0
+        assert paper_stat["residual_applied_norm_mean"] == 0.0
+        assert all(record["execution_mask"] == 1.0 for record in paper_records)
+        assert scan.selected_design.minimum_residual_authority >= (
+            paper_episode_cfg.qp_min_residual_authority - 1e-8
+        )
+        paper_zero_controller = SafeController(
+            paper_episode_cfg, scan.selected_model, scan.selected_design
+        )
+        paper_zero_controller.reset(paper_episode_cfg.paper2016_steady_state)
+        _, zero_info = paper_zero_controller.act(
+            paper_episode_cfg.paper2016_steady_state + [0.0, 1.0],
+            np.zeros(2),
+            action_is_normalized=True,
+        )
+        assert zero_info["reset_projection_norm"] > 0.0
+        assert zero_info["base_qp_feasible"]
+        assert zero_info["qp_feasible"]
+        assert zero_info["reserved_residual_authority"] >= (
+            paper_episode_cfg.qp_min_residual_authority - 1e-8
+        )
+        assert np.allclose(zero_info["nominal"], zero_info["base"])
+        paper_nonzero_controller = SafeController(
+            paper_episode_cfg, scan.selected_model, scan.selected_design
+        )
+        paper_nonzero_controller.reset(
+            paper_episode_cfg.paper2016_steady_state
+        )
+        _, nonzero_info = paper_nonzero_controller.act(
+            paper_episode_cfg.paper2016_steady_state + [0.0, 1.0],
+            np.array([1.0, -1.0]),
+            action_is_normalized=True,
+        )
+        assert nonzero_info["qp_feasible"]
+        assert nonzero_info["feasible_action_mapping_scale"] >= (
+            paper_episode_cfg.qp_min_residual_authority - 1e-8
+        )
+        assert np.linalg.norm(
+            nonzero_info["nominal"] - nonzero_info["base"]
+        ) > 0.0
+    short_trend = summarize_training_trend(
+        np.arange(10, dtype=float), np.array([0.0, 0.1])
+    )
+    assert short_trend["training_trend_status"] == "insufficient_episodes"
+    assert short_trend["positive_training_trend"] is None
+    assert cfg.episodes == 500
+    assert cfg.steps_per_episode == 300
+    assert paper_cfg.paper2016_simulation_seconds == 300
+    paper_schedule = balanced_random_paper2016_schedule(500, 42)
+    assert len(paper_schedule) == 500
+    scenario_counts = {
+        scenario: paper_schedule.count(scenario)
+        for scenario in PAPER2016_SCENARIOS
+    }
+    assert max(scenario_counts.values()) - min(scenario_counts.values()) <= 1
+    for start in range(0, 498, 3):
+        assert set(paper_schedule[start:start + 3]) == set(
+            PAPER2016_SCENARIOS
+        )
+    assert len(set(paper_schedule[498:])) == 2
+    assert paper_schedule == balanced_random_paper2016_schedule(500, 42)
     assert len(DEFAULT_SEEDS) == 3 and 42 in DEFAULT_SEEDS
     assert np.isclose(T_975_DF2, 4.302652729911275)
     # A deliberately slow diagonal closed loop forces the finite-series path
@@ -221,6 +439,9 @@ def main() -> None:
     point, feasible = project_qp_2d(np.array([2.0, -3.0]), a, b)
     assert feasible and np.allclose(point, [1.0, -1.0]), point
     design = build_safety_design(cfg, model, np.random.default_rng(cfg.seed))
+    assert design.minimum_residual_authority >= (
+        cfg.qp_min_residual_authority - 1e-8
+    )
     a_economic, b_economic, affine_economic = model.linearize(
         cfg.linearization_state, cfg.linearization_input
     )

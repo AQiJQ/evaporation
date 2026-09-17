@@ -1,0 +1,65 @@
+{
+  "seeds": [
+    42,
+    2027,
+    314159
+  ],
+  "moving_average_episodes": 20,
+  "per_seed": [
+    {
+      "seed": 42,
+      "first_20_mean": -1420.9883675875642,
+      "last_20_mean": -1416.4536723230851,
+      "absolute_improvement": 4.534695264479069,
+      "relative_improvement": 0.3191226168992289,
+      "first_20_episode_mean_return": -1420.9883675875642,
+      "last_20_episode_mean_return": -1416.4536723230851,
+      "return_improvement_absolute": 4.534695264479069,
+      "return_improvement_percent": 0.3191226168992289,
+      "training_trend_status": "positive",
+      "positive_training_trend": true,
+      "episodes_in_window": 20
+    },
+    {
+      "seed": 2027,
+      "first_20_mean": -1420.829654221768,
+      "last_20_mean": -1417.1340527350726,
+      "absolute_improvement": 3.6956014866952955,
+      "relative_improvement": 0.26010165790912426,
+      "first_20_episode_mean_return": -1420.829654221768,
+      "last_20_episode_mean_return": -1417.1340527350726,
+      "return_improvement_absolute": 3.6956014866952955,
+      "return_improvement_percent": 0.26010165790912426,
+      "training_trend_status": "positive",
+      "positive_training_trend": true,
+      "episodes_in_window": 20
+    },
+    {
+      "seed": 314159,
+      "first_20_mean": -1445.3380200002753,
+      "last_20_mean": -1445.0649987887648,
+      "absolute_improvement": 0.27302121151046777,
+      "relative_improvement": 0.018889782717430748,
+      "first_20_episode_mean_return": -1445.3380200002753,
+      "last_20_episode_mean_return": -1445.0649987887648,
+      "return_improvement_absolute": 0.27302121151046777,
+      "return_improvement_percent": 0.018889782717430748,
+      "training_trend_status": "positive",
+      "positive_training_trend": true,
+      "episodes_in_window": 20
+    }
+  ],
+  "aggregate": {
+    "training_trend_status": "positive",
+    "first_20_mean": -1429.0520139365356,
+    "last_20_mean": -1426.2175746156408,
+    "absolute_improvement": 2.8344393208947167,
+    "relative_improvement": 0.1983440275967866,
+    "first_20_episode_mean_return": -1429.0520139365356,
+    "last_20_episode_mean_return": -1426.2175746156408,
+    "return_improvement_absolute": 2.8344393208947167,
+    "return_improvement_percent": 0.1983440275967866,
+    "positive_training_trend": true
+  },
+  "interpretation": "Unmodified episode cumulative training return. At least 40 episodes are required before comparing disjoint first/last-20 windows; shorter runs are labelled insufficient_episodes."
+}

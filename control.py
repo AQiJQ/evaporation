@@ -367,6 +367,71 @@ def project_qp_2d(candidate: np.ndarray, a_ineq: np.ndarray, b_ineq: np.ndarray,
     return choices[int(np.argmin(distances))], True
 
 
+def safe_projected_base(
+    candidate: np.ndarray,
+    a_ineq: np.ndarray,
+    b_ineq: np.ndarray,
+    residual_half_width: np.ndarray,
+    minimum_authority: float,
+    authority_margin: float,
+    tol: float = 1e-9,
+) -> tuple[np.ndarray, bool, float]:
+    """Project ``v_base`` while reserving a feasible symmetric residual box.
+
+    All quantities are in normalized input/state coordinates.  For a residual
+    box ``|r| <= s``, its support in row ``a_i`` is ``|a_i| @ s``.  Projecting
+    onto ``A v <= b - lambda |A|s`` therefore guarantees that every residual
+    corner at authority ``lambda`` passes the same verification QP used
+    online.  The returned authority includes the configured numerical margin.
+    """
+    candidate = np.asarray(candidate, dtype=float)
+    residual_half_width = np.asarray(residual_half_width, dtype=float)
+    minimum_authority = float(minimum_authority)
+    authority_margin = float(authority_margin)
+    if not 0.0 <= minimum_authority <= 1.0:
+        raise ValueError("minimum_authority must lie in [0, 1]")
+    if not 0.0 < authority_margin <= 1.0:
+        raise ValueError("authority_margin must lie in (0, 1]")
+    support = np.abs(a_ineq) @ residual_half_width
+    raw_floor = min(
+        1.0,
+        minimum_authority / authority_margin
+        if minimum_authority < 1.0 else 1.0,
+    )
+    base, feasible = project_qp_2d(
+        candidate,
+        a_ineq,
+        b_ineq - raw_floor * support,
+        tol=tol,
+    )
+    if not feasible:
+        fallback, _ = project_qp_2d(
+            candidate, a_ineq, b_ineq, tol=tol
+        )
+        return fallback, False, 0.0
+    slack = b_ineq - a_ineq @ base
+    constrained = support > 1e-12
+    raw_authority = 1.0
+    if np.any(constrained):
+        raw_authority = float(np.clip(
+            np.min(slack[constrained] / support[constrained]), 0.0, 1.0
+        ))
+    effective_authority = (
+        raw_authority
+        if raw_authority >= 1.0 - 1e-12
+        else raw_authority * authority_margin
+    )
+    zero_verified = bool(np.all(a_ineq @ base <= b_ineq + tol))
+    return (
+        base,
+        bool(
+            zero_verified
+            and effective_authority >= minimum_authority - 10.0 * tol
+        ),
+        float(effective_authority),
+    )
+
+
 def finite_horizon_nominal_policy(
     cfg: ExperimentConfig,
     a: np.ndarray,
@@ -459,6 +524,7 @@ class SafetyDesign:
     theta_p: np.ndarray
     nominal_policy_gain: np.ndarray
     nominal_policy_offset: np.ndarray
+    minimum_residual_authority: float
 
 
 def _controlled_invariant_box(
@@ -609,6 +675,23 @@ def build_safety_design(
     u_hi = model.normalized_input(physical_u_hi)
     z_ref = model.normalized_state(cfg.safe_center_state)
     v_ref = model.normalized_input(safe_u)
+    if (
+        cfg.experiment_mode == "proposed"
+        and cfg.proposed_nominal_controller == "safe_center_tracking"
+    ):
+        nominal_gain, _ = finite_horizon_nominal_policy(
+            cfg,
+            a,
+            b,
+            np.zeros_like(affine),
+            np.zeros_like(learned_h),
+            np.zeros_like(learned_p),
+        )
+        nominal_offset = v_ref - nominal_gain @ z_ref
+    else:
+        nominal_gain, nominal_offset = finite_horizon_nominal_policy(
+            cfg, a, b, affine, learned_h, learned_p
+        )
     if diagnostics is not None:
         diagnostics.update({
             "hinf_feasible": False,
@@ -620,6 +703,9 @@ def build_safety_design(
                 np.all(z_ref > x_lo) and np.all(z_ref < x_hi)
             ),
             "v_ref_feasible": False,
+            "verification_qp_feasible": False,
+            "residual_authority_feasible": False,
+            "minimum_residual_authority": 0.0,
         })
 
     # K is an explicit continuous component of theta.  The configured seed was
@@ -732,6 +818,85 @@ def build_safety_design(
             diagnostics["invariant_feasible"] = True
         invariant_lower, invariant_upper, invariant_scale = invariant
 
+        # Exercise the exact online base projection and verification-QP rows,
+        # rather than accepting geometry solely because some input exists at
+        # each invariant vertex.  The same normalized residual half-width and
+        # safety margin are used here and in SafeController.act().
+        qp_probe_states = [z_ref] + [
+            np.asarray(vertex, dtype=float)
+            for vertex in product(*zip(invariant_lower, invariant_upper))
+        ]
+        minimum_residual_authority = 1.0
+        qp_gate_passed = True
+        for probe_z in qp_probe_states:
+            probe_center_next = a @ probe_z + affine
+            probe_aq = np.vstack([np.eye(2), -np.eye(2), b, -b])
+            probe_bq = np.concatenate([
+                u_hi_t,
+                -u_lo_t,
+                invariant_upper - probe_center_next,
+                -invariant_lower + probe_center_next,
+            ])
+            probe_theta = nominal_gain @ probe_z + nominal_offset
+            probe_base, base_feasible, authority = safe_projected_base(
+                probe_theta,
+                probe_aq,
+                probe_bq,
+                cfg.residual_action_scale,
+                cfg.qp_min_residual_authority,
+                cfg.invariant_set_margin,
+                tol=1e-9,
+            )
+            minimum_residual_authority = min(
+                minimum_residual_authority, authority
+            )
+            zero_projection, zero_feasible = project_qp_2d(
+                probe_base, probe_aq, probe_bq, tol=1e-9
+            )
+            zero_exact = bool(
+                zero_feasible
+                and np.linalg.norm(zero_projection - probe_base) <= 1e-8
+            )
+            corner_feasible = True
+            for signs in product((-1.0, 1.0), repeat=2):
+                corner = (
+                    probe_base
+                    + float(cfg.qp_min_residual_authority)
+                    * cfg.residual_action_scale
+                    * np.asarray(signs, dtype=float)
+                )
+                projected_corner, feasible_corner = project_qp_2d(
+                    corner, probe_aq, probe_bq, tol=1e-9
+                )
+                if (
+                    not feasible_corner
+                    or np.linalg.norm(projected_corner - corner) > 1e-8
+                ):
+                    corner_feasible = False
+                    break
+            if not (base_feasible and zero_exact and corner_feasible):
+                qp_gate_passed = False
+                break
+        if diagnostics is not None:
+            diagnostics["verification_qp_feasible"] = bool(
+                diagnostics["verification_qp_feasible"] or qp_gate_passed
+            )
+            diagnostics["minimum_residual_authority"] = max(
+                float(diagnostics["minimum_residual_authority"]),
+                float(minimum_residual_authority),
+            )
+            diagnostics["residual_authority_feasible"] = bool(
+                diagnostics["residual_authority_feasible"]
+                or minimum_residual_authority
+                >= float(cfg.qp_min_residual_authority) - 1e-8
+            )
+        if (
+            not qp_gate_passed
+            or minimum_residual_authority
+            < float(cfg.qp_min_residual_authority) - 1e-8
+        ):
+            continue
+
         physical_boundary = boundary * cfg.state_scale
         rpi_area = 0.5 * abs(float(np.sum(
             physical_boundary[:, 0] * np.roll(physical_boundary[:, 1], -1)
@@ -758,6 +923,9 @@ def build_safety_design(
             "invariant_lower": invariant_lower,
             "invariant_upper": invariant_upper,
             "invariant_scale": invariant_scale,
+            "minimum_residual_authority": float(
+                minimum_residual_authority
+            ),
             "invariant_area": float(np.prod(
                 (invariant_upper - invariant_lower) * cfg.state_scale
             )),
@@ -773,7 +941,7 @@ def build_safety_design(
     if not candidates:
         raise RuntimeError(
             "Continuous K proposal failed the H-infinity/RPI/input-tightening/"
-            "controlled-invariant safety gate."
+            "controlled-invariant/verification-QP/residual-authority safety gate."
         )
     reference = min(
         candidates,
@@ -830,23 +998,6 @@ def build_safety_design(
         box_boundary_physical[:, 0] * np.roll(box_boundary_physical[:, 1], -1)
         - box_boundary_physical[:, 1] * np.roll(box_boundary_physical[:, 0], -1)
     )))
-    if (
-        cfg.experiment_mode == "proposed"
-        and cfg.proposed_nominal_controller == "safe_center_tracking"
-    ):
-        nominal_gain, _ = finite_horizon_nominal_policy(
-            cfg,
-            a,
-            b,
-            np.zeros_like(affine),
-            np.zeros_like(learned_h),
-            np.zeros_like(learned_p),
-        )
-        nominal_offset = v_ref - nominal_gain @ z_ref
-    else:
-        nominal_gain, nominal_offset = finite_horizon_nominal_policy(
-            cfg, a, b, affine, learned_h, learned_p
-        )
     return SafetyDesign(
         a=a,
         b=b,
@@ -894,6 +1045,9 @@ def build_safety_design(
         theta_p=learned_p.copy(),
         nominal_policy_gain=nominal_gain,
         nominal_policy_offset=nominal_offset,
+        minimum_residual_authority=float(
+            selected["minimum_residual_authority"]
+        ),
     )
 
 
@@ -903,9 +1057,18 @@ class SafeController:
     def __init__(self, cfg: ExperimentConfig, model: EvaporatorModel, design: SafetyDesign):
         self.cfg, self.model, self.d = cfg, model, design
         self.z = design.z_ref.copy()
+        self.reset_projection_norm = 0.0
 
     def reset(self, state: np.ndarray) -> None:
-        self.z = self.model.normalized_state(state)
+        raw_z = self.model.normalized_state(state)
+        # The nominal tube state must start inside its certified invariant set.
+        # The physical state is left untouched and appears in e=x-z; clipping z
+        # avoids constructing an empty one-step QP when the paper initial state
+        # lies outside the local nominal invariant region.
+        self.z = np.clip(
+            raw_z, self.d.invariant_lower, self.d.invariant_upper
+        )
+        self.reset_projection_norm = float(np.linalg.norm(self.z - raw_z))
 
     def act(
         self,
@@ -932,11 +1095,33 @@ class SafeController:
         aq = np.vstack(rows)
         bq = np.concatenate(bounds)
         theta_candidate = d.nominal_policy_gain @ self.z + d.nominal_policy_offset
-        base, theta_feasible = project_qp_2d(theta_candidate, aq, bq)
+        if self.cfg.residual_parameterization == "state_dependent_box":
+            base, theta_feasible, reserved_authority = safe_projected_base(
+                theta_candidate,
+                aq,
+                bq,
+                self.cfg.residual_action_scale,
+                self.cfg.qp_min_residual_authority,
+                self.cfg.invariant_set_margin,
+            )
+        else:
+            base, theta_feasible = project_qp_2d(theta_candidate, aq, bq)
+            reserved_authority = 0.0
         if not theta_feasible:
-            base, theta_feasible = project_qp_2d(d.v_ref, aq, bq)
+            if self.cfg.residual_parameterization == "state_dependent_box":
+                base, theta_feasible, reserved_authority = safe_projected_base(
+                    d.v_ref,
+                    aq,
+                    bq,
+                    self.cfg.residual_action_scale,
+                    self.cfg.qp_min_residual_authority,
+                    self.cfg.invariant_set_margin,
+                )
+            else:
+                base, theta_feasible = project_qp_2d(d.v_ref, aq, bq)
         if not theta_feasible:
             base = np.clip(d.v_ref, d.u_lower_tight, d.u_upper_tight)
+            reserved_authority = 0.0
         action = np.asarray(residual, dtype=float)
         requested_residual = (
             self.cfg.residual_action_scale * action
@@ -982,7 +1167,8 @@ class SafeController:
             parameterized_residual = mapping_scale * requested_residual
             candidate = base + parameterized_residual
             mapping_gap = float(np.linalg.norm(candidate - requested_candidate))
-        nominal, feasible = project_qp_2d(candidate, aq, bq)
+        nominal, verification_feasible = project_qp_2d(candidate, aq, bq)
+        feasible = bool(theta_feasible and verification_feasible)
         if not feasible:
             nominal = np.clip(base, d.u_lower_tight, d.u_upper_tight)
         ancillary = d.k @ e
@@ -1002,6 +1188,9 @@ class SafeController:
             "parameterized_residual": parameterized_residual.copy(),
             "ancillary": ancillary.copy(), "actual_norm": actual_n.copy(),
             "z_next": z_next.copy(), "qp_feasible": bool(feasible),
+            "base_qp_feasible": bool(theta_feasible),
+            "reserved_residual_authority": float(reserved_authority),
+            "reset_projection_norm": float(self.reset_projection_norm),
             "projection_gap": float(np.linalg.norm(nominal - candidate)),
             "feasible_action_mapping_scale": float(mapping_scale),
             "residual_feasible_scale": float(mapping_scale),

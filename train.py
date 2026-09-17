@@ -13,11 +13,8 @@ import numpy as np
 
 from .config import ExperimentConfig
 from .control import SafeController, build_safety_design, point_in_convex_polygon
-from .disturbance_experiments import (
-    run_disturbance_scale_scan,
-    run_full_disturbance_stress_test,
-)
 from .model import EvaporatorModel
+from .paper2016_compare import SCENARIOS as PAPER2016_SCENARIOS, apply_state_shock
 from .plot import (
     close_all_plots,
     plot_disturbance_adaptation,
@@ -108,6 +105,31 @@ def sample_disturbance(cfg: ExperimentConfig, rng: np.random.Generator) -> np.nd
     )
 
 
+def balanced_random_paper2016_schedule(
+    episodes: int,
+    seed: int,
+) -> tuple[str, ...]:
+    """Return a reproducible, balanced random scenario rotation.
+
+    Every complete three-episode block contains each Paper2016 scenario once
+    in a seed-dependent random order.  A final partial block is drawn from a
+    fresh permutation, so global scenario counts differ by at most one.
+    """
+    episodes = int(episodes)
+    if episodes < 0:
+        raise ValueError("episodes must be nonnegative")
+    rng = np.random.default_rng(int(seed) + 201600)
+    schedule: list[str] = []
+    block_count, remainder = divmod(episodes, len(PAPER2016_SCENARIOS))
+    for _ in range(block_count):
+        schedule.extend(rng.permutation(PAPER2016_SCENARIOS).tolist())
+    if remainder:
+        schedule.extend(
+            rng.permutation(PAPER2016_SCENARIOS)[:remainder].tolist()
+        )
+    return tuple(schedule)
+
+
 def advance_disturbance(
     cfg: ExperimentConfig,
     rng: np.random.Generator,
@@ -138,7 +160,19 @@ def run_episode(
     training: bool,
     global_step: int,
     theta_learner: OnlineThetaLearner | None = None,
+    paper_scenario: str | None = None,
 ) -> tuple[dict[str, float], list[dict[str, object]], int]:
+    paper_protocol = bool(
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    )
+    if paper_scenario is not None and paper_scenario not in PAPER2016_SCENARIOS:
+        raise ValueError(f"unknown paper2016 scenario: {paper_scenario}")
+    episode_steps = int(
+        cfg.steps_per_episode
+        if training or not paper_protocol
+        else cfg.paper2016_simulation_seconds
+    )
     initial_fraction = (
         cfg.training_initial_radius_fraction
         if training else cfg.evaluation_initial_radius_fraction
@@ -164,17 +198,34 @@ def run_episode(
                 "controlled-invariant set."
             )
     def reset_segment():
-        z0 = rng.uniform(initial_lower, initial_upper)
-        if training and rng.random() < cfg.training_boundary_start_probability:
-            boundary_axis = int(rng.integers(0, 2))
-            z0[boundary_axis] = rng.choice([
-                initial_lower[boundary_axis], initial_upper[boundary_axis]
-            ])
-        segment_state = model.physical_state(z0)
-        controller.reset(segment_state)
+        if paper_protocol:
+            segment_state = np.asarray(
+                cfg.paper2016_steady_state, dtype=float
+            ).copy()
+            controller.reset(segment_state)
+            segment_scenario = (
+                paper_scenario
+                if paper_scenario is not None
+                else cfg.paper2016_training_scenarios[
+                    int(rng.integers(0, len(cfg.paper2016_training_scenarios)))
+                ]
+            )
+        else:
+            z0 = rng.uniform(initial_lower, initial_upper)
+            if training and rng.random() < cfg.training_boundary_start_probability:
+                boundary_axis = int(rng.integers(0, 2))
+                z0[boundary_axis] = rng.choice([
+                    initial_lower[boundary_axis], initial_upper[boundary_axis]
+                ])
+            segment_state = model.physical_state(z0)
+            controller.reset(segment_state)
+            segment_scenario = "none"
         segment_previous_u = controller.d.v_ref.copy()
         segment_previous_residual = np.zeros(ACTION_DIM, dtype=float)
-        segment_disturbance = sample_disturbance(cfg, rng)
+        segment_disturbance = (
+            np.asarray(cfg.disturbance_nominal, dtype=float).copy()
+            if paper_protocol else sample_disturbance(cfg, rng)
+        )
         segment_w_est = np.zeros(2, dtype=float)
         segment_obs = observation(
             model,
@@ -191,6 +242,8 @@ def run_episode(
             segment_w_est,
             0,
             segment_obs,
+            segment_scenario,
+            0,
         )
 
     (
@@ -201,6 +254,8 @@ def run_episode(
         w_est,
         disturbance_age,
         obs,
+        active_paper_scenario,
+        paper_second,
     ) = reset_segment()
     reward_reference_cost = model.economic_cost(
         cfg.linearization_state,
@@ -234,7 +289,17 @@ def run_episode(
     records: list[dict[str, object]] = []
     last_losses: dict[str, float] | None = None
 
-    for step in range(cfg.steps_per_episode):
+    for step in range(episode_steps):
+        paper_state_shock = np.zeros(2, dtype=float)
+        if paper_protocol:
+            state_before_shock = state.copy()
+            state = apply_state_shock(
+                state, active_paper_scenario, paper_second
+            )
+            paper_state_shock = state - state_before_shock
+            obs = observation(
+                model, controller, state, previous_u, w_est
+            )
         if training and global_step < cfg.warmup_steps:
             raw_action = rng.uniform(-1.0, 1.0, ACTION_DIM).astype(np.float32)
         else:
@@ -335,12 +400,17 @@ def run_episode(
         )
         segment_done = bool(
             training
+            and not paper_protocol
             and int(cfg.training_segment_steps) > 0
             and (step + 1) % int(cfg.training_segment_steps) == 0
         )
-        done = bool(step == cfg.steps_per_episode - 1 or segment_done)
-        next_disturbance = advance_disturbance(
-            cfg, rng, disturbance, disturbance_age + 1
+        done = bool(step == episode_steps - 1 or segment_done)
+        next_disturbance = (
+            np.asarray(cfg.disturbance_nominal, dtype=float).copy()
+            if paper_protocol
+            else advance_disturbance(
+                cfg, rng, disturbance, disturbance_age + 1
+            )
         )
         robust_state_bad = bool(
             np.any(x_next_n < controller.d.robust_state_lower - 1e-8)
@@ -442,8 +512,10 @@ def run_episode(
             "nominal": np.asarray(info["nominal"]).copy(),
             "error": e_next.copy(),
             "effective_w": effective_w.copy(),
+            "paper2016_scenario": active_paper_scenario,
+            "paper_state_shock": paper_state_shock.copy(),
         })
-        if segment_done and step < cfg.steps_per_episode - 1:
+        if segment_done and step < episode_steps - 1:
             (
                 state,
                 previous_u,
@@ -452,6 +524,8 @@ def run_episode(
                 w_est,
                 disturbance_age,
                 obs,
+                active_paper_scenario,
+                paper_second,
             ) = reset_segment()
         else:
             state = next_state
@@ -461,6 +535,7 @@ def run_episode(
             disturbance_age += 1
             previous_u = np.asarray(info["actual_norm"])
             previous_applied_residual = applied_residual
+            paper_second += 1
         global_step += 1
 
     q_loss = float("nan")
@@ -474,46 +549,46 @@ def run_episode(
         entropy = -float(last_losses["mean_logp"])
     stats = {
         "return": total_return,
-        "return_per_step": total_return / cfg.steps_per_episode,
-        "economic_cost_mean": economic_cost_sum / cfg.steps_per_episode,
-        "economic_reward_mean": economic_reward_sum / cfg.steps_per_episode,
-        "projection_penalty_mean": projection_penalty_sum / cfg.steps_per_episode,
-        "mapping_penalty_mean": mapping_penalty_sum / cfg.steps_per_episode,
-        "feasible_action_mapping_rate": mapping_activations / cfg.steps_per_episode,
+        "return_per_step": total_return / episode_steps,
+        "economic_cost_mean": economic_cost_sum / episode_steps,
+        "economic_reward_mean": economic_reward_sum / episode_steps,
+        "projection_penalty_mean": projection_penalty_sum / episode_steps,
+        "mapping_penalty_mean": mapping_penalty_sum / episode_steps,
+        "feasible_action_mapping_rate": mapping_activations / episode_steps,
         "residual_feasible_scale_mean": (
-            residual_feasible_scale_sum / cfg.steps_per_episode
+            residual_feasible_scale_sum / episode_steps
         ),
         "residual_feasible_scale_min": residual_feasible_scale_min,
         "residual_requested_norm_mean": (
-            residual_requested_norm_sum / cfg.steps_per_episode
+            residual_requested_norm_sum / episode_steps
         ),
         "residual_applied_norm_mean": (
-            residual_applied_norm_sum / cfg.steps_per_episode
+            residual_applied_norm_sum / episode_steps
         ),
         "residual_execution_ratio_mean": (
-            residual_execution_ratio_sum / cfg.steps_per_episode
+            residual_execution_ratio_sum / episode_steps
         ),
-        "move_penalty_mean": move_penalty_sum / cfg.steps_per_episode,
-        "safety_penalty_mean": safety_penalty_sum / cfg.steps_per_episode,
+        "move_penalty_mean": move_penalty_sum / episode_steps,
+        "safety_penalty_mean": safety_penalty_sum / episode_steps,
         "state_excess_squared_mean": (
-            state_excess_squared_sum / cfg.steps_per_episode
+            state_excess_squared_sum / episode_steps
         ),
         "input_excess_squared_mean": (
-            input_excess_squared_sum / cfg.steps_per_episode
+            input_excess_squared_sum / episode_steps
         ),
         "rpi_excess_squared_mean": (
-            rpi_excess_squared_sum / cfg.steps_per_episode
+            rpi_excess_squared_sum / episode_steps
         ),
-        "violation_rate": violations / cfg.steps_per_episode,
+        "violation_rate": violations / episode_steps,
         "robust_operating_region_violation_rate": (
-            robust_region_violations / cfg.steps_per_episode
+            robust_region_violations / episode_steps
         ),
-        "rpi_violation_rate": rpi_violations / cfg.steps_per_episode,
+        "rpi_violation_rate": rpi_violations / episode_steps,
         "disturbance_bound_exceedance_rate": (
-            bound_exceedances / cfg.steps_per_episode
+            bound_exceedances / episode_steps
         ),
-        "intervention_rate": interventions / cfg.steps_per_episode,
-        "qp_infeasible_rate": infeasible / cfg.steps_per_episode,
+        "intervention_rate": interventions / episode_steps,
+        "qp_infeasible_rate": infeasible / episode_steps,
         "rpi_utilization_peak": rpi_utilization_peak,
         "alpha": float(getattr(agent, "alpha", 0.0)),
         "entropy": entropy,
@@ -542,6 +617,7 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "robust_state_violation", "robust_input_violation",
         "robust_region_violation",
         "candidate", "nominal", "error", "effective_w",
+        "paper2016_scenario", "paper_state_shock",
     ]
     return {key: np.asarray([record[key] for record in records]) for key in keys}
 
@@ -597,6 +673,7 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "robust_state_violation", "robust_input_violation",
             "robust_region_violation",
             "e_X2_norm", "e_P2_norm", "w_X2_norm", "w_P2_norm",
+            "paper2016_scenario", "state_shock_X2", "state_shock_P2",
         ],
         (
             [
@@ -638,16 +715,19 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 rollout["robust_region_violation"][i],
                 *rollout["error"][i],
                 *rollout["effective_w"][i],
+                rollout["paper2016_scenario"][i],
+                *rollout["paper_state_shock"][i],
             ]
             for i in range(len(rollout["time"]))
         ),
     )
 
 
-def save_theta_design(path: Path, design) -> None:
+def save_theta_design(
+    path: Path, design, training_rho_d: float | None = None
+) -> None:
     """Persist the complete online safety parameterization with a checkpoint."""
-    np.savez_compressed(
-        path,
+    payload = dict(
         h=design.theta_h,
         p=design.theta_p,
         M=design.theta_m_matrix,
@@ -675,7 +755,13 @@ def save_theta_design(path: Path, design) -> None:
         invariant_upper=design.invariant_upper,
         nominal_policy_gain=design.nominal_policy_gain,
         nominal_policy_offset=design.nominal_policy_offset,
+        minimum_residual_authority=np.asarray(
+            design.minimum_residual_authority
+        ),
     )
+    if training_rho_d is not None:
+        payload["training_rho_d"] = np.asarray(float(training_rho_d))
+    np.savez_compressed(path, **payload)
 
 
 def evaluate_policy(
@@ -689,6 +775,12 @@ def evaluate_policy(
     samples: list[dict[str, float]] = []
     representative: list[dict[str, object]] = []
     for index, seed in enumerate(seeds):
+        paper_scenario = (
+            PAPER2016_SCENARIOS[index % len(PAPER2016_SCENARIOS)]
+            if cfg.benchmark_profile == "zanon2016"
+            and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+            else None
+        )
         stat, records, _ = run_episode(
             cfg,
             model,
@@ -698,6 +790,7 @@ def evaluate_policy(
             np.random.default_rng(seed),
             training=False,
             global_step=0,
+            paper_scenario=paper_scenario,
         )
         samples.append(stat)
         if index == 0:
@@ -1119,8 +1212,9 @@ def save_feedback_law(
     payload = {
         "control_structure": (
             "v_base is safe-center finite-horizon tracking in proposed mode "
-            "(learned affine h,p guidance in joint_theta); base = safe "
-            "projection(v_base); candidate = declared feasible residual "
+            "(learned affine h,p guidance in joint_theta); nominal z is "
+            "projected into S on reset; base = safe projection(v_base) with "
+            "reserved residual-box margin; candidate = declared feasible residual "
             "parameterization(base, actor_action); "
             "v_qp = safety verification projection(candidate); "
             "u_normalized = v_qp + K(x-z)"
@@ -1161,6 +1255,12 @@ def save_feedback_law(
         "robust_input_upper_normalized": design.robust_input_upper.tolist(),
         "robust_region_scale": float(design.robust_region_scale),
         "sac_residual_scale_normalized": cfg.residual_action_scale.tolist(),
+        "minimum_residual_authority_required": float(
+            cfg.qp_min_residual_authority
+        ),
+        "minimum_residual_authority_certified": float(
+            design.minimum_residual_authority
+        ),
         "selected_policy_output_scale": float(policy_output_scale),
         "hinf_gamma_design": design.gamma_design,
         "hinf_norm_frequency_grid": design.gamma_sampled,
@@ -1179,7 +1279,8 @@ def save_feedback_law(
         "",
         "Control sequence:",
         "  v_base    = v_ref + L_track @ (z-z_ref)  [proposed]",
-        "  base      = safe_projection(v_base)",
+        "  z(reset)  = projection(x_n, S)",
+        "  base      = safe_projection(v_base) with reserved residual-box margin",
         "  candidate = state_dependent_feasible_residual(base, actor_action)",
         "  v_qp      = Euclidean projection with v_qp in U-KZ and z_next in S",
         "  u_n       = v_qp + K @ e",
@@ -1189,6 +1290,7 @@ def save_feedback_law(
         f"K_physical   = {np.array2string(k_physical, precision=9)}",
         f"S_lower_norm = {np.array2string(design.invariant_lower, precision=9)}",
         f"S_upper_norm = {np.array2string(design.invariant_upper, precision=9)}",
+        f"minimum_residual_authority = {design.minimum_residual_authority:.9g}",
         f"selected_SAC_output_scale = {float(policy_output_scale):.6g}",
         "",
         "The four true exogenous disturbances act on the plant but are not "
@@ -1205,13 +1307,13 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Continuous SAC + H-infinity/RPI/QP evaporator training"
     )
-    parser.add_argument("--episodes", type=int, default=300)
-    parser.add_argument("--steps", type=int, default=2000)
+    parser.add_argument("--episodes", type=int, default=500)
+    parser.add_argument("--steps", type=int, default=300)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
         "--benchmark-profile",
         choices=("default", "zanon2016"),
-        default="default",
+        default="zanon2016",
     )
     parser.add_argument(
         "--experiment-mode",
@@ -1241,6 +1343,90 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def summarize_training_trend(
+    training_returns: np.ndarray,
+    evaluation_improvements: np.ndarray,
+) -> dict[str, object]:
+    """Summarize disjoint first/last-20 windows only when they exist."""
+    values = np.asarray(training_returns, dtype=float)
+    improvements = np.asarray(evaluation_improvements, dtype=float)
+    improvements = improvements[np.isfinite(improvements)]
+    early_count = min(20, len(values))
+    late_count = min(20, len(values))
+    early_return_mean = float(np.mean(values[:early_count]))
+    late_return_mean = float(np.mean(values[-late_count:]))
+    evaluation_window = min(5, len(improvements))
+    enough_episodes_for_trend = len(values) >= 40
+    return {
+        "training_trend_status": (
+            "positive"
+            if enough_episodes_for_trend and late_return_mean > early_return_mean
+            else "non_positive" if enough_episodes_for_trend
+            else "insufficient_episodes"
+        ),
+        "early_return_mean": early_return_mean,
+        "late_return_mean": late_return_mean,
+        "return_improvement_absolute": late_return_mean - early_return_mean,
+        "return_improvement_percent": float(
+            100.0 * (late_return_mean - early_return_mean)
+            / max(abs(early_return_mean), 1e-12)
+        ),
+        "positive_training_trend": (
+            bool(late_return_mean > early_return_mean)
+            if enough_episodes_for_trend else None
+        ),
+        "early_eval_sac_improvement": (
+            float(np.mean(improvements[:evaluation_window]))
+            if evaluation_window else float("nan")
+        ),
+        "late_eval_sac_improvement": (
+            float(np.mean(improvements[-evaluation_window:]))
+            if evaluation_window else float("nan")
+        ),
+        "best_eval_sac_improvement": (
+            float(np.max(improvements)) if len(improvements) else float("nan")
+        ),
+        "fraction_of_evaluations_positive": (
+            float(np.mean(improvements > 0.0))
+            if len(improvements) else float("nan")
+        ),
+        "final_5_eval_mean_improvement": (
+            float(np.mean(improvements[-5:]))
+            if len(improvements) else float("nan")
+        ),
+        "evaluation_source": (
+            "fixed-seed paired deterministic Hinf-RPI zero-residual versus SAC"
+        ),
+    }
+
+
+def checkpoint_training_rho_d(path: Path, default: float = 1.0) -> float:
+    """Load new rho_d metadata, with legacy alpha JSON fallback."""
+    with np.load(path) as saved:
+        for key in (
+            "training_rho_d", "rho_d_max_certified", "alpha_max_certified"
+        ):
+            if key in saved.files:
+                return float(saved[key])
+    for candidate in (
+        path.parent / "metrics.json",
+        path.parent.parent / "metrics.json",
+    ):
+        if not candidate.exists():
+            continue
+        with candidate.open(encoding="utf-8") as stream:
+            metadata = json.load(stream)
+        value = metadata.get(
+            "training_rho_d",
+            metadata.get(
+                "rho_d_max_certified", metadata.get("alpha_max_certified")
+            ),
+        )
+        if value is not None:
+            return float(value)
+    return float(default)
+
+
 def main() -> None:
     args = parse_args()
     cfg = ExperimentConfig(
@@ -1265,64 +1451,41 @@ def main() -> None:
         )
     if args.output_dir is not None:
         cfg.output_dir = args.output_dir
+    elif (
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    ):
+        cfg.output_dir = Path(
+            "evaporation_safe_sac/outputs_paper2016_main_500x300"
+        ) / f"seed_{cfg.seed}"
     cfg.output_dir.mkdir(parents=True, exist_ok=True)
     model_dir = cfg.output_dir / "models"
     model_dir.mkdir(parents=True, exist_ok=True)
 
     set_seed(cfg.seed)
     rng = np.random.default_rng(cfg.seed)
-    scan_result = None
-    full_disturbance_stress_summary = None
-    if (
+    paper_main_experiment = bool(
         cfg.benchmark_profile == "zanon2016"
-        and cfg.experiment_mode == "proposed"
-        and cfg.disturbance_scale_scan_enabled
-        and args.resume_theta is None
-    ):
-        scan_result = run_disturbance_scale_scan(cfg, cfg.output_dir)
-        cfg.disturbance_half_range = (
-            scan_result.alpha_max_certified
-            * np.asarray(cfg.disturbance_full_half_range, dtype=float)
-        )
-        model = EvaporatorModel(cfg)
-        initial_fixed_design = copy.deepcopy(
-            scan_result.selected_initial_design
-        )
-        design = copy.deepcopy(scan_result.selected_design)
-        theta_learner = OnlineThetaLearner(
-            cfg, model, design, np.random.default_rng(cfg.seed + 17001)
-        )
-        source_learner = scan_result.selected_learner
-        for attribute in (
-            "robust_region_search_diagnostics", "first_feasible_scale",
-            "minimum_certified_scale", "maximum_certified_scale",
-            "last_lower_infeasible_scale", "first_upper_infeasible_scale",
-            "last_feasible_scale", "first_infeasible_scale",
-            "robust_region_max_sample_residual_norm",
-            "self_consistency_s_plus_z_passed", "refinement_iterations",
-        ):
-            if hasattr(source_learner, attribute):
-                setattr(theta_learner, attribute, copy.deepcopy(
-                    getattr(source_learner, attribute)
-                ))
-        save_robust_region_search(
-            cfg.output_dir / "robust_region_search.csv",
-            theta_learner.robust_region_search_diagnostics,
-        )
-        if not scan_result.full_disturbance_formal_certified:
-            full_disturbance_stress_summary = run_full_disturbance_stress_test(
-                cfg, model, design, cfg.output_dir
-            )
-    else:
-        model = EvaporatorModel(cfg)
-        design = build_safety_design(cfg, model, rng)
-        initial_fixed_design = copy.deepcopy(design)
-        theta_learner = OnlineThetaLearner(
-            cfg,
-            model,
-            design,
-            np.random.default_rng(cfg.seed + 17001),
-        )
+        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    )
+    paper_training_schedule = (
+        balanced_random_paper2016_schedule(cfg.episodes, cfg.seed)
+        if paper_main_experiment else tuple()
+    )
+    paper_training_scenario_counts = {
+        scenario: int(paper_training_schedule.count(scenario))
+        for scenario in PAPER2016_SCENARIOS
+    }
+    training_rho_d = None if paper_main_experiment else 1.0
+    model = EvaporatorModel(cfg)
+    design = build_safety_design(cfg, model, rng)
+    initial_fixed_design = copy.deepcopy(design)
+    theta_learner = OnlineThetaLearner(
+        cfg,
+        model,
+        design,
+        np.random.default_rng(cfg.seed + 17001),
+    )
     if args.resume_theta is not None:
         with np.load(args.resume_theta) as saved_theta:
             robust_kwargs = {}
@@ -1345,7 +1508,7 @@ def main() -> None:
                 theta_k=saved_theta["K"],
                 **robust_kwargs,
             )
-    if cfg.experiment_mode == "proposed" and scan_result is None:
+    if cfg.experiment_mode == "proposed":
         try:
             design, _ = theta_learner.build_certified_robust_operating_design(
                 design
@@ -1388,12 +1551,12 @@ def main() -> None:
     print(f"  device             : {agent.device}")
     print(f"  episodes x steps   : {cfg.episodes} x {cfg.steps_per_episode}")
     print(f"  benchmark profile  : {cfg.benchmark_profile} (dt={cfg.dt_min * 60:g} s)")
+    print(f"  main protocol      : {cfg.main_experiment_protocol}")
     print(
-        "  certified disturbance alpha: "
-        + (
-            f"{scan_result.alpha_max_certified:.9g}"
-            if scan_result is not None else "not scanned"
-        )
+        "  external conditions: nominal F1/X1/T1/T200; "
+        "rho_d is not used in the paper main experiment"
+        if paper_main_experiment
+        else f"  training external-disturbance rho_d: {float(training_rho_d):.9g}"
     )
     print(f"  total interactions : {cfg.episodes * cfg.steps_per_episode}")
     print(f"  obs/action dim     : {OBS_DIM}/{ACTION_DIM}")
@@ -1410,6 +1573,9 @@ def main() -> None:
     print(f"  training init span : {cfg.training_initial_radius_fraction:.0%} of invariant set")
     print(f"  disturbance input  : hidden from SAC, applied to plant")
     print(
+        "  disturbance process: nominal exogenous conditions plus unscaled "
+        "paper state shocks at 0/20/40 s"
+        if paper_main_experiment else
         f"  disturbance process: {cfg.disturbance_mode}, "
         f"hold={cfg.disturbance_hold_steps} steps"
     )
@@ -1468,11 +1634,17 @@ def main() -> None:
             else "online h, p, four-facet M, K (paper-inspired baseline)"
         )
     )
-    print(f"  safe subtrajectory : {cfg.training_segment_steps} training steps")
+    print(
+        f"  training trajectory: one unscaled paper scenario per "
+        f"{cfg.steps_per_episode}-step episode; seeded balanced random rotation "
+        f"{paper_training_scenario_counts}"
+        if paper_main_experiment else
+        f"  safe subtrajectory : {cfg.training_segment_steps} training steps"
+    )
     print(f"  theta set interval : {cfg.theta_set_update_every_episodes} episodes")
     print(f"  continuous K interval: {cfg.theta_k_update_every_episodes} episodes")
     print(f"  periodic eval seeds: {cfg.evaluation_seed_count}")
-    print(f"  robustness seeds   : {cfg.holdout_seed_count}")
+    print(f"  holdout seeds      : {cfg.holdout_seed_count}")
     print(f"  output             : {cfg.output_dir.resolve()}")
 
     evaluation_seeds = [
@@ -1524,20 +1696,23 @@ def main() -> None:
     initial_reduction, initial_gap = _paired_economic_metrics(
         initial_baseline_stat, initial_stat, safe_reference_cost
     )
-    initial_nominal_stat = evaluate_paper_nominal_pressure_policy(
-        cfg, model, design, agent
-    )
-    initial_nominal_baseline = evaluate_paper_nominal_pressure_policy(
-        cfg, model, design, no_rl_policy
-    )
-    initial_nominal_improvement = float(
-        100.0
-        * (
-            initial_nominal_baseline["economic_cost_total"]
-            - initial_nominal_stat["economic_cost_total"]
+    if paper_main_experiment:
+        initial_nominal_improvement = float(initial_reduction)
+    else:
+        initial_nominal_stat = evaluate_paper_nominal_pressure_policy(
+            cfg, model, design, agent
         )
-        / max(abs(initial_nominal_baseline["economic_cost_total"]), 1e-12)
-    )
+        initial_nominal_baseline = evaluate_paper_nominal_pressure_policy(
+            cfg, model, design, no_rl_policy
+        )
+        initial_nominal_improvement = float(
+            100.0
+            * (
+                initial_nominal_baseline["economic_cost_total"]
+                - initial_nominal_stat["economic_cost_total"]
+            )
+            / max(abs(initial_nominal_baseline["economic_cost_total"]), 1e-12)
+        )
     initial_theta_metrics = theta_learner.metrics(design)
     logs: list[dict[str, float]] = [{
         "episode": 0,
@@ -1549,8 +1724,7 @@ def main() -> None:
         "evaluation_theta_only_economic_cost_mean": initial_baseline_stat["economic_cost_mean"],
         "evaluation_safe_sac_economic_cost_mean": initial_stat["economic_cost_mean"],
         "evaluation_sac_incremental_cost_reduction_percent": initial_reduction,
-        "evaluation_robust_sac_improvement_percent": initial_reduction,
-        "evaluation_nominal_sac_improvement_percent": initial_nominal_improvement,
+        "evaluation_paper2016_sac_improvement_percent": initial_nominal_improvement,
         "evaluation_normalized_safe_performance_gap": initial_gap,
         "safe_reference_cost": safe_reference_cost,
     }]
@@ -1566,9 +1740,13 @@ def main() -> None:
     }]
     agent.save_actor(model_dir / "best_actor.pth")
     agent.save_checkpoint(model_dir / "best_checkpoint.pth")
-    save_theta_design(model_dir / "initial_theta.npz", initial_fixed_design)
-    save_theta_design(model_dir / "optimized_theta.npz", optimized_fixed_design)
-    save_theta_design(model_dir / "best_theta.npz", best_design)
+    save_theta_design(
+        model_dir / "initial_theta.npz", initial_fixed_design, training_rho_d
+    )
+    save_theta_design(
+        model_dir / "optimized_theta.npz", optimized_fixed_design, training_rho_d
+    )
+    save_theta_design(model_dir / "best_theta.npz", best_design, training_rho_d)
     print(
         "episode=000/"
         f"{cfg.episodes} eval_per_step={initial_stat['return_per_step']:.6f} "
@@ -1587,6 +1765,10 @@ def main() -> None:
             training=True,
             global_step=global_step,
             theta_learner=theta_learner,
+            paper_scenario=(
+                paper_training_schedule[episode - 1]
+                if paper_main_experiment else None
+            ),
         )
         agent.update_actor_ema()
         if cfg.experiment_mode == "joint_theta":
@@ -1626,22 +1808,25 @@ def main() -> None:
             eval_cost_reduction, eval_safe_gap = _paired_economic_metrics(
                 eval_baseline_stat, eval_stat, safe_reference_cost
             )
-            nominal_stat = evaluate_paper_nominal_pressure_policy(
-                cfg, model, design, agent
-            )
-            nominal_baseline_stat = evaluate_paper_nominal_pressure_policy(
-                cfg, model, design, no_rl_policy
-            )
-            eval_nominal_improvement = float(
-                100.0
-                * (
-                    nominal_baseline_stat["economic_cost_total"]
-                    - nominal_stat["economic_cost_total"]
+            if paper_main_experiment:
+                eval_nominal_improvement = float(eval_cost_reduction)
+            else:
+                nominal_stat = evaluate_paper_nominal_pressure_policy(
+                    cfg, model, design, agent
                 )
-                / max(
-                    abs(nominal_baseline_stat["economic_cost_total"]), 1e-12
+                nominal_baseline_stat = evaluate_paper_nominal_pressure_policy(
+                    cfg, model, design, no_rl_policy
                 )
-            )
+                eval_nominal_improvement = float(
+                    100.0
+                    * (
+                        nominal_baseline_stat["economic_cost_total"]
+                        - nominal_stat["economic_cost_total"]
+                    )
+                    / max(
+                        abs(nominal_baseline_stat["economic_cost_total"]), 1e-12
+                    )
+                )
             eval_safe = hard_safety_passed(eval_stat)
             policy_candidates.append({
                 "episode": int(episode),
@@ -1655,12 +1840,14 @@ def main() -> None:
                 best_design = copy.deepcopy(design)
                 agent.save_actor(model_dir / "best_actor.pth")
                 agent.save_checkpoint(model_dir / "best_checkpoint.pth")
-                save_theta_design(model_dir / "best_theta.npz", best_design)
+                save_theta_design(
+                    model_dir / "best_theta.npz", best_design, training_rho_d
+                )
 
         if episode % cfg.save_every == 0 or episode == cfg.episodes:
             agent.save_actor(model_dir / "last_actor.pth")
             agent.save_checkpoint(model_dir / "last_checkpoint.pth")
-            save_theta_design(model_dir / "last_theta.npz", design)
+            save_theta_design(model_dir / "last_theta.npz", design, training_rho_d)
 
         logs.append({
             "episode": episode,
@@ -1672,8 +1859,7 @@ def main() -> None:
             "evaluation_theta_only_economic_cost_mean": eval_theta_only_cost,
             "evaluation_safe_sac_economic_cost_mean": eval_sac_cost,
             "evaluation_sac_incremental_cost_reduction_percent": eval_cost_reduction,
-            "evaluation_robust_sac_improvement_percent": eval_cost_reduction,
-            "evaluation_nominal_sac_improvement_percent": eval_nominal_improvement,
+            "evaluation_paper2016_sac_improvement_percent": eval_nominal_improvement,
             "evaluation_normalized_safe_performance_gap": eval_safe_gap,
             "safe_reference_cost": safe_reference_cost,
         })
@@ -1851,7 +2037,7 @@ def main() -> None:
     best_design = copy.deepcopy(design)
     agent.save_actor(model_dir / "best_actor.pth")
     agent.save_checkpoint(model_dir / "best_checkpoint.pth")
-    save_theta_design(model_dir / "best_theta.npz", design)
+    save_theta_design(model_dir / "best_theta.npz", design, training_rho_d)
     save_csv(
         cfg.output_dir / "final_checkpoint_audit.csv",
         list(candidate_audit[0].keys()),
@@ -1922,8 +2108,7 @@ def main() -> None:
     save_rollout_csv(cfg.output_dir / "evaluation_rollout.csv", rollout)
     save_rollout_csv(cfg.output_dir / "theta_only_rollout.csv", theta_only_rollout)
     save_rollout_csv(cfg.output_dir / "no_rl_rollout.csv", no_rl_rollout)
-    np.savez_compressed(
-        cfg.output_dir / "safety_design.npz",
+    safety_design_payload = dict(
         A=design.a,
         B=design.b,
         affine=design.affine,
@@ -1951,6 +2136,16 @@ def main() -> None:
         robust_input_lower=design.robust_input_lower,
         robust_input_upper=design.robust_input_upper,
         robust_region_scale=design.robust_region_scale,
+        minimum_residual_authority=np.asarray(
+            design.minimum_residual_authority
+        ),
+    )
+    if training_rho_d is not None:
+        safety_design_payload["training_rho_d"] = np.asarray(
+            float(training_rho_d)
+        )
+    np.savez_compressed(
+        cfg.output_dir / "safety_design.npz", **safety_design_payload
     )
 
     boundary = design.rpi_boundary
@@ -2098,40 +2293,50 @@ def main() -> None:
             for index in range(len(disturbance_map["normalized_w_est"]))
         ),
     )
-    adaptation_comparison, adaptation_summary = evaluate_disturbance_adaptation(
-        cfg, model, design, agent, no_rl_policy
-    )
-    save_csv(
-        cfg.output_dir / "disturbance_adaptation_comparison.csv",
-        [
-            "time_min", "F1", "X1", "T1", "T200",
-            "baseline_X2", "baseline_P2", "sac_X2", "sac_P2",
-            "baseline_P100", "baseline_F200", "sac_P100", "sac_F200",
-            "baseline_economic_cost", "sac_economic_cost",
-            "baseline_cumulative_economic_cost", "sac_cumulative_economic_cost",
-            "baseline_w_est_1", "baseline_w_est_2",
-            "sac_w_est_1", "sac_w_est_2",
-            "sac_residual_P100_normalized", "sac_residual_F200_normalized",
-        ],
-        (
+    if paper_main_experiment:
+        adaptation_comparison = None
+        adaptation_summary = {
+            "included_in_main_experiment": False,
+            "reason": (
+                "four-exogenous-disturbance robustness/adaptation belongs to "
+                "the separate rho_d applicability analysis"
+            ),
+        }
+    else:
+        adaptation_comparison, adaptation_summary = evaluate_disturbance_adaptation(
+            cfg, model, design, agent, no_rl_policy
+        )
+        save_csv(
+            cfg.output_dir / "disturbance_adaptation_comparison.csv",
             [
-                adaptation_comparison["time"][index],
-                *adaptation_comparison["disturbance"][index],
-                *adaptation_comparison["baseline_state"][index],
-                *adaptation_comparison["sac_state"][index],
-                *adaptation_comparison["baseline_control"][index],
-                *adaptation_comparison["sac_control"][index],
-                adaptation_comparison["baseline_cost"][index],
-                adaptation_comparison["sac_cost"][index],
-                adaptation_comparison["baseline_cumulative_cost"][index],
-                adaptation_comparison["sac_cumulative_cost"][index],
-                *adaptation_comparison["baseline_w_est"][index],
-                *adaptation_comparison["sac_w_est"][index],
-                *adaptation_comparison["sac_residual"][index],
-            ]
-            for index in range(len(adaptation_comparison["time"]))
-        ),
-    )
+                "time_min", "F1", "X1", "T1", "T200",
+                "baseline_X2", "baseline_P2", "sac_X2", "sac_P2",
+                "baseline_P100", "baseline_F200", "sac_P100", "sac_F200",
+                "baseline_economic_cost", "sac_economic_cost",
+                "baseline_cumulative_economic_cost", "sac_cumulative_economic_cost",
+                "baseline_w_est_1", "baseline_w_est_2",
+                "sac_w_est_1", "sac_w_est_2",
+                "sac_residual_P100_normalized", "sac_residual_F200_normalized",
+            ],
+            (
+                [
+                    adaptation_comparison["time"][index],
+                    *adaptation_comparison["disturbance"][index],
+                    *adaptation_comparison["baseline_state"][index],
+                    *adaptation_comparison["sac_state"][index],
+                    *adaptation_comparison["baseline_control"][index],
+                    *adaptation_comparison["sac_control"][index],
+                    adaptation_comparison["baseline_cost"][index],
+                    adaptation_comparison["sac_cost"][index],
+                    adaptation_comparison["baseline_cumulative_cost"][index],
+                    adaptation_comparison["sac_cumulative_cost"][index],
+                    *adaptation_comparison["baseline_w_est"][index],
+                    *adaptation_comparison["sac_w_est"][index],
+                    *adaptation_comparison["sac_residual"][index],
+                ]
+                for index in range(len(adaptation_comparison["time"]))
+            ),
+        )
     plot_learning(log_arrays, cfg.output_dir)
     plot_theta_learning(log_arrays, cfg.output_dir)
     plot_empirical_regret(log_arrays, cfg.output_dir)
@@ -2149,7 +2354,8 @@ def main() -> None:
     plot_economic_performance(rollout, safe_center_cost, cfg.output_dir)
     plot_feedback_components(rollout, cfg.output_dir)
     plot_sac_policy_map(policy_map, cfg.output_dir)
-    plot_disturbance_adaptation(adaptation_comparison, cfg.output_dir)
+    if adaptation_comparison is not None:
+        plot_disturbance_adaptation(adaptation_comparison, cfg.output_dir)
     plot_rl_comparison(
         cfg, rollout, theta_only_rollout, no_rl_rollout, cfg.output_dir
     )
@@ -2178,7 +2384,13 @@ def main() -> None:
     }
     rl_vs_no_rl = {
         "comparison_design": (
-            "paired seeds and identical hidden disturbances; safe_SAC uses "
+            (
+                "paired original Paper2016 state-shock scenarios under "
+                "identical nominal exogenous conditions; "
+                if paper_main_experiment else
+                "paired seeds and identical hidden disturbances; "
+            )
+            + "safe_SAC uses "
             "the same optimized fixed safety design as theta_only; only the "
             "SAC residual differs. no_RL uses the initial unoptimized design"
         ),
@@ -2213,47 +2425,9 @@ def main() -> None:
     evaluation_improvements = log_arrays[
         "evaluation_sac_incremental_cost_reduction_percent"
     ]
-    evaluation_improvements = evaluation_improvements[
-        np.isfinite(evaluation_improvements)
-    ]
-    early_count = min(20, len(training_returns))
-    late_count = min(20, len(training_returns))
-    early_return_mean = float(np.mean(training_returns[:early_count]))
-    late_return_mean = float(np.mean(training_returns[-late_count:]))
-    evaluation_window = min(5, len(evaluation_improvements))
-    training_trend_summary = {
-        "early_return_mean": early_return_mean,
-        "late_return_mean": late_return_mean,
-        "return_improvement_absolute": late_return_mean - early_return_mean,
-        "return_improvement_percent": float(
-            100.0 * (late_return_mean - early_return_mean)
-            / max(abs(early_return_mean), 1e-12)
-        ),
-        "positive_training_trend": bool(late_return_mean > early_return_mean),
-        "early_eval_sac_improvement": (
-            float(np.mean(evaluation_improvements[:evaluation_window]))
-            if evaluation_window else float("nan")
-        ),
-        "late_eval_sac_improvement": (
-            float(np.mean(evaluation_improvements[-evaluation_window:]))
-            if evaluation_window else float("nan")
-        ),
-        "best_eval_sac_improvement": (
-            float(np.max(evaluation_improvements))
-            if len(evaluation_improvements) else float("nan")
-        ),
-        "fraction_of_evaluations_positive": (
-            float(np.mean(evaluation_improvements > 0.0))
-            if len(evaluation_improvements) else float("nan")
-        ),
-        "final_5_eval_mean_improvement": (
-            float(np.mean(evaluation_improvements[-5:]))
-            if len(evaluation_improvements) else float("nan")
-        ),
-        "evaluation_source": (
-            "fixed-seed paired deterministic Hinf-RPI zero-residual versus SAC"
-        ),
-    }
+    training_trend_summary = summarize_training_trend(
+        training_returns, evaluation_improvements
+    )
     proposed_design_unchanged = bool(
         cfg.experiment_mode == "proposed"
         and np.array_equal(design.k, optimized_fixed_design.k)
@@ -2276,39 +2450,27 @@ def main() -> None:
         "experiment_mode": cfg.experiment_mode,
         "benchmark_profile": cfg.benchmark_profile,
         "dt_min": float(cfg.dt_min),
-        "alpha_max_certified": (
-            float(scan_result.alpha_max_certified)
-            if scan_result is not None else 1.0
+        "main_experiment_protocol": cfg.main_experiment_protocol,
+        "external_conditions": (
+            "nominal" if paper_main_experiment else "bounded_uncertainty"
         ),
+        "uses_rho_d_scaling": False if paper_main_experiment else True,
+        "training_disturbance_protocol": (
+            "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+            if paper_main_experiment
+            else f"{cfg.disturbance_mode}_exogenous_uncertainty"
+        ),
+        "paper2016_evaluation_disturbance_protocol": (
+            "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+        ),
+        "paper2016_state_shock_scaling": 1.0,
+        "paper2016_training_scenarios": list(
+            cfg.paper2016_training_scenarios
+        ),
+        "paper2016_shock_times_seconds": [0, 20, 40],
         "training_disturbance_half_range": np.asarray(
             cfg.disturbance_half_range, dtype=float
         ).tolist(),
-        "full_disturbance_formal_certified": (
-            bool(scan_result.full_disturbance_formal_certified)
-            if scan_result is not None else True
-        ),
-        "full_disturbance_all_corners_steady_feasible": (
-            bool(scan_result.corner_summary[
-                "full_disturbance_all_corners_steady_feasible"
-            ]) if scan_result is not None else None
-        ),
-        "max_required_P100": (
-            float(scan_result.corner_summary["max_required_P100"])
-            if scan_result is not None else float("nan")
-        ),
-        "max_required_F200": (
-            float(scan_result.corner_summary["max_required_F200"])
-            if scan_result is not None else float("nan")
-        ),
-        "min_required_P100": (
-            float(scan_result.corner_summary["min_required_P100"])
-            if scan_result is not None else float("nan")
-        ),
-        "min_required_F200": (
-            float(scan_result.corner_summary["min_required_F200"])
-            if scan_result is not None else float("nan")
-        ),
-        "full_disturbance_stress_test": full_disturbance_stress_summary,
         "safety_design_frozen_during_training": proposed_design_unchanged,
         "safety_design_frozen_during_evaluation": True,
         "actor_frozen_during_evaluation": True,
@@ -2511,17 +2673,42 @@ def main() -> None:
         "observation_includes_true_disturbance": False,
         "observation_includes_disturbance_estimate": True,
         "disturbance_is_applied_to_plant": True,
-        "disturbance_model": cfg.disturbance_mode,
-        "disturbance_hold_steps": int(cfg.disturbance_hold_steps),
+        "disturbance_model": (
+            "nominal_exogenous_plus_unscaled_paper2016_state_shocks"
+            if paper_main_experiment else cfg.disturbance_mode
+        ),
+        "disturbance_hold_steps": (
+            None if paper_main_experiment else int(cfg.disturbance_hold_steps)
+        ),
         "disturbance_estimate_ema": float(cfg.disturbance_estimate_ema),
         "observation_dimension": OBS_DIM,
         "episodes": cfg.episodes,
         "steps_per_episode": cfg.steps_per_episode,
         "total_interactions": cfg.episodes * cfg.steps_per_episode,
         "gradient_updates": training_gradient_updates,
-        "training_segment_steps": int(cfg.training_segment_steps),
+        "training_segment_steps": int(
+            cfg.steps_per_episode
+            if paper_main_experiment else cfg.training_segment_steps
+        ),
         "training_subtrajectories_per_episode": int(
-            np.ceil(cfg.steps_per_episode / max(cfg.training_segment_steps, 1))
+            1
+            if paper_main_experiment
+            else np.ceil(
+                cfg.steps_per_episode / max(cfg.training_segment_steps, 1)
+            )
+        ),
+        "paper2016_training_scenario_schedule": (
+            "seeded_balanced_random_three_episode_permutation_blocks"
+            if paper_main_experiment else "not_applicable"
+        ),
+        "paper2016_training_scenario_schedule_seed": (
+            int(cfg.seed + 201600) if paper_main_experiment else None
+        ),
+        "paper2016_training_scenario_counts": (
+            paper_training_scenario_counts if paper_main_experiment else None
+        ),
+        "paper2016_training_scenario_sequence": (
+            list(paper_training_schedule) if paper_main_experiment else None
         ),
         "theta_learning": {
             **final_theta_metrics,
@@ -2544,7 +2731,9 @@ def main() -> None:
             ),
             "safe_acceptance_gate": (
                 "all retained residuals in W_theta; stable A+BK; nonempty "
-                "tightened input/state sets and controlled-invariant set"
+                "tightened input/state sets and controlled-invariant set; "
+                "actual zero-residual verification QP feasible; nonzero "
+                "state-dependent residual authority at S center/vertices"
             ),
         },
         "legacy_2020_ablation_context": {
@@ -2610,6 +2799,20 @@ def main() -> None:
             "training_checkpoint_eligible": bool(
                 cfg.benchmark_profile == "zanon2016"
                 and cfg.experiment_mode == "proposed"
+            ),
+            "training_disturbance_protocol": (
+                "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+                if paper_main_experiment
+                else f"{cfg.disturbance_mode}_exogenous_uncertainty"
+            ),
+            "evaluation_disturbance_protocol": (
+                "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+            ),
+            "uses_rho_d_scaling_during_training": False,
+            "uses_rho_d_scaling_during_evaluation": False,
+            "rho_d_scope": (
+                "separate four-exogenous-disturbance robustness/applicability "
+                "analysis; excluded from the Paper2016 fair comparison"
             ),
         },
         "training_seconds": time.time() - start,
@@ -2749,6 +2952,12 @@ def main() -> None:
         ),
         "disturbance_polytope_vertex_count": int(len(design.w_vertices)),
         "qp_intervention_tolerance_normalized": cfg.qp_intervention_tolerance,
+        "qp_min_residual_authority_required": float(
+            cfg.qp_min_residual_authority
+        ),
+        "qp_min_residual_authority_certified": float(
+            design.minimum_residual_authority
+        ),
         "reward_penalty_weights": {
             "projection_squared": cfg.projection_penalty_weight,
             "feasible_action_mapping_squared": (

@@ -456,6 +456,9 @@ class OnlineThetaLearner:
             "residual_membership_passed": False,
             "safe_center_feasible": False,
             "v_ref_feasible": False,
+            "verification_qp_feasible": False,
+            "residual_authority_feasible": False,
+            "minimum_residual_authority": 0.0,
             "feasible": False,
             "failure_reason": "no feasible M/K seed",
         }
@@ -512,11 +515,16 @@ class OnlineThetaLearner:
                         "hinf_feasible", "rpi_feasible",
                         "x_tightening_feasible", "u_tightening_feasible",
                         "invariant_feasible", "safe_center_feasible",
-                        "v_ref_feasible",
+                        "v_ref_feasible", "verification_qp_feasible",
+                        "residual_authority_feasible",
                     ):
                         diagnostic[key] = bool(
                             diagnostic[key] or gate.get(key, False)
                         )
+                    diagnostic["minimum_residual_authority"] = max(
+                        float(diagnostic["minimum_residual_authority"]),
+                        float(gate.get("minimum_residual_authority", 0.0)),
+                    )
                     continue
                 rebuilt = candidate
                 diagnostic.update(gate)
@@ -529,7 +537,8 @@ class OnlineThetaLearner:
                     "hinf_feasible", "rpi_feasible",
                     "x_tightening_feasible", "u_tightening_feasible",
                     "invariant_feasible", "safe_center_feasible",
-                    "v_ref_feasible",
+                    "v_ref_feasible", "verification_qp_feasible",
+                    "residual_authority_feasible",
                 )
                 if not bool(diagnostic[key])
             ]
@@ -584,6 +593,10 @@ class OnlineThetaLearner:
             np.all(refined.v_ref >= refined.u_lower_tight - tolerance)
             and np.all(refined.v_ref <= refined.u_upper_tight + tolerance)
         )
+        verification_qp_feasible = bool(
+            refined.minimum_residual_authority
+            >= float(self.cfg.qp_min_residual_authority) - tolerance
+        )
         feasible = bool(
             s_subset_tightened
             and s_plus_z_contained
@@ -591,6 +604,7 @@ class OnlineThetaLearner:
             and residual_membership
             and safe_center_feasible
             and v_ref_feasible
+            and verification_qp_feasible
         )
         diagnostic.update({
             "s_subset_tightened": s_subset_tightened,
@@ -599,6 +613,11 @@ class OnlineThetaLearner:
             "residual_membership_passed": residual_membership,
             "safe_center_feasible": safe_center_feasible,
             "v_ref_feasible": v_ref_feasible,
+            "verification_qp_feasible": verification_qp_feasible,
+            "residual_authority_feasible": verification_qp_feasible,
+            "minimum_residual_authority": float(
+                refined.minimum_residual_authority
+            ),
             "rpi_area": _polygon_area(
                 refined.rpi_boundary, self.cfg.state_scale
             ),
@@ -672,6 +691,8 @@ class OnlineThetaLearner:
                     "scale={scale:.9g}: hinf={hinf}, rpi={rpi}, "
                     "x_tight={x_tight}, u_tight={u_tight}, "
                     "invariant={invariant}, v_ref={v_ref}, "
+                    "verification_qp={verification_qp}, "
+                    "residual_authority={authority:.6g}, "
                     "max_residual_norm={residual:.6g}".format(
                         scale=float(row["scale"]),
                         hinf=bool(row.get("hinf_feasible", False)),
@@ -680,6 +701,12 @@ class OnlineThetaLearner:
                         u_tight=bool(row.get("u_tightening_feasible", False)),
                         invariant=bool(row.get("invariant_feasible", False)),
                         v_ref=bool(row.get("v_ref_feasible", False)),
+                        verification_qp=bool(
+                            row.get("verification_qp_feasible", False)
+                        ),
+                        authority=float(
+                            row.get("minimum_residual_authority", 0.0)
+                        ),
                         residual=float(row["max_residual_norm"]),
                     )
                 )
@@ -969,6 +996,9 @@ class OnlineThetaLearner:
             "theta_M_angle_deg": float(np.rad2deg(design.theta_m_angle)),
             "theta_td_error_abs_mean": float(self.last_td_error),
             "theta_rpi_area": float(rpi_area),
+            "theta_minimum_residual_authority": float(
+                design.minimum_residual_authority
+            ),
             "theta_rpi_area_change_percent": float(
                 100.0 * (rpi_area - self.initial_rpi_area)
                 / max(self.initial_rpi_area, 1e-12)

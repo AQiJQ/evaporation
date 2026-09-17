@@ -16,7 +16,7 @@ from .theta_learning import OnlineThetaLearner
 
 
 SCAN_FIELDS = (
-    "phase", "alpha", "disturbance_half_F1", "disturbance_half_X1",
+    "phase", "rho_d", "disturbance_half_F1", "disturbance_half_X1",
     "disturbance_half_T1", "disturbance_half_T200", "hinf_feasible",
     "rpi_feasible", "x_tight_feasible", "u_tight_feasible",
     "invariant_feasible", "v_ref_feasible", "formal_certification_passed",
@@ -29,7 +29,7 @@ SCAN_FIELDS = (
 
 @dataclass
 class DisturbanceScaleScanResult:
-    alpha_max_certified: float
+    rho_d_max_certified: float
     full_disturbance_formal_certified: bool
     rows: list[dict[str, Any]]
     selected_cfg: ExperimentConfig
@@ -217,7 +217,7 @@ def _attempt_alpha(
             if bool(row.get("feasible", False))
         )
         row = {
-            "phase": phase, "alpha": float(alpha),
+            "phase": phase, "rho_d": float(alpha),
             "disturbance_half_F1": float(alpha * full[0]),
             "disturbance_half_X1": float(alpha * full[1]),
             "disturbance_half_T1": float(alpha * full[2]),
@@ -253,7 +253,7 @@ def _attempt_alpha(
             [] if learner is None else learner.robust_region_search_diagnostics
         )
         row = {
-            "phase": phase, "alpha": float(alpha),
+            "phase": phase, "rho_d": float(alpha),
             "disturbance_half_F1": float(alpha * full[0]),
             "disturbance_half_X1": float(alpha * full[1]),
             "disturbance_half_T1": float(alpha * full[2]),
@@ -288,25 +288,25 @@ def _write_scan_plot(path: Path, rows: list[dict[str, Any]]) -> None:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    ordered = sorted(rows, key=lambda row: float(row["alpha"]))
-    alpha = np.asarray([row["alpha"] for row in ordered], dtype=float)
+    ordered = sorted(rows, key=lambda row: float(row["rho_d"]))
+    rho_d = np.asarray([row["rho_d"] for row in ordered], dtype=float)
     rpi = np.asarray([row["rpi_area"] for row in ordered], dtype=float)
     invariant = np.asarray([row["invariant_area"] for row in ordered], dtype=float)
     feasible = np.asarray([
         float(bool(row["formal_certification_passed"])) for row in ordered
     ])
     fig, axes = plt.subplots(3, 1, figsize=(8.4, 8.2), sharex=True)
-    axes[0].plot(alpha, rpi, "o-", color="#2f6fb3")
+    axes[0].plot(rho_d, rpi, "o-", color="#2f6fb3")
     axes[0].set_ylabel("RPI area")
-    axes[1].plot(alpha, invariant, "o-", color="#3b8f5a")
+    axes[1].plot(rho_d, invariant, "o-", color="#3b8f5a")
     axes[1].set_ylabel("Invariant area")
-    axes[2].step(alpha, feasible, where="mid", color="#a84b3c")
-    axes[2].scatter(alpha, feasible, color="#a84b3c")
+    axes[2].step(rho_d, feasible, where="mid", color="#a84b3c")
+    axes[2].scatter(rho_d, feasible, color="#a84b3c")
     axes[2].set_yticks([0, 1], ["infeasible", "certified"])
-    axes[2].set_xlabel("Disturbance scale alpha")
+    axes[2].set_xlabel("Disturbance scaling factor ρ_d")
     for axis in axes:
         axis.grid(True, color="#dddddd", linewidth=0.6)
-    fig.suptitle("Independent disturbance-envelope certification")
+    fig.suptitle("Certified external-disturbance envelope versus ρ_d")
     fig.tight_layout()
     fig.savefig(path, dpi=180)
     plt.close(fig)
@@ -333,18 +333,18 @@ def run_disturbance_scale_scan(
         if objects is not None:
             feasible_designs[alpha] = objects
         print(
-            f"disturbance alpha={alpha:.6g}: "
+            f"external-disturbance rho_d={alpha:.6g}: "
             f"certified={bool(row['formal_certification_passed'])}",
             flush=True,
         )
     if not feasible_designs:
-        raise RuntimeError("No disturbance scale, including alpha=0, was certified")
+        raise RuntimeError("No external-disturbance scale, including rho_d=0, was certified")
 
     lower = max(feasible_designs)
     upper_candidates = [
-        float(row["alpha"]) for row in rows
+        float(row["rho_d"]) for row in rows
         if not bool(row["formal_certification_passed"])
-        and float(row["alpha"]) > lower
+        and float(row["rho_d"]) > lower
     ]
     if upper_candidates:
         upper = min(upper_candidates)
@@ -353,7 +353,7 @@ def run_disturbance_scale_scan(
             row, objects = _attempt_alpha(cfg, middle, "bisection")
             rows.append(row)
             print(
-                f"disturbance alpha={middle:.9g}: "
+                f"external-disturbance rho_d={middle:.9g}: "
                 f"certified={bool(row['formal_certification_passed'])}",
                 flush=True,
             )
@@ -363,11 +363,11 @@ def run_disturbance_scale_scan(
                 lower = middle
                 feasible_designs[middle] = objects
 
-    alpha_max = max(feasible_designs)
-    selected = feasible_designs[alpha_max]
-    full_row = min(rows, key=lambda row: abs(float(row["alpha"]) - 1.0))
+    rho_d_max = max(feasible_designs)
+    selected = feasible_designs[rho_d_max]
+    full_row = min(rows, key=lambda row: abs(float(row["rho_d"]) - 1.0))
     full_certified = bool(
-        abs(float(full_row["alpha"]) - 1.0) <= 1e-12
+        abs(float(full_row["rho_d"]) - 1.0) <= 1e-12
         and full_row["formal_certification_passed"]
     )
     with (output_dir / "disturbance_scale_scan.csv").open(
@@ -375,11 +375,18 @@ def run_disturbance_scale_scan(
     ) as stream:
         writer = csv.DictWriter(stream, fieldnames=list(SCAN_FIELDS))
         writer.writeheader()
-        writer.writerows(sorted(rows, key=lambda row: float(row["alpha"])))
+        writer.writerows(sorted(rows, key=lambda row: float(row["rho_d"])))
     _write_scan_plot(output_dir / "disturbance_scale_scan.png", rows)
-    save_safety_design(output_dir / "alpha_max_certified_design.npz", selected[3])
+    save_safety_design(output_dir / "rho_d_max_certified_design.npz", selected[3])
     summary = {
-        "alpha_max_certified": float(alpha_max),
+        "experiment_type": "external_uncertainty_applicability_analysis",
+        "disturbance_variables": ["F1", "X1", "T1", "T200"],
+        "full_half_range": np.asarray(
+            cfg.disturbance_full_half_range, dtype=float
+        ).tolist(),
+        "rho_d_max_certified": float(rho_d_max),
+        "alpha_max_certified_legacy": float(rho_d_max),
+        "related_to_paper_state_shock_scaling": False,
         "full_disturbance_formal_certified": full_certified,
         **corner_summary,
     }
@@ -388,7 +395,7 @@ def run_disturbance_scale_scan(
     ) as stream:
         json.dump(summary, stream, indent=2, ensure_ascii=False)
     return DisturbanceScaleScanResult(
-        alpha_max_certified=float(alpha_max),
+        rho_d_max_certified=float(rho_d_max),
         full_disturbance_formal_certified=full_certified,
         rows=rows,
         selected_cfg=selected[0], selected_model=selected[1],
@@ -403,7 +410,7 @@ def run_full_disturbance_stress_test(
     design: Any,
     output_dir: Path,
 ) -> dict[str, Any]:
-    """Evaluate the certified controller at alpha=1 without claiming a guarantee."""
+    """Evaluate the certified controller at rho_d=1 without claiming a guarantee."""
     controller = SafeController(cfg, model, design)
     state = cfg.safe_center_state.copy()
     controller.reset(state)
@@ -462,7 +469,7 @@ def run_full_disturbance_stress_test(
         axis.grid(True, color="#dddddd", linewidth=0.6)
     axes[-1, 0].set_xlabel("Time [min]")
     axes[-1, 1].set_xlabel("Time [min]")
-    fig.suptitle("Out-of-certified-envelope stress test (full alpha=1)")
+    fig.suptitle("Out-of-certified-envelope stress test (full ρ_d=1)")
     fig.tight_layout()
     fig.savefig(output_dir / "full_disturbance_stress_test.png", dpi=180)
     plt.close(fig)

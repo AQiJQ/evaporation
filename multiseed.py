@@ -1,4 +1,4 @@
-"""Sequential three-seed launcher and aggregate report for evaporator safe-SAC."""
+"""Formal 500 x 300 x 3 Paper2016 launcher and aggregate report."""
 from __future__ import annotations
 
 import argparse
@@ -17,16 +17,19 @@ T_975_DF2 = 4.302652729911275
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Train evaporator safe-SAC on three independent seeds"
+        description=(
+            "Run the formal Paper2016 nominal-exogenous, unscaled-state-shock "
+            "safe-SAC comparison on three independent seeds"
+        )
     )
-    parser.add_argument("--episodes", type=int, default=300)
-    parser.add_argument("--steps", type=int, default=2000)
+    parser.add_argument("--episodes", type=int, default=500)
+    parser.add_argument("--steps", type=int, default=300)
     parser.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     parser.add_argument("--device", default="auto")
     parser.add_argument(
         "--benchmark-profile",
         choices=("default", "zanon2016"),
-        default="default",
+        default="zanon2016",
     )
     parser.add_argument(
         "--experiment-mode",
@@ -47,9 +50,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path(
-            "evaporation_safe_sac/outputs_state_dependent_safe_sac_300x2000"
-        ),
+        default=Path("evaporation_safe_sac/outputs_paper2016_main_500x300"),
     )
     return parser.parse_args()
 
@@ -71,7 +72,6 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     gap_curves: list[np.ndarray] = []
     reduction_curves: list[np.ndarray] = []
     nominal_improvement_curves: list[np.ndarray] = []
-    robust_improvement_curves: list[np.ndarray] = []
     episode_axis: np.ndarray | None = None
     for seed in seeds:
         seed_dir = root / f"seed_{seed}"
@@ -225,13 +225,13 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             float(row["evaluation_sac_incremental_cost_reduction_percent"])
             for row in records
         ])[mask])
+        paper_improvement_key = (
+            "evaluation_paper2016_sac_improvement_percent"
+            if "evaluation_paper2016_sac_improvement_percent" in records[0]
+            else "evaluation_nominal_sac_improvement_percent"
+        )
         nominal_improvement_curves.append(np.asarray([
-            float(row["evaluation_nominal_sac_improvement_percent"])
-            for row in records
-        ])[mask])
-        robust_improvement_curves.append(np.asarray([
-            float(row["evaluation_robust_sac_improvement_percent"])
-            for row in records
+            float(row[paper_improvement_key]) for row in records
         ])[mask])
 
     header = list(rows[0])
@@ -244,7 +244,14 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
 
     numeric_keys = [key for key in header if key != "seed"]
     aggregate = {
-        "protocol": "three independent trainings; paired final-theta SAC/no-SAC evaluation",
+        "protocol": (
+            "Paper2016 original nominal exogenous conditions and unscaled "
+            "state shocks; three independent trainings with paired final-theta "
+            "SAC/no-SAC evaluation"
+        ),
+        "benchmark_profile": "zanon2016",
+        "uses_rho_d_scaling": False,
+        "rho_d_scope": "separate four-exogenous-disturbance applicability analysis only",
         "seeds": seeds,
         "runs": rows,
         "mean": {
@@ -279,6 +286,7 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
         window = min(20, len(values))
         early = float(np.mean(values[:window]))
         late = float(np.mean(values[-window:]))
+        enough_episodes_for_trend = len(values) >= 40
         curve_summaries.append({
             "seed": int(seed),
             "first_20_mean": early,
@@ -293,7 +301,14 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "return_improvement_percent": float(
                 100.0 * (late - early) / max(abs(early), 1e-12)
             ),
-            "positive_training_trend": bool(late > early),
+            "training_trend_status": (
+                "positive" if enough_episodes_for_trend and late > early
+                else "non_positive" if enough_episodes_for_trend
+                else "insufficient_episodes"
+            ),
+            "positive_training_trend": (
+                bool(late > early) if enough_episodes_for_trend else None
+            ),
             "episodes_in_window": int(window),
         })
     early_values = np.asarray([
@@ -304,11 +319,21 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     ])
     early_mean = float(np.mean(early_values))
     late_mean = float(np.mean(late_values))
+    enough_episodes_for_trend = bool(
+        curve_summaries
+        and all(item["episodes_in_window"] == 20 for item in curve_summaries)
+        and len(raw_reward_curves[0]) >= 40
+    )
     learning_summary = {
         "seeds": seeds,
         "moving_average_episodes": 20,
         "per_seed": curve_summaries,
         "aggregate": {
+            "training_trend_status": (
+                "positive" if enough_episodes_for_trend and late_mean > early_mean
+                else "non_positive" if enough_episodes_for_trend
+                else "insufficient_episodes"
+            ),
             "first_20_mean": early_mean,
             "last_20_mean": late_mean,
             "absolute_improvement": late_mean - early_mean,
@@ -321,11 +346,15 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
             "return_improvement_percent": float(
                 100.0 * (late_mean - early_mean) / max(abs(early_mean), 1e-12)
             ),
-            "positive_training_trend": bool(late_mean > early_mean),
+            "positive_training_trend": (
+                bool(late_mean > early_mean)
+                if enough_episodes_for_trend else None
+            ),
         },
         "interpretation": (
-            "Unmodified episode cumulative training return; the trend flag is "
-            "diagnostic and is never forced to be positive."
+            "Unmodified episode cumulative training return. At least 40 "
+            "episodes are required before comparing disjoint first/last-20 "
+            "windows; shorter runs are labelled insufficient_episodes."
         ),
     }
     with (root / "learning_curve_summary.json").open(
@@ -416,20 +445,14 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     plot_evaluation_curves(
         reduction_curves,
         "SAC economic improvement over H∞–RPI [%]",
-        "Paired deterministic SAC economic improvement",
+        "Paper2016 unscaled state-shock SAC economic improvement",
         "multi_seed_sac_economic_improvement_curve.png",
     )
     plot_evaluation_curves(
         nominal_improvement_curves,
         "SAC economic improvement over H∞–RPI [%]",
-        "Nominal paper-shock SAC economic improvement",
-        "multi_seed_nominal_economic_improvement.png",
-    )
-    plot_evaluation_curves(
-        robust_improvement_curves,
-        "SAC economic improvement over H∞–RPI [%]",
-        "Certified-disturbance SAC economic improvement",
-        "multi_seed_robust_economic_improvement.png",
+        "Paper2016 unscaled state-shock SAC economic improvement",
+        "multi_seed_paper2016_economic_improvement.png",
     )
 
 
@@ -444,7 +467,55 @@ def main() -> None:
         raise ValueError("--seeds must contain distinct integers")
     if 42 not in args.seeds:
         raise ValueError("The requested three-seed protocol must include seed 42")
+    if args.benchmark_profile != "zanon2016":
+        raise ValueError(
+            "The formal multiseed entrypoint is reserved for the zanon2016 "
+            "original-scenario comparison"
+        )
+    if args.episodes != 500 or args.steps != 300:
+        raise ValueError(
+            "The formal multiseed protocol requires exactly --episodes 500 "
+            "--steps 300; use evaporation.train for short debug runs"
+        )
+    if tuple(args.seeds) != DEFAULT_SEEDS:
+        raise ValueError(
+            "The formal protocol requires --seeds 42 2027 314159 in that order"
+        )
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    with (args.output_dir / "formal_protocol.json").open(
+        "w", encoding="utf-8"
+    ) as stream:
+        json.dump(
+            {
+                "benchmark_profile": "zanon2016",
+                "episodes": 500,
+                "steps_per_episode": 300,
+                "seeds": list(DEFAULT_SEEDS),
+                "external_conditions": "nominal",
+                "state_shocks": {
+                    "scenarios": [
+                        "pressure_positive",
+                        "pressure_negative",
+                        "concentration_positive",
+                    ],
+                    "times_seconds": [0, 20, 40],
+                    "scaling": 1.0,
+                },
+                "training_scenario_schedule": (
+                    "seeded balanced random permutation in three-episode "
+                    "blocks; scenario counts differ by at most one"
+                ),
+                "evaluation_horizon_seconds_per_scenario": 300,
+                "uses_rho_d_scaling": False,
+                "rho_d_scope": (
+                    "separate four-exogenous-disturbance robustness/"
+                    "applicability analysis only"
+                ),
+            },
+            stream,
+            indent=2,
+            ensure_ascii=False,
+        )
     for seed in args.seeds:
         seed_dir = args.output_dir / f"seed_{seed}"
         command = [

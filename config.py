@@ -10,8 +10,8 @@ import numpy as np
 class ExperimentConfig:
     # Reproducibility and requested training length.
     seed: int = 42
-    episodes: int = 300
-    steps_per_episode: int = 2000
+    episodes: int = 500
+    steps_per_episode: int = 300
     benchmark_profile: str = "default"
     dt_min: float = 0.20
     # ``proposed`` freezes an offline-optimized safety design during SAC.
@@ -43,8 +43,9 @@ class ExperimentConfig:
         default_factory=lambda: np.array([0.5, 0.5, 4.0, 5.0], dtype=float)
     )
     # Immutable reference envelope used by the independent certification scan.
-    # ``disturbance_half_range`` is replaced by alpha_max times this vector for
-    # the formal proposed training distribution.
+    # ``disturbance_half_range`` is replaced by rho_d_max times this vector for
+    # the formal proposed training distribution.  rho_d scales only exogenous
+    # [F1, X1, T1, T200] uncertainty, never the 2016 plant-state shocks.
     disturbance_full_half_range: np.ndarray = field(
         default_factory=lambda: np.array([0.5, 0.5, 4.0, 5.0], dtype=float)
     )
@@ -55,9 +56,9 @@ class ExperimentConfig:
     disturbance_scale_bisection_iterations: int = 8
     disturbance_scale_scan_seed: int = 420016
     disturbance_scale_random_samples: int = 2000
-    # One independent offline M/K design pass is run for every alpha before
+    # One independent offline M/K design pass is run for every rho_d before
     # robust-region certification.  The resulting gain is never warm-started
-    # from a neighbouring alpha or from an earlier scan artifact.
+    # from a neighbouring rho_d or from an earlier scan artifact.
     disturbance_scale_static_outer_iterations: int = 1
     disturbance_scale_k_max_iterations: int = 8
     disturbance_scale_m_angle_max_degrees: float = 8.0
@@ -66,6 +67,13 @@ class ExperimentConfig:
     disturbance_mode: str = "piecewise_constant"
     disturbance_hold_steps: int = 50
     disturbance_estimate_ema: float = 0.8
+    # The formal Zanon2016 main experiment uses only nominal exogenous
+    # conditions and the paper's unscaled instantaneous plant-state shocks.
+    # rho_d-scaled exogenous uncertainty is a separate disturbance_scan CLI.
+    main_experiment_protocol: str = "default_exogenous_uncertainty"
+    paper2016_training_scenarios: tuple[str, ...] = (
+        "pressure_positive", "pressure_negative", "concentration_positive",
+    )
 
     # Paper constraints: (25,40) <= (X2,P2) <= (100,80), 100 <= u <= 400.
     state_lower: np.ndarray = field(
@@ -208,6 +216,11 @@ class ExperimentConfig:
     residual_action_scale: np.ndarray = field(
         default_factory=lambda: np.array([0.12, 0.10], dtype=float)
     )
+    # The safe projection reserves this fraction of the declared normalized
+    # residual box before the actor command is applied.  This prevents a
+    # feasible v_base projection from landing on a QP facet and silently
+    # collapsing all residual authority to zero.
+    qp_min_residual_authority: float = 0.01
     residual_parameterization: str = "state_dependent_box"
     proposed_nominal_controller: str = "safe_center_tracking"
     # The evaporation comparison in Zanon-Gros (2020) uses gamma=0.99.
@@ -257,9 +270,9 @@ class ExperimentConfig:
     # configured fractions of the complete certified invariant set.
     reset_within_disturbance_identification_window: bool = False
     training_boundary_start_probability: float = 0.30
-    # Long 2000-step episodes otherwise spend almost all samples near one
-    # steady state.  Treat every segment as a replay-terminal subtrajectory and
-    # safely resample inside S, while keeping the requested episode accounting.
+    # Non-paper long rollouts can otherwise spend most samples near one steady
+    # state. Treat every segment as a replay-terminal subtrajectory and safely
+    # resample inside S; the Paper2016 main protocol does not use this reset.
     training_segment_steps: int = 200
     disturbance_adaptation_steps: int = 2000
     disturbance_adaptation_switch_steps: int = 250
@@ -284,7 +297,7 @@ class ExperimentConfig:
 
     # Keep hidden-disturbance results separate from earlier preview experiments.
     output_dir: Path = Path(
-        "evaporation_safe_sac/outputs_state_dependent_safe_sac_300x2000/seed_42"
+        "evaporation_safe_sac/outputs_state_dependent_safe_sac_500x300/seed_42"
     )
 
     # Zanon, Gros & Diehl (2016) formal-comparison protocol.  The TuneMPC
@@ -304,6 +317,13 @@ class ExperimentConfig:
         if self.benchmark_profile == "zanon2016":
             # Model derivatives are expressed per minute, so 1 s = 1/60 min.
             self.dt_min = 1.0 / 60.0
+            self.main_experiment_protocol = "paper2016_original_state_shocks"
+            self.disturbance_half_range = np.zeros(4, dtype=float)
+            # The certified Zanon2016 geometry supports a materially useful
+            # residual box at every checked invariant vertex (the diagnosed
+            # optimized design has >15% maximum authority).  Reserve 5% for
+            # exploration instead of using the more conservative generic 1%.
+            self.qp_min_residual_authority = 0.05
             # The robust tube is local to the interior safety anchor.  Keep the
             # paper economic steady state separately for Experiment I, while
             # eliminating a persistent affine mismatch caused by linearizing

@@ -28,6 +28,18 @@ from .paper2016_adapter import (
 
 SCENARIOS = ("pressure_positive", "pressure_negative", "concentration_positive")
 SHOCK_SECONDS = (0, 20, 40)
+PAPER2016_DISTURBANCE_PROTOCOL = {
+    "external_conditions": "nominal",
+    "state_shock_scaling": 1.0,
+    "uses_rho_d_scaling": False,
+    "pressure_positive_shock_kpa": 1.0,
+    "pressure_negative_shock_kpa": -1.0,
+    "concentration_positive_shock_percentage_point": 1.0,
+    "shock_times_seconds": list(SHOCK_SECONDS),
+    "evaluation_disturbance_protocol": (
+        "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+    ),
+}
 PAPER_REFERENCE_G = {
     "pressure_positive": {
         "Normal_Tracking_MPC": -3.2e-4,
@@ -79,6 +91,35 @@ def economic_metric_g(
     return float((empc_cumulative_cost - method_cumulative_cost) / denominator)
 
 
+def _checkpoint_training_rho_d(path: Path | None) -> float | None:
+    """Read training metadata without making it part of paper evaluation."""
+    if path is None or not path.exists():
+        return None
+    with np.load(path) as saved:
+        for key in (
+            "training_rho_d", "rho_d_max_certified", "alpha_max_certified"
+        ):
+            if key in saved.files:
+                return float(saved[key])
+    for candidate in (
+        path.parent / "metrics.json",
+        path.parent.parent / "metrics.json",
+    ):
+        if not candidate.exists():
+            continue
+        with candidate.open(encoding="utf-8") as stream:
+            metadata = json.load(stream)
+        value = metadata.get(
+            "training_rho_d",
+            metadata.get(
+                "rho_d_max_certified", metadata.get("alpha_max_certified")
+            ),
+        )
+        if value is not None:
+            return float(value)
+    return None
+
+
 def _rollout(
     cfg: ExperimentConfig,
     model: EvaporatorModel,
@@ -87,6 +128,9 @@ def _rollout(
     reset: Callable[[np.ndarray], None] | None = None,
 ) -> dict[str, Any]:
     state = cfg.paper2016_steady_state.copy()
+    external_conditions = np.asarray(
+        cfg.disturbance_nominal, dtype=float
+    ).copy()
     if reset is not None:
         reset(state)
     rows: list[dict[str, Any]] = []
@@ -97,7 +141,7 @@ def _rollout(
         control, info = action(state.copy())
         solve_times.append(1000.0 * (time.perf_counter() - start))
         control = np.asarray(control, dtype=float).reshape(-1)
-        cost = model.economic_cost(state, control, cfg.disturbance_nominal)
+        cost = model.economic_cost(state, control, external_conditions)
         state_violation = bool(
             np.any(state < cfg.state_lower - 1e-9)
             or np.any(state > cfg.state_upper + 1e-9)
@@ -115,7 +159,7 @@ def _rollout(
             "input_violation": input_violation,
             **info,
         })
-        state = model.step(state, control, cfg.disturbance_nominal)
+        state = model.step(state, control, external_conditions)
     costs = np.asarray([row["economic_cost"] for row in rows])
     times = np.asarray(solve_times)
     return {
@@ -351,6 +395,7 @@ def main() -> None:
     cfg = ExperimentConfig(benchmark_profile="zanon2016")
     model = EvaporatorModel(cfg)
     diagnostics = dependency_diagnostics(args.tunempc_path)
+    training_rho_d = _checkpoint_training_rho_d(args.safety_design)
     protocol = {
         "benchmark_profile": cfg.benchmark_profile,
         "dt_seconds": cfg.dt_min * 60.0,
@@ -365,6 +410,12 @@ def main() -> None:
         "K_updates_during_evaluation": 0,
         "M_updates_during_evaluation": 0,
         "W_updates_during_evaluation": 0,
+        **PAPER2016_DISTURBANCE_PROTOCOL,
+        "training_rho_d": training_rho_d,
+        "training_disturbance_protocol": (
+            "certified_piecewise_constant_exogenous_uncertainty"
+            if training_rho_d is not None else "not_applicable_or_not_provided"
+        ),
         "tunempc": diagnostics,
     }
     with (args.output_dir / "paper2016_protocol.json").open("w", encoding="utf-8") as stream:

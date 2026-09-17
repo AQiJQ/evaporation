@@ -1,0 +1,28 @@
+{
+  "benchmark_profile": "zanon2016",
+  "episodes": 300,
+  "steps_per_episode": 2000,
+  "seeds": [
+    42,
+    2027,
+    314159
+  ],
+  "external_conditions": "nominal",
+  "state_shocks": {
+    "scenarios": [
+      "pressure_positive",
+      "pressure_negative",
+      "concentration_positive"
+    ],
+    "times_seconds": [
+      0,
+      20,
+      40
+    ],
+    "scaling": 1.0
+  },
+  "training_scenario_schedule": "episode round-robin; 100 episodes per scenario",
+  "evaluation_horizon_seconds_per_scenario": 300,
+  "uses_rho_d_scaling": false,
+  "rho_d_scope": "separate four-exogenous-disturbance robustness/applicability analysis only"
+}
