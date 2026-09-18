@@ -1,0 +1,41 @@
+{
+  "benchmark_profile": "zanon2016",
+  "episodes": 500,
+  "steps_per_episode": 300,
+  "seeds": [
+    42,
+    2027,
+    314159
+  ],
+  "external_conditions": "nominal",
+  "state_shocks": {
+    "scenarios": [
+      "pressure_positive",
+      "pressure_negative",
+      "concentration_positive"
+    ],
+    "times_seconds": [
+      0,
+      20,
+      40
+    ],
+    "scaling": 1.0
+  },
+  "training_scenario_schedule": "seeded balanced random permutation in three-episode blocks; scenario counts differ by at most one",
+  "evaluation_horizon_seconds_per_scenario": 300,
+  "residual_action_scale": [
+    0.36,
+    0.3
+  ],
+  "reward_fix": {
+    "scope": "zanon2016 AND proposed AND paper2016_original_state_shocks",
+    "excluded_from_replay_reward_only": [
+      "rpi_violation_event_penalty",
+      "rpi_excess_penalty"
+    ],
+    "rpi_monitoring_and_formal_audit_retained": true
+  },
+  "learned_checkpoint_requirement": "global_step >= warmup_steps; pre-warmup checkpoints are diagnostic only",
+  "uses_rho_d_scaling": false,
+  "rho_d_scope": "separate four-exogenous-disturbance robustness/applicability analysis only"
+}

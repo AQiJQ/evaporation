@@ -456,6 +456,440 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     )
 
 
+def _metric_summary(values: list[float], seeds: list[int]) -> dict[str, object]:
+    """Five-number cross-seed summary plus a two-sided Student-t 95% CI."""
+    pairs = [
+        (int(seed), float(value)) for seed, value in zip(seeds, values)
+        if value is not None and np.isfinite(float(value))
+    ]
+    if not pairs:
+        return {
+            "n": 0, "mean": None, "sample_std": None,
+            "ci95_lower": None, "ci95_upper": None,
+            "ci95_half_width": None, "min": None, "max": None,
+            "values_by_seed": {},
+        }
+    array = np.asarray([value for _, value in pairs], dtype=float)
+    mean = float(np.mean(array))
+    std = float(np.std(array, ddof=1)) if len(array) > 1 else 0.0
+    if len(array) == 3:
+        half_width = float(T_975_DF2 * std / np.sqrt(3.0))
+    elif len(array) == 2:
+        half_width = float(12.706204736432095 * std / np.sqrt(2.0))
+    else:
+        half_width = None
+    return {
+        "n": int(len(array)),
+        "mean": mean,
+        "sample_std": std,
+        "ci95_lower": None if half_width is None else mean - half_width,
+        "ci95_upper": None if half_width is None else mean + half_width,
+        "ci95_half_width": half_width,
+        "min": float(np.min(array)),
+        "max": float(np.max(array)),
+        "values_by_seed": {str(seed): value for seed, value in pairs},
+    }
+
+
+def _write_formal_aggregate(root: Path, seeds: list[int]) -> None:
+    """Aggregate only fixed deterministic learned-policy evidence."""
+    scenarios = (
+        "pressure_positive", "pressure_negative", "concentration_positive"
+    )
+    rows: list[dict[str, object]] = []
+    evaluation_curves: dict[str, list[np.ndarray]] = {}
+    evaluation_episodes: np.ndarray | None = None
+    g_statuses: list[str] = []
+
+    for seed in seeds:
+        seed_dir = root / f"seed_{seed}"
+        with (seed_dir / "metrics.json").open(encoding="utf-8") as stream:
+            metrics = json.load(stream)
+        with (seed_dir / "paper2016_control_performance_metrics.json").open(
+            encoding="utf-8"
+        ) as stream:
+            control = json.load(stream)
+        learned = metrics.get("best_post_warmup_learned_checkpoint")
+        if learned is None or not bool(learned["post_warmup_eligible"]):
+            raise RuntimeError(
+                f"seed {seed} has no post-warmup learned checkpoint"
+            )
+        comparison = metrics[
+            "paper2016_best_post_warmup_scenario_comparison"
+        ]
+        if int(comparison["episode"]) != int(learned["episode"]):
+            raise RuntimeError(
+                f"seed {seed} paper scenario output does not use its learned checkpoint"
+            )
+        if metrics["residual_action_scale_normalized"] != [0.36, 0.3]:
+            raise RuntimeError(f"seed {seed} did not use frozen 3x authority")
+        if not metrics["paper2016_proposed_training_reward_rpi_terms_excluded"]:
+            raise RuntimeError(f"seed {seed} did not use the Paper2016 reward fix")
+        if int(metrics["episodes"]) != 500 or int(metrics["steps_per_episode"]) != 300:
+            raise RuntimeError(f"seed {seed} does not satisfy 500x300")
+
+        scenario_values = comparison["scenarios"]
+        improvements = [
+            float(scenario_values[scenario]["economic_cost_reduction_percent"])
+            for scenario in scenarios
+        ]
+        sac_stats = [scenario_values[scenario]["safe_sac"] for scenario in scenarios]
+        row: dict[str, object] = {
+            "seed": int(seed),
+            "best_diagnostic_episode": int(
+                metrics["best_diagnostic_nonzero_checkpoint"]["episode"]
+            ),
+            "best_post_warmup_episode": int(learned["episode"]),
+            "best_post_warmup_global_step": int(learned["global_step"]),
+            "best_post_warmup_improvement_percent": float(
+                learned["economic_cost_reduction_percent"]
+            ),
+            "economic_improvement_percent": float(np.mean(improvements)),
+            "J_econ": float(np.mean([
+                stat["economic_cost_total"] for stat in sac_stats
+            ])),
+            "requested_residual_norm": float(np.mean([
+                stat["residual_requested_norm_mean"] for stat in sac_stats
+            ])),
+            "applied_residual_norm": float(np.mean([
+                stat["residual_applied_norm_mean"] for stat in sac_stats
+            ])),
+            "execution_ratio": float(np.mean([
+                stat["residual_execution_ratio_mean"] for stat in sac_stats
+            ])),
+            "requested_policy_state_dependence": float(
+                comparison["requested_residual_state_dependence_norm"]
+            ),
+            "applied_policy_state_dependence": float(
+                comparison["applied_residual_state_dependence_norm"]
+            ),
+            "physical_constraint_violation_rate": float(max(
+                stat["violation_rate"] for stat in sac_stats
+            )),
+            "robust_operating_region_violation_rate": float(max(
+                stat["robust_operating_region_violation_rate"]
+                for stat in sac_stats
+            )),
+            "qp_infeasible_rate": float(max(
+                stat["qp_infeasible_rate"] for stat in sac_stats
+            )),
+            "disturbance_bound_exceedance_rate": float(max(
+                stat["disturbance_bound_exceedance_rate"] for stat in sac_stats
+            )),
+            "execution_mask_mean": float(min(
+                stat["execution_mask_mean"] for stat in sac_stats
+            )),
+            "rpi_violation_rate": float(np.mean([
+                stat["rpi_violation_rate"] for stat in sac_stats
+            ])),
+            "rpi_utilization_peak": float(max(
+                stat["rpi_utilization_peak"] for stat in sac_stats
+            )),
+            "formal_safety_certification_passed": bool(
+                metrics["formal_safety_certification_passed"]
+            ),
+        }
+        for scenario in scenarios:
+            scenario_result = scenario_values[scenario]
+            stat = scenario_result["safe_sac"]
+            scenario_control = control["scenarios"][scenario]
+            row[f"{scenario}_economic_improvement_percent"] = float(
+                scenario_result["economic_cost_reduction_percent"]
+            )
+            row[f"{scenario}_J_econ"] = float(stat["economic_cost_total"])
+            row[f"{scenario}_requested_residual_norm"] = float(
+                stat["residual_requested_norm_mean"]
+            )
+            row[f"{scenario}_applied_residual_norm"] = float(
+                stat["residual_applied_norm_mean"]
+            )
+            for state in ("X2", "P2"):
+                sac_state = scenario_control["safe_sac"][state]
+                baseline_state = scenario_control["zero_residual_baseline"][state]
+                prefix = f"{scenario}_{state}"
+                for metric_name in ("peak_deviation", "IAE", "ISE"):
+                    sac_value = float(sac_state[metric_name])
+                    baseline_value = float(baseline_state[metric_name])
+                    row[f"{prefix}_{metric_name}"] = sac_value
+                    row[f"{prefix}_{metric_name}_baseline"] = baseline_value
+                    row[f"{prefix}_{metric_name}_change"] = sac_value - baseline_value
+                row[f"{prefix}_settling_time_empirical"] = sac_state[
+                    "settling_time_after_last_shock_seconds"
+                ]
+                row[f"{prefix}_settling_time_empirical_baseline"] = baseline_state[
+                    "settling_time_after_last_shock_seconds"
+                ]
+                row[f"{prefix}_settling_time_common"] = sac_state[
+                    "common_reference"
+                ]["settling_time_after_last_shock_seconds"]
+                row[f"{prefix}_settling_time_common_baseline"] = baseline_state[
+                    "common_reference"
+                ]["settling_time_after_last_shock_seconds"]
+            for actuator in ("P100", "F200"):
+                sac_actuator = scenario_control["safe_sac"][actuator]
+                baseline_actuator = scenario_control[
+                    "zero_residual_baseline"
+                ][actuator]
+                paired = scenario_control[
+                    "paired_changes_safe_sac_minus_baseline"
+                ][actuator]
+                prefix = f"{scenario}_{actuator}"
+                row[f"{prefix}_min"] = float(sac_actuator["min"])
+                row[f"{prefix}_max"] = float(sac_actuator["max"])
+                row[f"{prefix}_peak_difference"] = float(
+                    paired["peak_deviation_from_paired_zero_residual_baseline"]
+                )
+                row[f"{prefix}_TV"] = float(sac_actuator["total_variation"])
+                row[f"{prefix}_TV_baseline"] = float(
+                    baseline_actuator["total_variation"]
+                )
+                row[f"{prefix}_TV_change"] = float(
+                    paired["total_variation_change"]
+                )
+
+        with (seed_dir / "training_log.csv").open(
+            newline="", encoding="utf-8"
+        ) as stream:
+            records = list(csv.DictReader(stream))
+        eval_records = [
+            record for record in records
+            if np.isfinite(float(record[
+                "evaluation_sac_incremental_cost_reduction_percent"
+            ]))
+        ]
+        seed_eval_episodes = np.asarray([
+            float(record["episode"]) for record in eval_records
+        ])
+        if evaluation_episodes is None:
+            evaluation_episodes = seed_eval_episodes
+        elif not np.array_equal(evaluation_episodes, seed_eval_episodes):
+            raise RuntimeError("fixed-evaluation episode grids differ across seeds")
+        curve_fields = {
+            "economic_improvement": (
+                "evaluation_sac_incremental_cost_reduction_percent"
+            ),
+            "J_econ": "evaluation_economic_cost_mean",
+            "requested_residual": "evaluation_residual_requested_norm_mean",
+            "applied_residual": "evaluation_residual_applied_norm_mean",
+            "execution_ratio": "evaluation_residual_execution_ratio_mean",
+            "requested_state_dependence": (
+                "evaluation_requested_residual_state_dependence_norm"
+            ),
+            "applied_state_dependence": (
+                "evaluation_applied_residual_state_dependence_norm"
+            ),
+        }
+        for scenario in scenarios:
+            curve_fields[f"{scenario}_improvement"] = (
+                f"evaluation_{scenario}_improvement_percent"
+            )
+        for output_name, field_name in curve_fields.items():
+            evaluation_curves.setdefault(output_name, []).append(np.asarray([
+                float(record[field_name]) for record in eval_records
+            ]))
+        post_warmup = [
+            record for record in eval_records
+            if float(record["global_step"]) >= float(metrics["final_checkpoint_certification"]["warmup_steps"])
+        ]
+        post_values = np.asarray([
+            float(record["evaluation_sac_incremental_cost_reduction_percent"])
+            for record in post_warmup
+        ])
+        row["early_post_warmup_mean_improvement"] = float(
+            np.mean(post_values[:5])
+        )
+        row["late_5_mean_improvement"] = float(np.mean(post_values[-5:]))
+        row["late_10_mean_improvement"] = float(np.mean(post_values[-10:]))
+        row["post_warmup_positive_fraction"] = float(np.mean(post_values > 0.0))
+        row["late_5_all_positive"] = bool(np.all(post_values[-5:] > 0.0))
+        rows.append(row)
+        g_statuses.append(metrics["paper2016_G"]["G_status"])
+
+    header = list(rows[0])
+    with (root / "aggregate_per_seed.csv").open(
+        "w", newline="", encoding="utf-8"
+    ) as stream:
+        writer = csv.DictWriter(stream, fieldnames=header)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    numeric_keys = [
+        key for key in header
+        if key != "seed"
+        and not isinstance(rows[0][key], bool)
+        and any(
+            row[key] is not None and isinstance(row[key], (int, float))
+            for row in rows
+        )
+    ]
+    statistics = {
+        key: _metric_summary([row[key] for row in rows], seeds)
+        for key in numeric_keys
+    }
+    improvement_values = [
+        float(row["economic_improvement_percent"]) for row in rows
+    ]
+    aggregate = {
+        "protocol": {
+            "benchmark_profile": "zanon2016",
+            "experiment_mode": "proposed",
+            "episodes": 500,
+            "steps_per_episode": 300,
+            "seeds": seeds,
+            "residual_action_scale": [0.36, 0.30],
+            "rpi_reward_fix_scope": (
+                "Paper2016 proposed replay reward only; complete RPI monitoring "
+                "and formal safety audit retained"
+            ),
+            "primary_learning_evidence": (
+                "fixed deterministic three-scenario economic evaluation; raw "
+                "mixed-scenario training return is not used as primary evidence"
+            ),
+            "learned_checkpoint_requirement": "global_step >= warmup_steps",
+        },
+        "runs": rows,
+        "statistics": statistics,
+        "improvement_direction_consistent": bool(all(
+            value > 0.0 for value in improvement_values
+        )),
+        "all_late_5_means_positive": bool(all(
+            float(row["late_5_mean_improvement"]) > 0.0 for row in rows
+        )),
+        "all_late_5_evaluations_positive": bool(all(
+            bool(row["late_5_all_positive"]) for row in rows
+        )),
+        "policy_state_dependence_present_all_seeds": bool(all(
+            float(row["applied_policy_state_dependence"]) > 0.0 for row in rows
+        )),
+        "all_physical_qp_robust_region_metrics_zero": bool(all(
+            float(row["physical_constraint_violation_rate"]) == 0.0
+            and float(row["robust_operating_region_violation_rate"]) == 0.0
+            and float(row["qp_infeasible_rate"]) == 0.0
+            and float(row["disturbance_bound_exceedance_rate"]) == 0.0
+            for row in rows
+        )),
+        "G_status": (
+            "unavailable_empc_baseline"
+            if any(status == "unavailable_empc_baseline" for status in g_statuses)
+            else "available"
+        ),
+        "G_interface": {
+            "formula": "G=(P_eco-P_method)/sum(P_s)",
+            "P_eco": None,
+            "P_method_by_seed_and_scenario": {
+                str(row["seed"]): {
+                    scenario: row[f"{scenario}_J_econ"]
+                    for scenario in scenarios
+                }
+                for row in rows
+            },
+            "sum_P_s": None,
+            "G": None,
+        },
+        "settling_time_definitions_file": (
+            "seed_<seed>/paper2016_control_performance_metrics.json"
+        ),
+    }
+    for filename in ("aggregate_summary.json", "multi_seed_summary.json"):
+        with (root / filename).open("w", encoding="utf-8") as stream:
+            json.dump(aggregate, stream, indent=2, ensure_ascii=False)
+    with (root / "aggregate_statistics.csv").open(
+        "w", newline="", encoding="utf-8"
+    ) as stream:
+        columns = [
+            "metric", "n", "mean", "sample_std", "ci95_lower",
+            "ci95_upper", "ci95_half_width", "min", "max",
+        ]
+        writer = csv.DictWriter(stream, fieldnames=columns)
+        writer.writeheader()
+        for metric, summary in statistics.items():
+            writer.writerow({
+                "metric": metric,
+                **{key: summary[key] for key in columns if key != "metric"},
+            })
+
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    def draw_curve(axis, name: str, ylabel: str, title: str) -> None:
+        data = np.vstack(evaluation_curves[name])
+        mean = np.mean(data, axis=0)
+        std = np.std(data, axis=0, ddof=1)
+        half_width = T_975_DF2 * std / np.sqrt(len(seeds))
+        for seed, values in zip(seeds, data):
+            axis.plot(
+                evaluation_episodes, values, linewidth=0.9, alpha=0.5,
+                label=f"seed {seed}",
+            )
+        axis.plot(
+            evaluation_episodes, mean, color="#2f6fb3", linewidth=2.1,
+            label="mean",
+        )
+        axis.fill_between(
+            evaluation_episodes, mean - half_width, mean + half_width,
+            color="#2f6fb3", alpha=0.16, label="95% CI",
+        )
+        axis.set_xlabel("Episode")
+        axis.set_ylabel(ylabel)
+        axis.set_title(title)
+        axis.grid(True, color="#dddddd", linewidth=0.6)
+        axis.legend(frameon=True)
+
+    figure, axis = plt.subplots(figsize=(8.6, 4.9))
+    draw_curve(
+        axis, "economic_improvement", "Economic improvement [%]",
+        "Three-seed fixed deterministic economic improvement",
+    )
+    axis.axhline(0.0, color="#333333", linestyle="--", linewidth=0.8)
+    figure.tight_layout()
+    figure.savefig(root / "three_seed_economic_improvement.png", dpi=180)
+    plt.close(figure)
+
+    figure, axes = plt.subplots(1, 3, figsize=(15.0, 4.4), constrained_layout=True)
+    for axis, scenario in zip(axes, scenarios):
+        draw_curve(
+            axis, f"{scenario}_improvement", "Improvement [%]",
+            scenario.replace("_", " ").title(),
+        )
+        axis.axhline(0.0, color="#333333", linestyle="--", linewidth=0.8)
+    figure.savefig(root / "three_scenario_improvement_mean_ci.png", dpi=180)
+    plt.close(figure)
+
+    figure, axis = plt.subplots(figsize=(8.6, 4.9))
+    draw_curve(
+        axis, "J_econ", "Mean stage economic cost",
+        "Three-seed fixed deterministic J_econ",
+    )
+    figure.tight_layout()
+    figure.savefig(root / "three_seed_J_econ_learning_curve.png", dpi=180)
+    plt.close(figure)
+
+    figure, axes = plt.subplots(1, 2, figsize=(11.8, 4.5), constrained_layout=True)
+    draw_curve(
+        axes[0], "requested_residual", "Normalized residual norm",
+        "Requested residual",
+    )
+    draw_curve(
+        axes[1], "applied_residual", "Normalized residual norm",
+        "Applied residual",
+    )
+    figure.savefig(root / "three_seed_residual_evolution.png", dpi=180)
+    plt.close(figure)
+
+    figure, axes = plt.subplots(1, 2, figsize=(11.8, 4.5), constrained_layout=True)
+    draw_curve(
+        axes[0], "requested_state_dependence", "Physical peak-to-peak norm",
+        "Requested policy state-dependence",
+    )
+    draw_curve(
+        axes[1], "applied_state_dependence", "Physical peak-to-peak norm",
+        "Applied policy state-dependence",
+    )
+    figure.savefig(root / "three_seed_policy_state_dependence.png", dpi=180)
+    plt.close(figure)
+
+
 def main() -> None:
     args = parse_args()
     package_dir = Path(__file__).resolve().parent
@@ -506,6 +940,22 @@ def main() -> None:
                     "blocks; scenario counts differ by at most one"
                 ),
                 "evaluation_horizon_seconds_per_scenario": 300,
+                "residual_action_scale": [0.36, 0.30],
+                "reward_fix": {
+                    "scope": (
+                        "zanon2016 AND proposed AND "
+                        "paper2016_original_state_shocks"
+                    ),
+                    "excluded_from_replay_reward_only": [
+                        "rpi_violation_event_penalty",
+                        "rpi_excess_penalty",
+                    ],
+                    "rpi_monitoring_and_formal_audit_retained": True,
+                },
+                "learned_checkpoint_requirement": (
+                    "global_step >= warmup_steps; pre-warmup checkpoints are "
+                    "diagnostic only"
+                ),
                 "uses_rho_d_scaling": False,
                 "rho_d_scope": (
                     "separate four-exogenous-disturbance robustness/"
@@ -535,7 +985,7 @@ def main() -> None:
         ]
         print(f"\n=== evaporator safe-SAC seed {seed} ===", flush=True)
         subprocess.run(command, check=True, cwd=package_dir.parent)
-    _write_aggregate(args.output_dir, list(args.seeds))
+    _write_formal_aggregate(args.output_dir, list(args.seeds))
     print(f"\nThree-seed summary: {args.output_dir.resolve()}", flush=True)
 
 

@@ -99,6 +99,195 @@ def plot_learning(log: dict[str, np.ndarray], out_dir: Path) -> None:
     _save(fig, out_dir / "training_curves.png")
 
 
+def plot_sac_learning_diagnostics(
+    log: dict[str, np.ndarray], out_dir: Path
+) -> None:
+    """Plot paired deterministic economics and residual learning diagnostics."""
+    required = (
+        "evaluation_safe_sac_economic_cost_mean",
+        "evaluation_theta_only_economic_cost_mean",
+        "evaluation_sac_incremental_cost_reduction_percent",
+        "evaluation_residual_requested_norm_mean",
+        "evaluation_residual_applied_norm_mean",
+        "evaluation_residual_execution_ratio_mean",
+        "evaluation_requested_residual_state_dependence_norm",
+        "evaluation_applied_residual_state_dependence_norm",
+    )
+    if any(key not in log for key in required):
+        return
+    episode = log["episode"]
+    mask = np.isfinite(log["evaluation_safe_sac_economic_cost_mean"])
+    x = episode[mask]
+    fig, axes = plt.subplots(3, 2, figsize=(12.2, 10.0), constrained_layout=True)
+    scenario_names = (
+        ("pressure_positive", "Pressure +", BLUE),
+        ("pressure_negative", "Pressure -", ORANGE),
+        ("concentration_positive", "Concentration +", GREEN),
+    )
+    scenario_improvements = []
+    for scenario, label, color in scenario_names:
+        j_key = f"evaluation_{scenario}_J_econ"
+        improvement_key = f"evaluation_{scenario}_improvement_percent"
+        if j_key in log:
+            axes[0, 0].plot(x, log[j_key][mask], color=color, label=label)
+        if improvement_key in log:
+            values = log[improvement_key][mask]
+            scenario_improvements.append(values)
+            axes[0, 1].plot(x, values, color=color, alpha=0.72, label=label)
+    _style_axis(
+        axes[0, 0], "Fixed 300 s scenario economics", "Episode", r"$J_{econ}$"
+    )
+    _legend(axes[0, 0])
+    if scenario_improvements:
+        axes[0, 1].plot(
+            x,
+            np.mean(np.vstack(scenario_improvements), axis=0),
+            color=BLACK,
+            linewidth=2.2,
+            label="Three-scenario mean",
+        )
+    axes[0, 1].axhline(0.0, color=BLACK, linestyle="--", linewidth=0.8)
+    _style_axis(
+        axes[0, 1],
+        "SAC improvement over paired baseline",
+        "Episode",
+        "Economic improvement [%]",
+    )
+    _legend(axes[0, 1])
+    axes[1, 0].plot(
+        x,
+        log["evaluation_residual_requested_norm_mean"][mask],
+        color=ORANGE,
+        label="Requested",
+    )
+    axes[1, 0].plot(
+        x,
+        log["evaluation_residual_applied_norm_mean"][mask],
+        color=BLUE,
+        label="Applied",
+    )
+    _style_axis(
+        axes[1, 0],
+        "Deterministic residual execution",
+        "Episode",
+        "Mean normalized residual norm",
+    )
+    _legend(axes[1, 0])
+    axes[1, 1].plot(
+        x,
+        log["evaluation_residual_execution_ratio_mean"][mask],
+        color=GREEN,
+    )
+    _style_axis(
+        axes[1, 1],
+        "Residual execution ratio",
+        "Episode",
+        "Applied/requested norm",
+    )
+    axes[2, 0].plot(
+        x,
+        log["evaluation_requested_residual_state_dependence_norm"][mask],
+        color=ORANGE,
+        label="Requested",
+    )
+    axes[2, 0].plot(
+        x,
+        log["evaluation_applied_residual_state_dependence_norm"][mask],
+        color=BLUE,
+        label="Applied",
+    )
+    _style_axis(
+        axes[2, 0],
+        "Residual policy state dependence",
+        "Episode",
+        "Peak-to-peak physical norm",
+    )
+    _legend(axes[2, 0])
+    axes[2, 1].plot(
+        x,
+        log["evaluation_safe_sac_economic_cost_mean"][mask],
+        color=BLUE,
+        label="SAC mean stage cost",
+    )
+    axes[2, 1].plot(
+        x,
+        log["evaluation_theta_only_economic_cost_mean"][mask],
+        color=ORANGE,
+        label="Paired zero residual",
+    )
+    _style_axis(
+        axes[2, 1],
+        "Three-scenario mean economic cost",
+        "Episode",
+        "Mean stage cost",
+    )
+    _legend(axes[2, 1])
+    _save(fig, out_dir / "sac_learning_diagnostics.png")
+
+
+def plot_reward_decomposition(
+    log: dict[str, np.ndarray], out_dir: Path
+) -> None:
+    """Expose the economic signal and every material Paper2016 penalty."""
+    required = (
+        "economic_reward_mean",
+        "rpi_violation_event_penalty_mean",
+        "rpi_excess_penalty_mean",
+        "total_reward_mean",
+        "evaluation_economic_reward_mean",
+        "evaluation_rpi_violation_event_penalty_mean",
+        "evaluation_rpi_excess_penalty_mean",
+        "evaluation_total_reward_mean",
+    )
+    if any(key not in log for key in required):
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(12.0, 4.5), constrained_layout=True)
+    train_mask = log["episode"] >= 1.0
+    episode = log["episode"][train_mask]
+    for key, label, color in (
+        ("economic_reward_mean", "Economic reward", BLUE),
+        ("rpi_violation_event_penalty_mean", "RPI event penalty", RED),
+        ("rpi_excess_penalty_mean", "RPI excess penalty", ORANGE),
+        ("total_reward_mean", "Replay total reward", BLACK),
+    ):
+        axes[0].plot(
+            episode,
+            moving_average(log[key][train_mask], window=10),
+            color=color,
+            label=label,
+        )
+    _style_axis(
+        axes[0], "Training reward decomposition (10-episode mean)",
+        "Episode", "Per-step component",
+    )
+    _legend(axes[0])
+    eval_mask = np.isfinite(log["evaluation_total_reward_mean"])
+    eval_episode = log["episode"][eval_mask]
+    for key, label, color in (
+        ("evaluation_economic_reward_mean", "Economic reward", BLUE),
+        (
+            "evaluation_rpi_violation_event_penalty_mean",
+            "Reported RPI event penalty",
+            RED,
+        ),
+        (
+            "evaluation_rpi_excess_penalty_mean",
+            "Reported RPI excess penalty",
+            ORANGE,
+        ),
+        ("evaluation_total_reward_mean", "Evaluation total reward", BLACK),
+    ):
+        axes[1].plot(
+            eval_episode, log[key][eval_mask], color=color, label=label
+        )
+    _style_axis(
+        axes[1], "Fixed deterministic evaluation decomposition",
+        "Episode", "Per-step component",
+    )
+    _legend(axes[1])
+    _save(fig, out_dir / "reward_decomposition.png")
+
+
 def plot_theta_learning(log: dict[str, np.ndarray], out_dir: Path) -> None:
     """Show the slow h, p, M, K adaptation separately from SAC reward."""
     episodes = log["episode"]
@@ -318,6 +507,61 @@ def plot_rollout(cfg, rollout: dict[str, np.ndarray], out_dir: Path) -> None:
     _save(fig, out_dir / "states_inputs.png")
 
 
+def plot_paper2016_scenario_trajectories(
+    cfg,
+    sac_rollouts: dict[str, dict[str, np.ndarray]],
+    baseline_rollouts: dict[str, dict[str, np.ndarray]],
+    out_dir: Path,
+) -> None:
+    """Compare best nonzero SAC and paired zero-residual trajectories."""
+    scenarios = (
+        "pressure_positive", "pressure_negative", "concentration_positive"
+    )
+    titles = (
+        r"$\Delta P_2=+1$ kPa",
+        r"$\Delta P_2=-1$ kPa",
+        r"$\Delta X_2=+1$ percentage point",
+    )
+    if any(scenario not in sac_rollouts for scenario in scenarios):
+        return
+    fig, axes = plt.subplots(
+        4, 3, figsize=(13.5, 12.0), sharex=True, constrained_layout=True
+    )
+    for column, (scenario, title) in enumerate(zip(scenarios, titles)):
+        sac = sac_rollouts[scenario]
+        baseline = baseline_rollouts[scenario]
+        time_s = 60.0 * sac["time"]
+        series = (
+            (sac["state"][:, 0], baseline["state"][:, 0], r"$X_2$ [%]"),
+            (sac["state"][:, 1], baseline["state"][:, 1], r"$P_2$ [kPa]"),
+            (sac["control"][:, 0], baseline["control"][:, 0], r"$P_{100}$ [kPa]"),
+            (
+                sac["control"][:, 1],
+                baseline["control"][:, 1],
+                r"$F_{200}$ [kg min$^{-1}$]",
+            ),
+        )
+        for row, (sac_values, baseline_values, ylabel) in enumerate(series):
+            axis = axes[row, column]
+            axis.plot(time_s, baseline_values, color=ORANGE, label="Zero residual")
+            axis.plot(time_s, sac_values, color=BLUE, label="Best nonzero SAC")
+            for shock_second in (0.0, 20.0, 40.0):
+                axis.axvline(
+                    shock_second, color=BLACK, linestyle=":", linewidth=0.8
+                )
+            axis.grid(True, color=GRID, linewidth=0.6, alpha=0.65)
+            axis.set_ylabel(ylabel)
+            if row == 0:
+                axis.set_title(title)
+            if row == 3:
+                axis.set_xlabel("Time [s]")
+    axes[0, 0].legend(loc="best")
+    fig.suptitle(
+        "Paper2016 deterministic scenarios: fixed-design SAC vs zero residual"
+    )
+    _save(fig, out_dir / "paper2016_three_scenario_trajectories.png")
+
+
 def plot_disturbances(cfg, rollout: dict[str, np.ndarray], out_dir: Path) -> None:
     time = rollout["time"]
     disturbance = rollout["disturbance"]
@@ -427,7 +671,11 @@ def plot_feedback_components(rollout: dict[str, np.ndarray], out_dir: Path) -> N
     _save(fig, out_dir / "feedback_components.png")
 
 
-def plot_sac_policy_map(policy_map: dict[str, np.ndarray], out_dir: Path) -> None:
+def plot_sac_policy_map(
+    policy_map: dict[str, np.ndarray],
+    out_dir: Path,
+    filename: str = "sac_residual_policy_map.png",
+) -> None:
     """Requested and safely executed residuals over the certified state set."""
     x2 = policy_map["X2"]
     p2 = policy_map["P2"]
@@ -448,7 +696,7 @@ def plot_sac_policy_map(policy_map: dict[str, np.ndarray], out_dir: Path) -> Non
         )
         fig.colorbar(image, ax=ax, label=unit)
         _style_axis(ax, title, r"$X_2$ [%]", r"$P_2$ [kPa]")
-    _save(fig, out_dir / "sac_residual_policy_map.png")
+    _save(fig, out_dir / filename)
 
 
 def plot_rl_comparison(

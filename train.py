@@ -15,6 +15,7 @@ from .config import ExperimentConfig
 from .control import SafeController, build_safety_design, point_in_convex_polygon
 from .model import EvaporatorModel
 from .paper2016_compare import SCENARIOS as PAPER2016_SCENARIOS, apply_state_shock
+from .paper2016_adapter import DEFAULT_TUNEMPC_PATH, dependency_diagnostics
 from .plot import (
     close_all_plots,
     plot_disturbance_adaptation,
@@ -25,9 +26,12 @@ from .plot import (
     plot_feedback_components,
     plot_learning,
     plot_paper_aligned_set_comparison,
+    plot_paper2016_scenario_trajectories,
     plot_rl_comparison,
+    plot_reward_decomposition,
     plot_rollout,
     plot_sac_policy_map,
+    plot_sac_learning_diagnostics,
     plot_sets,
     plot_theta_learning,
 )
@@ -37,6 +41,29 @@ from .theta_learning import OnlineThetaLearner
 
 OBS_DIM = 19
 ACTION_DIM = 2
+
+REWARD_DECOMPOSITION_FIELDS = (
+    "economic_reward_mean",
+    "economic_reward_total",
+    "projection_penalty_mean",
+    "projection_penalty_total",
+    "mapping_penalty_mean",
+    "mapping_penalty_total",
+    "move_penalty_mean",
+    "move_penalty_total",
+    "state_violation_penalty_mean",
+    "state_violation_penalty_total",
+    "input_violation_penalty_mean",
+    "input_violation_penalty_total",
+    "rpi_violation_event_penalty_mean",
+    "rpi_violation_event_penalty_total",
+    "rpi_excess_penalty_mean",
+    "rpi_excess_penalty_total",
+    "qp_infeasible_penalty_mean",
+    "qp_infeasible_penalty_total",
+    "total_reward_mean",
+    "total_reward_total",
+)
 
 
 class ZeroResidualPolicy:
@@ -277,6 +304,14 @@ def run_episode(
     mapping_activations = 0
     move_penalty_sum = 0.0
     safety_penalty_sum = 0.0
+    reward_safety_penalty_sum = 0.0
+    state_violation_penalty_sum = 0.0
+    input_violation_penalty_sum = 0.0
+    rpi_violation_event_penalty_sum = 0.0
+    qp_infeasible_penalty_sum = 0.0
+    state_excess_penalty_sum = 0.0
+    input_excess_penalty_sum = 0.0
+    rpi_excess_penalty_sum = 0.0
     state_excess_squared_sum = 0.0
     input_excess_squared_sum = 0.0
     rpi_excess_squared_sum = 0.0
@@ -385,18 +420,55 @@ def run_episode(
         move_penalty = cfg.input_move_penalty_weight * float(
             np.sum((applied_residual - previous_applied_residual) ** 2)
         )
-        safety_penalty = (
+        state_violation_penalty = (
             cfg.state_violation_event_penalty * float(state_bad)
-            + cfg.input_violation_event_penalty * float(input_bad)
-            + cfg.rpi_violation_event_penalty * float(rpi_bad)
-            + cfg.qp_infeasible_event_penalty * float(not info["qp_feasible"])
-            + cfg.state_excess_square_weight * state_excess_squared
-            + cfg.input_excess_square_weight * input_excess_squared
-            + cfg.rpi_excess_square_weight * rpi_excess_squared
         )
+        input_violation_penalty = (
+            cfg.input_violation_event_penalty * float(input_bad)
+        )
+        rpi_violation_event_penalty = (
+            cfg.rpi_violation_event_penalty * float(rpi_bad)
+        )
+        qp_infeasible_penalty = (
+            cfg.qp_infeasible_event_penalty * float(not info["qp_feasible"])
+        )
+        state_excess_penalty = (
+            cfg.state_excess_square_weight * state_excess_squared
+        )
+        input_excess_penalty = (
+            cfg.input_excess_square_weight * input_excess_squared
+        )
+        rpi_excess_penalty = (
+            cfg.rpi_excess_square_weight * rpi_excess_squared
+        )
+        safety_penalty = (
+            state_violation_penalty
+            + input_violation_penalty
+            + rpi_violation_event_penalty
+            + qp_infeasible_penalty
+            + state_excess_penalty
+            + input_excess_penalty
+            + rpi_excess_penalty
+        )
+        exclude_rpi_from_training_reward = bool(
+            training
+            and paper_protocol
+            and cfg.experiment_mode == "proposed"
+        )
+        # Paper2016's exogenous instantaneous state shocks can leave the RPI
+        # tube even when physical, robust-region, and QP constraints remain
+        # satisfied.  For this one proposed-policy training protocol, those
+        # two policy-independent terms are omitted only from the replay reward.
+        # They are still computed, stored, plotted, and used by the unchanged
+        # formal safety audit; this is not a relaxation of the RPI requirement.
+        reward_safety_penalty = safety_penalty
+        if exclude_rpi_from_training_reward:
+            reward_safety_penalty -= (
+                rpi_violation_event_penalty + rpi_excess_penalty
+            )
         reward = (
             economic_reward - projection_penalty - mapping_penalty
-            - move_penalty - safety_penalty
+            - move_penalty - reward_safety_penalty
         )
         segment_done = bool(
             training
@@ -464,6 +536,14 @@ def run_episode(
         residual_execution_ratio_sum += execution_ratio
         move_penalty_sum += move_penalty
         safety_penalty_sum += safety_penalty
+        reward_safety_penalty_sum += reward_safety_penalty
+        state_violation_penalty_sum += state_violation_penalty
+        input_violation_penalty_sum += input_violation_penalty
+        rpi_violation_event_penalty_sum += rpi_violation_event_penalty
+        qp_infeasible_penalty_sum += qp_infeasible_penalty
+        state_excess_penalty_sum += state_excess_penalty
+        input_excess_penalty_sum += input_excess_penalty
+        rpi_excess_penalty_sum += rpi_excess_penalty
         state_excess_squared_sum += state_excess_squared
         input_excess_squared_sum += input_excess_squared
         rpi_excess_squared_sum += rpi_excess_squared
@@ -493,12 +573,24 @@ def run_episode(
             "nominal_control": np.asarray(info["nominal"]).copy(),
             "ancillary": np.asarray(info["ancillary"]).copy(),
             "reward": reward,
+            "total_reward": reward,
             "economic_cost": cost,
             "economic_reward": economic_reward,
             "projection_penalty": projection_penalty,
             "mapping_penalty": mapping_penalty,
             "move_penalty": move_penalty,
             "safety_penalty": safety_penalty,
+            "reward_safety_penalty": reward_safety_penalty,
+            "state_violation_penalty": state_violation_penalty,
+            "input_violation_penalty": input_violation_penalty,
+            "rpi_violation_event_penalty": rpi_violation_event_penalty,
+            "qp_infeasible_penalty": qp_infeasible_penalty,
+            "state_excess_penalty": state_excess_penalty,
+            "input_excess_penalty": input_excess_penalty,
+            "rpi_excess_penalty": rpi_excess_penalty,
+            "rpi_penalty_excluded_from_training_reward": (
+                exclude_rpi_from_training_reward
+            ),
             "state_excess_squared": state_excess_squared,
             "input_excess_squared": input_excess_squared,
             "rpi_excess_squared": rpi_excess_squared,
@@ -550,10 +642,16 @@ def run_episode(
     stats = {
         "return": total_return,
         "return_per_step": total_return / episode_steps,
+        "total_reward_total": total_return,
+        "total_reward_mean": total_return / episode_steps,
         "economic_cost_mean": economic_cost_sum / episode_steps,
+        "economic_cost_total": economic_cost_sum,
         "economic_reward_mean": economic_reward_sum / episode_steps,
+        "economic_reward_total": economic_reward_sum,
         "projection_penalty_mean": projection_penalty_sum / episode_steps,
+        "projection_penalty_total": projection_penalty_sum,
         "mapping_penalty_mean": mapping_penalty_sum / episode_steps,
+        "mapping_penalty_total": mapping_penalty_sum,
         "feasible_action_mapping_rate": mapping_activations / episode_steps,
         "residual_feasible_scale_mean": (
             residual_feasible_scale_sum / episode_steps
@@ -569,7 +667,46 @@ def run_episode(
             residual_execution_ratio_sum / episode_steps
         ),
         "move_penalty_mean": move_penalty_sum / episode_steps,
+        "move_penalty_total": move_penalty_sum,
         "safety_penalty_mean": safety_penalty_sum / episode_steps,
+        "safety_penalty_total": safety_penalty_sum,
+        "reward_safety_penalty_mean": (
+            reward_safety_penalty_sum / episode_steps
+        ),
+        "reward_safety_penalty_total": reward_safety_penalty_sum,
+        "state_violation_penalty_mean": (
+            state_violation_penalty_sum / episode_steps
+        ),
+        "state_violation_penalty_total": state_violation_penalty_sum,
+        "input_violation_penalty_mean": (
+            input_violation_penalty_sum / episode_steps
+        ),
+        "input_violation_penalty_total": input_violation_penalty_sum,
+        "rpi_violation_event_penalty_mean": (
+            rpi_violation_event_penalty_sum / episode_steps
+        ),
+        "rpi_violation_event_penalty_total": (
+            rpi_violation_event_penalty_sum
+        ),
+        "qp_infeasible_penalty_mean": (
+            qp_infeasible_penalty_sum / episode_steps
+        ),
+        "qp_infeasible_penalty_total": qp_infeasible_penalty_sum,
+        "state_excess_penalty_mean": (
+            state_excess_penalty_sum / episode_steps
+        ),
+        "state_excess_penalty_total": state_excess_penalty_sum,
+        "input_excess_penalty_mean": (
+            input_excess_penalty_sum / episode_steps
+        ),
+        "input_excess_penalty_total": input_excess_penalty_sum,
+        "rpi_excess_penalty_mean": (
+            rpi_excess_penalty_sum / episode_steps
+        ),
+        "rpi_excess_penalty_total": rpi_excess_penalty_sum,
+        "rpi_penalty_excluded_from_training_reward": float(
+            training and paper_protocol and cfg.experiment_mode == "proposed"
+        ),
         "state_excess_squared_mean": (
             state_excess_squared_sum / episode_steps
         ),
@@ -609,9 +746,13 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "residual_applied_norm", "residual_execution_ratio", "execution_mask",
         "feasible_action_mapping_scale", "feasible_action_mapping_gap",
         "base", "nominal_control", "ancillary",
-        "reward", "economic_cost", "economic_reward", "projection_penalty",
+        "reward", "total_reward", "economic_cost", "economic_reward", "projection_penalty",
         "mapping_penalty",
-        "move_penalty", "safety_penalty", "state_excess_squared",
+        "move_penalty", "safety_penalty", "reward_safety_penalty",
+        "state_violation_penalty", "input_violation_penalty",
+        "rpi_violation_event_penalty", "qp_infeasible_penalty",
+        "state_excess_penalty", "input_excess_penalty", "rpi_excess_penalty",
+        "rpi_penalty_excluded_from_training_reward", "state_excess_squared",
         "input_excess_squared", "rpi_excess_squared",
         "violation", "rpi_violation", "projection_gap",
         "robust_state_violation", "robust_input_violation",
@@ -666,8 +807,13 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "candidate_P100_norm", "candidate_F200_norm",
             "qp_nominal_P100_norm", "qp_nominal_F200_norm",
             "hinf_feedback_P100_norm", "hinf_feedback_F200_norm",
-            "reward", "economic_cost", "economic_reward",
+            "reward", "total_reward", "economic_cost", "economic_reward",
             "projection_penalty", "mapping_penalty", "move_penalty", "safety_penalty",
+            "reward_safety_penalty", "state_violation_penalty",
+            "input_violation_penalty", "rpi_violation_event_penalty",
+            "rpi_excess_penalty", "qp_infeasible_penalty",
+            "state_excess_penalty", "input_excess_penalty",
+            "rpi_penalty_excluded_from_training_reward",
             "state_excess_squared", "input_excess_squared", "rpi_excess_squared",
             "violation", "rpi_violation", "projection_gap",
             "robust_state_violation", "robust_input_violation",
@@ -698,12 +844,22 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 *rollout["nominal_control"][i],
                 *rollout["ancillary"][i],
                 rollout["reward"][i],
+                rollout["total_reward"][i],
                 rollout["economic_cost"][i],
                 rollout["economic_reward"][i],
                 rollout["projection_penalty"][i],
                 rollout["mapping_penalty"][i],
                 rollout["move_penalty"][i],
                 rollout["safety_penalty"][i],
+                rollout["reward_safety_penalty"][i],
+                rollout["state_violation_penalty"][i],
+                rollout["input_violation_penalty"][i],
+                rollout["rpi_violation_event_penalty"][i],
+                rollout["rpi_excess_penalty"][i],
+                rollout["qp_infeasible_penalty"][i],
+                rollout["state_excess_penalty"][i],
+                rollout["input_excess_penalty"][i],
+                rollout["rpi_penalty_excluded_from_training_reward"][i],
                 rollout["state_excess_squared"][i],
                 rollout["input_excess_squared"][i],
                 rollout["rpi_excess_squared"][i],
@@ -800,6 +956,305 @@ def evaluate_policy(
         for key in samples[0]
     }
     return aggregate, representative, samples
+
+
+def evaluate_paper2016_scenario_rollouts(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    agent,
+) -> tuple[dict[str, dict[str, float]], dict[str, dict[str, np.ndarray]]]:
+    """Evaluate and retain each deterministic 300 s Paper2016 scenario."""
+    if not (
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    ):
+        return {}, {}
+    stats: dict[str, dict[str, float]] = {}
+    rollouts: dict[str, dict[str, np.ndarray]] = {}
+    for index, scenario in enumerate(PAPER2016_SCENARIOS):
+        stat, records, _ = run_episode(
+            cfg,
+            model,
+            SafeController(cfg, model, design),
+            agent,
+            None,
+            np.random.default_rng(cfg.seed + 31000 + index),
+            training=False,
+            global_step=0,
+            paper_scenario=scenario,
+        )
+        stats[scenario] = stat
+        rollouts[scenario] = records_to_arrays(records)
+    return stats, rollouts
+
+
+def paper2016_scenario_log_fields(
+    samples: list[dict[str, float]] | None,
+    baseline_samples: list[dict[str, float]] | None,
+    requested_state_dependence: float = float("nan"),
+    applied_state_dependence: float = float("nan"),
+) -> dict[str, float]:
+    """Flatten paired fixed-scenario evaluation metrics into the train log."""
+    fields: dict[str, float] = {}
+    for index, scenario in enumerate(PAPER2016_SCENARIOS):
+        prefix = f"evaluation_{scenario}"
+        if (
+            samples is None
+            or baseline_samples is None
+            or index >= len(samples)
+            or index >= len(baseline_samples)
+        ):
+            fields.update({
+                f"{prefix}_J_econ": float("nan"),
+                f"{prefix}_economic_cost_mean": float("nan"),
+                f"{prefix}_baseline_J_econ": float("nan"),
+                f"{prefix}_improvement_percent": float("nan"),
+                f"{prefix}_residual_requested_norm_mean": float("nan"),
+                f"{prefix}_residual_applied_norm_mean": float("nan"),
+                f"{prefix}_residual_execution_ratio_mean": float("nan"),
+                f"{prefix}_requested_state_dependence_norm": float("nan"),
+                f"{prefix}_applied_state_dependence_norm": float("nan"),
+            })
+            continue
+        sample = samples[index]
+        baseline = baseline_samples[index]
+        baseline_total = float(baseline["economic_cost_total"])
+        fields.update({
+            f"{prefix}_J_econ": float(sample["economic_cost_total"]),
+            f"{prefix}_economic_cost_mean": float(sample["economic_cost_mean"]),
+            f"{prefix}_baseline_J_econ": baseline_total,
+            f"{prefix}_improvement_percent": float(
+                100.0
+                * (baseline_total - float(sample["economic_cost_total"]))
+                / max(abs(baseline_total), 1e-12)
+            ),
+            f"{prefix}_residual_requested_norm_mean": float(
+                sample["residual_requested_norm_mean"]
+            ),
+            f"{prefix}_residual_applied_norm_mean": float(
+                sample["residual_applied_norm_mean"]
+            ),
+            f"{prefix}_residual_execution_ratio_mean": float(
+                sample["residual_execution_ratio_mean"]
+            ),
+            f"{prefix}_requested_state_dependence_norm": float(
+                requested_state_dependence
+            ),
+            f"{prefix}_applied_state_dependence_norm": float(
+                applied_state_dependence
+            ),
+        })
+    return fields
+
+
+def _settling_and_integral_metrics(
+    time_values: np.ndarray,
+    signal: np.ndarray,
+    *,
+    last_shock_seconds: float,
+    final_window_seconds: float,
+    tolerance_fraction: float,
+    fixed_reference: float | None = None,
+    fixed_tolerance: float | None = None,
+) -> dict[str, float | None]:
+    """Recovery metrics relative to a documented post-transient reference."""
+    time_values = np.asarray(time_values, dtype=float)
+    signal = np.asarray(signal, dtype=float)
+    dt = float(np.median(np.diff(time_values))) if len(time_values) > 1 else 1.0
+    final_mask = time_values > time_values[-1] - final_window_seconds
+    reference = (
+        float(np.mean(signal[final_mask]))
+        if fixed_reference is None else float(fixed_reference)
+    )
+    recovery_mask = time_values >= last_shock_seconds
+    recovery_time = time_values[recovery_mask]
+    deviation = signal[recovery_mask] - reference
+    if deviation.size == 0:
+        raise ValueError(
+            "Recovery metric window is empty; time_values must be expressed "
+            "in seconds and extend beyond the last Paper2016 shock."
+        )
+    peak = float(np.max(np.abs(deviation)))
+    tolerance = (
+        max(tolerance_fraction * peak, 1e-9)
+        if fixed_tolerance is None else max(float(fixed_tolerance), 1e-9)
+    )
+    inside = np.abs(deviation) <= tolerance
+    settling_index: int | None = None
+    for index in range(len(inside)):
+        if bool(np.all(inside[index:])):
+            settling_index = index
+            break
+    settling_time = (
+        None
+        if settling_index is None
+        else float(recovery_time[settling_index] - last_shock_seconds)
+    )
+    return {
+        "reference_final_window_mean": reference,
+        "peak_deviation": peak,
+        "tolerance_absolute": tolerance,
+        "uses_fixed_common_reference": bool(fixed_reference is not None),
+        "settling_time_after_last_shock_seconds": settling_time,
+        "IAE": float(np.sum(np.abs(deviation)) * dt),
+        "ISE": float(np.sum(deviation ** 2) * dt),
+    }
+
+
+def paper2016_control_performance_metrics(
+    sac_rollouts: dict[str, dict[str, np.ndarray]],
+    baseline_rollouts: dict[str, dict[str, np.ndarray]],
+) -> dict[str, object]:
+    """Compute fixed, untuned recovery and actuator metrics for the paper run."""
+    last_shock_seconds = 40.0
+    final_window_seconds = 20.0
+    tolerance_fraction = 0.05
+    result: dict[str, object] = {
+        "tolerance_definition": {
+            "last_shock_seconds": last_shock_seconds,
+            "reference": (
+                "method-specific mean over the final 20 s of the fixed 300 s "
+                "rollout"
+            ),
+            "band": (
+                "5% of the maximum absolute post-last-shock deviation from "
+                "that reference"
+            ),
+            "settling_time": (
+                "first elapsed second after t=40 s for which every remaining "
+                "sample stays inside the fixed 5% band; null if never settled"
+            ),
+            "iae_ise_window": "t=40 s through t=299 s",
+            "tolerance_fraction": tolerance_fraction,
+            "minimum_numeric_tolerance": 1e-9,
+        },
+        "settling_time_definitions": {
+            "empirical_method_specific": {
+                "reference": "each method's own final-20-s mean",
+                "tolerance": (
+                    "5% of that method's own maximum absolute deviation "
+                    "after the final shock"
+                ),
+                "shock_time_seconds": last_shock_seconds,
+            },
+            "common_paired_reference": {
+                "reference": (
+                    "the paired zero-residual baseline final-20-s mean, used "
+                    "unchanged for both SAC and zero residual"
+                ),
+                "tolerance": (
+                    "5% of the zero-residual baseline's maximum absolute "
+                    "post-last-shock deviation, used unchanged for both methods"
+                ),
+                "shock_time_seconds": last_shock_seconds,
+                "purpose": (
+                    "controller-to-controller recovery comparison without "
+                    "method-specific reference drift"
+                ),
+            },
+        },
+        "scenarios": {},
+    }
+    scenarios: dict[str, object] = {}
+    for scenario in PAPER2016_SCENARIOS:
+        sac = sac_rollouts[scenario]
+        baseline = baseline_rollouts[scenario]
+        scenario_result: dict[str, object] = {
+            "safe_sac": {},
+            "zero_residual_baseline": {},
+            "paired_changes_safe_sac_minus_baseline": {},
+        }
+        for label, rollout in (
+            ("safe_sac", sac),
+            ("zero_residual_baseline", baseline),
+        ):
+            state_metrics = {
+                state_name: _settling_and_integral_metrics(
+                    np.asarray(rollout["time"], dtype=float) * 60.0,
+                    rollout["state"][:, state_index],
+                    last_shock_seconds=last_shock_seconds,
+                    final_window_seconds=final_window_seconds,
+                    tolerance_fraction=tolerance_fraction,
+                )
+                for state_index, state_name in enumerate(("X2", "P2"))
+            }
+            control_metrics: dict[str, dict[str, float]] = {}
+            for control_index, control_name in enumerate(("P100", "F200")):
+                control = np.asarray(rollout["control"][:, control_index], dtype=float)
+                reference = float(np.mean(control[-int(final_window_seconds):]))
+                control_metrics[control_name] = {
+                    "max": float(np.max(control)),
+                    "min": float(np.min(control)),
+                    "peak_deviation_from_final_window_reference": float(
+                        np.max(np.abs(control - reference))
+                    ),
+                    "final_window_reference": reference,
+                    "total_variation": float(np.sum(np.abs(np.diff(control)))),
+                }
+            scenario_result[label] = {
+                **state_metrics,
+                **control_metrics,
+            }
+        for state_index, state_name in enumerate(("X2", "P2")):
+            baseline_empirical = scenario_result[
+                "zero_residual_baseline"
+            ][state_name]
+            common_reference = float(
+                baseline_empirical["reference_final_window_mean"]
+            )
+            common_tolerance = float(baseline_empirical["tolerance_absolute"])
+            for label, rollout in (
+                ("safe_sac", sac),
+                ("zero_residual_baseline", baseline),
+            ):
+                scenario_result[label][state_name]["common_reference"] = (
+                    _settling_and_integral_metrics(
+                        np.asarray(rollout["time"], dtype=float) * 60.0,
+                        rollout["state"][:, state_index],
+                        last_shock_seconds=last_shock_seconds,
+                        final_window_seconds=final_window_seconds,
+                        tolerance_fraction=tolerance_fraction,
+                        fixed_reference=common_reference,
+                        fixed_tolerance=common_tolerance,
+                    )
+                )
+        paired_changes: dict[str, object] = {}
+        for state_name in ("X2", "P2"):
+            paired_changes[state_name] = {
+                key: (
+                    None
+                    if scenario_result["safe_sac"][state_name][key] is None
+                    or scenario_result["zero_residual_baseline"][state_name][key] is None
+                    else float(
+                        scenario_result["safe_sac"][state_name][key]
+                        - scenario_result["zero_residual_baseline"][state_name][key]
+                    )
+                )
+                for key in (
+                    "peak_deviation",
+                    "settling_time_after_last_shock_seconds",
+                    "IAE",
+                    "ISE",
+                )
+            }
+        for control_index, control_name in enumerate(("P100", "F200")):
+            delta = np.asarray(sac["control"][:, control_index], dtype=float) - np.asarray(
+                baseline["control"][:, control_index], dtype=float
+            )
+            paired_changes[control_name] = {
+                "peak_deviation_from_paired_zero_residual_baseline": float(
+                    np.max(np.abs(delta))
+                ),
+                "total_variation_change": float(
+                    scenario_result["safe_sac"][control_name]["total_variation"]
+                    - scenario_result["zero_residual_baseline"][control_name]["total_variation"]
+                ),
+            }
+        scenario_result["paired_changes_safe_sac_minus_baseline"] = paired_changes
+        scenarios[scenario] = scenario_result
+    result["scenarios"] = scenarios
+    return result
 
 
 def evaluate_paper_nominal_pressure_policy(
@@ -976,6 +1431,52 @@ def evaluate_sac_policy_map(
         "applied_physical": applied,
         "mapping_scale": mapping_scale,
     }
+
+
+def evaluate_policy_state_dependence(
+    cfg: ExperimentConfig,
+    model: EvaporatorModel,
+    design,
+    agent,
+    grid_points: int = 15,
+) -> tuple[float, float]:
+    """Peak-to-peak residual dependence over a fixed invariant-state grid."""
+    policy_map = evaluate_sac_policy_map(
+        cfg, model, design, agent, grid_points=grid_points
+    )
+    requested = float(np.linalg.norm(np.ptp(
+        policy_map["requested_physical"], axis=(0, 1)
+    )))
+    applied = float(np.linalg.norm(np.ptp(
+        policy_map["applied_physical"], axis=(0, 1)
+    )))
+    return requested, applied
+
+
+def save_sac_policy_map_csv(
+    path: Path, policy_map: dict[str, np.ndarray]
+) -> None:
+    """Persist one deterministic residual-policy surface."""
+    save_csv(
+        path,
+        [
+            "X2", "P2",
+            "requested_delta_P100", "requested_delta_F200",
+            "applied_delta_P100", "applied_delta_F200",
+            "mapping_scale",
+        ],
+        (
+            [
+                policy_map["X2"][row, column],
+                policy_map["P2"][row, column],
+                *policy_map["requested_physical"][row, column],
+                *policy_map["applied_physical"][row, column],
+                policy_map["mapping_scale"][row, column],
+            ]
+            for row in range(policy_map["X2"].shape[0])
+            for column in range(policy_map["X2"].shape[1])
+        ),
+    )
 
 
 def evaluate_disturbance_estimate_policy_map(
@@ -1687,15 +2188,19 @@ def main() -> None:
             if safe else -float("inf")
         )
 
-    initial_stat, _, _ = evaluate_policy(
+    initial_stat, _, initial_samples = evaluate_policy(
         cfg, model, design, agent, evaluation_seeds
     )
-    initial_baseline_stat, _, _ = evaluate_policy(
+    initial_baseline_stat, _, initial_baseline_samples = evaluate_policy(
         cfg, model, design, no_rl_policy, evaluation_seeds
     )
     initial_reduction, initial_gap = _paired_economic_metrics(
         initial_baseline_stat, initial_stat, safe_reference_cost
     )
+    (
+        initial_requested_state_dependence,
+        initial_applied_state_dependence,
+    ) = evaluate_policy_state_dependence(cfg, model, design, agent)
     if paper_main_experiment:
         initial_nominal_improvement = float(initial_reduction)
     else:
@@ -1714,16 +2219,43 @@ def main() -> None:
             / max(abs(initial_nominal_baseline["economic_cost_total"]), 1e-12)
         )
     initial_theta_metrics = theta_learner.metrics(design)
+    initial_scenario_fields = paper2016_scenario_log_fields(
+        initial_samples if paper_main_experiment else None,
+        initial_baseline_samples if paper_main_experiment else None,
+        initial_requested_state_dependence,
+        initial_applied_state_dependence,
+    )
     logs: list[dict[str, float]] = [{
         "episode": 0,
+        "global_step": 0,
         **initial_stat,
         **initial_theta_metrics,
+        **{
+            f"evaluation_{key}": float(initial_stat[key])
+            for key in REWARD_DECOMPOSITION_FIELDS
+        },
+        **initial_scenario_fields,
         "evaluation_return": initial_stat["return"],
         "evaluation_return_per_step": initial_stat["return_per_step"],
         "evaluation_economic_cost_mean": initial_stat["economic_cost_mean"],
         "evaluation_theta_only_economic_cost_mean": initial_baseline_stat["economic_cost_mean"],
         "evaluation_safe_sac_economic_cost_mean": initial_stat["economic_cost_mean"],
         "evaluation_sac_incremental_cost_reduction_percent": initial_reduction,
+        "evaluation_residual_requested_norm_mean": initial_stat[
+            "residual_requested_norm_mean"
+        ],
+        "evaluation_residual_applied_norm_mean": initial_stat[
+            "residual_applied_norm_mean"
+        ],
+        "evaluation_residual_execution_ratio_mean": initial_stat[
+            "residual_execution_ratio_mean"
+        ],
+        "evaluation_requested_residual_state_dependence_norm": (
+            initial_requested_state_dependence
+        ),
+        "evaluation_applied_residual_state_dependence_norm": (
+            initial_applied_state_dependence
+        ),
         "evaluation_paper2016_sac_improvement_percent": initial_nominal_improvement,
         "evaluation_normalized_safe_performance_gap": initial_gap,
         "safe_reference_cost": safe_reference_cost,
@@ -1734,6 +2266,8 @@ def main() -> None:
     best_design = copy.deepcopy(design)
     policy_candidates: list[dict[str, object]] = [{
         "episode": 0,
+        "global_step": 0,
+        "post_warmup_eligible": False,
         "online_return_per_step": float(initial_stat["return_per_step"]),
         "actor_state": copy.deepcopy(agent.actor.state_dict()),
         "zero_fallback": True,
@@ -1787,24 +2321,59 @@ def main() -> None:
         eval_theta_only_cost = float("nan")
         eval_sac_cost = float("nan")
         eval_cost_reduction = float("nan")
+        eval_requested_residual_norm = float("nan")
+        eval_applied_residual_norm = float("nan")
+        eval_residual_execution_ratio = float("nan")
+        eval_requested_state_dependence = float("nan")
+        eval_applied_state_dependence = float("nan")
         eval_nominal_improvement = float("nan")
         eval_safe_gap = float("nan")
+        eval_reward_fields = {
+            f"evaluation_{key}": float("nan")
+            for key in REWARD_DECOMPOSITION_FIELDS
+        }
+        eval_scenario_fields = paper2016_scenario_log_fields(None, None)
         if (
             episode == 1
             or episode % cfg.evaluation_every == 0
             or episode == cfg.episodes
         ):
-            eval_stat, _, _ = evaluate_policy(
+            eval_stat, _, eval_samples = evaluate_policy(
                 cfg, model, design, agent, evaluation_seeds
             )
             eval_return = float(eval_stat["return"])
             eval_return_per_step = float(eval_stat["return_per_step"])
             eval_economic_cost_mean = float(eval_stat["economic_cost_mean"])
-            eval_baseline_stat, _, _ = evaluate_policy(
+            eval_baseline_stat, _, eval_baseline_samples = evaluate_policy(
                 cfg, model, design, no_rl_policy, evaluation_seeds
             )
             eval_theta_only_cost = float(eval_baseline_stat["economic_cost_mean"])
             eval_sac_cost = eval_economic_cost_mean
+            eval_requested_residual_norm = float(
+                eval_stat["residual_requested_norm_mean"]
+            )
+            eval_applied_residual_norm = float(
+                eval_stat["residual_applied_norm_mean"]
+            )
+            eval_residual_execution_ratio = float(
+                eval_stat["residual_execution_ratio_mean"]
+            )
+            (
+                eval_requested_state_dependence,
+                eval_applied_state_dependence,
+            ) = evaluate_policy_state_dependence(
+                cfg, model, design, agent
+            )
+            eval_reward_fields = {
+                f"evaluation_{key}": float(eval_stat[key])
+                for key in REWARD_DECOMPOSITION_FIELDS
+            }
+            eval_scenario_fields = paper2016_scenario_log_fields(
+                eval_samples if paper_main_experiment else None,
+                eval_baseline_samples if paper_main_experiment else None,
+                eval_requested_state_dependence,
+                eval_applied_state_dependence,
+            )
             eval_cost_reduction, eval_safe_gap = _paired_economic_metrics(
                 eval_baseline_stat, eval_stat, safe_reference_cost
             )
@@ -1830,6 +2399,10 @@ def main() -> None:
             eval_safe = hard_safety_passed(eval_stat)
             policy_candidates.append({
                 "episode": int(episode),
+                "global_step": int(global_step),
+                "post_warmup_eligible": bool(
+                    global_step >= cfg.warmup_steps
+                ),
                 "online_return_per_step": eval_return_per_step,
                 "actor_state": copy.deepcopy(agent.actor.state_dict()),
                 "zero_fallback": False,
@@ -1851,18 +2424,44 @@ def main() -> None:
 
         logs.append({
             "episode": episode,
+            "global_step": global_step,
             **stat,
             **theta_metrics,
+            **eval_reward_fields,
+            **eval_scenario_fields,
             "evaluation_return": eval_return,
             "evaluation_return_per_step": eval_return_per_step,
             "evaluation_economic_cost_mean": eval_economic_cost_mean,
             "evaluation_theta_only_economic_cost_mean": eval_theta_only_cost,
             "evaluation_safe_sac_economic_cost_mean": eval_sac_cost,
             "evaluation_sac_incremental_cost_reduction_percent": eval_cost_reduction,
+            "evaluation_residual_requested_norm_mean": (
+                eval_requested_residual_norm
+            ),
+            "evaluation_residual_applied_norm_mean": (
+                eval_applied_residual_norm
+            ),
+            "evaluation_residual_execution_ratio_mean": (
+                eval_residual_execution_ratio
+            ),
+            "evaluation_requested_residual_state_dependence_norm": (
+                eval_requested_state_dependence
+            ),
+            "evaluation_applied_residual_state_dependence_norm": (
+                eval_applied_state_dependence
+            ),
             "evaluation_paper2016_sac_improvement_percent": eval_nominal_improvement,
             "evaluation_normalized_safe_performance_gap": eval_safe_gap,
             "safe_reference_cost": safe_reference_cost,
         })
+        if np.isfinite(eval_return_per_step) or episode == cfg.episodes:
+            # Persist fixed-evaluation history incrementally so an unrelated
+            # final reporting failure cannot erase the completed learning run.
+            save_csv(
+                cfg.output_dir / "training_log.csv",
+                list(logs[0].keys()),
+                ([row[key] for key in logs[0]] for row in logs),
+            )
         if episode == 1 or episode % 10 == 0:
             eval_text = (
                 f" eval_cost={eval_economic_cost_mean:.3f}"
@@ -1942,6 +2541,8 @@ def main() -> None:
     ranked_candidates = list(policy_candidates)
 
     selected_candidate: dict[str, object] | None = None
+    best_diagnostic_nonzero_candidate: dict[str, object] | None = None
+    best_post_warmup_learned_candidate: dict[str, object] | None = None
     candidate_audit: list[dict[str, float]] = []
     for candidate in ranked_candidates:
         agent.actor.load_state_dict(candidate["actor_state"])
@@ -1969,7 +2570,12 @@ def main() -> None:
             zero_fallback = bool(
                 policy_scale == 0.0 and candidate.get("zero_fallback", False)
             )
-            eligible = bool(zero_fallback or positive_increment)
+            post_warmup_eligible = bool(
+                candidate.get("post_warmup_eligible", False)
+            )
+            eligible = bool(
+                zero_fallback or (post_warmup_eligible and positive_increment)
+            )
             cost_reduction_percent = float(
                 100.0
                 * (theta_only_stat["economic_cost_mean"] - candidate_stat["economic_cost_mean"])
@@ -1985,6 +2591,8 @@ def main() -> None:
             eligible = bool(zero_fallback or (safe and eligible))
             audit_row = {
                 "episode": float(candidate["episode"]),
+                "global_step": float(candidate["global_step"]),
+                "post_warmup_eligible": float(post_warmup_eligible),
                 "policy_scale": float(policy_scale),
                 "return_per_step": float(candidate_stat["return_per_step"]),
                 "economic_cost_mean": float(candidate_stat["economic_cost_mean"]),
@@ -2007,6 +2615,40 @@ def main() -> None:
                 "eligible": float(eligible),
             }
             candidate_audit.append(audit_row)
+            if policy_scale > 0.0 and (
+                best_diagnostic_nonzero_candidate is None
+                or (
+                    audit_row["economic_cost_mean"],
+                    audit_row["violation_rate"],
+                    audit_row["intervention_rate"],
+                )
+                < (
+                    float(best_diagnostic_nonzero_candidate["economic_cost_mean"]),
+                    float(best_diagnostic_nonzero_candidate["violation_rate"]),
+                    float(best_diagnostic_nonzero_candidate["intervention_rate"]),
+                )
+            ):
+                best_diagnostic_nonzero_candidate = {
+                    **audit_row,
+                    "actor_state": copy.deepcopy(candidate["actor_state"]),
+                }
+            if policy_scale > 0.0 and post_warmup_eligible and (
+                best_post_warmup_learned_candidate is None
+                or (
+                    audit_row["economic_cost_mean"],
+                    audit_row["violation_rate"],
+                    audit_row["intervention_rate"],
+                )
+                < (
+                    float(best_post_warmup_learned_candidate["economic_cost_mean"]),
+                    float(best_post_warmup_learned_candidate["violation_rate"]),
+                    float(best_post_warmup_learned_candidate["intervention_rate"]),
+                )
+            ):
+                best_post_warmup_learned_candidate = {
+                    **audit_row,
+                    "actor_state": copy.deepcopy(candidate["actor_state"]),
+                }
             if eligible and (
                 selected_candidate is None
                 or (
@@ -2044,6 +2686,74 @@ def main() -> None:
         ([row[key] for key in candidate_audit[0]] for row in candidate_audit),
     )
 
+    policy_evolution_summary: list[dict[str, object]] = []
+    if paper_main_experiment:
+        evolution_dir = cfg.output_dir / "policy_evolution"
+        evolution_dir.mkdir(parents=True, exist_ok=True)
+        restore_actor_state = copy.deepcopy(agent.actor.state_dict())
+        restore_policy_scale = float(agent.policy_output_scale)
+        first_post_warmup = next(
+            (
+                candidate for candidate in policy_candidates
+                if bool(candidate.get("post_warmup_eligible", False))
+            ),
+            None,
+        )
+        target_episodes = [0, 50, 100, 150, 200]
+        if first_post_warmup is not None:
+            target_episodes.insert(1, int(first_post_warmup["episode"]))
+        for target_episode in dict.fromkeys(target_episodes):
+            candidate = next(
+                (
+                    item for item in policy_candidates
+                    if int(item["episode"]) == int(target_episode)
+                ),
+                None,
+            )
+            if candidate is None:
+                continue
+            agent.actor.load_state_dict(candidate["actor_state"])
+            agent.actor_ema.load_state_dict(candidate["actor_state"])
+            agent.set_policy_output_scale(1.0)
+            evolution_map = evaluate_sac_policy_map(cfg, model, design, agent)
+            filename_stem = f"policy_map_episode_{int(target_episode):03d}"
+            save_sac_policy_map_csv(
+                evolution_dir / f"{filename_stem}.csv", evolution_map
+            )
+            plot_sac_policy_map(
+                evolution_map,
+                evolution_dir,
+                filename=f"{filename_stem}.png",
+            )
+            policy_evolution_summary.append({
+                "episode": int(target_episode),
+                "global_step": int(candidate["global_step"]),
+                "post_warmup_eligible": bool(
+                    candidate.get("post_warmup_eligible", False)
+                ),
+                "requested_state_dependence_norm": float(np.linalg.norm(
+                    np.ptp(
+                        evolution_map["requested_physical"], axis=(0, 1)
+                    )
+                )),
+                "applied_state_dependence_norm": float(np.linalg.norm(
+                    np.ptp(
+                        evolution_map["applied_physical"], axis=(0, 1)
+                    )
+                )),
+                "csv": f"policy_evolution/{filename_stem}.csv",
+                "plot": f"policy_evolution/{filename_stem}.png",
+            })
+        with (evolution_dir / "policy_evolution_summary.json").open(
+            "w", encoding="utf-8"
+        ) as stream:
+            json.dump(
+                policy_evolution_summary, stream, indent=2, ensure_ascii=False
+            )
+        agent.actor.load_state_dict(restore_actor_state)
+        agent.actor_ema.load_state_dict(restore_actor_state)
+        agent.set_policy_output_scale(restore_policy_scale)
+
     final_stat, final_records, _ = evaluate_policy(
         cfg, model, design, agent, evaluation_seeds
     )
@@ -2066,7 +2776,7 @@ def main() -> None:
     nonzero_audit = [
         row for row in candidate_audit if float(row["policy_scale"]) > 0.0
     ]
-    best_nonzero = min(
+    best_diagnostic_nonzero = min(
         nonzero_audit,
         key=lambda row: (
             float(row["economic_cost_mean"]),
@@ -2075,6 +2785,185 @@ def main() -> None:
         ),
         default=None,
     )
+    post_warmup_nonzero_audit = [
+        row for row in nonzero_audit
+        if bool(row["post_warmup_eligible"])
+    ]
+    best_post_warmup_learned = min(
+        post_warmup_nonzero_audit,
+        key=lambda row: (
+            float(row["economic_cost_mean"]),
+            float(row["violation_rate"]),
+            float(row["intervention_rate"]),
+        ),
+        default=None,
+    )
+    # All paper-facing learned-policy plots and metrics must use a checkpoint
+    # collected only after the random-action warm-up has completed.
+    best_nonzero_candidate = best_post_warmup_learned_candidate
+    if best_post_warmup_learned_candidate is not None:
+        restore_actor_state = copy.deepcopy(agent.actor.state_dict())
+        agent.actor.load_state_dict(
+            best_post_warmup_learned_candidate["actor_state"]
+        )
+        agent.save_actor(model_dir / "best_post_warmup_learned_actor.pth")
+        agent.actor.load_state_dict(restore_actor_state)
+        agent.actor_ema.load_state_dict(restore_actor_state)
+
+    paper_scenario_comparison: dict[str, object] = {}
+    paper_control_metrics: dict[str, object] = {}
+    paper_sac_rollouts: dict[str, dict[str, np.ndarray]] = {}
+    paper_baseline_rollouts: dict[str, dict[str, np.ndarray]] = {}
+    if paper_main_experiment and best_nonzero_candidate is not None:
+        selected_actor_state = copy.deepcopy(agent.actor.state_dict())
+        selected_policy_scale = float(agent.policy_output_scale)
+        agent.actor.load_state_dict(best_nonzero_candidate["actor_state"])
+        agent.actor_ema.load_state_dict(best_nonzero_candidate["actor_state"])
+        agent.set_policy_output_scale(
+            float(best_nonzero_candidate["policy_scale"])
+        )
+        best_nonzero_policy_map = evaluate_sac_policy_map(
+            cfg, model, design, agent
+        )
+        save_csv(
+            cfg.output_dir / "best_post_warmup_sac_residual_policy_map.csv",
+            [
+                "X2", "P2",
+                "requested_delta_P100", "requested_delta_F200",
+                "applied_delta_P100", "applied_delta_F200",
+                "mapping_scale",
+            ],
+            (
+                [
+                    best_nonzero_policy_map["X2"][row, column],
+                    best_nonzero_policy_map["P2"][row, column],
+                    *best_nonzero_policy_map["requested_physical"][row, column],
+                    *best_nonzero_policy_map["applied_physical"][row, column],
+                    best_nonzero_policy_map["mapping_scale"][row, column],
+                ]
+                for row in range(best_nonzero_policy_map["X2"].shape[0])
+                for column in range(best_nonzero_policy_map["X2"].shape[1])
+            ),
+        )
+        plot_sac_policy_map(
+            best_nonzero_policy_map,
+            cfg.output_dir,
+            filename="best_post_warmup_sac_residual_policy_map.png",
+        )
+        paper_sac_stats, paper_sac_rollouts = (
+            evaluate_paper2016_scenario_rollouts(
+                cfg, model, design, agent
+            )
+        )
+        paper_baseline_stats, paper_baseline_rollouts = (
+            evaluate_paper2016_scenario_rollouts(
+                cfg, model, design, no_rl_policy
+            )
+        )
+        for scenario in PAPER2016_SCENARIOS:
+            save_rollout_csv(
+                cfg.output_dir
+                / f"paper2016_{scenario}_best_post_warmup_sac.csv",
+                paper_sac_rollouts[scenario],
+            )
+            save_rollout_csv(
+                cfg.output_dir
+                / f"paper2016_{scenario}_zero_residual_baseline.csv",
+                paper_baseline_rollouts[scenario],
+            )
+        plot_paper2016_scenario_trajectories(
+            cfg,
+            paper_sac_rollouts,
+            paper_baseline_rollouts,
+            cfg.output_dir,
+        )
+        paper_control_metrics = paper2016_control_performance_metrics(
+            paper_sac_rollouts, paper_baseline_rollouts
+        )
+        with (cfg.output_dir / "paper2016_control_performance_metrics.json").open(
+            "w", encoding="utf-8"
+        ) as stream:
+            json.dump(
+                paper_control_metrics, stream, indent=2, ensure_ascii=False
+            )
+        paper_scenario_comparison = {
+            "policy": "best_post_warmup_learned_fixed-design_candidate",
+            "episode": int(best_nonzero_candidate["episode"]),
+            "policy_scale": float(best_nonzero_candidate["policy_scale"]),
+            "residual_action_scale_normalized": (
+                cfg.residual_action_scale.tolist()
+            ),
+            "paired_same_safety_design_and_safe_projected_base": True,
+            "requested_residual_state_dependence_norm": float(np.linalg.norm(
+                np.ptp(
+                    best_nonzero_policy_map["requested_physical"], axis=(0, 1)
+                )
+            )),
+            "applied_residual_state_dependence_norm": float(np.linalg.norm(
+                np.ptp(
+                    best_nonzero_policy_map["applied_physical"], axis=(0, 1)
+                )
+            )),
+            "scenarios": {
+                scenario: {
+                    "safe_sac": paper_sac_stats[scenario],
+                    "zero_residual_baseline": paper_baseline_stats[scenario],
+                    "economic_cost_reduction_percent": float(
+                        100.0
+                        * (
+                            paper_baseline_stats[scenario]["economic_cost_mean"]
+                            - paper_sac_stats[scenario]["economic_cost_mean"]
+                        )
+                        / max(
+                            abs(paper_baseline_stats[scenario]["economic_cost_mean"]),
+                            1e-12,
+                        )
+                    ),
+                }
+                for scenario in PAPER2016_SCENARIOS
+            },
+        }
+        agent.actor.load_state_dict(selected_actor_state)
+        agent.actor_ema.load_state_dict(selected_actor_state)
+        agent.set_policy_output_scale(selected_policy_scale)
+
+    tunempc_diagnostics = dependency_diagnostics(DEFAULT_TUNEMPC_PATH)
+    paper2016_g = {
+        "G_status": "unavailable_empc_baseline",
+        "reason": (
+            "No validated same-scenario Economic MPC cumulative-cost result "
+            "is available in this run; G is intentionally not fabricated."
+        ),
+        "tunempc_dependency_diagnostics": tunempc_diagnostics,
+        "formula": "G=(P_eco-P_method)/sum(P_s)",
+        "required_fields": {
+            "P_eco": "same-scenario EMPC cumulative economic cost",
+            "P_method": "same-scenario method cumulative economic cost",
+            "sum_P_s": "sum of steady economic costs over identical samples",
+        },
+        "method_cumulative_cost_by_scenario": {
+            scenario: float(
+                paper_scenario_comparison.get("scenarios", {})
+                .get(scenario, {})
+                .get("safe_sac", {})
+                .get("economic_cost_total", float("nan"))
+            )
+            for scenario in PAPER2016_SCENARIOS
+        },
+        "P_eco_by_scenario": {
+            scenario: None for scenario in PAPER2016_SCENARIOS
+        },
+        "sum_P_s_by_scenario": {
+            scenario: None for scenario in PAPER2016_SCENARIOS
+        },
+        "G_by_scenario": {
+            scenario: None for scenario in PAPER2016_SCENARIOS
+        },
+    }
+    with (cfg.output_dir / "paper2016_G_status.json").open(
+        "w", encoding="utf-8"
+    ) as stream:
+        json.dump(paper2016_g, stream, indent=2, ensure_ascii=False)
 
     rollout = records_to_arrays(final_records)
     theta_only_rollout = records_to_arrays(theta_only_records)
@@ -2338,6 +3227,8 @@ def main() -> None:
             ),
         )
     plot_learning(log_arrays, cfg.output_dir)
+    plot_sac_learning_diagnostics(log_arrays, cfg.output_dir)
+    plot_reward_decomposition(log_arrays, cfg.output_dir)
     plot_theta_learning(log_arrays, cfg.output_dir)
     plot_empirical_regret(log_arrays, cfg.output_dir)
     plot_sets(cfg, model, design, boundary, rollout, cfg.output_dir)
@@ -2441,6 +3332,30 @@ def main() -> None:
         and np.array_equal(design.robust_input_lower, optimized_fixed_design.robust_input_lower)
         and np.array_equal(design.robust_input_upper, optimized_fixed_design.robust_input_upper)
     )
+    checkpoint_fields = (
+        "episode",
+        "global_step",
+        "post_warmup_eligible",
+        "policy_scale",
+        "return_per_step",
+        "economic_cost_mean",
+        "incremental_return_per_step",
+        "economic_cost_reduction_percent",
+        "violation_rate",
+        "robust_operating_region_violation_rate",
+        "rpi_violation_rate",
+        "qp_infeasible_rate",
+        "disturbance_bound_exceedance_rate",
+        "intervention_rate",
+        "mapping_rate",
+        "safe",
+    )
+
+    def checkpoint_summary(row: dict[str, float] | None) -> dict[str, float] | None:
+        if row is None:
+            return None
+        return {key: float(row[key]) for key in checkpoint_fields}
+
     metrics = {
         "algorithm": (
             "static_hinf_rpi_geometry_plus_fixed_qp_residual_sac"
@@ -2490,6 +3405,13 @@ def main() -> None:
         "selected_policy": "fixed_design_paired_checkpoint_scale_audit",
         "best_evaluation_episode": int(best_eval_episode),
         "best_episode": int(best_eval_episode),
+        "best_diagnostic_nonzero_checkpoint": checkpoint_summary(
+            best_diagnostic_nonzero
+        ),
+        "best_post_warmup_learned_checkpoint": checkpoint_summary(
+            best_post_warmup_learned
+        ),
+        "paper_facing_checkpoint": "best_post_warmup_learned_checkpoint",
         "selected_policy_output_scale": float(agent.policy_output_scale),
         "selected_policy_scale": float(agent.policy_output_scale),
         "initial_rpi_area": float(initial_rpi_area),
@@ -2610,27 +3532,32 @@ def main() -> None:
         ),
         "uncovered_final_hull_vertices": int(uncovered_final_vertices),
         "best_nonzero_policy_episode": (
-            float(best_nonzero["episode"]) if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["episode"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_policy_scale": (
-            float(best_nonzero["policy_scale"]) if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["policy_scale"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_incremental_return": (
-            float(best_nonzero["incremental_return_per_step"])
-            if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["incremental_return_per_step"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_cost_reduction_percent": (
-            float(best_nonzero["economic_cost_reduction_percent"])
-            if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["economic_cost_reduction_percent"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_violation_rate": (
-            float(best_nonzero["violation_rate"]) if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["violation_rate"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_intervention_rate": (
-            float(best_nonzero["intervention_rate"]) if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["intervention_rate"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "best_nonzero_mapping_rate": (
-            float(best_nonzero["mapping_rate"]) if best_nonzero is not None else float("nan")
+            float(best_post_warmup_learned["mapping_rate"])
+            if best_post_warmup_learned is not None else float("nan")
         ),
         "final_checkpoint_certification": {
             "checked_against_final_retained_disturbance_hull": True,
@@ -2641,6 +3568,12 @@ def main() -> None:
             "uncovered_final_hull_vertices": int(uncovered_final_vertices),
             "candidate_count_before_prescreen": int(len(policy_candidates)),
             "candidate_count_after_prescreen": int(len(ranked_candidates)),
+            "post_warmup_candidate_count": int(sum(
+                bool(candidate.get("post_warmup_eligible", False))
+                for candidate in policy_candidates
+            )),
+            "warmup_steps": int(cfg.warmup_steps),
+            "learned_checkpoint_requires_global_step_at_least_warmup": True,
             "policy_scales_tested": list(cfg.sac_selection_scales),
             "paired_theta_only_return_per_step": float(
                 theta_only_stat["return_per_step"]
@@ -2815,6 +3748,15 @@ def main() -> None:
                 "analysis; excluded from the Paper2016 fair comparison"
             ),
         },
+        "paper2016_best_nonzero_scenario_comparison": (
+            paper_scenario_comparison
+        ),
+        "paper2016_best_post_warmup_scenario_comparison": (
+            paper_scenario_comparison
+        ),
+        "paper2016_control_performance": paper_control_metrics,
+        "paper2016_G": paper2016_g,
+        "policy_evolution_checkpoints": policy_evolution_summary,
         "training_seconds": time.time() - start,
         "training_final_return": float(training_returns[-1]),
         "evaluation_return": float(final_stat["return"]),
@@ -2863,6 +3805,16 @@ def main() -> None:
             "- lambda_du*||delta_residual_executed||_2^2 "
             "- violation_event_penalties - normalized_hinge_excess_penalties"
         ),
+        "paper2016_proposed_training_reward_rpi_terms_excluded": bool(
+            paper_main_experiment and cfg.experiment_mode == "proposed"
+        ),
+        "paper2016_proposed_training_reward_scope": (
+            "replay reward only; RPI event/excess remain computed and remain "
+            "in fixed evaluation reporting and formal safety certification"
+            if paper_main_experiment and cfg.experiment_mode == "proposed"
+            else "not_applicable"
+        ),
+        "reward_decomposition_fields": list(REWARD_DECOMPOSITION_FIELDS),
         "economic_reward_form": (
             "linear_monotone_decreasing_in_observed_economic_stage_cost"
         ),

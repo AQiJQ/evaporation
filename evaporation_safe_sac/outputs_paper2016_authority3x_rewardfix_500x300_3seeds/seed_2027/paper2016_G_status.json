@@ -1,0 +1,45 @@
+{
+  "G_status": "unavailable_empc_baseline",
+  "reason": "No validated same-scenario Economic MPC cumulative-cost result is available in this run; G is intentionally not fabricated.",
+  "tunempc_dependency_diagnostics": {
+    "path": "C:\\Users\\cushy\\PycharmProjects\\tunempc",
+    "reference_files_present": true,
+    "missing_reference_files": [],
+    "python_version": "3.12.14",
+    "legacy_python_range_satisfied": false,
+    "dependencies": {
+      "casadi": false,
+      "scipy": false,
+      "picos": false,
+      "cvxopt": false
+    },
+    "direct_api_available": false,
+    "note": "TuneMPC declares Python >=3.5,<3.8 and pins casadi==3.5.1 and picos==1.2.0.post32. A newer interpreter may work only with a separately validated compatibility environment."
+  },
+  "formula": "G=(P_eco-P_method)/sum(P_s)",
+  "required_fields": {
+    "P_eco": "same-scenario EMPC cumulative economic cost",
+    "P_method": "same-scenario method cumulative economic cost",
+    "sum_P_s": "sum of steady economic costs over identical samples"
+  },
+  "method_cumulative_cost_by_scenario": {
+    "pressure_positive": 2027082.3818059897,
+    "pressure_negative": 2053006.232059143,
+    "concentration_positive": 1965210.9164733663
+  },
+  "P_eco_by_scenario": {
+    "pressure_positive": null,
+    "pressure_negative": null,
+    "concentration_positive": null
+  },
+  "sum_P_s_by_scenario": {
+    "pressure_positive": null,
+    "pressure_negative": null,
+    "concentration_positive": null
+  },
+  "G_by_scenario": {
+    "pressure_positive": null,
+    "pressure_negative": null,
+    "concentration_positive": null
+  }
+}

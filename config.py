@@ -324,6 +324,13 @@ class ExperimentConfig:
             # optimized design has >15% maximum authority).  Reserve 5% for
             # exploration instead of using the more conservative generic 1%.
             self.qp_min_residual_authority = 0.05
+            if self.experiment_mode == "proposed":
+                # The fixed-geometry authority scan at e6112b1 certified this
+                # three-times wider declaration at the invariant center,
+                # vertices, edge midpoints and all Paper2016 baseline states.
+                self.residual_action_scale = np.array(
+                    [0.36, 0.30], dtype=float
+                )
             # The robust tube is local to the interior safety anchor.  Keep the
             # paper economic steady state separately for Experiment I, while
             # eliminating a persistent affine mismatch caused by linearizing

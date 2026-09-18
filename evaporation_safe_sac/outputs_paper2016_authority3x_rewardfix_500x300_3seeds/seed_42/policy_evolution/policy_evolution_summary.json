@@ -1,0 +1,56 @@
+[
+  {
+    "episode": 0,
+    "global_step": 0,
+    "post_warmup_eligible": false,
+    "requested_state_dependence_norm": 0.0,
+    "applied_state_dependence_norm": 0.0,
+    "csv": "policy_evolution/policy_map_episode_000.csv",
+    "plot": "policy_evolution/policy_map_episode_000.png"
+  },
+  {
+    "episode": 20,
+    "global_step": 6000,
+    "post_warmup_eligible": true,
+    "requested_state_dependence_norm": 35.85247119771357,
+    "applied_state_dependence_norm": 1.7926235598856763,
+    "csv": "policy_evolution/policy_map_episode_020.csv",
+    "plot": "policy_evolution/policy_map_episode_020.png"
+  },
+  {
+    "episode": 50,
+    "global_step": 15000,
+    "post_warmup_eligible": true,
+    "requested_state_dependence_norm": 44.16330039831496,
+    "applied_state_dependence_norm": 2.2081650199157474,
+    "csv": "policy_evolution/policy_map_episode_050.csv",
+    "plot": "policy_evolution/policy_map_episode_050.png"
+  },
+  {
+    "episode": 100,
+    "global_step": 30000,
+    "post_warmup_eligible": true,
+    "requested_state_dependence_norm": 38.81612025238398,
+    "applied_state_dependence_norm": 1.9408060126191975,
+    "csv": "policy_evolution/policy_map_episode_100.csv",
+    "plot": "policy_evolution/policy_map_episode_100.png"
+  },
+  {
+    "episode": 150,
+    "global_step": 45000,
+    "post_warmup_eligible": true,
+    "requested_state_dependence_norm": 71.90463910309666,
+    "applied_state_dependence_norm": 3.595231955154831,
+    "csv": "policy_evolution/policy_map_episode_150.csv",
+    "plot": "policy_evolution/policy_map_episode_150.png"
+  },
+  {
+    "episode": 200,
+    "global_step": 60000,
+    "post_warmup_eligible": true,
+    "requested_state_dependence_norm": 69.24534935039864,
+    "applied_state_dependence_norm": 3.4622674675199288,
+    "csv": "policy_evolution/policy_map_episode_200.csv",
+    "plot": "policy_evolution/policy_map_episode_200.png"
+  }
+]

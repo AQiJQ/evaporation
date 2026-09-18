@@ -19,7 +19,9 @@ from .control import (
     spectral_radius,
 )
 from .model import EvaporatorModel
-from .multiseed import DEFAULT_SEEDS, T_975_DF2, _moving_average
+from .multiseed import (
+    DEFAULT_SEEDS, T_975_DF2, _metric_summary, _moving_average
+)
 from .paper2016_adapter import (
     DEFAULT_TUNEMPC_PATH,
     dependency_diagnostics,
@@ -51,6 +53,7 @@ from .train import (
     formal_safety_certified,
     hard_safety_passed,
     observation,
+    paper2016_control_performance_metrics,
     run_episode,
     summarize_training_trend,
 )
@@ -68,6 +71,11 @@ def main() -> None:
     assert np.isclose(paper_cfg.dt_min, 1.0 / 60.0)
     assert paper_cfg.main_experiment_protocol == "paper2016_original_state_shocks"
     assert np.array_equal(paper_cfg.disturbance_half_range, np.zeros(4))
+    assert np.allclose(paper_cfg.residual_action_scale, [0.36, 0.30])
+    paper_joint_cfg = ExperimentConfig(
+        benchmark_profile="zanon2016", experiment_mode="joint_theta"
+    )
+    assert np.allclose(paper_joint_cfg.residual_action_scale, [0.12, 0.10])
     assert paper_cfg.paper2016_training_scenarios == (
         "pressure_positive", "pressure_negative", "concentration_positive"
     )
@@ -306,6 +314,31 @@ def main() -> None:
         )
         assert len(paper_records) == 41
         assert np.isfinite(paper_stat["economic_cost_mean"])
+        for component in (
+            "economic_reward",
+            "projection_penalty",
+            "mapping_penalty",
+            "move_penalty",
+            "state_violation_penalty",
+            "input_violation_penalty",
+            "rpi_violation_event_penalty",
+            "rpi_excess_penalty",
+            "qp_infeasible_penalty",
+            "total_reward",
+        ):
+            assert f"{component}_mean" in paper_stat
+            assert f"{component}_total" in paper_stat
+        assert np.isclose(
+            paper_stat["rpi_violation_event_penalty_mean"],
+            paper_episode_cfg.rpi_violation_event_penalty
+            * paper_stat["rpi_violation_rate"],
+        )
+        assert np.isclose(
+            paper_stat["rpi_excess_penalty_mean"],
+            paper_episode_cfg.rpi_excess_square_weight
+            * paper_stat["rpi_excess_squared_mean"],
+        )
+        assert paper_stat["rpi_penalty_excluded_from_training_reward"] == 0.0
         assert all(
             np.array_equal(record["disturbance"], paper_cfg.disturbance_nominal)
             for record in paper_records
@@ -368,6 +401,65 @@ def main() -> None:
         assert np.linalg.norm(
             nonzero_info["nominal"] - nonzero_info["base"]
         ) > 0.0
+        training_cfg = replace(paper_episode_cfg, steps_per_episode=3)
+        training_replay = ReplayBuffer(OBS_DIM, 2, 16, "cpu")
+        training_stat, training_records, _ = run_episode(
+            training_cfg,
+            scan.selected_model,
+            SafeController(training_cfg, scan.selected_model, scan.selected_design),
+            ZeroResidualPolicy(),
+            training_replay,
+            np.random.default_rng(2017),
+            training=True,
+            global_step=0,
+            paper_scenario="pressure_positive",
+        )
+        assert training_stat["rpi_penalty_excluded_from_training_reward"] == 1.0
+        assert all(
+            record["rpi_penalty_excluded_from_training_reward"]
+            for record in training_records
+        )
+        assert np.isclose(
+            training_stat["reward_safety_penalty_total"],
+            training_stat["safety_penalty_total"]
+            - training_stat["rpi_violation_event_penalty_total"]
+            - training_stat["rpi_excess_penalty_total"],
+        )
+        synthetic_rollout = {
+            "time": np.arange(60, dtype=float),
+            "state": np.column_stack([
+                1.0 + np.exp(-np.arange(60) / 10.0),
+                2.0 + 2.0 * np.exp(-np.arange(60) / 8.0),
+            ]),
+            "control": np.column_stack([
+                200.0 + np.sin(np.arange(60) / 10.0),
+                250.0 + np.cos(np.arange(60) / 10.0),
+            ]),
+        }
+        control_metrics = paper2016_control_performance_metrics(
+            {scenario: synthetic_rollout for scenario in PAPER2016_SCENARIOS},
+            {scenario: synthetic_rollout for scenario in PAPER2016_SCENARIOS},
+        )
+        assert control_metrics["tolerance_definition"]["tolerance_fraction"] == 0.05
+        assert control_metrics["scenarios"]["pressure_positive"][
+            "safe_sac"
+        ]["X2"]["IAE"] >= 0.0
+        for state_name in ("X2", "P2"):
+            sac_common = control_metrics["scenarios"]["pressure_positive"][
+                "safe_sac"
+            ][state_name]["common_reference"]
+            baseline_common = control_metrics["scenarios"][
+                "pressure_positive"
+            ]["zero_residual_baseline"][state_name]["common_reference"]
+            assert sac_common["reference_final_window_mean"] == (
+                baseline_common["reference_final_window_mean"]
+            )
+            assert sac_common["tolerance_absolute"] == (
+                baseline_common["tolerance_absolute"]
+            )
+        train_source = inspect.getsource(train_module.main)
+        assert '"post_warmup_eligible": bool(' in train_source
+        assert "global_step >= cfg.warmup_steps" in train_source
     short_trend = summarize_training_trend(
         np.arange(10, dtype=float), np.array([0.0, 0.1])
     )
@@ -376,6 +468,11 @@ def main() -> None:
     assert cfg.episodes == 500
     assert cfg.steps_per_episode == 300
     assert paper_cfg.paper2016_simulation_seconds == 300
+    aggregate_check = _metric_summary([1.0, 2.0, 3.0], list(DEFAULT_SEEDS))
+    assert aggregate_check["n"] == 3
+    assert aggregate_check["mean"] == 2.0
+    assert aggregate_check["sample_std"] == 1.0
+    assert aggregate_check["ci95_half_width"] > 0.0
     paper_schedule = balanced_random_paper2016_schedule(500, 42)
     assert len(paper_schedule) == 500
     scenario_counts = {
