@@ -291,6 +291,20 @@ class ExperimentConfig:
     rpi_excess_square_weight: float = 200.0
     qp_intervention_tolerance: float = 1e-3
 
+    # Paper2016 proposed-policy shaping, calibrated on the frozen 38f62cb
+    # three-seed rollouts.  With the paper steady state as the common target,
+    # lambda_x*E[Lx] and lambda_F*E[LF] are initially about 8.3% and 5.2% of
+    # E[|economic_reward|], respectively.  These terms do not alter safety.
+    paper2016_state_recovery_penalty_weight: float = 1.5
+    paper2016_f200_move_penalty_weight: float = 900.0
+
+    # Training-only continuous shock-amplitude domain randomization.  Formal
+    # deterministic evaluation always keeps the original endpoint lambda=1.
+    paper2016_random_shock_episode_probability: float = 0.80
+    paper2016_endpoint_shock_episode_probability: float = 0.20
+    paper2016_training_shock_scale_lower: float = 0.20
+    paper2016_training_shock_scale_upper: float = 1.00
+
     # The reward baseline is the fixed nominal economic point above, independent
     # of the terminal center, so paper-center and ablation returns are comparable.
     reward_cost_scale: float = 200.0
@@ -350,4 +364,20 @@ class ExperimentConfig:
         elif self.benchmark_profile != "default":
             raise ValueError(
                 "benchmark_profile must be 'default' or 'zanon2016'"
+            )
+        probability_sum = (
+            self.paper2016_random_shock_episode_probability
+            + self.paper2016_endpoint_shock_episode_probability
+        )
+        if not np.isclose(probability_sum, 1.0):
+            raise ValueError(
+                "Paper2016 random/endpoint shock probabilities must sum to one"
+            )
+        if not (
+            0.0 < self.paper2016_training_shock_scale_lower
+            <= self.paper2016_training_shock_scale_upper
+            <= 1.0
+        ):
+            raise ValueError(
+                "Paper2016 training shock scale must satisfy 0 < lower <= upper <= 1"
             )

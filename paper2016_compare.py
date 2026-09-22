@@ -62,17 +62,25 @@ PAPER_REFERENCE_G = {
 }
 
 
-def apply_state_shock(state: np.ndarray, scenario: str, second: int) -> np.ndarray:
+def apply_state_shock(
+    state: np.ndarray,
+    scenario: str,
+    second: int,
+    scale: float = 1.0,
+) -> np.ndarray:
     """Apply the paper's instantaneous plant-state shock, never a persistent bias."""
     result = np.asarray(state, dtype=float).copy()
     if second not in SHOCK_SECONDS:
         return result
+    scale = float(scale)
+    if not 0.0 < scale <= 1.0:
+        raise ValueError("Paper2016 state-shock scale must satisfy 0 < scale <= 1")
     if scenario == "pressure_positive":
-        result[1] += 1.0
+        result[1] += scale
     elif scenario == "pressure_negative":
-        result[1] -= 1.0
+        result[1] -= scale
     elif scenario == "concentration_positive":
-        result[0] += 1.0
+        result[0] += scale
     else:
         raise ValueError(f"unknown paper2016 scenario: {scenario}")
     return result

@@ -231,10 +231,14 @@ def plot_reward_decomposition(
     """Expose the economic signal and every material Paper2016 penalty."""
     required = (
         "economic_reward_mean",
+        "state_recovery_penalty_mean",
+        "f200_move_penalty_mean",
         "rpi_violation_event_penalty_mean",
         "rpi_excess_penalty_mean",
         "total_reward_mean",
         "evaluation_economic_reward_mean",
+        "evaluation_state_recovery_penalty_mean",
+        "evaluation_f200_move_penalty_mean",
         "evaluation_rpi_violation_event_penalty_mean",
         "evaluation_rpi_excess_penalty_mean",
         "evaluation_total_reward_mean",
@@ -246,8 +250,10 @@ def plot_reward_decomposition(
     episode = log["episode"][train_mask]
     for key, label, color in (
         ("economic_reward_mean", "Economic reward", BLUE),
+        ("state_recovery_penalty_mean", "State recovery penalty", GREEN),
+        ("f200_move_penalty_mean", "F200 move penalty", ORANGE),
         ("rpi_violation_event_penalty_mean", "RPI event penalty", RED),
-        ("rpi_excess_penalty_mean", "RPI excess penalty", ORANGE),
+        ("rpi_excess_penalty_mean", "RPI excess penalty", "#8c6bb1"),
         ("total_reward_mean", "Replay total reward", BLACK),
     ):
         axes[0].plot(
@@ -266,6 +272,16 @@ def plot_reward_decomposition(
     for key, label, color in (
         ("evaluation_economic_reward_mean", "Economic reward", BLUE),
         (
+            "evaluation_state_recovery_penalty_mean",
+            "State recovery penalty",
+            GREEN,
+        ),
+        (
+            "evaluation_f200_move_penalty_mean",
+            "F200 move penalty",
+            ORANGE,
+        ),
+        (
             "evaluation_rpi_violation_event_penalty_mean",
             "Reported RPI event penalty",
             RED,
@@ -273,7 +289,7 @@ def plot_reward_decomposition(
         (
             "evaluation_rpi_excess_penalty_mean",
             "Reported RPI excess penalty",
-            ORANGE,
+            "#8c6bb1",
         ),
         ("evaluation_total_reward_mean", "Evaluation total reward", BLACK),
     ):

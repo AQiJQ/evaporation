@@ -55,6 +55,7 @@ from .train import (
     observation,
     paper2016_control_performance_metrics,
     run_episode,
+    sample_paper2016_training_shock_scale,
     summarize_training_trend,
 )
 from . import train as train_module
@@ -72,6 +73,13 @@ def main() -> None:
     assert paper_cfg.main_experiment_protocol == "paper2016_original_state_shocks"
     assert np.array_equal(paper_cfg.disturbance_half_range, np.zeros(4))
     assert np.allclose(paper_cfg.residual_action_scale, [0.36, 0.30])
+    assert np.isclose(paper_cfg.actor_learning_rate, 3e-4)
+    assert np.isclose(paper_cfg.critic_learning_rate, 3e-4)
+    assert np.isclose(paper_cfg.entropy_learning_rate, 3e-4)
+    assert np.isclose(paper_cfg.tau, 0.005)
+    assert paper_cfg.batch_size == 256
+    assert np.isclose(paper_cfg.paper2016_state_recovery_penalty_weight, 1.5)
+    assert np.isclose(paper_cfg.paper2016_f200_move_penalty_weight, 900.0)
     paper_joint_cfg = ExperimentConfig(
         benchmark_profile="zanon2016", experiment_mode="joint_theta"
     )
@@ -131,6 +139,27 @@ def main() -> None:
     assert np.allclose(
         apply_state_shock(nominal_state, "pressure_positive", 1), nominal_state
     )
+    assert np.allclose(
+        apply_state_shock(
+            nominal_state, "pressure_positive", 0, scale=0.35
+        ) - nominal_state,
+        [0.0, 0.35],
+    )
+    try:
+        apply_state_shock(nominal_state, "pressure_positive", 0, scale=0.0)
+        raise AssertionError("zero Paper2016 shock scale must be rejected")
+    except ValueError:
+        pass
+    scale_rng = np.random.default_rng(1601)
+    sampled_scales = np.asarray([
+        sample_paper2016_training_shock_scale(paper_cfg, scale_rng)
+        for _ in range(10000)
+    ])
+    assert np.all(sampled_scales >= 0.2)
+    assert np.all(sampled_scales <= 1.0)
+    endpoint_fraction = float(np.mean(sampled_scales == 1.0))
+    assert 0.17 <= endpoint_fraction <= 0.23
+    assert np.unique(sampled_scales[sampled_scales < 1.0]).size > 100
     assert PAPER2016_DISTURBANCE_PROTOCOL["uses_rho_d_scaling"] is False
     assert PAPER2016_DISTURBANCE_PROTOCOL["external_conditions"] == "nominal"
     assert PAPER2016_DISTURBANCE_PROTOCOL["state_shock_scaling"] == 1.0
@@ -319,6 +348,8 @@ def main() -> None:
             "projection_penalty",
             "mapping_penalty",
             "move_penalty",
+            "state_recovery_penalty",
+            "f200_move_penalty",
             "state_violation_penalty",
             "input_violation_penalty",
             "rpi_violation_event_penalty",
@@ -347,6 +378,10 @@ def main() -> None:
             record["paper2016_scenario"] == "pressure_positive"
             for record in paper_records
         )
+        assert all(record["scenario_type"] == "pressure_positive"
+                   for record in paper_records)
+        assert all(record["shock_scale_lambda"] == 1.0
+                   for record in paper_records)
         shock_seconds = [
             index for index, record in enumerate(paper_records)
             if np.any(record["paper_state_shock"] != 0.0)
@@ -355,6 +390,27 @@ def main() -> None:
         assert all(
             np.array_equal(paper_records[index]["paper_state_shock"], [0.0, 1.0])
             for index in shock_seconds
+        )
+        assert np.isclose(
+            paper_stat["state_recovery_penalty_mean"],
+            paper_episode_cfg.paper2016_state_recovery_penalty_weight
+            * paper_stat["state_recovery_loss_mean"],
+        )
+        assert np.isclose(
+            paper_stat["f200_move_penalty_mean"],
+            paper_episode_cfg.paper2016_f200_move_penalty_weight
+            * paper_stat["f200_move_loss_mean"],
+        )
+        first_reward = paper_records[0]
+        assert np.isclose(
+            first_reward["reward"],
+            first_reward["economic_reward"]
+            - first_reward["projection_penalty"]
+            - first_reward["mapping_penalty"]
+            - first_reward["move_penalty"]
+            - first_reward["state_recovery_penalty"]
+            - first_reward["f200_move_penalty"]
+            - first_reward["reward_safety_penalty"],
         )
         # A zero actor residual must pass the actual online verification QP,
         # even though the paper initial state lies outside the local nominal
@@ -401,8 +457,8 @@ def main() -> None:
         assert np.linalg.norm(
             nonzero_info["nominal"] - nonzero_info["base"]
         ) > 0.0
-        training_cfg = replace(paper_episode_cfg, steps_per_episode=3)
-        training_replay = ReplayBuffer(OBS_DIM, 2, 16, "cpu")
+        training_cfg = replace(paper_episode_cfg, steps_per_episode=41)
+        training_replay = ReplayBuffer(OBS_DIM, 2, 64, "cpu")
         training_stat, training_records, _ = run_episode(
             training_cfg,
             scan.selected_model,
@@ -425,6 +481,21 @@ def main() -> None:
             - training_stat["rpi_violation_event_penalty_total"]
             - training_stat["rpi_excess_penalty_total"],
         )
+        training_lambda = training_stat["shock_scale_lambda"]
+        assert 0.2 <= training_lambda <= 1.0
+        assert all(record["shock_scale_lambda"] == training_lambda
+                   for record in training_records)
+        assert all(record["scenario_type"] == "pressure_positive"
+                   for record in training_records)
+        training_shock_seconds = [
+            index for index, record in enumerate(training_records)
+            if np.any(record["paper_state_shock"] != 0.0)
+        ]
+        assert training_shock_seconds == [0, 20, 40]
+        assert all(np.allclose(
+            training_records[index]["paper_state_shock"],
+            [0.0, training_lambda],
+        ) for index in training_shock_seconds)
         synthetic_rollout = {
             "time": np.arange(60, dtype=float),
             "state": np.column_stack([
@@ -705,7 +776,8 @@ def main() -> None:
     for reward_field in (
         "return", "return_per_step", "economic_reward_mean",
         "projection_penalty_mean", "mapping_penalty_mean",
-        "move_penalty_mean", "safety_penalty_mean",
+        "move_penalty_mean", "state_recovery_penalty_mean",
+        "f200_move_penalty_mean", "safety_penalty_mean",
     ):
         assert reward_field in episode_stat
     assert np.all(np.isfinite(episode_records[0]["w_est"]))
@@ -721,6 +793,8 @@ def main() -> None:
             "residual_execution_ratio_mean",
         )
     )
+    assert episode_stat["state_recovery_penalty_mean"] == 0.0
+    assert episode_stat["f200_move_penalty_mean"] == 0.0
     episode_source = inspect.getsource(run_episode)
     assert "(reward_reference_cost - cost) / cfg.reward_cost_scale" in episode_source
     assert "total_return += reward" in episode_source

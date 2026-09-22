@@ -18,8 +18,9 @@ T_975_DF2 = 4.302652729911275
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run the formal Paper2016 nominal-exogenous, unscaled-state-shock "
-            "safe-SAC comparison on three independent seeds"
+            "Run Paper2016 safe-SAC with nominal exogenous conditions, "
+            "randomized-amplitude training shocks, and original endpoint "
+            "evaluation shocks on three independent seeds"
         )
     )
     parser.add_argument("--episodes", type=int, default=500)
@@ -245,9 +246,10 @@ def _write_aggregate(root: Path, seeds: list[int]) -> None:
     numeric_keys = [key for key in header if key != "seed"]
     aggregate = {
         "protocol": (
-            "Paper2016 original nominal exogenous conditions and unscaled "
-            "state shocks; three independent trainings with paired final-theta "
-            "SAC/no-SAC evaluation"
+            "Paper2016 nominal exogenous conditions with randomized-amplitude "
+            "training shocks and original unscaled endpoint evaluation shocks; "
+            "three independent trainings with paired final-theta SAC/no-SAC "
+            "evaluation"
         ),
         "benchmark_profile": "zanon2016",
         "uses_rho_d_scaling": False,
@@ -933,7 +935,14 @@ def main() -> None:
                         "concentration_positive",
                     ],
                     "times_seconds": [0, 20, 40],
-                    "scaling": 1.0,
+                    "training_scale_distribution": {
+                        "random_uniform_probability": 0.80,
+                        "random_uniform_interval": [0.20, 1.00],
+                        "endpoint_probability": 0.20,
+                        "endpoint_scale": 1.0,
+                        "same_scale_for_all_three_shocks_in_episode": True,
+                    },
+                    "evaluation_scale": 1.0,
                 },
                 "training_scenario_schedule": (
                     "seeded balanced random permutation in three-episode "
@@ -951,6 +960,9 @@ def main() -> None:
                         "rpi_excess_penalty",
                     ],
                     "rpi_monitoring_and_formal_audit_retained": True,
+                    "state_recovery_penalty_weight": 1.5,
+                    "f200_move_penalty_weight": 900.0,
+                    "state_reference": [25.0, 49.743],
                 },
                 "learned_checkpoint_requirement": (
                     "global_step >= warmup_steps; pre-warmup checkpoints are "

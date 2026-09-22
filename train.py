@@ -51,6 +51,10 @@ REWARD_DECOMPOSITION_FIELDS = (
     "mapping_penalty_total",
     "move_penalty_mean",
     "move_penalty_total",
+    "state_recovery_penalty_mean",
+    "state_recovery_penalty_total",
+    "f200_move_penalty_mean",
+    "f200_move_penalty_total",
     "state_violation_penalty_mean",
     "state_violation_penalty_total",
     "input_violation_penalty_mean",
@@ -75,6 +79,18 @@ class ZeroResidualPolicy:
     def select_action(obs: np.ndarray, deterministic: bool = True) -> np.ndarray:
         del obs, deterministic
         return np.zeros(ACTION_DIM, dtype=np.float32)
+
+
+def sample_paper2016_training_shock_scale(
+    cfg: ExperimentConfig, rng: np.random.Generator
+) -> float:
+    """Sample one amplitude shared by all three shocks in a training episode."""
+    if rng.random() < cfg.paper2016_endpoint_shock_episode_probability:
+        return 1.0
+    return float(rng.uniform(
+        cfg.paper2016_training_shock_scale_lower,
+        cfg.paper2016_training_shock_scale_upper,
+    ))
 
 
 def observation(
@@ -237,6 +253,10 @@ def run_episode(
                     int(rng.integers(0, len(cfg.paper2016_training_scenarios)))
                 ]
             )
+            segment_shock_scale = (
+                sample_paper2016_training_shock_scale(cfg, rng)
+                if training else 1.0
+            )
         else:
             z0 = rng.uniform(initial_lower, initial_upper)
             if training and rng.random() < cfg.training_boundary_start_probability:
@@ -247,6 +267,7 @@ def run_episode(
             segment_state = model.physical_state(z0)
             controller.reset(segment_state)
             segment_scenario = "none"
+            segment_shock_scale = 0.0
         segment_previous_u = controller.d.v_ref.copy()
         segment_previous_residual = np.zeros(ACTION_DIM, dtype=float)
         segment_disturbance = (
@@ -270,6 +291,7 @@ def run_episode(
             0,
             segment_obs,
             segment_scenario,
+            segment_shock_scale,
             0,
         )
 
@@ -282,6 +304,7 @@ def run_episode(
         disturbance_age,
         obs,
         active_paper_scenario,
+        active_shock_scale,
         paper_second,
     ) = reset_segment()
     reward_reference_cost = model.economic_cost(
@@ -303,6 +326,10 @@ def run_episode(
     mapping_penalty_sum = 0.0
     mapping_activations = 0
     move_penalty_sum = 0.0
+    state_recovery_loss_sum = 0.0
+    state_recovery_penalty_sum = 0.0
+    f200_move_loss_sum = 0.0
+    f200_move_penalty_sum = 0.0
     safety_penalty_sum = 0.0
     reward_safety_penalty_sum = 0.0
     state_violation_penalty_sum = 0.0
@@ -329,7 +356,10 @@ def run_episode(
         if paper_protocol:
             state_before_shock = state.copy()
             state = apply_state_shock(
-                state, active_paper_scenario, paper_second
+                state,
+                active_paper_scenario,
+                paper_second,
+                scale=active_shock_scale,
             )
             paper_state_shock = state - state_before_shock
             obs = observation(
@@ -420,6 +450,27 @@ def run_episode(
         move_penalty = cfg.input_move_penalty_weight * float(
             np.sum((applied_residual - previous_applied_residual) ** 2)
         )
+        paper_reward_shaping = bool(
+            paper_protocol and cfg.experiment_mode == "proposed"
+        )
+        if paper_reward_shaping:
+            state_recovery_loss = float(np.sum((
+                (next_state - cfg.paper2016_steady_state) / cfg.state_scale
+            ) ** 2))
+            previous_control = model.physical_input(previous_u)
+            f200_move_loss = float((
+                (control[1] - previous_control[1]) / cfg.input_scale[1]
+            ) ** 2)
+        else:
+            state_recovery_loss = 0.0
+            f200_move_loss = 0.0
+        state_recovery_penalty = (
+            cfg.paper2016_state_recovery_penalty_weight
+            * state_recovery_loss
+        )
+        f200_move_penalty = (
+            cfg.paper2016_f200_move_penalty_weight * f200_move_loss
+        )
         state_violation_penalty = (
             cfg.state_violation_event_penalty * float(state_bad)
         )
@@ -468,7 +519,8 @@ def run_episode(
             )
         reward = (
             economic_reward - projection_penalty - mapping_penalty
-            - move_penalty - reward_safety_penalty
+            - move_penalty - state_recovery_penalty - f200_move_penalty
+            - reward_safety_penalty
         )
         segment_done = bool(
             training
@@ -535,6 +587,10 @@ def run_episode(
         residual_applied_norm_sum += applied_norm
         residual_execution_ratio_sum += execution_ratio
         move_penalty_sum += move_penalty
+        state_recovery_loss_sum += state_recovery_loss
+        state_recovery_penalty_sum += state_recovery_penalty
+        f200_move_loss_sum += f200_move_loss
+        f200_move_penalty_sum += f200_move_penalty
         safety_penalty_sum += safety_penalty
         reward_safety_penalty_sum += reward_safety_penalty
         state_violation_penalty_sum += state_violation_penalty
@@ -579,6 +635,10 @@ def run_episode(
             "projection_penalty": projection_penalty,
             "mapping_penalty": mapping_penalty,
             "move_penalty": move_penalty,
+            "state_recovery_loss": state_recovery_loss,
+            "state_recovery_penalty": state_recovery_penalty,
+            "f200_move_loss": f200_move_loss,
+            "f200_move_penalty": f200_move_penalty,
             "safety_penalty": safety_penalty,
             "reward_safety_penalty": reward_safety_penalty,
             "state_violation_penalty": state_violation_penalty,
@@ -605,6 +665,8 @@ def run_episode(
             "error": e_next.copy(),
             "effective_w": effective_w.copy(),
             "paper2016_scenario": active_paper_scenario,
+            "scenario_type": active_paper_scenario,
+            "shock_scale_lambda": active_shock_scale,
             "paper_state_shock": paper_state_shock.copy(),
         })
         if segment_done and step < episode_steps - 1:
@@ -617,6 +679,7 @@ def run_episode(
                 disturbance_age,
                 obs,
                 active_paper_scenario,
+                active_shock_scale,
                 paper_second,
             ) = reset_segment()
         else:
@@ -668,6 +731,15 @@ def run_episode(
         ),
         "move_penalty_mean": move_penalty_sum / episode_steps,
         "move_penalty_total": move_penalty_sum,
+        "state_recovery_loss_mean": state_recovery_loss_sum / episode_steps,
+        "state_recovery_penalty_mean": (
+            state_recovery_penalty_sum / episode_steps
+        ),
+        "state_recovery_penalty_total": state_recovery_penalty_sum,
+        "f200_move_loss_mean": f200_move_loss_sum / episode_steps,
+        "f200_move_penalty_mean": f200_move_penalty_sum / episode_steps,
+        "f200_move_penalty_total": f200_move_penalty_sum,
+        "shock_scale_lambda": float(active_shock_scale),
         "safety_penalty_mean": safety_penalty_sum / episode_steps,
         "safety_penalty_total": safety_penalty_sum,
         "reward_safety_penalty_mean": (
@@ -748,7 +820,9 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "base", "nominal_control", "ancillary",
         "reward", "total_reward", "economic_cost", "economic_reward", "projection_penalty",
         "mapping_penalty",
-        "move_penalty", "safety_penalty", "reward_safety_penalty",
+        "move_penalty", "state_recovery_loss", "state_recovery_penalty",
+        "f200_move_loss", "f200_move_penalty",
+        "safety_penalty", "reward_safety_penalty",
         "state_violation_penalty", "input_violation_penalty",
         "rpi_violation_event_penalty", "qp_infeasible_penalty",
         "state_excess_penalty", "input_excess_penalty", "rpi_excess_penalty",
@@ -758,7 +832,8 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "robust_state_violation", "robust_input_violation",
         "robust_region_violation",
         "candidate", "nominal", "error", "effective_w",
-        "paper2016_scenario", "paper_state_shock",
+        "paper2016_scenario", "scenario_type", "shock_scale_lambda",
+        "paper_state_shock",
     ]
     return {key: np.asarray([record[key] for record in records]) for key in keys}
 
@@ -809,6 +884,8 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "hinf_feedback_P100_norm", "hinf_feedback_F200_norm",
             "reward", "total_reward", "economic_cost", "economic_reward",
             "projection_penalty", "mapping_penalty", "move_penalty", "safety_penalty",
+            "state_recovery_loss", "state_recovery_penalty",
+            "f200_move_loss", "f200_move_penalty",
             "reward_safety_penalty", "state_violation_penalty",
             "input_violation_penalty", "rpi_violation_event_penalty",
             "rpi_excess_penalty", "qp_infeasible_penalty",
@@ -819,7 +896,8 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
             "robust_state_violation", "robust_input_violation",
             "robust_region_violation",
             "e_X2_norm", "e_P2_norm", "w_X2_norm", "w_P2_norm",
-            "paper2016_scenario", "state_shock_X2", "state_shock_P2",
+            "paper2016_scenario", "scenario_type", "shock_scale_lambda",
+            "state_shock_X2", "state_shock_P2",
         ],
         (
             [
@@ -851,6 +929,10 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 rollout["mapping_penalty"][i],
                 rollout["move_penalty"][i],
                 rollout["safety_penalty"][i],
+                rollout["state_recovery_loss"][i],
+                rollout["state_recovery_penalty"][i],
+                rollout["f200_move_loss"][i],
+                rollout["f200_move_penalty"][i],
                 rollout["reward_safety_penalty"][i],
                 rollout["state_violation_penalty"][i],
                 rollout["input_violation_penalty"][i],
@@ -872,6 +954,8 @@ def save_rollout_csv(path: Path, rollout: dict[str, np.ndarray]) -> None:
                 *rollout["error"][i],
                 *rollout["effective_w"][i],
                 rollout["paper2016_scenario"][i],
+                rollout["scenario_type"][i],
+                rollout["shock_scale_lambda"][i],
                 *rollout["paper_state_shock"][i],
             ]
             for i in range(len(rollout["time"]))
@@ -2225,9 +2309,11 @@ def main() -> None:
         initial_requested_state_dependence,
         initial_applied_state_dependence,
     )
-    logs: list[dict[str, float]] = [{
+    logs: list[dict[str, object]] = [{
         "episode": 0,
         "global_step": 0,
+        "scenario_type": "fixed_deterministic_evaluation",
+        "shock_scale_lambda": 1.0,
         **initial_stat,
         **initial_theta_metrics,
         **{
@@ -2425,6 +2511,10 @@ def main() -> None:
         logs.append({
             "episode": episode,
             "global_step": global_step,
+            "scenario_type": (
+                paper_training_schedule[episode - 1]
+                if paper_main_experiment else "none"
+            ),
             **stat,
             **theta_metrics,
             **eval_reward_fields,
@@ -2971,6 +3061,7 @@ def main() -> None:
     log_arrays = {
         key: np.asarray([row[key] for row in logs], dtype=float)
         for key in logs[0]
+        if key != "scenario_type"
     }
     save_csv(
         cfg.output_dir / "training_log.csv",
@@ -3371,7 +3462,7 @@ def main() -> None:
         ),
         "uses_rho_d_scaling": False if paper_main_experiment else True,
         "training_disturbance_protocol": (
-            "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+            "nominal_exogenous_conditions_plus_randomized_state_shocks"
             if paper_main_experiment
             else f"{cfg.disturbance_mode}_exogenous_uncertainty"
         ),
@@ -3379,6 +3470,18 @@ def main() -> None:
             "nominal_exogenous_conditions_plus_unscaled_state_shocks"
         ),
         "paper2016_state_shock_scaling": 1.0,
+        "paper2016_training_shock_scale_distribution": {
+            "random_uniform_probability": (
+                cfg.paper2016_random_shock_episode_probability
+            ),
+            "random_uniform_lower": cfg.paper2016_training_shock_scale_lower,
+            "random_uniform_upper": cfg.paper2016_training_shock_scale_upper,
+            "endpoint_probability": (
+                cfg.paper2016_endpoint_shock_episode_probability
+            ),
+            "endpoint_scale": 1.0,
+            "shared_by_shocks_within_episode": True,
+        },
         "paper2016_training_scenarios": list(
             cfg.paper2016_training_scenarios
         ),
@@ -3796,6 +3899,32 @@ def main() -> None:
         "training_feasible_action_mapping_rate": float(
             np.mean(log_arrays["feasible_action_mapping_rate"][training_mask])
         ),
+        "training_state_recovery_loss_mean": float(
+            np.mean(log_arrays["state_recovery_loss_mean"][training_mask])
+        ),
+        "training_state_recovery_penalty_mean": float(
+            np.mean(log_arrays["state_recovery_penalty_mean"][training_mask])
+        ),
+        "training_f200_move_loss_mean": float(
+            np.mean(log_arrays["f200_move_loss_mean"][training_mask])
+        ),
+        "training_f200_move_penalty_mean": float(
+            np.mean(log_arrays["f200_move_penalty_mean"][training_mask])
+        ),
+        "training_shock_scale_lambda_mean": float(
+            np.mean(log_arrays["shock_scale_lambda"][training_mask])
+        ),
+        "training_shock_scale_lambda_min": float(
+            np.min(log_arrays["shock_scale_lambda"][training_mask])
+        ),
+        "training_shock_scale_lambda_max": float(
+            np.max(log_arrays["shock_scale_lambda"][training_mask])
+        ),
+        "training_shock_endpoint_episode_fraction": float(np.mean(
+            np.isclose(
+                log_arrays["shock_scale_lambda"][training_mask], 1.0
+            )
+        )),
         "first_20_return_mean": float(np.mean(training_returns[:20])),
         "last_20_return_mean": float(np.mean(training_returns[-20:])),
         "reward_formula": (
@@ -3803,6 +3932,8 @@ def main() -> None:
             "- lambda_qp*||v_qp-v_candidate||_2^2 "
             "- lambda_map*||v_safe_ray-v_requested||_2^2 "
             "- lambda_du*||delta_residual_executed||_2^2 "
+            "- lambda_x*||diag(state_scale)^-1*(x-x_ref)||_2^2 "
+            "- lambda_F*((F200_k-F200_{k-1})/input_scale_F200)^2 "
             "- violation_event_penalties - normalized_hinge_excess_penalties"
         ),
         "paper2016_proposed_training_reward_rpi_terms_excluded": bool(
@@ -3814,6 +3945,18 @@ def main() -> None:
             if paper_main_experiment and cfg.experiment_mode == "proposed"
             else "not_applicable"
         ),
+        "paper2016_reward_shaping_scope": (
+            "zanon2016 AND proposed AND "
+            "paper2016_original_state_shocks"
+        ),
+        "paper2016_reward_weight_calibration": {
+            "source": "frozen_38f62cb_existing_rollouts",
+            "pooled_mean_absolute_economic_reward": 1.667,
+            "pooled_mean_state_recovery_loss": 0.092235,
+            "pooled_mean_f200_move_loss": 9.6775e-5,
+            "estimated_state_penalty_fraction_of_abs_economic_reward": 0.083,
+            "estimated_f200_penalty_fraction_of_abs_economic_reward": 0.052,
+        },
         "reward_decomposition_fields": list(REWARD_DECOMPOSITION_FIELDS),
         "economic_reward_form": (
             "linear_monotone_decreasing_in_observed_economic_stage_cost"
@@ -3833,6 +3976,12 @@ def main() -> None:
         ),
         "reward_reference": "fixed_nominal_economic_point_independent_of_terminal_center",
         "reward_reference_cost": nominal_economic_reference_cost,
+        "paper2016_state_recovery_reference": (
+            cfg.paper2016_steady_state.tolist()
+        ),
+        "paper2016_state_recovery_reference_source": (
+            "fixed_Paper2016_nominal_steady_state_not_trajectory_terminal_mean"
+        ),
         "economic_optimum_precomputed_for_sac": False,
         "reward_uses_observed_stage_cost": True,
         "economic_optimum_is_actor_observation": False,
@@ -3916,6 +4065,12 @@ def main() -> None:
                 cfg.feasible_action_mapping_penalty_weight
             ),
             "input_move_squared": cfg.input_move_penalty_weight,
+            "paper2016_state_recovery_normalized_squared": (
+                cfg.paper2016_state_recovery_penalty_weight
+            ),
+            "paper2016_f200_move_normalized_squared": (
+                cfg.paper2016_f200_move_penalty_weight
+            ),
             "state_violation_event": cfg.state_violation_event_penalty,
             "input_violation_event": cfg.input_violation_event_penalty,
             "rpi_violation_event": cfg.rpi_violation_event_penalty,
