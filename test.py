@@ -9,13 +9,16 @@ from pathlib import Path
 import numpy as np
 
 from .config import ExperimentConfig
+from .certified_reference_search import _candidate_config
 from .control import (
     SafeController,
     _rpi_support,
     build_safety_design,
     estimate_hinf_norm,
+    maximum_reservable_authority,
     point_in_convex_polygon,
     project_qp_2d,
+    safe_projected_base,
     spectral_radius,
 )
 from .model import EvaporatorModel
@@ -50,6 +53,7 @@ from .train import (
     compute_safe_steady_reference,
     economic_policy_eligible,
     evaluate_paper_nominal_pressure_policy,
+    experiment_reference_state,
     formal_safety_certified,
     hard_safety_passed,
     observation,
@@ -70,16 +74,35 @@ def main() -> None:
         benchmark_profile="zanon2016", disturbance_bound_samples=50
     )
     assert np.isclose(paper_cfg.dt_min, 1.0 / 60.0)
-    assert paper_cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+    assert paper_cfg.main_experiment_protocol == "robust_reference_paper2016_shocks"
     assert np.array_equal(paper_cfg.disturbance_half_range, np.zeros(4))
     assert np.allclose(paper_cfg.residual_action_scale, [0.36, 0.30])
+    assert np.allclose(
+        paper_cfg.safe_center_state, paper_cfg.robust_economic_reference_state
+    )
+    assert np.allclose(
+        paper_cfg.linearization_state, paper_cfg.robust_economic_reference_state
+    )
+    assert np.allclose(
+        paper_cfg.linearization_input, paper_cfg.robust_economic_reference_input
+    )
+    assert not np.array_equal(
+        paper_cfg.robust_economic_reference_state,
+        paper_cfg.paper2016_steady_state,
+    )
     assert np.isclose(paper_cfg.actor_learning_rate, 3e-4)
     assert np.isclose(paper_cfg.critic_learning_rate, 3e-4)
     assert np.isclose(paper_cfg.entropy_learning_rate, 3e-4)
     assert np.isclose(paper_cfg.tau, 0.005)
     assert paper_cfg.batch_size == 256
-    assert np.isclose(paper_cfg.paper2016_state_recovery_penalty_weight, 1.5)
-    assert np.isclose(paper_cfg.paper2016_f200_move_penalty_weight, 900.0)
+    assert np.isclose(
+        paper_cfg.paper2016_state_recovery_penalty_weight,
+        5.476770540459546,
+    )
+    assert np.isclose(
+        paper_cfg.paper2016_f200_move_penalty_weight,
+        160.4170823496067,
+    )
     paper_joint_cfg = ExperimentConfig(
         benchmark_profile="zanon2016", experiment_mode="joint_theta"
     )
@@ -90,6 +113,21 @@ def main() -> None:
     path_diagnostics = dependency_diagnostics(DEFAULT_TUNEMPC_PATH)
     assert path_diagnostics["reference_files_present"], path_diagnostics
     paper_model = EvaporatorModel(paper_cfg)
+    searched_state = np.array([27.0, 51.5])
+    searched_cfg = _candidate_config(searched_state, seed=42)
+    searched_model = EvaporatorModel(searched_cfg)
+    assert np.array_equal(searched_cfg.safe_center_state, searched_state)
+    assert np.array_equal(searched_cfg.linearization_state, searched_state)
+    assert np.allclose(
+        searched_cfg.linearization_input,
+        searched_model.steady_input(
+            searched_state, searched_cfg.disturbance_nominal
+        ),
+        rtol=0.0,
+        atol=1e-12,
+    )
+    assert np.isclose(searched_cfg.qp_min_residual_authority, 0.05)
+    assert np.allclose(searched_cfg.residual_action_scale, [0.36, 0.30])
     consistency_state = np.array([28.4, 54.2])
     consistency_input = np.array([225.0, 240.0])
     current_flows = paper_model.algebraic(
@@ -413,9 +451,7 @@ def main() -> None:
             - first_reward["reward_safety_penalty"],
         )
         # A zero actor residual must pass the actual online verification QP,
-        # even though the paper initial state lies outside the local nominal
-        # invariant set.  reset() projects only z; the physical state remains
-        # unchanged and is handled through the ancillary error feedback.
+        # for the formal robust-reference shock protocol.
         assert paper_stat["qp_infeasible_rate"] == 0.0
         assert paper_stat["execution_mask_mean"] == 1.0
         assert paper_stat["residual_applied_norm_mean"] == 0.0
@@ -426,13 +462,14 @@ def main() -> None:
         paper_zero_controller = SafeController(
             paper_episode_cfg, scan.selected_model, scan.selected_design
         )
-        paper_zero_controller.reset(paper_episode_cfg.paper2016_steady_state)
+        robust_reference = experiment_reference_state(paper_episode_cfg)
+        paper_zero_controller.reset(robust_reference)
         _, zero_info = paper_zero_controller.act(
-            paper_episode_cfg.paper2016_steady_state + [0.0, 1.0],
+            robust_reference + [0.0, 1.0],
             np.zeros(2),
             action_is_normalized=True,
         )
-        assert zero_info["reset_projection_norm"] > 0.0
+        assert np.isclose(zero_info["reset_projection_norm"], 0.0)
         assert zero_info["base_qp_feasible"]
         assert zero_info["qp_feasible"]
         assert zero_info["reserved_residual_authority"] >= (
@@ -443,10 +480,10 @@ def main() -> None:
             paper_episode_cfg, scan.selected_model, scan.selected_design
         )
         paper_nonzero_controller.reset(
-            paper_episode_cfg.paper2016_steady_state
+            robust_reference
         )
         _, nonzero_info = paper_nonzero_controller.act(
-            paper_episode_cfg.paper2016_steady_state + [0.0, 1.0],
+            robust_reference + [0.0, 1.0],
             np.array([1.0, -1.0]),
             action_is_normalized=True,
         )
@@ -606,6 +643,23 @@ def main() -> None:
     b = np.ones(4)
     point, feasible = project_qp_2d(np.array([2.0, -3.0]), a, b)
     assert feasible and np.allclose(point, [1.0, -1.0]), point
+    authority_max, authority_feasible = maximum_reservable_authority(
+        np.array([1.0, 0.0]), a, b, np.array([0.5, 0.25])
+    )
+    assert authority_feasible and np.isclose(authority_max, 2.0, atol=1e-7)
+    reserve_diagnostics = {}
+    reserve_base, reserve_ok, reserve_actual = safe_projected_base(
+        np.array([1.0, 0.0]), a, b, np.array([0.5, 0.25]),
+        0.05, 0.995, reserve_mode="fraction_of_max",
+        reserve_fraction=0.8, diagnostics=reserve_diagnostics,
+    )
+    assert reserve_ok and np.isclose(reserve_diagnostics["lambda_reserve"], 1.6)
+    assert reserve_actual >= 1.6 - 1e-7
+    for signs in product((-1.0, 1.0), repeat=2):
+        assert np.all(
+            a @ (reserve_base + 1.6 * np.array([0.5, 0.25]) * signs)
+            <= b + 1e-8
+        )
     design = build_safety_design(cfg, model, np.random.default_rng(cfg.seed))
     assert design.minimum_residual_authority >= (
         cfg.qp_min_residual_authority - 1e-8
@@ -649,7 +703,11 @@ def main() -> None:
     _, tracking_info = controller.act(
         cfg.safe_center_state, np.zeros(2), action_is_normalized=True
     )
-    assert np.allclose(tracking_info["base"], design.v_ref, atol=1e-9)
+    assert np.allclose(tracking_info["theta_candidate"], design.v_ref, atol=1e-9)
+    assert np.allclose(tracking_info["nominal"], tracking_info["base"], atol=1e-9)
+    assert tracking_info["reserved_residual_authority"] >= (
+        cfg.qp_min_residual_authority - 1e-8
+    )
     acl = design.a + design.b @ design.k
     assert spectral_radius(acl) < 1.0
     assert all(
@@ -717,6 +775,24 @@ def main() -> None:
         assert np.all(
             info["a_q"] @ emergency_projection <= info["b_q"] + 1e-8
         )
+    cfg.residual_parameterization = "state_dependent_polytope"
+    for normalized_action in (
+        np.zeros(2), np.array([1.0, -0.5]), np.array([-0.4, 1.0])
+    ):
+        controller.reset(cfg.safe_center_state)
+        _, poly_info = controller.act(
+            cfg.safe_center_state, normalized_action,
+            action_is_normalized=True,
+        )
+        assert poly_info["qp_feasible"]
+        assert np.all(
+            poly_info["a_q"] @ poly_info["candidate"]
+            <= poly_info["b_q"] + 1e-8
+        )
+        assert poly_info["projection_gap"] < 1e-7
+        if np.max(np.abs(normalized_action)) == 0.0:
+            assert np.allclose(poly_info["nominal"], poly_info["base"])
+    cfg.residual_parameterization = "state_dependent_box"
     selected_boundary = design.rpi_boundary
     selected_physical = selected_boundary * cfg.state_scale
     selected_area = 0.5 * abs(float(np.sum(

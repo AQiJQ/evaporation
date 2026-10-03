@@ -1,0 +1,142 @@
+{
+  "episodes": 1,
+  "steps_per_episode": 41,
+  "seed": 42,
+  "global_step": 41,
+  "action_mapping": "interior_anchor",
+  "observation_dimension": 19,
+  "raw_action_saturation_threshold": 0.99,
+  "sac_hyperparameters_frozen": {
+    "actor_lr": 0.0003,
+    "critic_lr": 0.0003,
+    "entropy_lr": 0.0003,
+    "tau": 0.005,
+    "batch_size": 256,
+    "replay_capacity": 100000,
+    "hidden_dim": 256,
+    "alpha_initial": 0.1
+  },
+  "requested_applied_residual_definition": "normalized final-input displacement from the safe zero-action center, before/after final verification QP",
+  "action_collapse_thresholds": {
+    "eps_a_infinity_norm": 1e-08,
+    "eps_u_physical_input_l2": 1e-06
+  },
+  "evaluation_every_episodes": 5,
+  "fixed_scenarios": [
+    "pressure_positive",
+    "pressure_negative",
+    "concentration_positive"
+  ],
+  "training_schedule_counts": {
+    "pressure_positive": 0,
+    "pressure_negative": 1,
+    "concentration_positive": 0
+  },
+  "shock_amplitude_distribution": {
+    "uniform_probability": 0.8,
+    "uniform_bounds": [
+      0.2,
+      1.0
+    ],
+    "endpoint_probability": 0.2
+  },
+  "calibration": {
+    "action_mapping": "interior_anchor",
+    "mean_absolute_economic_reward": 0.6201996655805485,
+    "mean_losses": {
+      "state_recovery": 0.011273351980745418,
+      "P100_move": 0.00028681799965802636,
+      "F200_move": 0.00037872268203962726,
+      "saturation": 0.008458428051901045
+    },
+    "calibrated_weights": {
+      "state_recovery": 5.501466348605391,
+      "P100_move": 108.11728453584045,
+      "F200_move": 81.880449071658,
+      "saturation": 3.666163865052666
+    },
+    "target_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "realized_baseline_penalty_means": {
+      "state_recovery": 0.062019966558054855,
+      "P100_move": 0.031009983279027428,
+      "F200_move": 0.031009983279027428,
+      "saturation": 0.031009983279027428
+    },
+    "realized_baseline_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "scenario_loss_means": {
+      "pressure_positive": {
+        "state_recovery": 0.01648574246774214,
+        "P100_move": 0.0001590086512320558,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "pressure_negative": {
+        "state_recovery": 0.016120696839708692,
+        "P100_move": 0.0001591986752853102,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "concentration_positive": {
+        "state_recovery": 0.0012136166347854222,
+        "P100_move": 0.0005422466724567131,
+        "F200_move": 0.00039903978836741704,
+        "saturation": 0.00537528415570314
+      }
+    },
+    "scenario_J_econ": {
+      "pressure_positive": 1872175.080373695,
+      "pressure_negative": 1867566.3989547016,
+      "concentration_positive": 1783464.8035648465
+    },
+    "scenario_omega_exit_count": {
+      "pressure_positive": 0,
+      "pressure_negative": 0,
+      "concentration_positive": 0
+    },
+    "scenario_safety_audit": {
+      "pressure_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "pressure_negative": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "concentration_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      }
+    },
+    "baseline_step_count": 900
+  },
+  "best_economic_diagnostic_checkpoint": null,
+  "best_constrained_performance_checkpoint": null,
+  "nearest_tradeoff_diagnostic_checkpoint": null,
+  "primary_checkpoint_status": "unavailable_no_positive_safe_checkpoint_within_performance_tolerance",
+  "performance_tolerance_definition": "All X2/P2 IAE/ISE and P100/F200 TV <= 110% of paired baseline; if baseline TV=0, absolute increase <=1 physical input unit.",
+  "cumulative_omega_exit_count": 0,
+  "cumulative_omega_outside_steps": 0,
+  "cumulative_fixed_eval_omega_exit_count": 0,
+  "K_W_Z_S_Omega_fixed": true,
+  "rank_constraint_enabled": false,
+  "reachable_rank_sets_computed": 1001
+}

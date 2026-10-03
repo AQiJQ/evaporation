@@ -367,6 +367,46 @@ def project_qp_2d(candidate: np.ndarray, a_ineq: np.ndarray, b_ineq: np.ndarray,
     return choices[int(np.argmin(distances))], True
 
 
+def maximum_reservable_authority(
+    candidate: np.ndarray,
+    a_ineq: np.ndarray,
+    b_ineq: np.ndarray,
+    residual_half_width: np.ndarray,
+    tol: float = 1e-9,
+) -> tuple[float, bool]:
+    """Largest symmetric residual-box multiplier with any feasible base.
+
+    Feasibility is checked by the existing exact two-dimensional projection;
+    no optimizer or change to the verification constraints is introduced.
+    """
+    support = np.abs(a_ineq) @ np.asarray(residual_half_width, dtype=float)
+    _, feasible_zero = project_qp_2d(candidate, a_ineq, b_ineq, tol=tol)
+    if not feasible_zero:
+        return 0.0, False
+    if not np.any(support > 1e-12):
+        return float("inf"), True
+    lower, upper = 0.0, 1.0
+    for _ in range(40):
+        _, feasible = project_qp_2d(
+            candidate, a_ineq, b_ineq - upper * support, tol=tol
+        )
+        if not feasible:
+            break
+        lower, upper = upper, 2.0 * upper
+    else:
+        raise RuntimeError("residual authority has no finite upper bound")
+    for _ in range(36):
+        middle = 0.5 * (lower + upper)
+        _, feasible = project_qp_2d(
+            candidate, a_ineq, b_ineq - middle * support, tol=tol
+        )
+        if feasible:
+            lower = middle
+        else:
+            upper = middle
+    return float(lower), True
+
+
 def safe_projected_base(
     candidate: np.ndarray,
     a_ineq: np.ndarray,
@@ -375,6 +415,10 @@ def safe_projected_base(
     minimum_authority: float,
     authority_margin: float,
     tol: float = 1e-9,
+    *,
+    reserve_mode: str = "floor",
+    reserve_fraction: float = 0.8,
+    diagnostics: dict[str, float] | None = None,
 ) -> tuple[np.ndarray, bool, float]:
     """Project ``v_base`` while reserving a feasible symmetric residual box.
 
@@ -393,15 +437,32 @@ def safe_projected_base(
     if not 0.0 < authority_margin <= 1.0:
         raise ValueError("authority_margin must lie in (0, 1]")
     support = np.abs(a_ineq) @ residual_half_width
-    raw_floor = min(
-        1.0,
-        minimum_authority / authority_margin
-        if minimum_authority < 1.0 else 1.0,
-    )
+    if reserve_mode not in {"floor", "fraction_of_max"}:
+        raise ValueError("reserve_mode must be 'floor' or 'fraction_of_max'")
+    if not 0.0 < reserve_fraction <= 1.0:
+        raise ValueError("reserve_fraction must lie in (0, 1]")
+    if reserve_mode == "fraction_of_max":
+        maximum, maximum_feasible = maximum_reservable_authority(
+            candidate, a_ineq, b_ineq, residual_half_width, tol=tol
+        )
+        reserve = max(minimum_authority, reserve_fraction * maximum)
+        if diagnostics is not None:
+            diagnostics.update(lambda_max=maximum, lambda_reserve=reserve)
+        if not maximum_feasible or reserve > maximum + 10.0 * tol:
+            fallback, _ = project_qp_2d(candidate, a_ineq, b_ineq, tol=tol)
+            return fallback, False, 0.0
+    else:
+        reserve = min(
+            1.0,
+            minimum_authority / authority_margin
+            if minimum_authority < 1.0 else 1.0,
+        )
+        if diagnostics is not None:
+            diagnostics.update(lambda_max=float("nan"), lambda_reserve=reserve)
     base, feasible = project_qp_2d(
         candidate,
         a_ineq,
-        b_ineq - raw_floor * support,
+        b_ineq - reserve * support,
         tol=tol,
     )
     if not feasible:
@@ -411,16 +472,21 @@ def safe_projected_base(
         return fallback, False, 0.0
     slack = b_ineq - a_ineq @ base
     constrained = support > 1e-12
-    raw_authority = 1.0
+    raw_authority = float("inf")
     if np.any(constrained):
-        raw_authority = float(np.clip(
-            np.min(slack[constrained] / support[constrained]), 0.0, 1.0
-        ))
-    effective_authority = (
-        raw_authority
-        if raw_authority >= 1.0 - 1e-12
-        else raw_authority * authority_margin
-    )
+        raw_authority = max(0.0, float(np.min(
+            slack[constrained] / support[constrained]
+        )))
+    if reserve_mode == "fraction_of_max":
+        effective_authority = raw_authority
+    else:
+        capped_authority = min(raw_authority, 1.0)
+        effective_authority = (
+            capped_authority if capped_authority >= 1.0 - 1e-12
+            else capped_authority * authority_margin
+        )
+    if diagnostics is not None:
+        diagnostics["actual_authority"] = effective_authority
     zero_verified = bool(np.all(a_ineq @ base <= b_ineq + tol))
     return (
         base,
@@ -610,6 +676,10 @@ def build_safety_design(
     a, b, affine = model.linearize(
         cfg.linearization_state, cfg.linearization_input
     )
+    paper_proposed_geometry = bool(
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.experiment_mode == "proposed"
+    )
     safe_u = model.linearized_steady_input(
         cfg.safe_center_state, a, b, affine
     )
@@ -702,10 +772,21 @@ def build_safety_design(
             "safe_center_feasible": bool(
                 np.all(z_ref > x_lo) and np.all(z_ref < x_hi)
             ),
+            "reference_in_tightened_state_set": False,
+            "reference_in_controlled_invariant_set": False,
             "v_ref_feasible": False,
             "verification_qp_feasible": False,
             "residual_authority_feasible": False,
             "minimum_residual_authority": 0.0,
+            "closed_loop_spectral_radius": float("nan"),
+            "hinf_sampled_norm": float("nan"),
+            "rpi_area_physical": float("nan"),
+            "rpi_width_physical": None,
+            "x_minus_z_lower_physical": None,
+            "x_minus_z_upper_physical": None,
+            "u_minus_kz_lower_physical": None,
+            "u_minus_kz_upper_physical": None,
+            "reference_tightened_state_margin_normalized": None,
         })
 
     # K is an explicit continuous component of theta.  The configured seed was
@@ -719,6 +800,7 @@ def build_safety_design(
     if k.shape != (2, 2) or not np.all(np.isfinite(k)):
         raise ValueError("theta_k must be a finite 2x2 feedback matrix.")
     candidates: list[dict[str, object]] = []
+    last_reference_tightened_margin: dict[str, list[float]] | None = None
     for state_weight_scale, input_weight_scale in [(1.0, 1.0)]:
         acl = a + b @ k
         if spectral_radius(acl) >= 1.0:
@@ -734,6 +816,10 @@ def build_safety_design(
             continue
         if diagnostics is not None:
             diagnostics["hinf_feasible"] = True
+            diagnostics["closed_loop_spectral_radius"] = float(
+                spectral_radius(acl)
+            )
+            diagnostics["hinf_sampled_norm"] = float(sampled_norm)
         try:
             boundary = rpi_polygon(
                 acl, w_vertices, max_terms=cfg.rpi_series_max_terms
@@ -767,6 +853,32 @@ def build_safety_design(
         x_tightening_feasible = bool(np.all(x_hi_t > x_lo_t))
         u_tightening_feasible = bool(np.all(u_hi_t > u_lo_t))
         if diagnostics is not None:
+            physical_boundary = boundary * cfg.state_scale
+            diagnostics["rpi_area_physical"] = 0.5 * abs(float(np.sum(
+                physical_boundary[:, 0]
+                * np.roll(physical_boundary[:, 1], -1)
+                - physical_boundary[:, 1]
+                * np.roll(physical_boundary[:, 0], -1)
+            )))
+            diagnostics["rpi_width_physical"] = (
+                (support_lower + support_upper) * cfg.state_scale
+            ).tolist()
+            diagnostics["x_minus_z_lower_physical"] = (
+                model.physical_state(x_lo_t).tolist()
+            )
+            diagnostics["x_minus_z_upper_physical"] = (
+                model.physical_state(x_hi_t).tolist()
+            )
+            diagnostics["u_minus_kz_lower_physical"] = (
+                model.physical_input(u_lo_t).tolist()
+            )
+            diagnostics["u_minus_kz_upper_physical"] = (
+                model.physical_input(u_hi_t).tolist()
+            )
+            diagnostics["reference_tightened_state_margin_normalized"] = {
+                "above_lower": (z_ref - x_lo_t).tolist(),
+                "below_upper": (x_hi_t - z_ref).tolist(),
+            }
             diagnostics["x_tightening_feasible"] = bool(
                 diagnostics["x_tightening_feasible"] or x_tightening_feasible
             )
@@ -775,7 +887,19 @@ def build_safety_design(
             )
         if not x_tightening_feasible or not u_tightening_feasible:
             continue
-        if np.any(z_ref <= x_lo_t) or np.any(z_ref >= x_hi_t):
+        reference_in_tightened_state_set = bool(
+            np.all(z_ref > x_lo_t) and np.all(z_ref < x_hi_t)
+        )
+        last_reference_tightened_margin = {
+            "above_lower": (z_ref - x_lo_t).tolist(),
+            "below_upper": (x_hi_t - z_ref).tolist(),
+        }
+        if diagnostics is not None:
+            diagnostics["reference_in_tightened_state_set"] = bool(
+                diagnostics["reference_in_tightened_state_set"]
+                or reference_in_tightened_state_set
+            )
+        if not reference_in_tightened_state_set:
             continue
         if np.any(v_ref <= u_lo_t) or np.any(v_ref >= u_hi_t):
             continue
@@ -817,6 +941,17 @@ def build_safety_design(
         if diagnostics is not None:
             diagnostics["invariant_feasible"] = True
         invariant_lower, invariant_upper, invariant_scale = invariant
+        reference_in_invariant = bool(
+            np.all(z_ref >= invariant_lower - 1e-12)
+            and np.all(z_ref <= invariant_upper + 1e-12)
+        )
+        if diagnostics is not None:
+            diagnostics["reference_in_controlled_invariant_set"] = bool(
+                diagnostics["reference_in_controlled_invariant_set"]
+                or reference_in_invariant
+            )
+        if not reference_in_invariant:
+            continue
 
         # Exercise the exact online base projection and verification-QP rows,
         # rather than accepting geometry solely because some input exists at
@@ -939,6 +1074,22 @@ def build_safety_design(
         })
 
     if not candidates:
+        if (
+            paper_proposed_geometry
+            and last_reference_tightened_margin is not None
+            and min(last_reference_tightened_margin["above_lower"]) < -1e-12
+        ):
+            tightened_lower = model.physical_state(x_lo_t)
+            raise RuntimeError(
+                "Proposed unified-reference safety geometry is infeasible: "
+                "limiting_gate=reference_in_tightened_state_set; the candidate "
+                "reference lacks the lower-side margin required by the "
+                "nonzero negative-direction RPI support: "
+                f"X_minus_Z_lower={tightened_lower.tolist()} and therefore "
+                f"excludes state_ref={cfg.safe_center_state.tolist()}. "
+                "Physical constraints, the RPI condition, and the 5% residual "
+                "authority requirement were not relaxed."
+            )
         raise RuntimeError(
             "Continuous K proposal failed the H-infinity/RPI/input-tightening/"
             "controlled-invariant/verification-QP/residual-authority safety gate."
@@ -971,6 +1122,14 @@ def build_safety_design(
         ),
     )
     selected_acl = a + b @ np.asarray(selected["k"])
+    if not (
+        np.all(z_ref >= np.asarray(selected["invariant_lower"]) - 1e-12)
+        and np.all(z_ref <= np.asarray(selected["invariant_upper"]) + 1e-12)
+    ):
+        raise RuntimeError(
+            "Selected controlled-invariant set does not contain the configured "
+            "nominal safety reference."
+        )
     if cfg.benchmark_profile != "zanon2016":
         box_generators, box_support = rpi_generators(
             selected_acl, w_bound, max_terms=cfg.rpi_series_max_terms
@@ -1095,7 +1254,11 @@ class SafeController:
         aq = np.vstack(rows)
         bq = np.concatenate(bounds)
         theta_candidate = d.nominal_policy_gain @ self.z + d.nominal_policy_offset
-        if self.cfg.residual_parameterization == "state_dependent_box":
+        reserve_box = self.cfg.residual_parameterization in {
+            "state_dependent_box", "state_dependent_polytope"
+        }
+        reserve_diagnostics: dict[str, float] = {}
+        if reserve_box:
             base, theta_feasible, reserved_authority = safe_projected_base(
                 theta_candidate,
                 aq,
@@ -1103,12 +1266,15 @@ class SafeController:
                 self.cfg.residual_action_scale,
                 self.cfg.qp_min_residual_authority,
                 self.cfg.invariant_set_margin,
+                reserve_mode=self.cfg.residual_reserve_mode,
+                reserve_fraction=self.cfg.residual_reserve_fraction,
+                diagnostics=reserve_diagnostics,
             )
         else:
             base, theta_feasible = project_qp_2d(theta_candidate, aq, bq)
             reserved_authority = 0.0
         if not theta_feasible:
-            if self.cfg.residual_parameterization == "state_dependent_box":
+            if reserve_box:
                 base, theta_feasible, reserved_authority = safe_projected_base(
                     d.v_ref,
                     aq,
@@ -1116,6 +1282,9 @@ class SafeController:
                     self.cfg.residual_action_scale,
                     self.cfg.qp_min_residual_authority,
                     self.cfg.invariant_set_margin,
+                    reserve_mode=self.cfg.residual_reserve_mode,
+                    reserve_fraction=self.cfg.residual_reserve_fraction,
+                    diagnostics=reserve_diagnostics,
                 )
             else:
                 base, theta_feasible = project_qp_2d(d.v_ref, aq, bq)
@@ -1150,6 +1319,29 @@ class SafeController:
             candidate = base + parameterized_residual
             mapping_scale = feasible_scale
             mapping_gap = 0.0
+        elif (
+            action_is_normalized
+            and self.cfg.residual_parameterization == "state_dependent_polytope"
+        ):
+            rho = float(np.max(np.abs(action)))
+            if rho <= 1e-15:
+                parameterized_residual = np.zeros(2, dtype=float)
+                mapping_scale = 0.0
+            else:
+                direction = (
+                    np.asarray(self.cfg.residual_action_scale, dtype=float)
+                    * action / rho
+                )
+                outward = aq @ direction > 1e-12
+                if not np.any(outward):
+                    raise RuntimeError("verification polytope is unbounded")
+                t_max = max(0.0, float(np.min(
+                    slack[outward] / (aq @ direction)[outward]
+                )))
+                mapping_scale = 0.999 * t_max
+                parameterized_residual = rho * mapping_scale * direction
+            candidate = base + parameterized_residual
+            mapping_gap = float(np.linalg.norm(candidate - requested_candidate))
         else:
             # Legacy ray mapping retained for ablation.
             ray_denominator = aq @ requested_residual
@@ -1190,6 +1382,12 @@ class SafeController:
             "z_next": z_next.copy(), "qp_feasible": bool(feasible),
             "base_qp_feasible": bool(theta_feasible),
             "reserved_residual_authority": float(reserved_authority),
+            "maximum_residual_authority": float(
+                reserve_diagnostics.get("lambda_max", float("nan"))
+            ),
+            "residual_reserve_target": float(
+                reserve_diagnostics.get("lambda_reserve", 0.0)
+            ),
             "reset_projection_norm": float(self.reset_projection_norm),
             "projection_gap": float(np.linalg.norm(nominal - candidate)),
             "feasible_action_mapping_scale": float(mapping_scale),

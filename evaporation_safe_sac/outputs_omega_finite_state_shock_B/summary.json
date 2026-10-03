@@ -1,0 +1,5171 @@
+{
+  "scope": "offline fixed-B linearized set analysis; no SAC training",
+  "regular_uncertainty": "xi_next=A xi+B q+w, w in unchanged certified W",
+  "jump_operator": "xi_plus=xi_minus+delta; delta is not part of W",
+  "shock_clock_used_in_set_computation": false,
+  "quantifier_interpretation": "At every regular step a feasible q must keep the state in C_m for all w in W; an unpredictable instantaneous scenario-specific jump maps C_m into C_(m-1). Consecutive jumps are permitted.",
+  "linear_model_caveat": "Numerical 2D polytope computation under the fixed affine model; nonlinear continuous-domain coverage is not proved here.",
+  "reference_state_physical": [
+    25.39,
+    50.125
+  ],
+  "reference_input_physical": [
+    194.86144296829238,
+    216.27665350522335
+  ],
+  "Omega": {
+    "vertices_normalized": [
+      [
+        -0.026,
+        -0.16625976563
+      ],
+      [
+        0.14778645832999998,
+        -0.16625976563
+      ],
+      [
+        0.14778645832999998,
+        0.16625976563
+      ],
+      [
+        -0.026,
+        0.16625976563
+      ]
+    ],
+    "vertices_physical_error": [
+      [
+        -0.38999999999999996,
+        -3.3251953126
+      ],
+      [
+        2.2167968749499996,
+        -3.3251953126
+      ],
+      [
+        2.2167968749499996,
+        3.3251953126
+      ],
+      [
+        -0.38999999999999996,
+        3.3251953126
+      ]
+    ],
+    "vertex_count": 4,
+    "area_normalized": 0.05778739166322712,
+    "area_physical": 17.336217498968136
+  },
+  "Omega_physical_state_extent": {
+    "lower": [
+      25.0,
+      46.7998046874
+    ],
+    "upper": [
+      27.60679687495,
+      53.4501953126
+    ],
+    "width": [
+      2.6067968749499997,
+      6.6503906252
+    ]
+  },
+  "Omega_certificate": {
+    "passed": true,
+    "reason": "vertex_feedback_certificate",
+    "tested_vertices": 4,
+    "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+    "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+    "minimum_feasible_q_polygon_area": 0.006173968387217815
+  },
+  "Omega_pre_by_scenario": {
+    "pressure_positive": {
+      "vertices_normalized": [
+        [
+          -0.026,
+          -0.16625976563
+        ],
+        [
+          0.14778645832999998,
+          -0.16625976563
+        ],
+        [
+          0.14778645832999998,
+          0.11625976563
+        ],
+        [
+          -0.026,
+          0.11625976563
+        ]
+      ],
+      "vertices_physical_error": [
+        [
+          -0.38999999999999996,
+          -3.3251953126
+        ],
+        [
+          2.2167968749499996,
+          -3.3251953126
+        ],
+        [
+          2.2167968749499996,
+          2.3251953126
+        ],
+        [
+          -0.38999999999999996,
+          2.3251953126
+        ]
+      ],
+      "vertex_count": 4,
+      "area_normalized": 0.04909806874672711,
+      "area_physical": 14.729420624018134,
+      "area_over_Omega": 0.8496328928092209,
+      "balanced_reference_in_set": true,
+      "balanced_reference_margin_physical": 0.38999999999999996
+    },
+    "pressure_negative": {
+      "vertices_normalized": [
+        [
+          -0.026,
+          -0.11625976563
+        ],
+        [
+          0.14778645832999998,
+          -0.11625976563
+        ],
+        [
+          0.14778645832999998,
+          0.16625976563
+        ],
+        [
+          -0.026,
+          0.16625976563
+        ]
+      ],
+      "vertices_physical_error": [
+        [
+          -0.38999999999999996,
+          -2.3251953126
+        ],
+        [
+          2.2167968749499996,
+          -2.3251953126
+        ],
+        [
+          2.2167968749499996,
+          3.3251953126
+        ],
+        [
+          -0.38999999999999996,
+          3.3251953126
+        ]
+      ],
+      "vertex_count": 4,
+      "area_normalized": 0.04909806874672712,
+      "area_physical": 14.729420624018136,
+      "area_over_Omega": 0.849632892809221,
+      "balanced_reference_in_set": true,
+      "balanced_reference_margin_physical": 0.38999999999999996
+    },
+    "concentration_positive": {
+      "vertices_normalized": [
+        [
+          -0.026,
+          -0.16625976563
+        ],
+        [
+          0.08111979166,
+          -0.16625976563
+        ],
+        [
+          0.08111979166,
+          0.16625976563
+        ],
+        [
+          -0.026,
+          0.16625976563
+        ]
+      ],
+      "vertices_physical_error": [
+        [
+          -0.38999999999999996,
+          -3.3251953126
+        ],
+        [
+          1.2167968749,
+          -3.3251953126
+        ],
+        [
+          1.2167968749,
+          3.3251953126
+        ],
+        [
+          -0.38999999999999996,
+          3.3251953126
+        ]
+      ],
+      "vertex_count": 4,
+      "area_normalized": 0.03561942291145206,
+      "area_physical": 10.685826873435618,
+      "area_over_Omega": 0.6163874486502978,
+      "balanced_reference_in_set": true,
+      "balanced_reference_margin_physical": 0.38999999999999996
+    }
+  },
+  "Omega_pre_all": {
+    "vertices_normalized": [
+      [
+        -0.026,
+        -0.11625976563
+      ],
+      [
+        0.08111979166,
+        -0.11625976563
+      ],
+      [
+        0.08111979166,
+        0.11625976563
+      ],
+      [
+        -0.026,
+        0.11625976563
+      ]
+    ],
+    "vertices_physical_error": [
+      [
+        -0.38999999999999996,
+        -2.3251953126
+      ],
+      [
+        1.2167968749,
+        -2.3251953126
+      ],
+      [
+        1.2167968749,
+        2.3251953126
+      ],
+      [
+        -0.38999999999999996,
+        2.3251953126
+      ]
+    ],
+    "vertex_count": 4,
+    "area_normalized": 0.024907443745452052,
+    "area_physical": 7.472233123635616,
+    "area_over_Omega": 0.43101865352579755,
+    "balanced_reference_in_set": true,
+    "balanced_reference_margin_physical": 0.38999999999999996
+  },
+  "aborted_M2_episode_3_t40": {
+    "status": "reconstructed_from_saved_applied_inputs",
+    "state_pre_jump": [
+      26.84071644499574,
+      50.05732897291358
+    ],
+    "state_post_jump": [
+      27.84071644499574,
+      50.05732897291358
+    ],
+    "xi_pre_jump_normalized": [
+      0.09671442966638252,
+      -0.0033835513543209574
+    ],
+    "xi_post_jump_normalized": [
+      0.1633810963330492,
+      -0.0033835513543209574
+    ],
+    "pre_in_Omega": true,
+    "pre_in_Omega_pre_concentration_positive": false,
+    "post_in_Omega": false,
+    "pre_margin_to_Omega_physical": 0.7660804299542616,
+    "pre_margin_to_Omega_pre_physical": -0.23391957009573794,
+    "post_margin_to_Omega_physical": -0.23391957004573838,
+    "logged_mode_at_jump": "outside_certified_domain",
+    "logged_qp_feasible_at_jump": "False"
+  },
+  "finite_shock_sets": {
+    "pressure_positive": {
+      "delta_normalized": [
+        0.0,
+        0.05
+      ],
+      "delta_physical": [
+        0.0,
+        1.0
+      ],
+      "levels": {
+        "C1": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              0.11625976563
+            ],
+            [
+              -0.026,
+              0.11625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              2.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              2.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.04909806874672711,
+          "area_physical": 14.729420624018134,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.8496328928092209,
+          "jump_domain_area_physical": 14.729420624018134,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.38999999999999996,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -7.389208274172221e-06,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.0021605727474066933
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.060893229164999986,
+                  -0.024999999999999998
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  49.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.08647533003397692
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.08806907910999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.08803191681,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.08806907910999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    186.05453505729238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3165519108256641,
+                  "max_regular_W_next_target_facet_excess": -0.0002709504852958511
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.19222237356,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08667201757,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08670503583,
+                      0.25835976402
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.19222237356,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.08667201757,
+                    0.25835976402
+                  ],
+                  "P100_F200_min_physical": [
+                    175.6392056122924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    186.1942412112924,
+                    242.11262990722335
+                  ],
+                  "q_polygon_area_normalized": 0.031183759981434415,
+                  "max_regular_W_next_target_facet_excess": -2.807228087439717e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.11625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  52.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.09908784094999999,
+                      -0.33251953125
+                    ],
+                    [
+                      0.13465114597,
+                      -0.13337102108999999
+                    ],
+                    [
+                      0.13462511207,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.13465114597,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    208.32655756529238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.34399590801055235,
+                  "max_regular_W_next_target_facet_excess": -0.00018766823042727643
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.11625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  52.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.13326521282999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.13327390392,
+                      0.17698780949999998
+                    ],
+                    [
+                      0.16104826213999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.13326521282999998,
+                    0.17698780949999998
+                  ],
+                  "q_max_normalized": [
+                    0.16104826213999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    208.18796425129239,
+                    233.97543445522336
+                  ],
+                  "P100_F200_max_physical": [
+                    210.96626918229236,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.002160572747324726,
+                  "max_regular_W_next_target_facet_excess": -7.389208272576275e-06
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.22062243904999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.10186188688999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.22062243904999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    172.79919906329238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.36522722710672856,
+                  "max_regular_W_next_target_facet_excess": -0.000219091358334228
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.025
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  49.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.0239951284,
+                      -0.33251953125
+                    ],
+                    [
+                      0.0239579661,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.0239951284,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    197.26095580829238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.27394023071481444,
+                  "max_regular_W_next_target_facet_excess": -0.0011118838017843413
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  0.11625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  52.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.07068777546999999,
+                      -0.33251953125
+                    ],
+                    [
+                      0.18944832762,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.18944832762,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    213.80627573029238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.344495225270376,
+                  "max_regular_W_next_target_facet_excess": -0.0002066547103914268
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  -0.025
+                ],
+                "physical_state": [
+                  25.0,
+                  49.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.02259806686,
+                      0.33251953125
+                    ],
+                    [
+                      0.02263522915,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.02259806686,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    197.12124965429237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2429539358235498,
+                  "max_regular_W_next_target_facet_excess": -0.0009861149095029866
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.025683657418594966
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.002160572747324726
+          }
+        },
+        "C2": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              0.06625976563
+            ],
+            [
+              -0.026,
+              0.06625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              1.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              1.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.04040874583022712,
+          "area_physical": 12.122623749068136,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.699265785618442,
+          "jump_domain_area_physical": 12.122623749068136,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.38999999999999996,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -2.287461032812743e-06,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.00020705250404014046
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.060893229164999986,
+                  -0.049999999999999996
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  49.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.08658106557074755
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.08806907910999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.08803191681,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.08806907910999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    186.05453505729238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3165519108256641,
+                  "max_regular_W_next_target_facet_excess": -0.0002709504852958511
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.19222237356,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08667201757,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08670503583,
+                      0.25835976402
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.19222237356,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.08667201757,
+                    0.25835976402
+                  ],
+                  "P100_F200_min_physical": [
+                    175.6392056122924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    186.1942412112924,
+                    242.11262990722335
+                  ],
+                  "q_polygon_area_normalized": 0.031183759981434415,
+                  "max_regular_W_next_target_facet_excess": -2.807228087439717e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.06625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  51.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.04073402666,
+                      -0.33251953125
+                    ],
+                    [
+                      0.09547364260999999,
+                      -0.02598691404
+                    ],
+                    [
+                      0.09545360930999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.09547364260999999,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    204.4088072292924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.31309526207980487,
+                  "max_regular_W_next_target_facet_excess": -0.00016598337376164118
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.06625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  51.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.09409371006999999,
+                      0.33251953125
+                    ],
+                    [
+                      0.09409640055999999,
+                      0.28437191656
+                    ],
+                    [
+                      0.10269444784,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.09409371006999999,
+                    0.28437191656
+                  ],
+                  "q_max_normalized": [
+                    0.10269444784,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    204.27081397529238,
+                    244.71384516122336
+                  ],
+                  "P100_F200_max_physical": [
+                    205.13088775229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.00020705250409984444,
+                  "max_regular_W_next_target_facet_excess": -2.28746103289601e-06
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.22062243904999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.10186188688999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.22062243904999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    172.79919906329238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.36522722710672856,
+                  "max_regular_W_next_target_facet_excess": -0.000219091358334228
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.05
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  49.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.00440937702,
+                      -0.33251953125
+                    ],
+                    [
+                      0.00437221472,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.00440937702,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    195.3023806702924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.26091494097870116,
+                  "max_regular_W_next_target_facet_excess": -0.0010590160334077448
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  0.06625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  51.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.01233396117,
+                      -0.33251953125
+                    ],
+                    [
+                      0.13109451333,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.13109451333,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    207.9708943012924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3056876593183301,
+                  "max_regular_W_next_target_facet_excess": -0.00018337494999021153
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  -0.05
+                ],
+                "physical_state": [
+                  25.0,
+                  49.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.0030123154799999996,
+                      0.33251953125
+                    ],
+                    [
+                      0.00304947778,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.0030123154799999996,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    195.16267451629238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.25597922555633795,
+                  "max_regular_W_next_target_facet_excess": -0.0010389826778930723
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.025683657418594966
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.00020705250409984444
+          }
+        },
+        "C3": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.16625976563
+            ],
+            [
+              0.14778645832999998,
+              0.01625976563
+            ],
+            [
+              -0.02594278052,
+              0.01625976563
+            ],
+            [
+              -0.026,
+              0.01625132018
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -3.3251953126
+            ],
+            [
+              2.2167968749499996,
+              0.3251953126
+            ],
+            [
+              -0.3891417078,
+              0.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              0.3250264036
+            ]
+          ],
+          "vertex_count": 5,
+          "area_normalized": 0.031719422672104994,
+          "area_physical": 9.515826801631498,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.5488986742464373,
+          "jump_domain_area_physical": 9.515826874118135,
+          "predecessor_iterations": 2,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.3251953126,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 5,
+            "max_next_facet_excess_normalized": -1.2926465453588776e-12,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 6.591949208711867e-17
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.04352602722799999,
+                  -0.056749735964000014
+                ],
+                "physical_state": [
+                  26.04289040842,
+                  48.99000528072
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.06930153235702094
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.08806907910999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.08803191681,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.08806907910999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    186.05453505729238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3165519108256641,
+                  "max_regular_W_next_target_facet_excess": -0.0002709504852958511
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.19222237356,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08667201757,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.08670503583,
+                      0.25835976402
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.19222237356,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.08667201757,
+                    0.25835976402
+                  ],
+                  "P100_F200_min_physical": [
+                    175.6392056122924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    186.1942412112924,
+                    242.11262990722335
+                  ],
+                  "q_polygon_area_normalized": 0.031183759981434415,
+                  "max_regular_W_next_target_facet_excess": -2.807228087439717e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.01625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  50.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.01761978764,
+                      -0.33251953125
+                    ],
+                    [
+                      0.056296139239999994,
+                      0.08139719302
+                    ],
+                    [
+                      0.056282106559999996,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.056296139239999994,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    200.4910568922924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.28013474074974476,
+                  "max_regular_W_next_target_facet_excess": -0.0001442985170978968
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.02594278052,
+                  0.01625976563
+                ],
+                "physical_state": [
+                  25.0008582922,
+                  50.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.04435933022,
+                      0.33251950403999997
+                    ],
+                    [
+                      0.04435933508,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.04435933022,
+                    0.33251950403999997
+                  ],
+                  "q_max_normalized": [
+                    0.04435933508,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    199.29737599029238,
+                    249.52860390922336
+                  ],
+                  "P100_F200_max_physical": [
+                    199.29737647629238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.0,
+                  "max_regular_W_next_target_facet_excess": -4.0245584642661925e-16
+                }
+              },
+              {
+                "name": "vertex_4",
+                "xi_normalized": [
+                  -0.026,
+                  0.01625132018
+                ],
+                "physical_state": [
+                  25.0,
+                  50.4500264036
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.0549155909,
+                      0.33251948787999996
+                    ],
+                    [
+                      0.054915598649999994,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.0549155909,
+                    0.33251948787999996
+                  ],
+                  "q_max_normalized": [
+                    0.054915598649999994,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    200.3530020582924,
+                    249.52860229322334
+                  ],
+                  "P100_F200_max_physical": [
+                    200.35300283329238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.0,
+                  "max_regular_W_next_target_facet_excess": -2.8102520310824275e-16
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.22062243904999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.10186188688999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.22062243904999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    172.79919906329238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.36522722710672856,
+                  "max_regular_W_next_target_facet_excess": -0.000219091358334228
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.075
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  48.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.01517637436,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.01521353665,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.01517637436,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    193.34380553229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2478896512459131,
+                  "max_regular_W_next_target_facet_excess": -0.001006148265017659
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06092183890499999,
+                  0.01625976563
+                ],
+                "physical_state": [
+                  26.303827583575,
+                  50.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.04601050236,
+                      -0.33251953125
+                    ],
+                    [
+                      0.0727500498,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.0727500498,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    202.13644794829239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.26688631199027346,
+                  "max_regular_W_next_target_facet_excess": -0.00016009892000053844
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.025971390259999998,
+                  0.016255542905
+                ],
+                "physical_state": [
+                  25.0004291461,
+                  50.4501108581
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.04963746056,
+                      0.33251949595999997
+                    ],
+                    [
+                      0.04963746686,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.04963746056,
+                    0.33251949595999997
+                  ],
+                  "q_max_normalized": [
+                    0.04963746686,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    199.82518902429237,
+                    249.52860310122335
+                  ],
+                  "P100_F200_max_physical": [
+                    199.8251896542924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.0,
+                  "max_regular_W_next_target_facet_excess": -2.338407245616736e-15
+                }
+              },
+              {
+                "name": "edge_midpoint_4",
+                "xi_normalized": [
+                  -0.026,
+                  -0.075004222725
+                ],
+                "physical_state": [
+                  25.0,
+                  48.6249155455
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.0165767441,
+                      0.33251953125
+                    ],
+                    [
+                      -0.01653958181,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.0165767441,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    193.20376855829238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2690067153780029,
+                  "max_regular_W_next_target_facet_excess": -0.001091859376124181
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.016239405070494487
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.0
+          }
+        }
+      },
+      "initial_reference_in_C3": true,
+      "initial_reference_margin_to_C3_physical": 0.3251953126,
+      "immediate_repeated_jump_membership": [
+        {
+          "jump_number": 1,
+          "remaining_shocks": 2,
+          "xi_if_no_regular_transition": [
+            0.0,
+            0.05
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.3251953126
+        },
+        {
+          "jump_number": 2,
+          "remaining_shocks": 1,
+          "xi_if_no_regular_transition": [
+            0.0,
+            0.1
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.3251953126
+        },
+        {
+          "jump_number": 3,
+          "remaining_shocks": 0,
+          "xi_if_no_regular_transition": [
+            0.0,
+            0.15000000000000002
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.32519531259999956
+        }
+      ],
+      "paired_zero_residual_0_20_40_shock_membership": [
+        {
+          "second": 0,
+          "remaining_shocks_after_jump": 2,
+          "state_after_jump": [
+            25.39,
+            51.125
+          ],
+          "xi_after_jump_normalized": [
+            0.0,
+            0.05
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.3251953126,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.38999999999999996
+        },
+        {
+          "second": 20,
+          "remaining_shocks_after_jump": 1,
+          "state_after_jump": [
+            25.3166783300886,
+            52.08719791340765
+          ],
+          "xi_after_jump_normalized": [
+            -0.004888111327426733,
+            0.09810989567038249
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.31667833008859897,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.31667833008859897
+        },
+        {
+          "second": 40,
+          "remaining_shocks_after_jump": 0,
+          "state_after_jump": [
+            25.2421552442805,
+            53.04261420855199
+          ],
+          "xi_after_jump_normalized": [
+            -0.009856317047966693,
+            0.14588071042759942
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.24215524428049956,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.24215524428049956
+        }
+      ]
+    },
+    "pressure_negative": {
+      "delta_normalized": [
+        0.0,
+        -0.05
+      ],
+      "delta_physical": [
+        0.0,
+        -1.0
+      ],
+      "levels": {
+        "C1": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.11625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.11625976563
+            ],
+            [
+              0.14778645832999998,
+              0.16625976563
+            ],
+            [
+              -0.026,
+              0.16625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -2.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -2.3251953126
+            ],
+            [
+              2.2167968749499996,
+              3.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              3.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.04909806874672712,
+          "area_physical": 14.729420624018136,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.849632892809221,
+          "jump_domain_area_physical": 14.729420624018136,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.38999999999999996,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.006173968387217815
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.060893229164999986,
+                  0.025
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  50.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.08626385896043567
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.11625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  47.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.04889757635,
+                      0.33251953125
+                    ],
+                    [
+                      -0.048860414059999996,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.04889757635,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    189.97168533329238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2905013313567627,
+                  "max_regular_W_next_target_facet_excess": -0.00024001810403448398
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.11625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  47.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.13386855926,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.04750051482,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.047527532459999994,
+                      0.15097565696999998
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.13386855926,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.04750051482,
+                    0.15097565696999998
+                  ],
+                  "P100_F200_min_physical": [
+                    181.47458704229237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    190.11139148629238,
+                    231.37421920222334
+                  ],
+                  "q_polygon_area_normalized": 0.020879266951355557,
+                  "max_regular_W_next_target_facet_excess": -2.297053363425894e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.15744165524999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.17382864933,
+                      -0.24075512814
+                    ],
+                    [
+                      0.17379661482,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.17382864933,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    212.2443079012924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3728366785440883,
+                  "max_regular_W_next_target_facet_excess": -0.00020935308709288392
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.17243671557999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.17245140728,
+                      0.06960370245
+                    ],
+                    [
+                      0.21940207643999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.17243671557999998,
+                    0.06960370245
+                  ],
+                  "q_max_normalized": [
+                    0.21940207643999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    212.10511452629237,
+                    223.23702375022336
+                  ],
+                  "P100_F200_max_physical": [
+                    216.80165061229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.006173968387698989,
+                  "max_regular_W_next_target_facet_excess": -1.2490955515365165e-05
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.11625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  47.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.16226862474999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.043508072589999995,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.16226862474999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    178.6345804932924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3264196611513574,
+                  "max_regular_W_next_target_facet_excess": -0.00019581159793499725
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.025
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  50.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.06316663115,
+                      -0.33251953125
+                    ],
+                    [
+                      0.06312946885,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.06316663115,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    201.1781060832924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.29999081018039064,
+                  "max_regular_W_next_target_facet_excess": -0.0012176193385645129
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.12904158977,
+                      -0.33251953125
+                    ],
+                    [
+                      0.24780214192,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.24780214192,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    219.64165716029237,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.38330279122574706,
+                  "max_regular_W_next_target_facet_excess": -0.00022993447079058815
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.025
+                ],
+                "physical_state": [
+                  25.0,
+                  50.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.06176956961,
+                      0.33251953125
+                    ],
+                    [
+                      0.061806731909999996,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.06176956961,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    201.03839992929238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.21690335635464847,
+                  "max_regular_W_next_target_facet_excess": -0.0008803793727363181
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.025683657418594966
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.006173968387698989
+          }
+        },
+        "C2": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.06625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.06625976563
+            ],
+            [
+              0.14778645832999998,
+              0.16625976563
+            ],
+            [
+              -0.026,
+              0.16625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -1.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -1.3251953126
+            ],
+            [
+              2.2167968749499996,
+              3.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              3.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.04040874583022712,
+          "area_physical": 12.122623749068136,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.699265785618442,
+          "jump_domain_area_physical": 12.122623749068136,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.38999999999999996,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.006173968387217815
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.060893229164999986,
+                  0.05
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  51.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.08615812342366505
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.06625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  48.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.0097260736,
+                      0.33251953125
+                    ],
+                    [
+                      -0.00968891131,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.0097260736,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    193.88883560829237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.26445075189118655,
+                  "max_regular_W_next_target_facet_excess": -0.0002090857227711046
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.06625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  48.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.07551474496999999,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.00832901206,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.0083500291,
+                      0.04359154992
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.07551474496999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.00832901206,
+                    0.04359154992
+                  ],
+                  "P100_F200_min_physical": [
+                    187.3099684712924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    194.02854176229238,
+                    220.63580849722334
+                  ],
+                  "q_polygon_area_normalized": 0.012634649321989475,
+                  "max_regular_W_next_target_facet_excess": -1.7868786391442293e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.15744165524999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.17382864933,
+                      -0.24075512814
+                    ],
+                    [
+                      0.17379661482,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.17382864933,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    212.2443079012924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3728366785440883,
+                  "max_regular_W_next_target_facet_excess": -0.00020935308709288392
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.17243671557999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.17245140728,
+                      0.06960370245
+                    ],
+                    [
+                      0.21940207643999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.17243671557999998,
+                    0.06960370245
+                  ],
+                  "q_max_normalized": [
+                    0.21940207643999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    212.10511452629237,
+                    223.23702375022336
+                  ],
+                  "P100_F200_max_physical": [
+                    216.80165061229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.006173968387698989,
+                  "max_regular_W_next_target_facet_excess": -1.2490955515365165e-05
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.06625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  48.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.10391481044999999,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      0.014845741709999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.10391481044999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    184.46996192329237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.28761209519598635,
+                  "max_regular_W_next_target_facet_excess": -0.00017253183753578039
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.05
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  51.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.08275238253,
+                      -0.33251953125
+                    ],
+                    [
+                      0.08271522023,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.08275238253,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    203.13668122129238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3130160999165039,
+                  "max_regular_W_next_target_facet_excess": -0.0012704871069410817
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.12904158977,
+                      -0.33251953125
+                    ],
+                    [
+                      0.24780214192,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.24780214192,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    219.64165716029237,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.38330279122574706,
+                  "max_regular_W_next_target_facet_excess": -0.00022993447079058815
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.05
+                ],
+                "physical_state": [
+                  25.0,
+                  51.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.08135532099,
+                      0.33251953125
+                    ],
+                    [
+                      0.08139248328,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.08135532099,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    202.99697506729237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2038780666218604,
+                  "max_regular_W_next_target_facet_excess": -0.0008275116043462323
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.025683657418594966
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.006173968387698989
+          }
+        },
+        "C3": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.01625976563
+            ],
+            [
+              0.14778645832999998,
+              -0.01625976563
+            ],
+            [
+              0.14778645832999998,
+              0.16625976563
+            ],
+            [
+              -0.026,
+              0.16625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -0.3251953126
+            ],
+            [
+              2.2167968749499996,
+              -0.3251953126
+            ],
+            [
+              2.2167968749499996,
+              3.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              3.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.03171942291372712,
+          "area_physical": 9.515826874118135,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.548898678427663,
+          "jump_domain_area_physical": 9.515826874118135,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.3251953126,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.006173968387217815
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.060893229164999986,
+                  0.075
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  51.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.08605238788689443
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.01625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  49.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.02945023221,
+                      0.24656627345999999
+                    ],
+                    [
+                      0.029482591449999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      0.04479949052,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.02945023221,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    197.8064661892924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.23774030662387186,
+                  "max_regular_W_next_target_facet_excess": -0.00014497282234806827
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  -0.01625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  49.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.017160930669999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.03084249069,
+                      -0.33251953125
+                    ],
+                    [
+                      0.030827474259999998,
+                      -0.06379255714
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.017160930669999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.03084249069,
+                    -0.06379255714
+                  ],
+                  "P100_F200_min_physical": [
+                    193.14534990129238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    197.9456920372924,
+                    209.89739779122334
+                  ],
+                  "q_polygon_area_normalized": 0.0064499070845000705,
+                  "max_regular_W_next_target_facet_excess": -1.2767039149128717e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.15744165524999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.17382864933,
+                      -0.24075512814
+                    ],
+                    [
+                      0.17379661482,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.17382864933,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    212.2443079012924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3728366785440883,
+                  "max_regular_W_next_target_facet_excess": -0.00020935308709288392
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.17243671557999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.17245140728,
+                      0.06960370245
+                    ],
+                    [
+                      0.21940207643999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.17243671557999998,
+                    0.06960370245
+                  ],
+                  "q_max_normalized": [
+                    0.21940207643999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    212.10511452629237,
+                    223.23702375022336
+                  ],
+                  "P100_F200_max_physical": [
+                    216.80165061229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.006173968387698989,
+                  "max_regular_W_next_target_facet_excess": -1.2490955515365165e-05
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  -0.01625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  49.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.04556099615,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      0.073199556,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.04556099615,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    190.3053433532924,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2488045292439405,
+                  "max_regular_W_next_target_facet_excess": -0.00014925207713459288
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.14778645832999998,
+                  0.075
+                ],
+                "physical_state": [
+                  27.60679687495,
+                  51.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.10233813389999999,
+                      -0.33251953125
+                    ],
+                    [
+                      0.10230097161,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.10233813389999999,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    205.09525635829237,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.326041389649292,
+                  "max_regular_W_next_target_facet_excess": -0.0013233548753311675
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.06089322916499999,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  26.303398437475,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.12904158977,
+                      -0.33251953125
+                    ],
+                    [
+                      0.24780214192,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.24780214192,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    219.64165716029237,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.38330279122574706,
+                  "max_regular_W_next_target_facet_excess": -0.00022993447079058815
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.075
+                ],
+                "physical_state": [
+                  25.0,
+                  51.625
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.10094107237,
+                      0.33251953125
+                    ],
+                    [
+                      0.10097823466,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.10094107237,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    204.95555020529238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.1908527768857471,
+                  "max_regular_W_next_target_facet_excess": -0.0007746438359696461
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.016249478199448567
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.006173968387698989
+          }
+        }
+      },
+      "initial_reference_in_C3": true,
+      "initial_reference_margin_to_C3_physical": 0.3251953126,
+      "immediate_repeated_jump_membership": [
+        {
+          "jump_number": 1,
+          "remaining_shocks": 2,
+          "xi_if_no_regular_transition": [
+            0.0,
+            -0.05
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.3251953126
+        },
+        {
+          "jump_number": 2,
+          "remaining_shocks": 1,
+          "xi_if_no_regular_transition": [
+            0.0,
+            -0.1
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.3251953126
+        },
+        {
+          "jump_number": 3,
+          "remaining_shocks": 0,
+          "xi_if_no_regular_transition": [
+            0.0,
+            -0.15000000000000002
+          ],
+          "in_required_C": true,
+          "margin_to_required_C_physical": 0.32519531259999956
+        }
+      ],
+      "paired_zero_residual_0_20_40_shock_membership": [
+        {
+          "second": 0,
+          "remaining_shocks_after_jump": 2,
+          "state_after_jump": [
+            25.39,
+            49.125
+          ],
+          "xi_after_jump_normalized": [
+            0.0,
+            -0.05
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.3251953126,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.38999999999999996
+        },
+        {
+          "second": 20,
+          "remaining_shocks_after_jump": 1,
+          "state_after_jump": [
+            25.46321017284524,
+            48.16721096613613
+          ],
+          "xi_after_jump_normalized": [
+            0.00488067818968266,
+            -0.09788945169319341
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.36740627873613185,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.46321017284523985
+        },
+        {
+          "second": 40,
+          "remaining_shocks_after_jump": 0,
+          "state_after_jump": [
+            25.537427930610708,
+            47.21570918880413
+          ],
+          "xi_after_jump_normalized": [
+            0.009828528707380475,
+            -0.1454645405597937
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.4159045014041265,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.4159045014041265
+        }
+      ]
+    },
+    "concentration_positive": {
+      "delta_normalized": [
+        0.06666666666666667,
+        0.0
+      ],
+      "delta_physical": [
+        1.0,
+        0.0
+      ],
+      "levels": {
+        "C1": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.16625976563
+            ],
+            [
+              0.08111979166,
+              -0.16625976563
+            ],
+            [
+              0.08111979166,
+              0.16625976563
+            ],
+            [
+              -0.026,
+              0.16625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -3.3251953126
+            ],
+            [
+              1.2167968749,
+              -3.3251953126
+            ],
+            [
+              1.2167968749,
+              3.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              3.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.03561942291145206,
+          "area_physical": 10.685826873435618,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.6163874486502978,
+          "jump_domain_area_physical": 10.685826873435618,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.38999999999999996,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.006173968387217815
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  0.02755989583,
+                  0.0
+                ],
+                "physical_state": [
+                  25.80339843745,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.05314973414283242
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.08806907910999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.08803191681,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.08806907910999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    186.05453505729238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3165519108256641,
+                  "max_regular_W_next_target_facet_excess": -0.0002709504852958511
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.08111979166,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  26.6067968749,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.21401161672,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.12870998615999998,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.12873667021,
+                      0.14500578716999998
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.21401161672,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.12870998615999998,
+                    0.14500578716999998
+                  ],
+                  "P100_F200_min_physical": [
+                    173.46028129629238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    181.99044435229237,
+                    230.77723222222335
+                  ],
+                  "q_polygon_area_normalized": 0.020366844147454606,
+                  "max_regular_W_next_target_facet_excess": -2.268690910192661e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.08111979166,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  26.6067968749,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.13179580853,
+                      -0.33251953125
+                    ],
+                    [
+                      0.13175864624,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.13179580853,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    208.04102382129238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.34563189396865723,
+                  "max_regular_W_next_target_facet_excess": -0.00025780703320102405
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.17243671557999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.17245140728,
+                      0.06960370245
+                    ],
+                    [
+                      0.21940207643999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.17243671557999998,
+                    0.06960370245
+                  ],
+                  "q_max_normalized": [
+                    0.21940207643999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    212.10511452629237,
+                    223.23702375022336
+                  ],
+                  "P100_F200_max_physical": [
+                    216.80165061229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.006173968387698989,
+                  "max_regular_W_next_target_facet_excess": -1.2490955515365165e-05
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  0.02755989583,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.80339843745,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.23151706063,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.11275650846999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.23151706063,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    171.70973690529237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.372472576028584,
+                  "max_regular_W_next_target_facet_excess": -0.00022343767541815884
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.08111979166,
+                  0.0
+                ],
+                "physical_state": [
+                  26.6067968749,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.00154291119,
+                      -0.33251953125
+                    ],
+                    [
+                      0.0015057488899999998,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.00154291119,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    195.01573408729237,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.2590086292304297,
+                  "max_regular_W_next_target_facet_excess": -0.0010512785895492177
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  0.02755989583,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.80339843745,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.11814696818999999,
+                      -0.33251953125
+                    ],
+                    [
+                      0.23690752033999998,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.23690752033999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    218.55219500229236,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3760574423038916,
+                  "max_regular_W_next_target_facet_excess": -0.0002255881537066573
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.0
+                ],
+                "physical_state": [
+                  25.0,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.04218381824,
+                      0.33251953125
+                    ],
+                    [
+                      0.04222098053,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.04218381824,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    199.07982479229238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.22992864608743657,
+                  "max_regular_W_next_target_facet_excess": -0.0009332471411264004
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.025683657418594966
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.006173968387698989
+          }
+        },
+        "C2": {
+          "vertices_normalized": [
+            [
+              -0.026,
+              -0.16625976563
+            ],
+            [
+              0.01445312499,
+              -0.16625976563
+            ],
+            [
+              0.01445312499,
+              0.16625976563
+            ],
+            [
+              -0.026,
+              0.16625976563
+            ]
+          ],
+          "vertices_physical_error": [
+            [
+              -0.38999999999999996,
+              -3.3251953126
+            ],
+            [
+              0.21679687485,
+              -3.3251953126
+            ],
+            [
+              0.21679687485,
+              3.3251953126
+            ],
+            [
+              -0.38999999999999996,
+              3.3251953126
+            ]
+          ],
+          "vertex_count": 4,
+          "area_normalized": 0.013451454159676992,
+          "area_physical": 4.035436247903098,
+          "nonempty_full_dimensional": true,
+          "area_over_Omega": 0.2327748973005957,
+          "jump_domain_area_physical": 4.035436247903098,
+          "predecessor_iterations": 1,
+          "numerically_converged": true,
+          "fully_certified_at_numerical_tolerance": true,
+          "C_m_max_facet_excess_over_Omega": 0.0,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": 0.0,
+          "reference_in_set": true,
+          "reference_margin_physical": 0.21679687485,
+          "regular_step_vertex_certificate": {
+            "passed": true,
+            "reason": "vertex_feedback_certificate",
+            "tested_vertices": 4,
+            "max_next_facet_excess_normalized": -1.2490955515503943e-05,
+            "minimum_state_box_margin_normalized": -5.000000413701855e-12,
+            "minimum_feasible_q_polygon_area": 0.006173968387217815
+          },
+          "representative_action_feasibility": {
+            "representatives": [
+              {
+                "name": "centroid",
+                "xi_normalized": [
+                  -0.0057734375049999995,
+                  0.0
+                ],
+                "physical_state": [
+                  25.303398437425,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.01992987378845851
+                }
+              },
+              {
+                "name": "vertex_0",
+                "xi_normalized": [
+                  -0.026,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.08806907910999999,
+                      0.33251953125
+                    ],
+                    [
+                      -0.08803191681,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.08806907910999999,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    186.05453505729238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3165519108256641,
+                  "max_regular_W_next_target_facet_excess": -0.0002709504852958511
+                }
+              },
+              {
+                "name": "vertex_1",
+                "xi_normalized": [
+                  0.01445312499,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.60679687485,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.23580085988,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.17074795473999999,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.17076830459,
+                      0.03165181031
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.23580085988,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.17074795473999999,
+                    0.03165181031
+                  ],
+                  "P100_F200_min_physical": [
+                    171.28135698029237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    177.78664749429237,
+                    219.44183453622335
+                  ],
+                  "q_polygon_area_normalized": 0.011845201868604608,
+                  "max_regular_W_next_target_facet_excess": -1.7301537332564676e-05
+                }
+              },
+              {
+                "name": "vertex_2",
+                "xi_normalized": [
+                  0.01445312499,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.60679687485,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.08975783995,
+                      -0.33251953125
+                    ],
+                    [
+                      0.08972067765,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.08975783995,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    203.83722696329238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3176750027514844,
+                  "max_regular_W_next_target_facet_excess": -0.00025719245668825996
+                }
+              },
+              {
+                "name": "vertex_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.0,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.17243671557999998,
+                      0.33251953125
+                    ],
+                    [
+                      0.17245140728,
+                      0.06960370245
+                    ],
+                    [
+                      0.21940207643999998,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.17243671557999998,
+                    0.06960370245
+                  ],
+                  "q_max_normalized": [
+                    0.21940207643999998,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    212.10511452629237,
+                    223.23702375022336
+                  ],
+                  "P100_F200_max_physical": [
+                    216.80165061229238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.006173968387698989,
+                  "max_regular_W_next_target_facet_excess": -1.2490955515365165e-05
+                }
+              },
+              {
+                "name": "edge_midpoint_0",
+                "xi_normalized": [
+                  -0.0057734375049999995,
+                  -0.16625976563
+                ],
+                "physical_state": [
+                  25.303398437425,
+                  46.7998046874
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.24241168220999998,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.12365113004999999,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.24241168220999998,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    170.62027474729237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.3797179249504395,
+                  "max_regular_W_next_target_facet_excess": -0.0002277839925021452
+                }
+              },
+              {
+                "name": "edge_midpoint_1",
+                "xi_normalized": [
+                  0.01445312499,
+                  0.0
+                ],
+                "physical_state": [
+                  25.60679687485,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.0404950574,
+                      -0.33251953125
+                    ],
+                    [
+                      -0.040532219689999996,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    -0.0404950574,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    190.81193722829238,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.23105173801325685,
+                  "max_regular_W_next_target_facet_excess": -0.0009378056089239927
+                }
+              },
+              {
+                "name": "edge_midpoint_2",
+                "xi_normalized": [
+                  -0.0057734375049999995,
+                  0.16625976563
+                ],
+                "physical_state": [
+                  25.303398437425,
+                  53.4501953126
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.10725234661,
+                      -0.33251953125
+                    ],
+                    [
+                      0.22601289876,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.22601289876,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    217.4627328442924,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.36881209338203613,
+                  "max_regular_W_next_target_facet_excess": -0.0002212418366226987
+                }
+              },
+              {
+                "name": "edge_midpoint_3",
+                "xi_normalized": [
+                  -0.026,
+                  0.0
+                ],
+                "physical_state": [
+                  25.0,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      0.04218381824,
+                      0.33251953125
+                    ],
+                    [
+                      0.04222098053,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    0.04218381824,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    199.07982479229238,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.22992864608743657,
+                  "max_regular_W_next_target_facet_excess": -0.0009332471411264004
+                }
+              },
+              {
+                "name": "balanced_reference",
+                "xi_normalized": [
+                  0.0,
+                  0.0
+                ],
+                "physical_state": [
+                  25.39,
+                  50.125
+                ],
+                "control": {
+                  "feasible": true,
+                  "q_vertices_normalized": [
+                    [
+                      -0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      -0.33251953125
+                    ],
+                    [
+                      0.38793945312,
+                      0.33251953125
+                    ],
+                    [
+                      -0.38793945312,
+                      0.33251953125
+                    ]
+                  ],
+                  "q_min_normalized": [
+                    -0.38793945312,
+                    -0.33251953125
+                  ],
+                  "q_max_normalized": [
+                    0.38793945312,
+                    0.33251953125
+                  ],
+                  "P100_F200_min_physical": [
+                    156.06749765629237,
+                    183.02470038022335
+                  ],
+                  "P100_F200_max_physical": [
+                    233.65538828029239,
+                    249.52860663022335
+                  ],
+                  "q_polygon_area_normalized": 0.515989780419375,
+                  "max_regular_W_next_target_facet_excess": -0.014185207093917473
+                }
+              }
+            ],
+            "all_feasible": true,
+            "minimum_q_polygon_area_normalized": 0.006173968387698989
+          }
+        },
+        "C3": {
+          "vertices_normalized": [],
+          "vertices_physical_error": [],
+          "vertex_count": 0,
+          "area_normalized": 0.0,
+          "area_physical": 0.0,
+          "nonempty_full_dimensional": false,
+          "area_over_Omega": 0.0,
+          "jump_domain_area_physical": 0.0,
+          "predecessor_iterations": 0,
+          "numerically_converged": false,
+          "fully_certified_at_numerical_tolerance": false,
+          "C_m_max_facet_excess_over_Omega": null,
+          "jumped_C_m_max_facet_excess_over_C_m_minus_1": null,
+          "reference_in_set": false,
+          "reference_margin_physical": null,
+          "regular_step_vertex_certificate": {
+            "passed": false,
+            "reason": "empty_or_lower_dimensional"
+          },
+          "representative_action_feasibility": {
+            "representatives": [],
+            "all_feasible": false
+          }
+        }
+      },
+      "initial_reference_in_C3": false,
+      "initial_reference_margin_to_C3_physical": null,
+      "immediate_repeated_jump_membership": [
+        {
+          "jump_number": 1,
+          "remaining_shocks": 2,
+          "xi_if_no_regular_transition": [
+            0.06666666666666667,
+            0.0
+          ],
+          "in_required_C": false,
+          "margin_to_required_C_physical": -0.78320312515
+        },
+        {
+          "jump_number": 2,
+          "remaining_shocks": 1,
+          "xi_if_no_regular_transition": [
+            0.13333333333333333,
+            0.0
+          ],
+          "in_required_C": false,
+          "margin_to_required_C_physical": -0.7832031251
+        },
+        {
+          "jump_number": 3,
+          "remaining_shocks": 0,
+          "xi_if_no_regular_transition": [
+            0.2,
+            0.0
+          ],
+          "in_required_C": false,
+          "margin_to_required_C_physical": -0.7832031250500004
+        }
+      ],
+      "paired_zero_residual_0_20_40_shock_membership": [
+        {
+          "second": 0,
+          "remaining_shocks_after_jump": 2,
+          "state_after_jump": [
+            26.39,
+            50.125
+          ],
+          "xi_after_jump_normalized": [
+            0.06666666666666667,
+            0.0
+          ],
+          "in_C_remaining": false,
+          "margin_to_C_remaining_physical": -0.78320312515,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 1.2167968749499996
+        },
+        {
+          "second": 20,
+          "remaining_shocks_after_jump": 1,
+          "state_after_jump": [
+            26.7027838224788,
+            50.017666710201986
+          ],
+          "xi_after_jump_normalized": [
+            0.08751892149858662,
+            -0.005366664489900685
+          ],
+          "in_C_remaining": false,
+          "margin_to_C_remaining_physical": -0.09598694757879933,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.9040130524712002
+        },
+        {
+          "second": 40,
+          "remaining_shocks_after_jump": 0,
+          "state_after_jump": [
+            26.993935137617864,
+            49.91169838479688
+          ],
+          "xi_after_jump_normalized": [
+            0.10692900917452425,
+            -0.010665080760156088
+          ],
+          "in_C_remaining": true,
+          "margin_to_C_remaining_physical": 0.6128617373321359,
+          "in_Omega": true,
+          "margin_to_Omega_physical": 0.6128617373321359
+        }
+      ]
+    }
+  }
+}

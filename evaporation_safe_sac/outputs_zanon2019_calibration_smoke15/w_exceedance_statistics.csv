@@ -1,0 +1,2 @@
+group,seed,W_exceedance_count,W_exceedance_rate,W_mean_facet_utilization,W_max_facet_utilization,W_p95_facet_utilization,W_p99_facet_utilization,W_max_facet_excess
+literal_variance,420000,15,1.0,13.351985965757507,40.58123294440804,33.78074950534066,39.22113625659456,0.0025317114426504075

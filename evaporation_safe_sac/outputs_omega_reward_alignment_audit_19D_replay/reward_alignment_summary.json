@@ -1,0 +1,137 @@
+{
+  "checkpoint_count": 61,
+  "scenario_rows": 183,
+  "exact_replay_verified": true,
+  "max_state_error": 0.0,
+  "max_input_error": 0.0,
+  "correlations_by_scenario": {
+    "pressure_positive": {
+      "formal_evaluation_return_vs_economic_improvement": -0.8447121521503919,
+      "return_vs_economic_improvement": -0.1371169746057895,
+      "return_vs_X2_IAE_ratio": 0.2531789754484734,
+      "return_vs_P2_IAE_ratio": -0.5654322625220196,
+      "highest_replay_return_checkpoint": {
+        "episode": 5,
+        "replay_equivalent_return": 18.351813036948442,
+        "economic_improvement_percent": 0.7490009530392119,
+        "X2_IAE_ratio": 1.8314980900269708,
+        "P2_IAE_ratio": 1.0401148524622386,
+        "P100_TV_ratio": 0.9289292203218675,
+        "F200_TV_ratio": null,
+        "robust_bound_occupancy_steps": 0
+      }
+    },
+    "pressure_negative": {
+      "formal_evaluation_return_vs_economic_improvement": 0.7514416957638496,
+      "return_vs_economic_improvement": 0.875587736875778,
+      "return_vs_X2_IAE_ratio": -0.25910511824901494,
+      "return_vs_P2_IAE_ratio": 0.7165345904583701,
+      "highest_replay_return_checkpoint": {
+        "episode": 25,
+        "replay_equivalent_return": 63.396983582526445,
+        "economic_improvement_percent": 1.0911892300181738,
+        "X2_IAE_ratio": 1.8201021753467483,
+        "P2_IAE_ratio": 1.1083193618799252,
+        "P100_TV_ratio": 1.4609493317032978,
+        "F200_TV_ratio": null,
+        "robust_bound_occupancy_steps": 11
+      }
+    },
+    "concentration_positive": {
+      "formal_evaluation_return_vs_economic_improvement": -0.07605589322018522,
+      "return_vs_economic_improvement": 0.6072398500378918,
+      "return_vs_X2_IAE_ratio": 0.6788858170838372,
+      "return_vs_P2_IAE_ratio": 0.3334696862110958,
+      "highest_replay_return_checkpoint": {
+        "episode": 25,
+        "replay_equivalent_return": 452.0600151512772,
+        "economic_improvement_percent": 0.7048526538405113,
+        "X2_IAE_ratio": 2.6898944755045657,
+        "P2_IAE_ratio": 1.5775387782071109,
+        "P100_TV_ratio": 3.4735028487175,
+        "F200_TV_ratio": 5.294790248936129,
+        "robust_bound_occupancy_steps": 94
+      }
+    }
+  },
+  "ranking_component_contribution": {
+    "pressure_positive": {
+      "economic_reward": {
+        "range": 79.10629399067139,
+        "rank_correlation_with_total_return": 0.3177154944473823
+      },
+      "state_recovery_penalty": {
+        "range": 3.109693297892548,
+        "rank_correlation_with_total_return": -0.07752511898466419
+      },
+      "P100_move_penalty": {
+        "range": 715.4592078906943,
+        "rank_correlation_with_total_return": 0.557800105764146
+      },
+      "F200_move_penalty": {
+        "range": 327.8280010075288,
+        "rank_correlation_with_total_return": 0.7490745637228979
+      },
+      "saturation_penalty": {
+        "range": 10.998491595158018,
+        "rank_correlation_with_total_return": 0.20274986779481752
+      },
+      "other_replay_penalties": {
+        "range": 0.09526109739169186,
+        "rank_correlation_with_total_return": 0.16758328926493915
+      }
+    },
+    "pressure_negative": {
+      "economic_reward": {
+        "range": 283.3002784422018,
+        "rank_correlation_with_total_return": 0.45573770491803267
+      },
+      "state_recovery_penalty": {
+        "range": 11.471118914462746,
+        "rank_correlation_with_total_return": 0.1753569539925965
+      },
+      "P100_move_penalty": {
+        "range": 184.600538462864,
+        "rank_correlation_with_total_return": 0.5387625594923321
+      },
+      "F200_move_penalty": {
+        "range": 128.27283252099585,
+        "rank_correlation_with_total_return": 0.42617662612374396
+      },
+      "saturation_penalty": {
+        "range": 10.994263611692395,
+        "rank_correlation_with_total_return": 0.5875198307773664
+      },
+      "other_replay_penalties": {
+        "range": 0.03429528694004347,
+        "rank_correlation_with_total_return": 0.5244843997884717
+      }
+    },
+    "concentration_positive": {
+      "economic_reward": {
+        "range": 62.853994991184436,
+        "rank_correlation_with_total_return": 0.4138551031200423
+      },
+      "state_recovery_penalty": {
+        "range": 1.9502818415413037,
+        "rank_correlation_with_total_return": -0.002485457429931253
+      },
+      "P100_move_penalty": {
+        "range": 207.38056446821957,
+        "rank_correlation_with_total_return": 0.4404547858276044
+      },
+      "F200_move_penalty": {
+        "range": 51.14449920962499,
+        "rank_correlation_with_total_return": 0.7551031200423055
+      },
+      "saturation_penalty": {
+        "range": 3.806940051670272,
+        "rank_correlation_with_total_return": 0.5
+      },
+      "other_replay_penalties": {
+        "range": 0.026613484988573077,
+        "rank_correlation_with_total_return": -0.1611845584346906
+      }
+    }
+  }
+}

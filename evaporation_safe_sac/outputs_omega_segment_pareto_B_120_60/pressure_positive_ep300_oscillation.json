@@ -1,0 +1,12 @@
+{
+  "P100_TV": 14223.662100431386,
+  "RMS_delta_P100": 50.53512252271049,
+  "max_abs_delta_P100": 59.01334596608905,
+  "sign_flip_count": 275,
+  "lag1_P100_correlation": -0.7847100466658884,
+  "lag1_delta_P100_correlation": -0.993561112923308,
+  "dominant_frequency_hz": 0.5,
+  "dominant_period_seconds": 2.0,
+  "high_frequency_power_fraction_ge_0p25_hz": 0.9343948145378966,
+  "TV_from_steps_abs_delta_gt_20_fraction": 0.9905903258144458
+}

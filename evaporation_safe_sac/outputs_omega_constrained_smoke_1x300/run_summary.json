@@ -1,0 +1,46 @@
+{
+  "episodes": 1,
+  "steps_per_episode": 300,
+  "seed": 42,
+  "global_step": 300,
+  "observation_dimension": 23,
+  "controller_and_supervisor_frozen": true,
+  "objective": "paired_economic_minus_current_dual_times_five_components",
+  "economic_scale": 200.0,
+  "constraint_keys": [
+    "x2",
+    "p2",
+    "tv_p100",
+    "tv_f200",
+    "boundary"
+  ],
+  "dual_lr_base": 1.0,
+  "dual_learning_rates": [
+    0.6349469289619248,
+    1.870060304969917,
+    34.13012787311039,
+    62.28026385717382,
+    15.873015873015873
+  ],
+  "offline_positive_g_p90": [
+    1.574934777044911,
+    0.5347421135791055,
+    0.029299626526974,
+    0.01605645092148745,
+    0.063
+  ],
+  "lambda_max": 1000.0,
+  "final_lambdas": [
+    0.24874070618600383,
+    0.0,
+    11.474031128953193,
+    20.897276470466526,
+    0.0
+  ],
+  "best_economic_diagnostic_checkpoint": null,
+  "best_joint_candidate_checkpoint": null,
+  "strict_joint_checkpoint_count": 0,
+  "paired_shock_protocol": "same initial state/scenario/lambda/0-20-40 shocks",
+  "fixed_evaluation_every_episodes": 5,
+  "formal_random_dwell_test_included": false
+}

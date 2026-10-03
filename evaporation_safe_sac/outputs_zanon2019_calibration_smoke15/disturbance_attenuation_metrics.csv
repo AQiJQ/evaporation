@@ -1,0 +1,2 @@
+group,seed,G_X2_emp,G_P2_emp,normalized_disturbance_energy,X2_error_energy,P2_error_energy,normalizer
+literal_variance,420000,0.019001648423473162,0.002800770009930965,63.5842237005827,0.02295788785030885,0.0004987745302213591,"literal-variance SD [sqrt(2),1,sqrt(8),sqrt(5)]"

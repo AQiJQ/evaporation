@@ -1,0 +1,170 @@
+{
+  "episodes": 300,
+  "steps_per_episode": 300,
+  "seed": 42,
+  "global_step": 90000,
+  "action_mapping": "feasible_set_normalized",
+  "observation_dimension": 19,
+  "raw_action_saturation_threshold": 0.99,
+  "sac_hyperparameters_frozen": {
+    "actor_lr": 0.0003,
+    "critic_lr": 0.0003,
+    "entropy_lr": 0.0003,
+    "tau": 0.005,
+    "batch_size": 256,
+    "replay_capacity": 100000,
+    "hidden_dim": 256,
+    "alpha_initial": 0.1
+  },
+  "requested_applied_residual_definition": "normalized final-input displacement from the safe zero-action center, before/after final verification QP",
+  "evaluation_every_episodes": 5,
+  "fixed_scenarios": [
+    "pressure_positive",
+    "pressure_negative",
+    "concentration_positive"
+  ],
+  "training_schedule_counts": {
+    "pressure_positive": 100,
+    "pressure_negative": 100,
+    "concentration_positive": 100
+  },
+  "shock_amplitude_distribution": {
+    "uniform_probability": 0.8,
+    "uniform_bounds": [
+      0.2,
+      1.0
+    ],
+    "endpoint_probability": 0.2
+  },
+  "calibration": {
+    "action_mapping": "feasible_set_normalized",
+    "mean_absolute_economic_reward": 0.6201996655805485,
+    "mean_losses": {
+      "state_recovery": 0.011273351980745418,
+      "P100_move": 0.00028681799965802636,
+      "F200_move": 0.00037872268203962726,
+      "saturation": 0.008458428051901045
+    },
+    "calibrated_weights": {
+      "state_recovery": 5.501466348605391,
+      "P100_move": 108.11728453584045,
+      "F200_move": 81.880449071658,
+      "saturation": 3.666163865052666
+    },
+    "target_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "realized_baseline_penalty_means": {
+      "state_recovery": 0.062019966558054855,
+      "P100_move": 0.031009983279027428,
+      "F200_move": 0.031009983279027428,
+      "saturation": 0.031009983279027428
+    },
+    "realized_baseline_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "scenario_loss_means": {
+      "pressure_positive": {
+        "state_recovery": 0.01648574246774214,
+        "P100_move": 0.0001590086512320558,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "pressure_negative": {
+        "state_recovery": 0.016120696839708692,
+        "P100_move": 0.0001591986752853102,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "concentration_positive": {
+        "state_recovery": 0.0012136166347854222,
+        "P100_move": 0.0005422466724567131,
+        "F200_move": 0.00039903978836741704,
+        "saturation": 0.00537528415570314
+      }
+    },
+    "scenario_J_econ": {
+      "pressure_positive": 1872175.080373695,
+      "pressure_negative": 1867566.3989547016,
+      "concentration_positive": 1783464.8035648465
+    },
+    "scenario_omega_exit_count": {
+      "pressure_positive": 0,
+      "pressure_negative": 0,
+      "concentration_positive": 0
+    },
+    "scenario_safety_audit": {
+      "pressure_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "pressure_negative": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "concentration_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      }
+    },
+    "baseline_step_count": 900
+  },
+  "best_economic_diagnostic_checkpoint": {
+    "episode": 45,
+    "global_step": 13500,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.3722551147354231,
+    "worst_scenario_economic_improvement_percent": 0.0,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 8.406136312763273,
+    "worst_positive_performance_degradation": 144.9196003540066,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 0.80817256714403, \"P100_TV\": 0.6436318085601241, \"P2_IAE\": 0.017171726624697764, \"P2_ISE\": 0.034491766090687936, \"X2_IAE\": -0.04663939818059152, \"X2_ISE\": -0.0029344958130392805}, \"pressure_negative\": {\"F200_TV\": 144.9196003540066, \"P100_TV\": 1.71414948228434, \"P2_IAE\": 0.09122028684736343, \"P2_ISE\": 0.18816963381599702, \"X2_IAE\": 0.7552238603088726, \"X2_ISE\": 2.138622144056203}, \"pressure_positive\": {\"F200_TV\": 0.0, \"P100_TV\": 0.0, \"P2_IAE\": 0.0, \"P2_ISE\": 0.0, \"X2_IAE\": 0.0, \"X2_ISE\": 0.0}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": 46, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 82, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 5, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 300, \"SAC\": 300, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"F200_TV\": 54.94069712731732, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1783351.8436166504, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 0.6033333333333334, \"P100_TV\": 62.09676809394924, \"P2_IAE\": 90.31486825948703, \"P2_ISE\": 32.24703927345369, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 40.986964699899616, \"X2_ISE\": 39.377674426882976, \"Z_mode_fraction\": 0.39666666666666667, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": 1.0000000000000002, \"applied_residual_norm_mean\": 0.014551976528230594, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 0.006333735769289525, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.014551976528230582, \"robust_input_saturation_steps\": 82, \"robust_region_violation_rate\": 0.0}, \"pressure_negative\": {\"F200_TV\": 144.9196003540066, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1846828.3513521603, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 190.8812659895285, \"P2_IAE\": 750.3249737138036, \"P2_ISE\": 2166.970329751087, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 92.97817295405916, \"X2_ISE\": 33.99368232040988, \"Z_mode_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": 1.0, \"applied_residual_norm_mean\": 0.5312040513999904, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 1.1104316084369799, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.5312040513999904, \"robust_input_saturation_steps\": 5, \"robust_region_violation_rate\": 0.0}, \"pressure_positive\": {\"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 300, \"J_econ\": 1872175.080373695, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 70.20960359779411, \"P2_IAE\": 695.6865238709771, \"P2_ISE\": 1865.8665574982638, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 54.25215276956294, \"X2_ISE\": 11.347196783284353, \"Z_mode_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": null, \"applied_residual_norm_mean\": 7.494556552324154e-17, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 0.0, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}}"
+  },
+  "best_constrained_performance_checkpoint": null,
+  "nearest_tradeoff_diagnostic_checkpoint": {
+    "episode": 115,
+    "global_step": 34500,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.10702568770625594,
+    "worst_scenario_economic_improvement_percent": 0.0,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 0.21395909453911366,
+    "worst_positive_performance_degradation": 3.238064115545427,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 0.21796944182130173, \"P100_TV\": 0.16927040620853076, \"P2_IAE\": 0.013985169702452756, \"P2_ISE\": 0.0248314529641131, \"X2_IAE\": 0.13227276177091996, \"X2_ISE\": 0.02278401639109576}, \"pressure_negative\": {\"F200_TV\": 0.0, \"P100_TV\": 0.0, \"P2_IAE\": 0.0, \"P2_ISE\": 0.0, \"X2_IAE\": 0.0, \"X2_ISE\": 0.0}, \"pressure_positive\": {\"F200_TV\": 3.238064115545427, \"P100_TV\": 0.0319366985398674, \"P2_IAE\": 2.487129298241724e-05, \"P2_ISE\": 4.968585888445223e-05, \"X2_IAE\": 2.506880548455805e-05, \"X2_ISE\": 5.0012802985557246e-05}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 159, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 300, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 299, \"SAC\": 300, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"F200_TV\": 37.00757960238519, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1777741.0084843352, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 0.59, \"P100_TV\": 44.17529088650085, \"P2_IAE\": 90.03193327309205, \"P2_ISE\": 31.94590928189877, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 48.678772364618354, \"X2_ISE\": 40.393390241005, \"Z_mode_fraction\": 0.41, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": 1.0000000000000002, \"applied_residual_norm_mean\": 0.038939747912686014, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 0.3209368118210385, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.038939747912685986, \"robust_input_saturation_steps\": 159, \"robust_region_violation_rate\": 0.0}, \"pressure_negative\": {\"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1867566.3989547016, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 70.32820676806458, \"P2_IAE\": 687.6017452732317, \"P2_ISE\": 1823.7886814120259, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 52.97225901298851, \"X2_ISE\": 10.830766100591546, \"Z_mode_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": null, \"applied_residual_norm_mean\": 7.290898915101645e-17, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 0.0, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}, \"pressure_positive\": {\"F200_TV\": 3.238064115545427, \"F200_at_robust_upper_steps\": 299, \"J_econ\": 1872172.454623849, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 72.45186654250045, \"P2_IAE\": 695.7038264943362, \"P2_ISE\": 1865.9592646807369, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 54.25351280622784, \"X2_ISE\": 11.347764288401514, \"Z_mode_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_over_requested_sum_ratio\": 1.0000000000005358, \"applied_residual_norm_mean\": 0.00013119296145245324, \"nonlinear_W_exceedance_steps\": 0, \"paired_economic_improvement_percent\": 0.00014025129772932008, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.00013119296145238288, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}}"
+  },
+  "primary_checkpoint_status": "unavailable_no_positive_safe_checkpoint_within_performance_tolerance",
+  "performance_tolerance_definition": "All X2/P2 IAE/ISE and P100/F200 TV <= 110% of paired baseline; if baseline TV=0, absolute increase <=1 physical input unit.",
+  "cumulative_omega_exit_count": 0,
+  "cumulative_omega_outside_steps": 0,
+  "cumulative_fixed_eval_omega_exit_count": 0,
+  "K_W_Z_S_Omega_fixed": true,
+  "rank_constraint_enabled": false,
+  "reachable_rank_sets_computed": 1001
+}

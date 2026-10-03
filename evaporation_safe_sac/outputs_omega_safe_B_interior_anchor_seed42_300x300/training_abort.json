@@ -1,0 +1,9 @@
+{
+  "episode": 3,
+  "global_step": 900,
+  "reason": "Interior-anchor safety anomaly",
+  "anomaly": {
+    "robust_operating_region_violation_rate": 0.016666666666666666,
+    "qp_infeasible_rate": 0.02
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "checkpoint_count": 1,
+  "scenario_rows": 3,
+  "exact_replay_verified": true,
+  "max_state_error": 0.0,
+  "max_input_error": 0.0,
+  "correlations_by_scenario": {
+    "pressure_positive": {
+      "return_vs_economic_improvement": null,
+      "return_vs_X2_IAE_ratio": null,
+      "return_vs_P2_IAE_ratio": null
+    },
+    "pressure_negative": {
+      "return_vs_economic_improvement": null,
+      "return_vs_X2_IAE_ratio": null,
+      "return_vs_P2_IAE_ratio": null
+    },
+    "concentration_positive": {
+      "return_vs_economic_improvement": null,
+      "return_vs_X2_IAE_ratio": null,
+      "return_vs_P2_IAE_ratio": null
+    }
+  },
+  "ranking_component_contribution": {
+    "pressure_positive": {
+      "economic_reward": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "state_recovery_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "P100_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "F200_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "saturation_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "other_penalties": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      }
+    },
+    "pressure_negative": {
+      "economic_reward": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "state_recovery_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "P100_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "F200_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "saturation_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "other_penalties": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      }
+    },
+    "concentration_positive": {
+      "economic_reward": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "state_recovery_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "P100_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "F200_move_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "saturation_penalty": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      },
+      "other_penalties": {
+        "range": 0.0,
+        "rank_correlation_with_total_return": null
+      }
+    }
+  }
+}

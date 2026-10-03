@@ -1,0 +1,297 @@
+{
+  "base19": {
+    "run_directory": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_seed42_300x300_local",
+    "positive_safe_checkpoints": 57,
+    "strict_constrained_checkpoints": 0,
+    "fixed_evaluation_safety_sums": {
+      "Gm_exit_count": 0.0,
+      "Bk_recovery_failure_count": 0.0,
+      "supervisor_Omega_exit_count": 0.0,
+      "supervisor_QP_infeasible_count": 0.0,
+      "physical_state_violation_steps": 0.0,
+      "physical_input_violation_steps": 0.0,
+      "robust_region_violation_rate": 0.0,
+      "QP_infeasible_rate": 0.0,
+      "nonlinear_W_exceedance_steps": 0.0,
+      "recovery_deadline_failure_count": 0.0
+    },
+    "scenarios": {
+      "concentration_positive": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 0.4660700805578688,
+          "normalized_mean_IAE_ratio": 2.2061211417788877,
+          "X2_IAE": 113.72157172179945,
+          "X2_ISE": 67.95106576202251,
+          "P2_IAE": 156.89829660776036,
+          "P2_ISE": 98.35299066120143,
+          "P100_TV": 75.6769139454421,
+          "F200_TV": 103.13854156668583,
+          "robust_input_saturation_steps": 278.0,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 4.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 0.4702735677414639,
+          "normalized_mean_IAE_ratio": 2.207627053025422,
+          "X2_IAE": 114.24718637466135,
+          "X2_ISE": 68.29794434929134,
+          "P2_IAE": 156.0801817696303,
+          "P2_ISE": 97.41587306092758,
+          "P100_TV": 64.18544261346044,
+          "F200_TV": 116.0081143314404,
+          "robust_input_saturation_steps": 282.8,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 4.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 2.6451743096948412,
+          "P2": 1.7670679738629342
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      },
+      "pressure_negative": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 0.9498735001865386,
+          "normalized_mean_IAE_ratio": 1.508456789505373,
+          "X2_IAE": 99.48707977831195,
+          "X2_ISE": 38.06799851274853,
+          "P2_IAE": 783.0517604823131,
+          "P2_ISE": 2358.624577880807,
+          "P100_TV": 76.19582194697233,
+          "F200_TV": 36.558419207577174,
+          "robust_input_saturation_steps": 6.0,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 0.9466349447472815,
+          "normalized_mean_IAE_ratio": 1.51040118722645,
+          "X2_IAE": 99.59459208573735,
+          "X2_ISE": 38.15035350816793,
+          "P2_IAE": 784.3301489725063,
+          "P2_ISE": 2366.3451175823693,
+          "P100_TV": 83.2793479119105,
+          "F200_TV": 52.532908777936726,
+          "robust_input_saturation_steps": 10.3,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 1.8780977370422933,
+          "P2": 1.1388158419684529
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      },
+      "pressure_positive": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 0.41981670923353515,
+          "normalized_mean_IAE_ratio": 1.3780276197187278,
+          "X2_IAE": 96.0492836311262,
+          "X2_ISE": 35.48292464966509,
+          "P2_IAE": 685.6907514240374,
+          "P2_ISE": 1813.0663766777182,
+          "P100_TV": 68.90829590293382,
+          "F200_TV": 22.730643008253537,
+          "robust_input_saturation_steps": 299.0,
+          "F200_at_robust_upper_steps": 299.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 0.42382339595494056,
+          "normalized_mean_IAE_ratio": 1.3807265593684312,
+          "X2_IAE": 96.35189446406714,
+          "X2_ISE": 35.70720404343432,
+          "P2_IAE": 685.5655423007331,
+          "P2_ISE": 1812.4074584377697,
+          "P100_TV": 62.5712000562866,
+          "F200_TV": 18.19525515260466,
+          "robust_input_saturation_steps": 299.0,
+          "F200_at_robust_upper_steps": 299.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 1.7704234528553617,
+          "P2": 0.9856317865820936
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      }
+    },
+    "episode_300_mean_economic_improvement_percent": 0.6119200966593142,
+    "episode_300_worst_economic_improvement_percent": 0.41981670923353515
+  },
+  "supervisor23": {
+    "run_directory": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full",
+    "positive_safe_checkpoints": 57,
+    "strict_constrained_checkpoints": 0,
+    "fixed_evaluation_safety_sums": {
+      "Gm_exit_count": 0.0,
+      "Bk_recovery_failure_count": 0.0,
+      "supervisor_Omega_exit_count": 0.0,
+      "supervisor_QP_infeasible_count": 0.0,
+      "physical_state_violation_steps": 0.0,
+      "physical_input_violation_steps": 0.0,
+      "robust_region_violation_rate": 0.0,
+      "QP_infeasible_rate": 0.0,
+      "nonlinear_W_exceedance_steps": 0.0,
+      "recovery_deadline_failure_count": 0.0
+    },
+    "scenarios": {
+      "concentration_positive": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 0.5175318518415051,
+          "normalized_mean_IAE_ratio": 2.170278047833761,
+          "X2_IAE": 115.61789490913459,
+          "X2_ISE": 70.43755850797365,
+          "P2_IAE": 146.61685095599515,
+          "P2_ISE": 86.10041957943037,
+          "P100_TV": 68.65754490482351,
+          "F200_TV": 131.5932291394244,
+          "robust_input_saturation_steps": 93.0,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.30163997815775007,
+          "max_recovery_steps": 5.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 0.5047061346752065,
+          "normalized_mean_IAE_ratio": 2.1677623713989083,
+          "X2_IAE": 115.29715703643369,
+          "X2_ISE": 70.20325708602181,
+          "P2_IAE": 146.83252585586632,
+          "P2_ISE": 86.44448827544075,
+          "P100_TV": 67.90413097274146,
+          "F200_TV": 125.72348023034053,
+          "robust_input_saturation_steps": 98.8,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.2894608257741294,
+          "max_recovery_steps": 5.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 2.6892829629790973,
+          "P2": 1.6512731326884251
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      },
+      "pressure_negative": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 1.0601381356248836,
+          "normalized_mean_IAE_ratio": 1.4720939002406397,
+          "X2_IAE": 96.86010997863735,
+          "X2_ISE": 36.08416644315483,
+          "P2_IAE": 767.1445384866526,
+          "P2_ISE": 2264.5330221740523,
+          "P100_TV": 57.90035994769681,
+          "F200_TV": 17.455823870668013,
+          "robust_input_saturation_steps": 0.0,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 1.0521743364476213,
+          "normalized_mean_IAE_ratio": 1.4762074178269113,
+          "X2_IAE": 97.20224789250292,
+          "X2_ISE": 36.339811684069126,
+          "P2_IAE": 768.3603711552284,
+          "P2_ISE": 2271.6449700206963,
+          "P100_TV": 54.23755910956178,
+          "F200_TV": 20.437581864062928,
+          "robust_input_saturation_steps": 0.0,
+          "F200_at_robust_upper_steps": 0.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 1.8285063122357645,
+          "P2": 1.1156814882455148
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      },
+      "pressure_positive": {
+        "episode_300": {
+          "paired_economic_improvement_percent": 0.42228572790787117,
+          "normalized_mean_IAE_ratio": 1.3860539361302462,
+          "X2_IAE": 96.94213319590929,
+          "X2_ISE": 36.14531555043145,
+          "P2_IAE": 685.4091579712533,
+          "P2_ISE": 1811.573106530529,
+          "P100_TV": 43.38080771042016,
+          "F200_TV": 0.0,
+          "robust_input_saturation_steps": 300.0,
+          "F200_at_robust_upper_steps": 300.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "late_255_300_mean": {
+          "paired_economic_improvement_percent": 0.42433136337627336,
+          "normalized_mean_IAE_ratio": 1.387161750928832,
+          "X2_IAE": 97.06605913324354,
+          "X2_ISE": 36.23818357855152,
+          "P2_IAE": 685.3614138167891,
+          "P2_ISE": 1811.3224912395265,
+          "P100_TV": 43.37443392511142,
+          "F200_TV": 0.0,
+          "robust_input_saturation_steps": 300.0,
+          "F200_at_robust_upper_steps": 300.0,
+          "action_collapse_fraction": 0.0,
+          "supervisor_projection_distance_mean_physical": 0.0,
+          "max_recovery_steps": 0.0,
+          "supervisor_low_authority_fraction": 0.0
+        },
+        "episode_300_IAE_ratios": {
+          "X2": 1.786880856279987,
+          "P2": 0.9852270159805052
+        },
+        "episode_300_common_settling_seconds": {
+          "X2_common_reference_settling_seconds": null,
+          "P2_common_reference_settling_seconds": null
+        }
+      }
+    },
+    "episode_300_mean_economic_improvement_percent": 0.6666519051247533,
+    "episode_300_worst_economic_improvement_percent": 0.42228572790787117
+  },
+  "paired_training_shock_sequence_mismatches": 0
+}

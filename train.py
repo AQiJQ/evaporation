@@ -81,6 +81,27 @@ class ZeroResidualPolicy:
         return np.zeros(ACTION_DIM, dtype=np.float32)
 
 
+STATE_SHOCK_PROTOCOLS = {
+    "paper2016_original_state_shocks",
+    "robust_reference_paper2016_shocks",
+}
+
+
+def uses_paper2016_state_shocks(cfg: ExperimentConfig) -> bool:
+    """Return whether the run uses the three fixed 2016 shock directions."""
+    return bool(
+        cfg.benchmark_profile == "zanon2016"
+        and cfg.main_experiment_protocol in STATE_SHOCK_PROTOCOLS
+    )
+
+
+def experiment_reference_state(cfg: ExperimentConfig) -> np.ndarray:
+    """Keep the formal robust reference separate from the paper benchmark."""
+    if cfg.main_experiment_protocol == "robust_reference_paper2016_shocks":
+        return np.asarray(cfg.robust_economic_reference_state, dtype=float)
+    return np.asarray(cfg.paper2016_steady_state, dtype=float)
+
+
 def sample_paper2016_training_shock_scale(
     cfg: ExperimentConfig, rng: np.random.Generator
 ) -> float:
@@ -127,7 +148,7 @@ def observation(
         else np.asarray(disturbance_estimate, dtype=float)
     )
     normalized_w_est = w_est / np.maximum(design.w_bound, 1e-12)
-    return np.clip(
+    base_observation = np.clip(
         np.concatenate([
             x - controller.d.z_ref,
             e,
@@ -138,6 +159,12 @@ def observation(
         -4.0,
         4.0,
     ).astype(np.float32)
+    if hasattr(controller, "actor_observation_extra"):
+        extra = np.asarray(controller.actor_observation_extra(state), dtype=np.float32)
+        if extra.shape != (4,) or not np.all(np.isfinite(extra)):
+            raise RuntimeError("Supervisor observation features must be four finite values")
+        return np.concatenate((base_observation, extra))
+    return base_observation
 
 
 def sample_disturbance(cfg: ExperimentConfig, rng: np.random.Generator) -> np.ndarray:
@@ -204,11 +231,17 @@ def run_episode(
     global_step: int,
     theta_learner: OnlineThetaLearner | None = None,
     paper_scenario: str | None = None,
+    paper_shock_scale_override: float | None = None,
+    paired_baseline_records: list[dict] | None = None,
+    paired_limits=None,
+    constrained_dual=None,
+    disturbance_trajectory: np.ndarray | None = None,
+    initial_state_override: np.ndarray | None = None,
 ) -> tuple[dict[str, float], list[dict[str, object]], int]:
-    paper_protocol = bool(
-        cfg.benchmark_profile == "zanon2016"
-        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
-    )
+    constrained = paired_baseline_records is not None
+    if constrained and (paired_limits is None or constrained_dual is None):
+        raise ValueError("Paired constrained rollout requires limits and dual state")
+    paper_protocol = uses_paper2016_state_shocks(cfg)
     if paper_scenario is not None and paper_scenario not in PAPER2016_SCENARIOS:
         raise ValueError(f"unknown paper2016 scenario: {paper_scenario}")
     episode_steps = int(
@@ -216,6 +249,19 @@ def run_episode(
         if training or not paper_protocol
         else cfg.paper2016_simulation_seconds
     )
+    # Implementation choice for reproduction: a pre-generated exogenous path
+    # is injected unchanged into paired stochastic benchmark rollouts. Legacy
+    # callers pass neither override and keep their original sampling behavior.
+    if disturbance_trajectory is not None:
+        disturbance_trajectory = np.asarray(disturbance_trajectory, dtype=float)
+        if disturbance_trajectory.shape != (episode_steps, 4):
+            raise ValueError("disturbance_trajectory must have shape (episode_steps, 4)")
+        if not np.all(np.isfinite(disturbance_trajectory)):
+            raise ValueError("disturbance_trajectory must be finite")
+    if initial_state_override is not None:
+        initial_state_override = np.asarray(initial_state_override, dtype=float)
+        if initial_state_override.shape != (2,) or not np.all(np.isfinite(initial_state_override)):
+            raise ValueError("initial_state_override must be a finite 2-vector")
     initial_fraction = (
         cfg.training_initial_radius_fraction
         if training else cfg.evaluation_initial_radius_fraction
@@ -242,9 +288,7 @@ def run_episode(
             )
     def reset_segment():
         if paper_protocol:
-            segment_state = np.asarray(
-                cfg.paper2016_steady_state, dtype=float
-            ).copy()
+            segment_state = experiment_reference_state(cfg).copy()
             controller.reset(segment_state)
             segment_scenario = (
                 paper_scenario
@@ -254,12 +298,19 @@ def run_episode(
                 ]
             )
             segment_shock_scale = (
-                sample_paper2016_training_shock_scale(cfg, rng)
-                if training else 1.0
+                float(paper_shock_scale_override)
+                if paper_shock_scale_override is not None else
+                (sample_paper2016_training_shock_scale(cfg, rng)
+                 if training else 1.0)
             )
+            if hasattr(controller, "set_paper_scenario"):
+                controller.set_paper_scenario(segment_scenario)
         else:
-            z0 = rng.uniform(initial_lower, initial_upper)
-            if training and rng.random() < cfg.training_boundary_start_probability:
+            z0 = (model.normalized_state(initial_state_override)
+                  if initial_state_override is not None
+                  else rng.uniform(initial_lower, initial_upper))
+            if (initial_state_override is None and training
+                    and rng.random() < cfg.training_boundary_start_probability):
                 boundary_axis = int(rng.integers(0, 2))
                 z0[boundary_axis] = rng.choice([
                     initial_lower[boundary_axis], initial_upper[boundary_axis]
@@ -271,7 +322,9 @@ def run_episode(
         segment_previous_u = controller.d.v_ref.copy()
         segment_previous_residual = np.zeros(ACTION_DIM, dtype=float)
         segment_disturbance = (
-            np.asarray(cfg.disturbance_nominal, dtype=float).copy()
+            disturbance_trajectory[0].copy()
+            if disturbance_trajectory is not None
+            else np.asarray(cfg.disturbance_nominal, dtype=float).copy()
             if paper_protocol else sample_disturbance(cfg, rng)
         )
         segment_w_est = np.zeros(2, dtype=float)
@@ -314,6 +367,7 @@ def run_episode(
     )
 
     total_return = 0.0
+    paired_component_sum = np.zeros(6, dtype=float)
     violations = 0
     robust_region_violations = 0
     rpi_violations = 0
@@ -328,8 +382,12 @@ def run_episode(
     move_penalty_sum = 0.0
     state_recovery_loss_sum = 0.0
     state_recovery_penalty_sum = 0.0
+    p100_move_loss_sum = 0.0
+    p100_move_penalty_sum = 0.0
     f200_move_loss_sum = 0.0
     f200_move_penalty_sum = 0.0
+    saturation_loss_sum = 0.0
+    saturation_penalty_sum = 0.0
     safety_penalty_sum = 0.0
     reward_safety_penalty_sum = 0.0
     state_violation_penalty_sum = 0.0
@@ -348,6 +406,12 @@ def run_episode(
     residual_requested_norm_sum = 0.0
     residual_applied_norm_sum = 0.0
     residual_execution_ratio_sum = 0.0
+    omega_exit_events = 0
+    omega_outside_steps = 0
+    omega_mode_steps = 0
+    z_mode_steps = 0
+    rank_decrease_steps = 0
+    rank_increase_steps = 0
     records: list[dict[str, object]] = []
     last_losses: dict[str, float] | None = None
 
@@ -378,10 +442,63 @@ def run_episode(
         control, info = controller.act(
             state, raw_action, action_is_normalized=True
         )
+        omega_exit_events += int(info.get("omega_exit_event", False))
+        omega_outside_steps += int(
+            info.get("mode") == "outside_certified_domain"
+        )
+        omega_mode_steps += int(info.get("mode") == "Omega_safe_one_step_QP")
+        z_mode_steps += int(info.get("mode") == "Z_mode_existing_controller")
+        if (training and getattr(cfg, "abort_on_first_uncertified_step", False)
+                and info.get("mode") in {
+                    "outside_certified_domain", "Omega_QP_infeasible_fallback"
+                }):
+            raise RuntimeError(
+                "Interior-anchor training entered an uncertified control mode "
+                f"at scenario={active_paper_scenario}, step={step}, "
+                f"mode={info.get('mode')}, "
+                f"state_before_shock={state_before_shock.tolist() if paper_protocol else None}, "
+                f"shock={paper_state_shock.tolist()}, "
+                f"state_after_shock={state.tolist()}. "
+                "No Omega/QP certification is claimed outside its domain."
+            )
+        if training and info.get("mode") == "Omega_QP_infeasible_fallback":
+            raise RuntimeError(
+                "Omega training abort: one-step Omega QP infeasible inside "
+                f"Omega; scenario={active_paper_scenario}, step={step}. "
+                "No safety certificate claimed for this fallback."
+            )
+        if training and getattr(cfg, "omega_exit_abort_count", 0) > 0 and (
+            omega_exit_events >= cfg.omega_exit_abort_count
+            or omega_outside_steps >= getattr(cfg, "omega_outside_abort_steps", 10)
+        ):
+            raise RuntimeError(
+                "Omega training abort: frequent outside-certified-domain states; "
+                f"scenario={active_paper_scenario}, step={step}, "
+                f"omega_exit_events={omega_exit_events}, "
+                f"outside_steps={omega_outside_steps}. No safety certificate claimed."
+            )
         residual = np.asarray(info["requested_residual"], dtype=float)
         next_state = model.step(state, control, disturbance)
+        if hasattr(controller, "audit_next_state"):
+            controller.audit_next_state(next_state)
         x_next_n = model.normalized_state(next_state)
         e_next = x_next_n - controller.z
+        reachable_rank_before = info.get("reachable_rank_before")
+        reachable_rank_next = (
+            controller.rank_of(x_next_n - controller.d.z_ref)
+            if hasattr(controller, "rank_of") else None
+        )
+        rank_decreased = (
+            reachable_rank_next < reachable_rank_before
+            if reachable_rank_before is not None
+            and reachable_rank_next is not None else None
+        )
+        rank_decrease_steps += int(rank_decreased is True)
+        rank_increase_steps += int(
+            reachable_rank_before is not None
+            and reachable_rank_next is not None
+            and reachable_rank_next > reachable_rank_before
+        )
         acl = controller.d.a + controller.d.b @ controller.d.k
         w_hat = x_next_n - (
             controller.d.a @ np.asarray(info["x_norm"])
@@ -412,14 +529,28 @@ def run_episode(
         projection = float(info["projection_gap"])
         mapping_scale = float(info["feasible_action_mapping_scale"])
         mapping_gap = float(info["feasible_action_mapping_gap"])
-        applied_residual = np.asarray(info["nominal"]) - np.asarray(info["base"])
+        applied_residual = np.asarray(info.get(
+            "applied_residual",
+            np.asarray(info["nominal"]) - np.asarray(info["base"]),
+        ))
+        # Diagnostic only: physical displacement relative to this state's
+        # zero-actor safe control.  This does not enter reward or replay.
+        baseline_control = (
+            model.physical_input(np.asarray(info["action_center_actual_norm"]))
+            if "action_center_actual_norm" in info else
+            control - applied_residual * cfg.input_scale
+        )
+        actor_rho = float(np.max(np.abs(raw_action)))
+        applied_displacement = float(np.linalg.norm(control - baseline_control))
+        nonzero_actor = bool(actor_rho > 1e-8)
+        collapsed_action = bool(nonzero_actor and applied_displacement < 1e-6)
         requested_norm = float(np.linalg.norm(residual))
         applied_norm = float(np.linalg.norm(applied_residual))
         execution_ratio = applied_norm / max(requested_norm, 1e-12)
         # The ray mapper is now part of the declared action parameterization,
         # so its safe result is the action attributed to SAC.  Only an actual
         # QP fallback suppresses learning credit.
-        execution_mask = float(info["qp_feasible"])
+        execution_mask = float(info.get("execution_mask", info["qp_feasible"]))
         cost = model.economic_cost(next_state, control, disturbance)
         if training and theta_learner is not None:
             theta_learner.observe_transition(
@@ -450,26 +581,60 @@ def run_episode(
         move_penalty = cfg.input_move_penalty_weight * float(
             np.sum((applied_residual - previous_applied_residual) ** 2)
         )
+        # The stochastic comparison reuses the frozen balanced-B reward
+        # components/weights. Without this protocol gate it would silently
+        # drop recovery and actual-input shaping during stochastic training.
+        frozen_shaped_protocol = bool(
+            paper_protocol
+            or cfg.main_experiment_protocol
+            == "zanon2019_stochastic_operating_uncertainty"
+        )
         paper_reward_shaping = bool(
-            paper_protocol and cfg.experiment_mode == "proposed"
+            frozen_shaped_protocol and cfg.experiment_mode == "proposed"
         )
         if paper_reward_shaping:
             state_recovery_loss = float(np.sum((
-                (next_state - cfg.paper2016_steady_state) / cfg.state_scale
+                (next_state - (
+                    cfg.robust_economic_reference_state
+                    if cfg.main_experiment_protocol
+                    == "zanon2019_stochastic_operating_uncertainty"
+                    else experiment_reference_state(cfg)
+                )) / cfg.state_scale
             ) ** 2))
             previous_control = model.physical_input(previous_u)
+            p100_move_loss = float((
+                (control[0] - previous_control[0]) / cfg.input_scale[0]
+            ) ** 2)
             f200_move_loss = float((
                 (control[1] - previous_control[1]) / cfg.input_scale[1]
             ) ** 2)
+            robust_lower = model.physical_input(controller.d.robust_input_lower)
+            robust_upper = model.physical_input(controller.d.robust_input_upper)
+            robust_mid = 0.5 * (robust_lower + robust_upper)
+            robust_half_range = 0.5 * (robust_upper - robust_lower)
+            if np.any(robust_half_range <= 0):
+                raise RuntimeError("Robust actual-input interval has no interior")
+            eta = np.abs(control - robust_mid) / robust_half_range
+            saturation_loss = float(np.sum(np.maximum(eta - 0.9, 0.0) ** 2))
         else:
             state_recovery_loss = 0.0
+            p100_move_loss = 0.0
             f200_move_loss = 0.0
+            saturation_loss = 0.0
         state_recovery_penalty = (
             cfg.paper2016_state_recovery_penalty_weight
             * state_recovery_loss
         )
         f200_move_penalty = (
             cfg.paper2016_f200_move_penalty_weight * f200_move_loss
+        )
+        p100_move_penalty = (
+            cfg.paper2016_p100_move_penalty_weight * p100_move_loss
+            if cfg.omega_performance_shaping_enabled else 0.0
+        )
+        saturation_penalty = (
+            cfg.paper2016_saturation_penalty_weight * saturation_loss
+            if cfg.omega_performance_shaping_enabled else 0.0
         )
         state_violation_penalty = (
             cfg.state_violation_event_penalty * float(state_bad)
@@ -503,15 +668,13 @@ def run_episode(
         )
         exclude_rpi_from_training_reward = bool(
             training
-            and paper_protocol
+            and frozen_shaped_protocol
             and cfg.experiment_mode == "proposed"
         )
-        # Paper2016's exogenous instantaneous state shocks can leave the RPI
-        # tube even when physical, robust-region, and QP constraints remain
-        # satisfied.  For this one proposed-policy training protocol, those
-        # two policy-independent terms are omitted only from the replay reward.
-        # They are still computed, stored, plotted, and used by the unchanged
-        # formal safety audit; this is not a relaxation of the RPI requirement.
+        # The frozen balanced-B proposed reward excludes RPI terms when
+        # exogenous state jumps (2016) or paper-scale operating uncertainty
+        # (2019-motivated) can exceed the fixed W. The two terms remain fully
+        # computed and logged; no formal W/RPI certificate is claimed there.
         reward_safety_penalty = safety_penalty
         if exclude_rpi_from_training_reward:
             reward_safety_penalty -= (
@@ -519,9 +682,23 @@ def run_episode(
             )
         reward = (
             economic_reward - projection_penalty - mapping_penalty
-            - move_penalty - state_recovery_penalty - f200_move_penalty
+            - move_penalty - state_recovery_penalty - p100_move_penalty
+            - f200_move_penalty - saturation_penalty
             - reward_safety_penalty
         )
+        paired_components = None
+        if constrained:
+            from .omega_constrained_objective import paired_step_components
+            paired_components = paired_step_components(
+                step, state, control, cost,
+                model.physical_input(previous_u) if step > 0 else None,
+                paired_baseline_records, paired_limits, cfg, model,
+                controller.d,
+            )
+            paired_component_sum += paired_components
+            reward = float(paired_components[0] - np.dot(
+                constrained_dual.values, paired_components[1:]
+            ))
         segment_done = bool(
             training
             and not paper_protocol
@@ -530,7 +707,9 @@ def run_episode(
         )
         done = bool(step == episode_steps - 1 or segment_done)
         next_disturbance = (
-            np.asarray(cfg.disturbance_nominal, dtype=float).copy()
+            disturbance_trajectory[min(step + 1, episode_steps - 1)].copy()
+            if disturbance_trajectory is not None
+            else np.asarray(cfg.disturbance_nominal, dtype=float).copy()
             if paper_protocol
             else advance_disturbance(
                 cfg, rng, disturbance, disturbance_age + 1
@@ -555,10 +734,16 @@ def run_episode(
         )
 
         if training:
-            replay.add(
-                obs, raw_action, reward, next_obs, done,
-                execution_mask=execution_mask,
-            )
+            if constrained:
+                replay.add_components(
+                    obs, raw_action, paired_components, next_obs, done,
+                    execution_mask=execution_mask,
+                )
+            else:
+                replay.add(
+                    obs, raw_action, reward, next_obs, done,
+                    execution_mask=execution_mask,
+                )
             # Match the CSTR-SAC warm-up order: random actions are retained
             # until warmup_steps, but learning begins as soon as one complete
             # replay minibatch exists.  The actor is therefore already trained
@@ -589,8 +774,12 @@ def run_episode(
         move_penalty_sum += move_penalty
         state_recovery_loss_sum += state_recovery_loss
         state_recovery_penalty_sum += state_recovery_penalty
+        p100_move_loss_sum += p100_move_loss
+        p100_move_penalty_sum += p100_move_penalty
         f200_move_loss_sum += f200_move_loss
         f200_move_penalty_sum += f200_move_penalty
+        saturation_loss_sum += saturation_loss
+        saturation_penalty_sum += saturation_penalty
         safety_penalty_sum += safety_penalty
         reward_safety_penalty_sum += reward_safety_penalty
         state_violation_penalty_sum += state_violation_penalty
@@ -614,6 +803,25 @@ def run_episode(
             "control": control.copy(),
             "disturbance": disturbance.copy(),
             "raw_action": raw_action.copy(),
+            "actor_rho": actor_rho,
+            "nonzero_actor": nonzero_actor,
+            "collapsed_action": collapsed_action,
+            "baseline_control": baseline_control.copy(),
+            "applied_displacement_from_baseline": applied_displacement,
+            "action_q_base": np.asarray(info.get("q_base", [np.nan, np.nan])).copy(),
+            "action_center": np.asarray(info.get(
+                "action_center_coordinate", [np.nan, np.nan]
+            )).copy(),
+            "interior_anchor": np.asarray(info.get(
+                "interior_anchor_coordinate", [np.nan, np.nan]
+            )).copy(),
+            "boundary_target": np.asarray(info.get(
+                "interior_boundary_coordinate", [np.nan, np.nan]
+            )).copy(),
+            "mapped_action": applied_residual.copy(),
+            "interior_tau_max": info.get("interior_tau_max"),
+            "interior_chebyshev_radius": info.get("interior_chebyshev_radius"),
+            "final_verification_gap": info.get("final_verification_gap"),
             "residual": residual.copy(),
             "applied_residual": applied_residual.copy(),
             "w_hat": w_hat.copy(),
@@ -623,6 +831,21 @@ def run_episode(
             "residual_applied_norm": applied_norm,
             "residual_execution_ratio": execution_ratio,
             "execution_mask": execution_mask,
+            "qp_feasible": bool(info["qp_feasible"]),
+            "safety_mode": info.get("mode", "legacy_Z_controller"),
+            "rpi_error_before": np.asarray(
+                info.get("rpi_error", info["e"])
+            ).copy(),
+            "omega_error_before": np.asarray(
+                info.get("omega_error", info["x_norm"] - controller.d.z_ref)
+            ).copy(),
+            "in_Z_before": bool(info.get("in_Z", not rpi_bad)),
+            "in_Omega_before": info.get("in_Omega"),
+            "omega_exit_event": bool(info.get("omega_exit_event", False)),
+            "omega_qp_feasible": info.get("omega_qp_feasible"),
+            "reachable_rank_before": reachable_rank_before,
+            "reachable_rank_next": reachable_rank_next,
+            "reachable_rank_decreased": rank_decreased,
             "feasible_action_mapping_scale": mapping_scale,
             "feasible_action_mapping_gap": mapping_gap,
             "base": np.asarray(info["base"]).copy(),
@@ -630,6 +853,9 @@ def run_episode(
             "ancillary": np.asarray(info["ancillary"]).copy(),
             "reward": reward,
             "total_reward": reward,
+            "paired_components": (
+                paired_components.copy() if paired_components is not None else None
+            ),
             "economic_cost": cost,
             "economic_reward": economic_reward,
             "projection_penalty": projection_penalty,
@@ -637,8 +863,12 @@ def run_episode(
             "move_penalty": move_penalty,
             "state_recovery_loss": state_recovery_loss,
             "state_recovery_penalty": state_recovery_penalty,
+            "p100_move_loss": p100_move_loss,
+            "p100_move_penalty": p100_move_penalty,
             "f200_move_loss": f200_move_loss,
             "f200_move_penalty": f200_move_penalty,
+            "saturation_loss": saturation_loss,
+            "saturation_penalty": saturation_penalty,
             "safety_penalty": safety_penalty,
             "reward_safety_penalty": reward_safety_penalty,
             "state_violation_penalty": state_violation_penalty,
@@ -655,6 +885,8 @@ def run_episode(
             "input_excess_squared": input_excess_squared,
             "rpi_excess_squared": rpi_excess_squared,
             "violation": violation,
+            "physical_state_violation": state_bad,
+            "physical_input_violation": input_bad,
             "robust_state_violation": robust_state_bad,
             "robust_input_violation": robust_input_bad,
             "robust_region_violation": robust_region_violation,
@@ -668,6 +900,27 @@ def run_episode(
             "scenario_type": active_paper_scenario,
             "shock_scale_lambda": active_shock_scale,
             "paper_state_shock": paper_state_shock.copy(),
+            "supervisor_mode": info.get("supervisor_mode"),
+            "supervisor_remaining_shocks": info.get("supervisor_remaining_shocks"),
+            "supervisor_rank_before": info.get("supervisor_rank_before"),
+            "supervisor_rank_next": info.get("supervisor_rank_next"),
+            "supervisor_target_rank": info.get("supervisor_target_rank"),
+            "supervisor_event_detected": info.get("supervisor_event_detected", False),
+            "supervisor_inferred_jump_scale": info.get("supervisor_inferred_jump_scale"),
+            "supervisor_q_area": info.get("supervisor_q_area"),
+            "supervisor_q_radius": info.get("supervisor_q_radius"),
+            "supervisor_low_authority": info.get("supervisor_low_authority", False),
+            "supervisor_projection_distance_physical": info.get(
+                "supervisor_projection_distance_physical"),
+            "supervisor_recovery_completed_steps": info.get(
+                "supervisor_recovery_completed_steps"),
+            "supervisor_Gm_exit": info.get("supervisor_Gm_exit", False),
+            "supervisor_Bk_recovery_failure": info.get(
+                "supervisor_Bk_recovery_failure", False),
+            "supervisor_omega_exit": info.get("supervisor_omega_exit", False),
+            "supervisor_qp_infeasible": info.get("supervisor_qp_infeasible", False),
+            "supervisor_nonlinear_W_exceedance": info.get(
+                "supervisor_nonlinear_W_exceedance", False),
         })
         if segment_done and step < episode_steps - 1:
             (
@@ -707,8 +960,14 @@ def run_episode(
         "return_per_step": total_return / episode_steps,
         "total_reward_total": total_return,
         "total_reward_mean": total_return / episode_steps,
+        "paired_economic_reward_total": float(paired_component_sum[0]),
+        "paired_component_totals": paired_component_sum.tolist(),
         "economic_cost_mean": economic_cost_sum / episode_steps,
         "economic_cost_total": economic_cost_sum,
+        "J_econ": economic_cost_sum,
+        "J_transient": (
+            economic_cost_sum - episode_steps * reward_reference_cost
+        ),
         "economic_reward_mean": economic_reward_sum / episode_steps,
         "economic_reward_total": economic_reward_sum,
         "projection_penalty_mean": projection_penalty_sum / episode_steps,
@@ -729,6 +988,12 @@ def run_episode(
         "residual_execution_ratio_mean": (
             residual_execution_ratio_sum / episode_steps
         ),
+        "omega_exit_count": int(omega_exit_events),
+        "omega_outside_steps": int(omega_outside_steps),
+        "omega_mode_fraction": omega_mode_steps / episode_steps,
+        "z_mode_fraction": z_mode_steps / episode_steps,
+        "reachable_rank_decrease_steps": int(rank_decrease_steps),
+        "reachable_rank_increase_steps": int(rank_increase_steps),
         "move_penalty_mean": move_penalty_sum / episode_steps,
         "move_penalty_total": move_penalty_sum,
         "state_recovery_loss_mean": state_recovery_loss_sum / episode_steps,
@@ -736,9 +1001,15 @@ def run_episode(
             state_recovery_penalty_sum / episode_steps
         ),
         "state_recovery_penalty_total": state_recovery_penalty_sum,
+        "p100_move_loss_mean": p100_move_loss_sum / episode_steps,
+        "p100_move_penalty_mean": p100_move_penalty_sum / episode_steps,
+        "p100_move_penalty_total": p100_move_penalty_sum,
         "f200_move_loss_mean": f200_move_loss_sum / episode_steps,
         "f200_move_penalty_mean": f200_move_penalty_sum / episode_steps,
         "f200_move_penalty_total": f200_move_penalty_sum,
+        "saturation_loss_mean": saturation_loss_sum / episode_steps,
+        "saturation_penalty_mean": saturation_penalty_sum / episode_steps,
+        "saturation_penalty_total": saturation_penalty_sum,
         "shock_scale_lambda": float(active_shock_scale),
         "safety_penalty_mean": safety_penalty_sum / episode_steps,
         "safety_penalty_total": safety_penalty_sum,
@@ -789,6 +1060,18 @@ def run_episode(
             rpi_excess_squared_sum / episode_steps
         ),
         "violation_rate": violations / episode_steps,
+        "physical_state_violation_steps": int(sum(
+            record["physical_state_violation"] for record in records
+        )),
+        "physical_input_violation_steps": int(sum(
+            record["physical_input_violation"] for record in records
+        )),
+        "robust_state_violation_steps": int(sum(
+            record["robust_state_violation"] for record in records
+        )),
+        "robust_input_violation_steps": int(sum(
+            record["robust_input_violation"] for record in records
+        )),
         "robust_operating_region_violation_rate": (
             robust_region_violations / episode_steps
         ),
@@ -807,6 +1090,34 @@ def run_episode(
             record["execution_mask"] for record in records
         ])),
     }
+    if hasattr(controller, "supervisor"):
+        radii = [r["supervisor_q_radius"] for r in records]
+        projections = [r["supervisor_projection_distance_physical"] for r in records]
+        events = controller.supervisor.events
+        stats.update({
+            "supervisor_Gm_normal_fraction": float(np.mean([
+                r["supervisor_mode"] == "wait_Gm" for r in records])),
+            "supervisor_Bj_recovery_fraction": float(np.mean([
+                r["supervisor_mode"] == "recover_Bj" for r in records])),
+            "supervisor_Gm_exit_count": int(sum(r["supervisor_Gm_exit"] for r in records)),
+            "supervisor_Bk_recovery_failure_count": int(sum(
+                r["supervisor_Bk_recovery_failure"] for r in records)),
+            "supervisor_omega_exit_count": int(sum(r["supervisor_omega_exit"] for r in records)),
+            "supervisor_QP_infeasible_count": int(sum(r["supervisor_qp_infeasible"] for r in records)),
+            "supervisor_low_authority_fraction": float(np.mean([
+                r["supervisor_low_authority"] for r in records])),
+            "supervisor_q_radius_min": float(np.min(radii)),
+            "supervisor_q_radius_median": float(np.median(radii)),
+            "supervisor_projection_distance_mean_physical": float(np.mean(projections)),
+            "supervisor_projection_distance_max_physical": float(np.max(projections)),
+            "supervisor_recovery_max_steps": int(max((
+                event["recovery_steps"] for event in events
+                if event["recovery_steps"] is not None
+            ), default=0)),
+            "supervisor_all_three_recovered_within_D": bool(
+                len(events) == 3 and all(event["completed_within_D"] for event in events)
+            ),
+        })
     return stats, records, global_step
 
 
@@ -821,7 +1132,9 @@ def records_to_arrays(records: list[dict[str, object]]) -> dict[str, np.ndarray]
         "reward", "total_reward", "economic_cost", "economic_reward", "projection_penalty",
         "mapping_penalty",
         "move_penalty", "state_recovery_loss", "state_recovery_penalty",
+        "p100_move_loss", "p100_move_penalty",
         "f200_move_loss", "f200_move_penalty",
+        "saturation_loss", "saturation_penalty",
         "safety_penalty", "reward_safety_penalty",
         "state_violation_penalty", "input_violation_penalty",
         "rpi_violation_event_penalty", "qp_infeasible_penalty",
@@ -1017,8 +1330,7 @@ def evaluate_policy(
     for index, seed in enumerate(seeds):
         paper_scenario = (
             PAPER2016_SCENARIOS[index % len(PAPER2016_SCENARIOS)]
-            if cfg.benchmark_profile == "zanon2016"
-            and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
+            if uses_paper2016_state_shocks(cfg)
             else None
         )
         stat, records, _ = run_episode(
@@ -1049,10 +1361,7 @@ def evaluate_paper2016_scenario_rollouts(
     agent,
 ) -> tuple[dict[str, dict[str, float]], dict[str, dict[str, np.ndarray]]]:
     """Evaluate and retain each deterministic 300 s Paper2016 scenario."""
-    if not (
-        cfg.benchmark_profile == "zanon2016"
-        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
-    ):
+    if not uses_paper2016_state_shocks(cfg):
         return {}, {}
     stats: dict[str, dict[str, float]] = {}
     rollouts: dict[str, dict[str, np.ndarray]] = {}
@@ -1817,7 +2126,12 @@ def save_feedback_law(
                 else "online two-sided policy search"
             )
         ),
-        "terminal_center_source": "Zanon-Gros-2020 evaporation example",
+        "terminal_center_source": (
+            "offline_fully_certified_robust_economic_reference"
+            if cfg.main_experiment_protocol
+            == "robust_reference_paper2016_shocks"
+            else "Zanon-Gros-2020 evaporation example"
+        ),
         "K_normalized": design.k.tolist(),
         "theta_h": design.theta_h.tolist(),
         "theta_p": design.theta_p.tolist(),
@@ -1913,7 +2227,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--disturbance-hold-steps", type=int, default=50)
     parser.add_argument(
         "--residual-parameterization",
-        choices=("state_dependent_box", "legacy_ray"),
+        choices=("state_dependent_box", "state_dependent_polytope", "legacy_ray"),
         default="state_dependent_box",
     )
     parser.add_argument("--device", default="auto", help="auto, cpu, cuda, cuda:0, ...")
@@ -2029,17 +2343,15 @@ def main() -> None:
     if cfg.disturbance_mode not in {"iid", "piecewise_constant"}:
         raise ValueError("disturbance_mode must be 'iid' or 'piecewise_constant'")
     if cfg.residual_parameterization not in {
-        "state_dependent_box", "legacy_ray"
+        "state_dependent_box", "state_dependent_polytope", "legacy_ray"
     }:
         raise ValueError(
-            "residual_parameterization must be 'state_dependent_box' or 'legacy_ray'"
+            "residual_parameterization must be 'state_dependent_box', "
+            "'state_dependent_polytope', or 'legacy_ray'"
         )
     if args.output_dir is not None:
         cfg.output_dir = args.output_dir
-    elif (
-        cfg.benchmark_profile == "zanon2016"
-        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
-    ):
+    elif uses_paper2016_state_shocks(cfg):
         cfg.output_dir = Path(
             "evaporation_safe_sac/outputs_paper2016_main_500x300"
         ) / f"seed_{cfg.seed}"
@@ -2049,10 +2361,7 @@ def main() -> None:
 
     set_seed(cfg.seed)
     rng = np.random.default_rng(cfg.seed)
-    paper_main_experiment = bool(
-        cfg.benchmark_profile == "zanon2016"
-        and cfg.main_experiment_protocol == "paper2016_original_state_shocks"
-    )
+    paper_main_experiment = uses_paper2016_state_shocks(cfg)
     paper_training_schedule = (
         balanced_random_paper2016_schedule(cfg.episodes, cfg.seed)
         if paper_main_experiment else tuple()
@@ -2220,8 +2529,9 @@ def main() -> None:
         )
     )
     print(
-        f"  training trajectory: one unscaled paper scenario per "
-        f"{cfg.steps_per_episode}-step episode; seeded balanced random rotation "
+        f"  training trajectory: one randomized-amplitude paper scenario per "
+        f"{cfg.steps_per_episode}-step episode; 80% U(0.2,1.0), 20% endpoint; "
+        f"seeded balanced random scenario rotation "
         f"{paper_training_scenario_counts}"
         if paper_main_experiment else
         f"  safe subtrajectory : {cfg.training_segment_steps} training steps"
@@ -3710,7 +4020,8 @@ def main() -> None:
         "observation_includes_disturbance_estimate": True,
         "disturbance_is_applied_to_plant": True,
         "disturbance_model": (
-            "nominal_exogenous_plus_unscaled_paper2016_state_shocks"
+            "nominal_exogenous_plus_randomized_training_state_shocks; "
+            "unscaled_endpoint_evaluation_state_shocks"
             if paper_main_experiment else cfg.disturbance_mode
         ),
         "disturbance_hold_steps": (
@@ -3837,7 +4148,7 @@ def main() -> None:
                 and cfg.experiment_mode == "proposed"
             ),
             "training_disturbance_protocol": (
-                "nominal_exogenous_conditions_plus_unscaled_state_shocks"
+                "nominal_exogenous_conditions_plus_randomized_state_shocks"
                 if paper_main_experiment
                 else f"{cfg.disturbance_mode}_exogenous_uncertainty"
             ),
@@ -3946,16 +4257,22 @@ def main() -> None:
             else "not_applicable"
         ),
         "paper2016_reward_shaping_scope": (
-            "zanon2016 AND proposed AND "
-            "paper2016_original_state_shocks"
+            "zanon2016 AND proposed AND a registered Paper2016 state-shock "
+            "protocol"
         ),
         "paper2016_reward_weight_calibration": {
-            "source": "frozen_38f62cb_existing_rollouts",
-            "pooled_mean_absolute_economic_reward": 1.667,
-            "pooled_mean_state_recovery_loss": 0.092235,
-            "pooled_mean_f200_move_loss": 9.6775e-5,
-            "estimated_state_penalty_fraction_of_abs_economic_reward": 0.083,
-            "estimated_f200_penalty_fraction_of_abs_economic_reward": 0.052,
+            "source": "certified_robust_reference_zero_residual_rollouts",
+            "pooled_steps": 900,
+            "pooled_mean_absolute_economic_reward": 0.6176969062597452,
+            "pooled_mean_state_recovery_loss": 0.011278487964695987,
+            "pooled_mean_f200_move_loss": 0.00038505681390811034,
+            "target_fraction_each": 0.10,
+            "weights": {
+                "state_recovery": float(
+                    cfg.paper2016_state_recovery_penalty_weight
+                ),
+                "f200_move": float(cfg.paper2016_f200_move_penalty_weight),
+            },
         },
         "reward_decomposition_fields": list(REWARD_DECOMPOSITION_FIELDS),
         "economic_reward_form": (
@@ -3977,11 +4294,18 @@ def main() -> None:
         "reward_reference": "fixed_nominal_economic_point_independent_of_terminal_center",
         "reward_reference_cost": nominal_economic_reference_cost,
         "paper2016_state_recovery_reference": (
-            cfg.paper2016_steady_state.tolist()
+            experiment_reference_state(cfg).tolist()
         ),
         "paper2016_state_recovery_reference_source": (
-            "fixed_Paper2016_nominal_steady_state_not_trajectory_terminal_mean"
+            "fixed_certified_robust_reference_not_trajectory_terminal_mean"
         ),
+        "paper2016_original_benchmark_state": (
+            cfg.paper2016_steady_state.tolist()
+        ),
+        "paper2016_original_benchmark_input": (
+            cfg.paper2016_steady_input.tolist()
+        ),
+        "paper2016_original_benchmark_is_separate_from_formal_robust_run": True,
         "economic_optimum_precomputed_for_sac": False,
         "reward_uses_observed_stage_cost": True,
         "economic_optimum_is_actor_observation": False,
@@ -4084,6 +4408,9 @@ def main() -> None:
         "entropy_learning_rate": cfg.entropy_learning_rate,
         "residual_action_scale_normalized": cfg.residual_action_scale.tolist(),
         "residual_parameterization": cfg.residual_parameterization,
+        "residual_reserve_mode": cfg.residual_reserve_mode,
+        "residual_reserve_fraction": cfg.residual_reserve_fraction,
+        "qp_min_residual_authority_floor": cfg.qp_min_residual_authority,
         "proposed_nominal_controller": cfg.proposed_nominal_controller,
         "replay_action_execution_mask": (
             "one for the declared feasible action parameterization; zero only if the "
@@ -4092,7 +4419,11 @@ def main() -> None:
         "safe_action_parameterization": (
             "state-dependent symmetric residual box scaled by current polytope "
             "slack" if cfg.residual_parameterization == "state_dependent_box"
-            else "legacy state-dependent ray to the current polytope boundary"
+            else (
+                "state-dependent asymmetric ray to verification polytope boundary"
+                if cfg.residual_parameterization == "state_dependent_polytope"
+                else "legacy state-dependent ray to the current polytope boundary"
+            )
         ),
         "input_move_penalty_scope": (
             "change in executed SAC residual only; excludes nominal and H-infinity motion"

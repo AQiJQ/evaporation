@@ -1,0 +1,86 @@
+{
+  "scope": "fixed B coordinates; offline one-step QP; no controller integration or training",
+  "W_coverage_tested_samples_passed": true,
+  "continuous_domain_W_coverage_proved": false,
+  "Omega_QP_probe_states": 1008,
+  "Omega_QP_candidate_actions_per_state": 5,
+  "Omega_QP_attempts": 5040,
+  "Omega_QP_infeasible_count": 0,
+  "maximum_W_vertex_next_Omega_excess_normalized": 0.0,
+  "maximum_tested_nonlinear_next_Omega_excess_normalized": -1.201615017504265e-05,
+  "maximum_tested_nonlinear_W_utilization": 0.8333333375434093,
+  "mode_logic": {
+    "inside_Z": "retain existing Hinf-RPI residual controller (not modified)",
+    "outside_Z_inside_Omega": "Omega one-step projection (diagnostic only)",
+    "outside_Omega": "no claim or filter action"
+  },
+  "rank_decreasing": {
+    "pressure_positive": {
+      "first_R_k": null,
+      "rank_decreasing_QP_feasible": null,
+      "interpretation": "No R_k coverage within prior 1000-step scan"
+    },
+    "pressure_negative": {
+      "first_R_k": 687,
+      "target_rank": 686,
+      "rank_decreasing_QP_feasible": true,
+      "projected_action": {
+        "feasible": true,
+        "q_candidate_normalized": [
+          0.0,
+          0.0
+        ],
+        "q_safe_normalized": [
+          0.06172824374838684,
+          -0.14087317692802317
+        ],
+        "q_safe_physical_P100_F200": [
+          6.172824374838684,
+          -14.087317692802317
+        ],
+        "projection_distance_normalized": 0.15380386228588144,
+        "actual_input_P100_F200": [
+          201.03426734313106,
+          202.18933581242104
+        ],
+        "max_QP_inequality_excess_normalized": 6.670521206286804e-10,
+        "max_W_vertex_next_target_excess_normalized": 6.670521218721248e-10,
+        "nonlinear_W_max_facet_utilization": 0.05934263829393329,
+        "nonlinear_next_target_excess_normalized": -3.717046886395764e-05
+      },
+      "inductive_return_bound_steps": 687,
+      "conditional_on": "Every future model mismatch belongs to fixed W"
+    },
+    "concentration_positive": {
+      "first_R_k": 34,
+      "target_rank": 33,
+      "rank_decreasing_QP_feasible": true,
+      "projected_action": {
+        "feasible": true,
+        "q_candidate_normalized": [
+          0.0,
+          0.0
+        ],
+        "q_safe_normalized": [
+          -0.08894152400794522,
+          -7.967185279671182e-05
+        ],
+        "q_safe_physical_P100_F200": [
+          -8.894152400794523,
+          -0.007967185279671182
+        ],
+        "projection_distance_normalized": 0.08894155969208109,
+        "actual_input_P100_F200": [
+          185.96729056749786,
+          216.26868631994367
+        ],
+        "max_QP_inequality_excess_normalized": 0.0,
+        "max_W_vertex_next_target_excess_normalized": -1.3877787807814457e-17,
+        "nonlinear_W_max_facet_utilization": 0.07399192073629285,
+        "nonlinear_next_target_excess_normalized": -0.00029116879781636296
+      },
+      "inductive_return_bound_steps": 34,
+      "conditional_on": "Every future model mismatch belongs to fixed W"
+    }
+  }
+}

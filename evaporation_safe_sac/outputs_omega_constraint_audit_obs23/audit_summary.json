@@ -1,0 +1,86 @@
+{
+  "checkpoint_count": 61,
+  "scenario_rows": 183,
+  "robust_input_physical_ranges": [
+    77.587890625,
+    66.50390625
+  ],
+  "threshold_rule": "IAE <= 1.10*paired_baseline; extra TV <= 10% baseline TV, or <=1 physical unit when baseline TV=0; extra boundary steps <=10% paired baseline occupancy steps (explicit extension, because prior comprehensive check had no occupancy threshold)",
+  "constraint_violation_frequency_by_scenario_row": {
+    "tv_f200": 141,
+    "x2": 147,
+    "tv_p100": 106,
+    "boundary": 29,
+    "p2": 100
+  },
+  "all_five_feasible_checkpoint_count": 1,
+  "positive_economic_all_five_feasible_checkpoint_count": 0,
+  "episode_100": [
+    {
+      "episode": 100,
+      "scenario": "pressure_positive",
+      "economic_improvement_percent": 0.1301299616972585,
+      "g_x2": 0.32293603445179153,
+      "g_p2": -0.10578158879054889,
+      "g_tv_p100": 0.036702559278428526,
+      "g_tv_f200": 0.00989637139094437,
+      "g_boundary": -0.2533333333333333,
+      "allowed_x2": 1.1,
+      "allowed_p2": 1.1,
+      "allowed_tv_p100": 0.0003016347140094029,
+      "allowed_tv_f200": 5.0122369065100345e-05,
+      "allowed_boundary": 0.1,
+      "constraints_feasible": false,
+      "joint_economic_and_constraints_feasible": false,
+      "violated_constraints": "x2;tv_p100;tv_f200",
+      "existing_comprehensive_performance_passed": false
+    },
+    {
+      "episode": 100,
+      "scenario": "pressure_negative",
+      "economic_improvement_percent": 0.02936644424331653,
+      "g_x2": -0.23878500002361125,
+      "g_p2": 0.021441426838688216,
+      "g_tv_p100": 0.0074646995803529514,
+      "g_tv_f200": 0.009525080101366198,
+      "g_boundary": -1.0366666666666666,
+      "allowed_x2": 1.1,
+      "allowed_p2": 1.1,
+      "allowed_tv_p100": 0.00030214425731276746,
+      "allowed_tv_f200": 5.0122369065100345e-05,
+      "allowed_boundary": 0.1,
+      "constraints_feasible": false,
+      "joint_economic_and_constraints_feasible": false,
+      "violated_constraints": "p2;tv_p100;tv_f200",
+      "existing_comprehensive_performance_passed": false
+    },
+    {
+      "episode": 100,
+      "scenario": "concentration_positive",
+      "economic_improvement_percent": 0.05253063963507874,
+      "g_x2": -0.13034493523343238,
+      "g_p2": 0.02591020518367171,
+      "g_tv_p100": 0.004747837866722701,
+      "g_tv_f200": 0.0029401774512531954,
+      "g_boundary": 0.07300000000000001,
+      "allowed_x2": 1.1,
+      "allowed_p2": 1.1,
+      "allowed_tv_p100": 0.0001623114884252124,
+      "allowed_tv_f200": 0.00015229508223647034,
+      "allowed_boundary": 0.03366666666666667,
+      "constraints_feasible": false,
+      "joint_economic_and_constraints_feasible": false,
+      "violated_constraints": "p2;tv_p100;tv_f200;boundary",
+      "existing_comprehensive_performance_passed": false
+    }
+  ],
+  "late_255_300_mean": {
+    "x2": 1.0019842700743058,
+    "p2": 0.1521034233621285,
+    "tv_p100": -0.0004386954227714839,
+    "tv_f200": 0.0018501493515037883,
+    "boundary": -0.4136666666666666
+  },
+  "late_255_300_feasible_rows": 0,
+  "late_255_300_row_count": 30
+}

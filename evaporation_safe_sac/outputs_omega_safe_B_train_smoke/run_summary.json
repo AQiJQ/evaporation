@@ -1,0 +1,54 @@
+{
+  "episodes": 1,
+  "steps_per_episode": 45,
+  "seed": 42,
+  "global_step": 45,
+  "evaluation_every_episodes": 5,
+  "fixed_scenarios": [
+    "pressure_positive",
+    "pressure_negative",
+    "concentration_positive"
+  ],
+  "training_schedule_counts": {
+    "pressure_positive": 0,
+    "pressure_negative": 1,
+    "concentration_positive": 0
+  },
+  "shock_amplitude_distribution": {
+    "uniform_probability": 0.8,
+    "uniform_bounds": [
+      0.2,
+      1.0
+    ],
+    "endpoint_probability": 0.2
+  },
+  "calibration": {
+    "mean_absolute_economic_reward": 0.6201996655805485,
+    "mean_state_recovery_loss": 0.011273351980745418,
+    "mean_F200_move_loss": 0.00037872268203962726,
+    "old_lambda_x": 5.476770540459546,
+    "old_lambda_F": 160.4170823496067,
+    "old_state_penalty_fraction": 0.099551104985817,
+    "old_F200_penalty_fraction": 0.09795811098276772,
+    "state_weight_adjusted": false,
+    "F200_weight_adjusted": false,
+    "lambda_x_used": 5.476770540459546,
+    "lambda_F_used": 160.4170823496067,
+    "new_state_penalty_fraction": 0.099551104985817,
+    "new_F200_penalty_fraction": 0.09795811098276772,
+    "scenario_J_econ": {
+      "pressure_positive": 1872175.080373695,
+      "pressure_negative": 1867566.3989547016,
+      "concentration_positive": 1783464.8035648465
+    },
+    "scenario_omega_exit_count": {
+      "pressure_positive": 0,
+      "pressure_negative": 0,
+      "concentration_positive": 0
+    },
+    "baseline_step_count": 900
+  },
+  "best_post_warmup_fixed_mean_improvement_percent": -Infinity,
+  "K_W_Z_S_Omega_fixed": true,
+  "rank_constraint_enabled": false
+}

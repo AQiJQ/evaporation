@@ -222,6 +222,8 @@ class ExperimentConfig:
     # collapsing all residual authority to zero.
     qp_min_residual_authority: float = 0.01
     residual_parameterization: str = "state_dependent_box"
+    residual_reserve_mode: str = "fraction_of_max"
+    residual_reserve_fraction: float = 0.8
     proposed_nominal_controller: str = "safe_center_tracking"
     # The evaporation comparison in Zanon-Gros (2020) uses gamma=0.99.
     gamma_rl: float = 0.99
@@ -291,12 +293,16 @@ class ExperimentConfig:
     rpi_excess_square_weight: float = 200.0
     qp_intervention_tolerance: float = 1e-3
 
-    # Paper2016 proposed-policy shaping, calibrated on the frozen 38f62cb
-    # three-seed rollouts.  With the paper steady state as the common target,
-    # lambda_x*E[Lx] and lambda_F*E[LF] are initially about 8.3% and 5.2% of
-    # E[|economic_reward|], respectively.  These terms do not alter safety.
-    paper2016_state_recovery_penalty_weight: float = 1.5
-    paper2016_f200_move_penalty_weight: float = 900.0
+    # Proposed-policy shaping weights calibrated from 900 zero-residual steps
+    # at the certified robust-economic reference.  Each mean shaping term is
+    # 10% of mean |economic_reward| (0.6176969063) on that fixed audit.
+    paper2016_state_recovery_penalty_weight: float = 5.476770540459546
+    paper2016_f200_move_penalty_weight: float = 160.4170823496067
+    # Opt-in for the fixed balanced-B Omega-safe experiment.  These are
+    # calibrated from its paired zero-residual endpoint rollouts at startup.
+    omega_performance_shaping_enabled: bool = False
+    paper2016_p100_move_penalty_weight: float = 0.0
+    paper2016_saturation_penalty_weight: float = 0.0
 
     # Training-only continuous shock-amplitude domain randomization.  Formal
     # deterministic evaluation always keeps the original endpoint lambda=1.
@@ -323,6 +329,17 @@ class ExperimentConfig:
     paper2016_steady_input: np.ndarray = field(
         default_factory=lambda: np.array([191.713, 215.888], dtype=float)
     )
+    # Fully certified robust-economic reference from the independent local
+    # search.  This is intentionally distinct from the original Paper2016
+    # benchmark point above, which remains available for a separate comparison.
+    robust_economic_reference_state: np.ndarray = field(
+        default_factory=lambda: np.array([25.3825, 50.1125], dtype=float)
+    )
+    robust_economic_reference_input: np.ndarray = field(
+        default_factory=lambda: np.array(
+            [194.78094288141926, 216.32585779965459], dtype=float
+        )
+    )
     paper2016_prediction_horizon: int = 200
     paper2016_smoke_horizon: int = 20
     paper2016_simulation_seconds: int = 300
@@ -331,7 +348,11 @@ class ExperimentConfig:
         if self.benchmark_profile == "zanon2016":
             # Model derivatives are expressed per minute, so 1 s = 1/60 min.
             self.dt_min = 1.0 / 60.0
-            self.main_experiment_protocol = "paper2016_original_state_shocks"
+            self.main_experiment_protocol = (
+                "robust_reference_paper2016_shocks"
+                if self.experiment_mode == "proposed"
+                else "paper2016_original_state_shocks"
+            )
             self.disturbance_half_range = np.zeros(4, dtype=float)
             # The certified Zanon2016 geometry supports a materially useful
             # residual box at every checked invariant vertex (the diagnosed
@@ -345,13 +366,18 @@ class ExperimentConfig:
                 self.residual_action_scale = np.array(
                     [0.36, 0.30], dtype=float
                 )
+                self.safe_center_state = (
+                    self.robust_economic_reference_state.copy()
+                )
             # The robust tube is local to the interior safety anchor.  Keep the
             # paper economic steady state separately for Experiment I, while
             # eliminating a persistent affine mismatch caused by linearizing
             # the safety model at a different operating point.
             self.linearization_state = self.safe_center_state.copy()
-            self.linearization_input = np.array(
-                [222.62265879, 215.15014494], dtype=float
+            self.linearization_input = (
+                self.robust_economic_reference_input.copy()
+                if self.experiment_mode == "proposed"
+                else np.array([222.62265879, 215.15014494], dtype=float)
             )
             # The one-second discrete closed loop contains a deliberately slow
             # mode.  Its RPI support series needs more terms than the 12-second

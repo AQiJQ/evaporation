@@ -1,0 +1,49 @@
+{
+  "mean_absolute_economic_reward": 0.6201996655805485,
+  "mean_state_recovery_loss": 0.011273351980745418,
+  "mean_F200_move_loss": 0.00037872268203962726,
+  "old_lambda_x": 5.476770540459546,
+  "old_lambda_F": 160.4170823496067,
+  "old_state_penalty_fraction": 0.099551104985817,
+  "old_F200_penalty_fraction": 0.09795811098276772,
+  "state_weight_adjusted": false,
+  "F200_weight_adjusted": false,
+  "lambda_x_used": 5.476770540459546,
+  "lambda_F_used": 160.4170823496067,
+  "new_state_penalty_fraction": 0.099551104985817,
+  "new_F200_penalty_fraction": 0.09795811098276772,
+  "scenario_J_econ": {
+    "pressure_positive": 1872175.080373695,
+    "pressure_negative": 1867566.3989547016,
+    "concentration_positive": 1783464.8035648465
+  },
+  "scenario_omega_exit_count": {
+    "pressure_positive": 0,
+    "pressure_negative": 0,
+    "concentration_positive": 0
+  },
+  "scenario_safety_audit": {
+    "pressure_positive": {
+      "omega_exit_count": 0,
+      "qp_infeasible_rate": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0
+    },
+    "pressure_negative": {
+      "omega_exit_count": 0,
+      "qp_infeasible_rate": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0
+    },
+    "concentration_positive": {
+      "omega_exit_count": 0,
+      "qp_infeasible_rate": 0.0,
+      "violation_rate": 0.0,
+      "robust_operating_region_violation_rate": 0.0,
+      "disturbance_bound_exceedance_rate": 0.0
+    }
+  },
+  "baseline_step_count": 900
+}

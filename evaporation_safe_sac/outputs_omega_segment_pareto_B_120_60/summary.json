@@ -1,0 +1,146 @@
+{
+  "frozen_class": "balanced B, Hinf/RPI/Omega/dwell20/interior-anchor/supervisor23",
+  "protocol": "Paper2016 endpoint 0/20/40 state jumps, 300 s",
+  "optimization": "offline segmented actor actions, archive multiobjective derivative-free",
+  "conclusion_limit": "finite search absence is not mathematical infeasibility",
+  "oscillation_diagnosis": {
+    "P100_TV": 14223.662100431386,
+    "RMS_delta_P100": 50.53512252271049,
+    "max_abs_delta_P100": 59.01334596608905,
+    "sign_flip_count": 275,
+    "lag1_P100_correlation": -0.7847100466658884,
+    "lag1_delta_P100_correlation": -0.993561112923308,
+    "dominant_frequency_hz": 0.5,
+    "dominant_period_seconds": 2.0,
+    "high_frequency_power_fraction_ge_0p25_hz": 0.9343948145378966,
+    "TV_from_steps_abs_delta_gt_20_fraction": 0.9905903258144458
+  },
+  "searches": [
+    {
+      "scenario": "pressure_positive",
+      "segment_seconds": 10,
+      "attempted": 120,
+      "safe_candidates": 120,
+      "failed_candidates": 0,
+      "pareto_count": 107,
+      "level_counts": {
+        "A": 0,
+        "B": 6,
+        "C": 3
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "pressure_positive_10s_00117",
+        "C": "pressure_positive_10s_00011"
+      },
+      "best_economy_percent": 0.8603211410628248,
+      "best_X2_ratio_among_economic_positive": 0.48984583357426964,
+      "best_P2_ratio_among_economic_positive": 0.9862459004765827
+    },
+    {
+      "scenario": "pressure_positive",
+      "segment_seconds": 5,
+      "attempted": 60,
+      "safe_candidates": 60,
+      "failed_candidates": 0,
+      "pareto_count": 56,
+      "level_counts": {
+        "A": 0,
+        "B": 8,
+        "C": 3
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "pressure_positive_5s_00028",
+        "C": "pressure_positive_5s_00011"
+      },
+      "best_economy_percent": 0.9519803157429804,
+      "best_X2_ratio_among_economic_positive": 0.8321234267994455,
+      "best_P2_ratio_among_economic_positive": 0.9927888013327892
+    },
+    {
+      "scenario": "pressure_negative",
+      "segment_seconds": 10,
+      "attempted": 120,
+      "safe_candidates": 120,
+      "failed_candidates": 0,
+      "pareto_count": 94,
+      "level_counts": {
+        "A": 0,
+        "B": 5,
+        "C": 4
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "pressure_negative_10s_00048",
+        "C": "pressure_negative_10s_00048"
+      },
+      "best_economy_percent": 1.2001114085714542,
+      "best_X2_ratio_among_economic_positive": 0.3971810540382993,
+      "best_P2_ratio_among_economic_positive": 1.0024633655899622
+    },
+    {
+      "scenario": "pressure_negative",
+      "segment_seconds": 5,
+      "attempted": 60,
+      "safe_candidates": 60,
+      "failed_candidates": 0,
+      "pareto_count": 51,
+      "level_counts": {
+        "A": 0,
+        "B": 2,
+        "C": 2
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "pressure_negative_5s_00006",
+        "C": "pressure_negative_5s_00006"
+      },
+      "best_economy_percent": 1.1083019674427592,
+      "best_X2_ratio_among_economic_positive": 0.21190595019024658,
+      "best_P2_ratio_among_economic_positive": 1.006009672179608
+    },
+    {
+      "scenario": "concentration_positive",
+      "segment_seconds": 10,
+      "attempted": 120,
+      "safe_candidates": 120,
+      "failed_candidates": 0,
+      "pareto_count": 88,
+      "level_counts": {
+        "A": 0,
+        "B": 2,
+        "C": 2
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "concentration_positive_10s_00005",
+        "C": "concentration_positive_10s_00005"
+      },
+      "best_economy_percent": 0.6851581762430696,
+      "best_X2_ratio_among_economic_positive": 0.9007573785689221,
+      "best_P2_ratio_among_economic_positive": 0.9156079572668722
+    },
+    {
+      "scenario": "concentration_positive",
+      "segment_seconds": 5,
+      "attempted": 60,
+      "safe_candidates": 60,
+      "failed_candidates": 0,
+      "pareto_count": 54,
+      "level_counts": {
+        "A": 0,
+        "B": 1,
+        "C": 1
+      },
+      "representative_witnesses": {
+        "A": null,
+        "B": "concentration_positive_5s_00005",
+        "C": "concentration_positive_5s_00005"
+      },
+      "best_economy_percent": 0.8059269106158408,
+      "best_X2_ratio_among_economic_positive": 0.9010495423853677,
+      "best_P2_ratio_among_economic_positive": 1.0354657825224438
+    }
+  ]
+}

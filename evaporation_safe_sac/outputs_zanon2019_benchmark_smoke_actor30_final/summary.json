@@ -1,0 +1,102 @@
+{
+  "benchmark": "ECC2019-motivated; not exact paper reproduction",
+  "formal_safety_status": "not_certified_W_exceeded_in_evaluation",
+  "controller": "fixed balanced B interior-anchor + Z/Omega one-step QP; Gm/Bj reserved for finite-jump test",
+  "actor_checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_obs23_constrained_seed42_300x300\\models\\last_actor.pth",
+  "paper_specification": {
+    "source": "Zanon, Gros, Bemporad, ECC 2019, Numerical Example pp. 2261-2262 and Fig. 2 p. 2263",
+    "paper_reported_disturbance_variances": {
+      "X1": 1,
+      "F1": 2,
+      "T1": 8,
+      "T200": 5
+    },
+    "paper_feed_flow_notation_note": "prose says flow F2, variance subscript says F1; project plant uses exogenous F1",
+    "paper_model_equations_and_economic_cost": "omitted in ECC2019; referred to earlier publications",
+    "paper_random_distribution": "not specified in the paper",
+    "paper_per_step_independence": "not specified in the paper",
+    "paper_initial_state": "not specified in the paper",
+    "paper_sampling_time": "not specified in the paper",
+    "paper_evaluation_seed_or_realization": "not specified in the paper",
+    "paper_exact_gain_formula": "not specified in the paper",
+    "paper_gain_baselines": "14% vs naive-initial-guess NMPC; 12% vs nominal-economic-tuned NMPC",
+    "paper_state_relaxation": "all state bounds softened by s_k in Eq. (3e); W_s=I and w_s=1 in Numerical Example; exact solver handling not specified in the paper",
+    "paper_fig2_horizon": "horizontal axis shown 0-1000; textual simulation horizon not specified in the paper",
+    "paper_fig2_cost_difference_sign": "not algebraically specified in the paper; plotted values are mostly negative",
+    "implementation_choice_for_reproduction": {
+      "mode": "zanon2019_stochastic",
+      "distribution": "independent zero-mean Gaussian per step",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "nominal_F1_X1_T1_T200": [
+        10.0,
+        5.0,
+        40.0,
+        25.0
+      ],
+      "initial_state": [
+        25.39,
+        50.125
+      ],
+      "horizon_samples": 30,
+      "sampling_seconds": 1.0,
+      "piecewise_hold_min_max": null,
+      "negative_F1_X1_clipping": "clip to zero, count each clip",
+      "Fig2_difference": "l_SAC - l_paired_zero_residual; negative favors SAC",
+      "training_observation": "23D: original 19D plus [0,0,0,normalized Omega q radius]; no future information",
+      "finite_jump_supervisor": "not used in no-state-jump Experiment I; unchanged in Experiment III",
+      "state_constraints": "unchanged hard physical constraints, unlike the paper's softened NMPC state bounds"
+    }
+  },
+  "frozen_reward_weights": {
+    "state_recovery": 5.501466348605391,
+    "P100_move": 108.11728453584045,
+    "F200_move": 81.880449071658,
+    "saturation": 3.666163865052666
+  },
+  "paired_random_seed_start": 420000,
+  "eval_seeds": 1,
+  "per_seed_W_exceedance": [
+    {
+      "seed": 420000,
+      "baseline": 30,
+      "SAC": 30
+    }
+  ],
+  "clipping_by_seed": [
+    {
+      "seed": 420000,
+      "mode": "zanon2019_stochastic",
+      "steps": 30,
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    }
+  ],
+  "gain_14_percent_baseline": "paper naive-initial-guess NMPC, not implemented here",
+  "gain_12_percent_baseline": "paper nominal-economic NMPC, not implemented here"
+}

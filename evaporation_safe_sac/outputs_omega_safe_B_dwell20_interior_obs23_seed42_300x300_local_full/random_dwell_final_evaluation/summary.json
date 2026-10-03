@@ -1,0 +1,1034 @@
+{
+  "checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full\\models\\last_actor.pth",
+  "shock_clock_available_to_supervisor": false,
+  "minimum_dwell": 20,
+  "trajectories": [
+    {
+      "scenario": "pressure_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 0,
+      "seed": 970042,
+      "shock_seconds_plant_side_only": [
+        3,
+        30,
+        55
+      ],
+      "shock_detected_seconds": [
+        3,
+        30,
+        55
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 3,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 55,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 1,
+      "seed": 970043,
+      "shock_seconds_plant_side_only": [
+        4,
+        24,
+        56
+      ],
+      "shock_detected_seconds": [
+        4,
+        24,
+        56
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 4,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 24,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 56,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 2,
+      "seed": 970044,
+      "shock_seconds_plant_side_only": [
+        5,
+        30,
+        60
+      ],
+      "shock_detected_seconds": [
+        5,
+        30,
+        60
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 60,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 0,
+      "seed": 970042,
+      "shock_seconds_plant_side_only": [
+        3,
+        30,
+        55
+      ],
+      "shock_detected_seconds": [
+        3,
+        30,
+        55
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.20014647408904335,
+      "q_radius_median": 0.22529385022199372,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 3,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 55,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 1,
+      "seed": 970043,
+      "shock_seconds_plant_side_only": [
+        4,
+        24,
+        56
+      ],
+      "shock_detected_seconds": [
+        4,
+        24,
+        56
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.19994561191164734,
+      "q_radius_median": 0.22519237777048579,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 4,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 24,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 56,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 2,
+      "seed": 970044,
+      "shock_seconds_plant_side_only": [
+        5,
+        30,
+        60
+      ],
+      "shock_detected_seconds": [
+        5,
+        30,
+        60
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.20009334145026267,
+      "q_radius_median": 0.225143143817005,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 60,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "paired_zero_residual",
+      "trajectory": 0,
+      "seed": 1070042,
+      "shock_seconds_plant_side_only": [
+        5,
+        39,
+        71
+      ],
+      "shock_detected_seconds": [
+        5,
+        39,
+        71
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 39,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 71,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "paired_zero_residual",
+      "trajectory": 1,
+      "seed": 1070043,
+      "shock_seconds_plant_side_only": [
+        13,
+        44,
+        69
+      ],
+      "shock_detected_seconds": [
+        13,
+        44,
+        69
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 13,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 44,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 69,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "paired_zero_residual",
+      "trajectory": 2,
+      "seed": 1070044,
+      "shock_seconds_plant_side_only": [
+        5,
+        30,
+        54
+      ],
+      "shock_detected_seconds": [
+        5,
+        30,
+        54
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.33251953125,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 54,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "final_checkpoint",
+      "trajectory": 0,
+      "seed": 1070042,
+      "shock_seconds_plant_side_only": [
+        5,
+        39,
+        71
+      ],
+      "shock_detected_seconds": [
+        5,
+        39,
+        71
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.27759357023251247,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 39,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 71,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "final_checkpoint",
+      "trajectory": 1,
+      "seed": 1070043,
+      "shock_seconds_plant_side_only": [
+        13,
+        44,
+        69
+      ],
+      "shock_detected_seconds": [
+        13,
+        44,
+        69
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.2778607650801289,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 13,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 44,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 69,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "pressure_negative",
+      "policy": "final_checkpoint",
+      "trajectory": 2,
+      "seed": 1070044,
+      "shock_seconds_plant_side_only": [
+        5,
+        30,
+        54
+      ],
+      "shock_detected_seconds": [
+        5,
+        30,
+        54
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.2971787743846934,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 5,
+          "remaining_shocks_after": 2,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 30,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 54,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 0,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 0,
+      "seed": 1170042,
+      "shock_seconds_plant_side_only": [
+        10,
+        45,
+        73
+      ],
+      "shock_detected_seconds": [
+        10,
+        45,
+        73
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.024134430643474147,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 10,
+          "remaining_shocks_after": 2,
+          "initial_rank": 5,
+          "recovery_steps": 4,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 45,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 73,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 4,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 1,
+      "seed": 1170043,
+      "shock_seconds_plant_side_only": [
+        0,
+        22,
+        50
+      ],
+      "shock_detected_seconds": [
+        0,
+        22,
+        50
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.0008225900878354008,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 0,
+          "remaining_shocks_after": 2,
+          "initial_rank": 5,
+          "recovery_steps": 4,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 22,
+          "remaining_shocks_after": 1,
+          "initial_rank": 1,
+          "recovery_steps": 1,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 50,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 4,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "paired_zero_residual",
+      "trajectory": 2,
+      "seed": 1170044,
+      "shock_seconds_plant_side_only": [
+        13,
+        42,
+        64
+      ],
+      "shock_detected_seconds": [
+        13,
+        42,
+        64
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.0243885289569184,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.0,
+      "projection_distance_max_physical": 0.0,
+      "shock_events": [
+        {
+          "detected_second": 13,
+          "remaining_shocks_after": 2,
+          "initial_rank": 5,
+          "recovery_steps": 4,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 42,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 64,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 4,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 0,
+      "seed": 1170042,
+      "shock_seconds_plant_side_only": [
+        10,
+        45,
+        73
+      ],
+      "shock_detected_seconds": [
+        10,
+        45,
+        73
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.028924568600321797,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.8662873733556959,
+      "projection_distance_max_physical": 44.6674896219927,
+      "shock_events": [
+        {
+          "detected_second": 10,
+          "remaining_shocks_after": 2,
+          "initial_rank": 7,
+          "recovery_steps": 7,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 45,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 73,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 7,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 1,
+      "seed": 1170043,
+      "shock_seconds_plant_side_only": [
+        0,
+        22,
+        50
+      ],
+      "shock_detected_seconds": [
+        0,
+        22,
+        50
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.0062959970218130325,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.7540999453943751,
+      "projection_distance_max_physical": 38.87788787928512,
+      "shock_events": [
+        {
+          "detected_second": 0,
+          "remaining_shocks_after": 2,
+          "initial_rank": 5,
+          "recovery_steps": 5,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 22,
+          "remaining_shocks_after": 1,
+          "initial_rank": 3,
+          "recovery_steps": 2,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 50,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 5,
+      "all_three_recovered_within_D": true
+    },
+    {
+      "scenario": "concentration_positive",
+      "policy": "final_checkpoint",
+      "trajectory": 2,
+      "seed": 1170044,
+      "shock_seconds_plant_side_only": [
+        13,
+        42,
+        64
+      ],
+      "shock_detected_seconds": [
+        13,
+        42,
+        64
+      ],
+      "steps_completed": 120,
+      "certificate_failure": false,
+      "failure_reason": null,
+      "G_m_exit_count": 0,
+      "B_k_recovery_failure_count": 0,
+      "Omega_exit_count": 0,
+      "QP_infeasible_count": 0,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "nonlinear_mismatch_outside_W_count": 0,
+      "low_authority_fraction": 0.0,
+      "q_radius_min": 0.010689702891177173,
+      "q_radius_median": 0.33251953125,
+      "projection_distance_mean_physical": 0.7655424382906527,
+      "projection_distance_max_physical": 63.89792858771599,
+      "shock_events": [
+        {
+          "detected_second": 13,
+          "remaining_shocks_after": 2,
+          "initial_rank": 7,
+          "recovery_steps": 7,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 42,
+          "remaining_shocks_after": 1,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        },
+        {
+          "detected_second": 64,
+          "remaining_shocks_after": 0,
+          "initial_rank": 0,
+          "recovery_steps": 0,
+          "completed_within_D": true
+        }
+      ],
+      "max_recovery_steps": 7,
+      "all_three_recovered_within_D": true
+    }
+  ],
+  "all_safe_and_recovered": true
+}

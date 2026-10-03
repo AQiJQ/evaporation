@@ -1,0 +1,41 @@
+{
+  "current_5pct_box": {
+    "steps": 1800,
+    "nonzero_action_steps": 1800,
+    "physical_state_violation_count": 0,
+    "physical_input_violation_count": 0,
+    "robust_region_violation_count": 0,
+    "qp_infeasible_count": 0,
+    "tube_violation_count": 0,
+    "disturbance_bound_exceedance_count": 0,
+    "ancillary_clip_max": 3.963719774138011e-15,
+    "first_failure": null,
+    "formal_domain_passed": true
+  },
+  "max_margin_symmetric_box": {
+    "steps": 1800,
+    "nonzero_action_steps": 1800,
+    "physical_state_violation_count": 0,
+    "physical_input_violation_count": 0,
+    "robust_region_violation_count": 0,
+    "qp_infeasible_count": 0,
+    "tube_violation_count": 0,
+    "disturbance_bound_exceedance_count": 0,
+    "ancillary_clip_max": 4.091476882082294e-15,
+    "first_failure": null,
+    "formal_domain_passed": true
+  },
+  "max_margin_asymmetric_polytope": {
+    "steps": 1800,
+    "nonzero_action_steps": 1800,
+    "physical_state_violation_count": 0,
+    "physical_input_violation_count": 0,
+    "robust_region_violation_count": 0,
+    "qp_infeasible_count": 0,
+    "tube_violation_count": 0,
+    "disturbance_bound_exceedance_count": 0,
+    "ancillary_clip_max": 4.045120731704774e-15,
+    "first_failure": null,
+    "formal_domain_passed": true
+  }
+}

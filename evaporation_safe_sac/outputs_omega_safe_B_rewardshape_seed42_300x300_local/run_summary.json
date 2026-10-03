@@ -1,0 +1,155 @@
+{
+  "episodes": 300,
+  "steps_per_episode": 300,
+  "seed": 42,
+  "global_step": 90000,
+  "evaluation_every_episodes": 5,
+  "fixed_scenarios": [
+    "pressure_positive",
+    "pressure_negative",
+    "concentration_positive"
+  ],
+  "training_schedule_counts": {
+    "pressure_positive": 100,
+    "pressure_negative": 100,
+    "concentration_positive": 100
+  },
+  "shock_amplitude_distribution": {
+    "uniform_probability": 0.8,
+    "uniform_bounds": [
+      0.2,
+      1.0
+    ],
+    "endpoint_probability": 0.2
+  },
+  "calibration": {
+    "mean_absolute_economic_reward": 0.6201996655805485,
+    "mean_losses": {
+      "state_recovery": 0.011273351980745418,
+      "P100_move": 0.00028681799965802636,
+      "F200_move": 0.00037872268203962726,
+      "saturation": 0.008458428051901045
+    },
+    "calibrated_weights": {
+      "state_recovery": 5.501466348605391,
+      "P100_move": 108.11728453584045,
+      "F200_move": 81.880449071658,
+      "saturation": 3.666163865052666
+    },
+    "target_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "realized_baseline_penalty_means": {
+      "state_recovery": 0.062019966558054855,
+      "P100_move": 0.031009983279027428,
+      "F200_move": 0.031009983279027428,
+      "saturation": 0.031009983279027428
+    },
+    "realized_baseline_penalty_fractions": {
+      "state_recovery": 0.1,
+      "P100_move": 0.05,
+      "F200_move": 0.05,
+      "saturation": 0.05
+    },
+    "scenario_loss_means": {
+      "pressure_positive": {
+        "state_recovery": 0.01648574246774214,
+        "P100_move": 0.0001590086512320558,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "pressure_negative": {
+        "state_recovery": 0.016120696839708692,
+        "P100_move": 0.0001591986752853102,
+        "F200_move": 0.0003685641288757324,
+        "saturation": 0.009999999999999993
+      },
+      "concentration_positive": {
+        "state_recovery": 0.0012136166347854222,
+        "P100_move": 0.0005422466724567131,
+        "F200_move": 0.00039903978836741704,
+        "saturation": 0.00537528415570314
+      }
+    },
+    "scenario_J_econ": {
+      "pressure_positive": 1872175.080373695,
+      "pressure_negative": 1867566.3989547016,
+      "concentration_positive": 1783464.8035648465
+    },
+    "scenario_omega_exit_count": {
+      "pressure_positive": 0,
+      "pressure_negative": 0,
+      "concentration_positive": 0
+    },
+    "scenario_safety_audit": {
+      "pressure_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "pressure_negative": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      },
+      "concentration_positive": {
+        "omega_exit_count": 0,
+        "qp_infeasible_rate": 0.0,
+        "violation_rate": 0.0,
+        "robust_operating_region_violation_rate": 0.0,
+        "disturbance_bound_exceedance_rate": 0.0
+      }
+    },
+    "baseline_step_count": 900
+  },
+  "best_economic_diagnostic_checkpoint": {
+    "episode": 70,
+    "global_step": 21000,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.35025281773841854,
+    "worst_scenario_economic_improvement_percent": 0.30894104875822653,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 0.6636684485084267,
+    "worst_positive_performance_degradation": 7.006490955122047,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 0.8823579414129569, \"P100_TV\": -0.01483707422880033, \"P2_IAE\": 0.04719120107024676, \"P2_ISE\": 0.1056338868045801, \"X2_IAE\": 0.27444377205756815, \"X2_ISE\": 0.03737955114624044}, \"pressure_negative\": {\"F200_TV\": 0.0, \"P100_TV\": -0.35606102296524084, \"P2_IAE\": 0.01503821273002846, \"P2_ISE\": 0.03007699232665622, \"X2_IAE\": -0.834878737112961, \"X2_ISE\": -0.9701638663442654}, \"pressure_positive\": {\"F200_TV\": 7.006490955122047, \"P100_TV\": 0.9764175052110464, \"P2_IAE\": -0.012848843031369836, \"P2_ISE\": -0.025375348877089574, \"X2_IAE\": 0.6962887115601699, \"X2_ISE\": 1.8747133437101393}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 300, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 300, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 299, \"SAC\": 299, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"F200_TV\": 57.194794027716284, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1777954.9486964794, \"Omega_exit_count\": 0, \"P100_TV\": 37.21967013400794, \"P2_IAE\": 92.98030302217498, \"P2_ISE\": 34.464671966004815, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 54.79100121994054, \"X2_ISE\": 40.96981998735652, \"paired_economic_improvement_percent\": 0.30894104875822653, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}, \"pressure_negative\": {\"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1860130.1421843462, \"Omega_exit_count\": 0, \"P100_TV\": 45.28707352291653, \"P2_IAE\": 697.9420465921894, \"P2_ISE\": 1878.6427595882978, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 8.746846306203995, \"X2_ISE\": 0.32314818497124953, \"paired_economic_improvement_percent\": 0.3981789763682594, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}, \"pressure_positive\": {\"F200_TV\": 7.006490955122047, \"F200_at_robust_upper_steps\": 299, \"J_econ\": 1865741.567356429, \"Omega_exit_count\": 0, \"P100_TV\": 138.76348958460875, \"P2_IAE\": 686.7477569267196, \"P2_ISE\": 1818.5195426436512, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 92.02731432084742, \"X2_ISE\": 32.6199380066123, \"paired_economic_improvement_percent\": 0.34363842808876965, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 299, \"robust_region_violation_rate\": 0.0}}"
+  },
+  "best_constrained_performance_checkpoint": null,
+  "nearest_tradeoff_diagnostic_checkpoint": {
+    "episode": 140,
+    "global_step": 42000,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.2061765199459118,
+    "worst_scenario_economic_improvement_percent": -0.07657076737171231,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 0.18732656429972702,
+    "worst_positive_performance_degradation": 2.346732952921092,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 2.346732952921092, \"P100_TV\": -0.01218462141442076, \"P2_IAE\": 0.05637973270095269, \"P2_ISE\": 0.12421929977774065, \"X2_IAE\": 0.26323593121385996, \"X2_ISE\": 0.03427306370526501}, \"pressure_negative\": {\"F200_TV\": 0.0, \"P100_TV\": -0.49533602625081347, \"P2_IAE\": 0.01515645933393416, \"P2_ISE\": 0.030311381657266257, \"X2_IAE\": -0.8420180476013182, \"X2_ISE\": -0.972377093690403}, \"pressure_positive\": {\"F200_TV\": 0.0, \"P100_TV\": 0.4917750389537131, \"P2_IAE\": 0.003271967062911744, \"P2_ISE\": 0.006522330068350737, \"X2_IAE\": -0.1879096450359729, \"X2_ISE\": -0.34161922996505434}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 300, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 300, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 300, \"SAC\": 300, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"F200_TV\": 101.68932151363833, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1778255.677899422, \"Omega_exit_count\": 0, \"P100_TV\": 37.31988037965837, \"P2_IAE\": 93.79615446790783, \"P2_ISE\": 35.044013978869444, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 54.30915271881045, \"X2_ISE\": 40.84713371393893, \"paired_economic_improvement_percent\": 0.29207897206675776, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}, \"pressure_negative\": {\"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 0, \"J_econ\": 1860039.7075454448, \"Omega_exit_count\": 0, \"P100_TV\": 35.492112294225905, \"P2_IAE\": 698.0233531634076, \"P2_ISE\": 1879.0702361965082, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 8.368660901840599, \"X2_ISE\": 0.2991772372578, \"paired_economic_improvement_percent\": 0.40302135514269, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}, \"pressure_positive\": {\"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 300, \"J_econ\": 1873608.619199279, \"Omega_exit_count\": 0, \"P100_TV\": 104.73693414202407, \"P2_IAE\": 697.9627872631945, \"P2_ISE\": 1878.0363550497648, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 44.05765000019699, \"X2_ISE\": 7.470776155916811, \"paired_economic_improvement_percent\": -0.07657076737171231, \"physical_violation_rate\": 0.0, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0}}"
+  },
+  "primary_checkpoint_status": "unavailable_no_positive_safe_checkpoint_within_performance_tolerance",
+  "performance_tolerance_definition": "All X2/P2 IAE/ISE and P100/F200 TV <= 110% of paired baseline; if baseline TV=0, absolute increase <=1 physical input unit.",
+  "cumulative_omega_exit_count": 0,
+  "cumulative_omega_outside_steps": 0,
+  "cumulative_fixed_eval_omega_exit_count": 0,
+  "K_W_Z_S_Omega_fixed": true,
+  "rank_constraint_enabled": false,
+  "reachable_rank_sets_computed": 1001
+}

@@ -1,0 +1,139 @@
+{
+  "observation_dimension": 19,
+  "observation_index_labels": [
+    "xi_X2",
+    "xi_P2",
+    "e_X2",
+    "e_P2",
+    "previous_final_P100_minus_vref",
+    "previous_final_F200_minus_vref",
+    "K_00",
+    "K_01",
+    "K_10",
+    "K_11",
+    "theta_h_0",
+    "theta_h_1",
+    "theta_h_2",
+    "theta_h_3",
+    "theta_p_0",
+    "theta_p_1",
+    "theta_m_angle",
+    "w_est_X2",
+    "w_est_P2"
+  ],
+  "normalized_actual_state_explicit": false,
+  "normalized_actual_state_recoverable_from_xi_plus_fixed_zref": true,
+  "rpi_error_explicit": true,
+  "nominal_z_recoverable_from_x_and_e": true,
+  "previous_final_applied_input_explicit_as_normalized_offset": true,
+  "previous_applied_input_reconstruction_max_abs_error": 3.5762786898541066e-09,
+  "previous_applied_input_offset_robust_range": [
+    [
+      -0.387939453125,
+      -0.33251953125
+    ],
+    [
+      0.387939453125,
+      0.33251953125
+    ]
+  ],
+  "previous_applied_input_offset_clipped_within_robust_range": false,
+  "mode_indicator_explicit": false,
+  "mode_inferable_from_e_and_fixed_Z_in_exact_arithmetic": true,
+  "feasible_action_authority_explicit": false,
+  "move_penalty_hidden_previous_input_history": false,
+  "paper_shock_episode_clock_explicit": false,
+  "paper_shock_clock_markov_caveat": "The fixed 0/20/40-second state-shock schedule is not an observation channel.  If future shocks are treated as part of the transition law, an episode-clock state is missing, independent of move penalties.",
+  "clipping_note": "Each observation component is clipped to [-4,4]; verify information loss if operating ranges change.",
+  "same_actual_state_two_mode_probe": [
+    25.34,
+    50.125
+  ],
+  "paired_projection_differences": [
+    {
+      "actor_action": [
+        1.0,
+        1.0
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        32.97092972701199,
+        28.061167293963166
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        0.24084129496570783,
+        0.25955886933273403
+      ]
+    },
+    {
+      "actor_action": [
+        1.0,
+        -1.0
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        30.54446200587006,
+        -21.82855013829868
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        0.21657661775428833,
+        -0.23933830498988443
+      ]
+    },
+    {
+      "actor_action": [
+        -1.0,
+        1.0
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        -22.260264089486867,
+        28.061167293963166
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        -0.3114706431992808,
+        0.25955886933273403
+      ]
+    },
+    {
+      "actor_action": [
+        -1.0,
+        -1.0
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        -19.833796368344906,
+        -21.82855013829868
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        -0.2872059659878613,
+        -0.23933830498988443
+      ]
+    },
+    {
+      "actor_action": [
+        0.5,
+        0.5
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        24.460332390405256,
+        15.083223827326464
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        0.1557353215996404,
+        0.12977943466636702
+      ]
+    },
+    {
+      "actor_action": [
+        0.0,
+        0.0
+      ],
+      "final_input_difference_Omega_minus_Z": [
+        8.886800230441224,
+        2.105280360689761
+      ],
+      "applied_residual_difference_Omega_minus_Z": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "interpretation": "The previous final applied input is present, so move penalties do not hide that one-step history.  Safety mode and state-dependent action authority are not explicit observation channels, although with fixed known geometry they can be inferred from x and e; the same actor output can map to different applied controls."
+}

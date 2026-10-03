@@ -1,0 +1,410 @@
+{
+  "tolerance_definition": {
+    "last_shock_seconds": 40.0,
+    "reference": "method-specific mean over the final 20 s of the fixed 300 s rollout",
+    "band": "5% of the maximum absolute post-last-shock deviation from that reference",
+    "settling_time": "first elapsed second after t=40 s for which every remaining sample stays inside the fixed 5% band; null if never settled",
+    "iae_ise_window": "t=40 s through t=299 s",
+    "tolerance_fraction": 0.05,
+    "minimum_numeric_tolerance": 1e-09
+  },
+  "settling_time_definitions": {
+    "empirical_method_specific": {
+      "reference": "each method's own final-20-s mean",
+      "tolerance": "5% of that method's own maximum absolute deviation after the final shock",
+      "shock_time_seconds": 40.0
+    },
+    "common_paired_reference": {
+      "reference": "the paired zero-residual baseline final-20-s mean, used unchanged for both SAC and zero residual",
+      "tolerance": "5% of the zero-residual baseline's maximum absolute post-last-shock deviation, used unchanged for both methods",
+      "shock_time_seconds": 40.0,
+      "purpose": "controller-to-controller recovery comparison without method-specific reference drift"
+    }
+  },
+  "scenarios": {
+    "pressure_positive": {
+      "safe_sac": {
+        "X2": {
+          "reference_final_window_mean": 25.117054649479645,
+          "peak_deviation": 0.0783580635280039,
+          "tolerance_absolute": 0.003917903176400195,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 218.0,
+          "IAE": 2.8100734549561928,
+          "ISE": 0.048759342870132207,
+          "common_reference": {
+            "reference_final_window_mean": 25.188189834095144,
+            "peak_deviation": 0.0869262455833173,
+            "tolerance_absolute": 0.002322004053024429,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": null,
+            "IAE": 20.52617787675162,
+            "ISE": 1.6513152775240525
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 52.56514738819421,
+          "peak_deviation": 0.45695670458457727,
+          "tolerance_absolute": 0.022847835229228865,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 236.0,
+          "IAE": 54.24536123425867,
+          "ISE": 15.823554295729355,
+          "common_reference": {
+            "reference_final_window_mean": 52.58369167649664,
+            "peak_deviation": 0.4384124162821479,
+            "tolerance_absolute": 0.022321144822939232,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": null,
+            "IAE": 50.000097032028805,
+            "ISE": 13.907291584851109
+          }
+        },
+        "P100": {
+          "max": 204.44112720693414,
+          "min": 181.44312787517717,
+          "peak_deviation_from_final_window_reference": 21.97488330659573,
+          "final_window_reference": 203.4180111817729,
+          "total_variation": 70.86919216436252
+        },
+        "F200": {
+          "max": 249.57781092465459,
+          "min": 249.57781092465459,
+          "peak_deviation_from_final_window_reference": 2.842170943040401e-14,
+          "final_window_reference": 249.5778109246546,
+          "total_variation": 0.0
+        }
+      },
+      "zero_residual_baseline": {
+        "X2": {
+          "reference_final_window_mean": 25.188189834095144,
+          "peak_deviation": 0.04644008106048858,
+          "tolerance_absolute": 0.002322004053024429,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 231.0,
+          "IAE": 3.7837193838966208,
+          "ISE": 0.07654349664222324,
+          "common_reference": {
+            "reference_final_window_mean": 25.188189834095144,
+            "peak_deviation": 0.04644008106048858,
+            "tolerance_absolute": 0.002322004053024429,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 231.0,
+            "IAE": 3.7837193838966208,
+            "ISE": 0.07654349664222324
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 52.58369167649664,
+          "peak_deviation": 0.44642289645878463,
+          "tolerance_absolute": 0.022321144822939232,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 237.0,
+          "IAE": 53.39873778201336,
+          "ISE": 15.295061817516167,
+          "common_reference": {
+            "reference_final_window_mean": 52.58369167649664,
+            "peak_deviation": 0.44642289645878463,
+            "tolerance_absolute": 0.022321144822939232,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 237.0,
+            "IAE": 53.39873778201336,
+            "ISE": 15.295061817516167
+          }
+        },
+        "P100": {
+          "max": 205.10391724671965,
+          "min": 183.00906136497667,
+          "peak_deviation_from_final_window_reference": 20.785154827716212,
+          "final_window_reference": 203.7942161926929,
+          "total_variation": 70.23408489107155
+        },
+        "F200": {
+          "max": 249.57781092465459,
+          "min": 249.57781092465459,
+          "peak_deviation_from_final_window_reference": 2.842170943040401e-14,
+          "final_window_reference": 249.5778109246546,
+          "total_variation": 0.0
+        }
+      },
+      "paired_changes_safe_sac_minus_baseline": {
+        "X2": {
+          "peak_deviation": 0.031917982467515316,
+          "settling_time_after_last_shock_seconds": -13.0,
+          "IAE": -0.973645928940428,
+          "ISE": -0.02778415377209103
+        },
+        "P2": {
+          "peak_deviation": 0.010533808125792632,
+          "settling_time_after_last_shock_seconds": -1.0,
+          "IAE": 0.8466234522453036,
+          "ISE": 0.5284924782131881
+        },
+        "P100": {
+          "peak_deviation_from_paired_zero_residual_baseline": 1.7695057207187972,
+          "total_variation_change": 0.6351072732909699
+        },
+        "F200": {
+          "peak_deviation_from_paired_zero_residual_baseline": 0.0,
+          "total_variation_change": 0.0
+        }
+      }
+    },
+    "pressure_negative": {
+      "safe_sac": {
+        "X2": {
+          "reference_final_window_mean": 25.499391454183083,
+          "peak_deviation": 0.054092187637849065,
+          "tolerance_absolute": 0.0027046093818924536,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 232.0,
+          "IAE": 5.758951466549725,
+          "ISE": 0.19520911628467963,
+          "common_reference": {
+            "reference_final_window_mean": 25.570734849521024,
+            "peak_deviation": 0.08062941198993911,
+            "tolerance_absolute": 0.002040384565504283,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": null,
+            "IAE": 12.823820120797741,
+            "ISE": 0.7016300383562206
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 47.67573433923228,
+          "peak_deviation": 0.4805777899113295,
+          "tolerance_absolute": 0.024028889495566474,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 237.0,
+          "IAE": 58.12541499606442,
+          "ISE": 18.07202709585159,
+          "common_reference": {
+            "reference_final_window_mean": 47.69404340022038,
+            "peak_deviation": 0.4988868508994315,
+            "tolerance_absolute": 0.024542321365221654,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 247.0,
+            "IAE": 62.70440381661278,
+            "ISE": 20.280986957544304
+          }
+        },
+        "P100": {
+          "max": 204.95237592059365,
+          "min": 183.78112813871908,
+          "peak_deviation_from_final_window_reference": 19.407444371613707,
+          "final_window_reference": 185.54493154897995,
+          "total_variation": 69.83177418301105
+        },
+        "F200": {
+          "max": 183.07390467465459,
+          "min": 183.07390467465459,
+          "peak_deviation_from_final_window_reference": 2.842170943040401e-14,
+          "final_window_reference": 183.07390467465456,
+          "total_variation": 0.0
+        }
+      },
+      "zero_residual_baseline": {
+        "X2": {
+          "reference_final_window_mean": 25.570734849521024,
+          "peak_deviation": 0.04080769131008566,
+          "tolerance_absolute": 0.002040384565504283,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 236.0,
+          "IAE": 4.452587198257614,
+          "ISE": 0.10505399856835143,
+          "common_reference": {
+            "reference_final_window_mean": 25.570734849521024,
+            "peak_deviation": 0.04080769131008566,
+            "tolerance_absolute": 0.002040384565504283,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 236.0,
+            "IAE": 4.452587198257614,
+            "ISE": 0.10505399856835143
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 47.69404340022038,
+          "peak_deviation": 0.49084642730443306,
+          "tolerance_absolute": 0.024542321365221654,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 237.0,
+          "IAE": 58.95668255387635,
+          "ISE": 18.634508770243063,
+          "common_reference": {
+            "reference_final_window_mean": 47.69404340022038,
+            "peak_deviation": 0.49084642730443306,
+            "tolerance_absolute": 0.024542321365221654,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 237.0,
+            "IAE": 58.95668255387635,
+            "ISE": 18.634508770243063
+          }
+        },
+        "P100": {
+          "max": 206.55282439786185,
+          "min": 184.47502443457506,
+          "peak_deviation_from_final_window_reference": 20.63555767616606,
+          "final_window_reference": 185.9172667216958,
+          "total_variation": 70.36330341101956
+        },
+        "F200": {
+          "max": 183.07390467465459,
+          "min": 183.07390467465459,
+          "peak_deviation_from_final_window_reference": 2.842170943040401e-14,
+          "final_window_reference": 183.07390467465456,
+          "total_variation": 0.0
+        }
+      },
+      "paired_changes_safe_sac_minus_baseline": {
+        "X2": {
+          "peak_deviation": 0.013284496327763406,
+          "settling_time_after_last_shock_seconds": -4.0,
+          "IAE": 1.3063642682921106,
+          "ISE": 0.0901551177163282
+        },
+        "P2": {
+          "peak_deviation": -0.010268637393103575,
+          "settling_time_after_last_shock_seconds": 0.0,
+          "IAE": -0.8312675578119268,
+          "ISE": -0.5624816743914742
+        },
+        "P100": {
+          "peak_deviation_from_paired_zero_residual_baseline": 1.7381230112764001,
+          "total_variation_change": -0.5315292280085089
+        },
+        "F200": {
+          "peak_deviation_from_paired_zero_residual_baseline": 0.0,
+          "total_variation_change": 0.0
+        }
+      }
+    },
+    "concentration_positive": {
+      "safe_sac": {
+        "X2": {
+          "reference_final_window_mean": 25.331753888582135,
+          "peak_deviation": 1.6550725523855476,
+          "tolerance_absolute": 0.08275362761927739,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 53.0,
+          "IAE": 43.882348699805696,
+          "ISE": 43.4425786667027,
+          "common_reference": {
+            "reference_final_window_mean": 25.403747001935834,
+            "peak_deviation": 1.5830794390318488,
+            "tolerance_absolute": 0.0791546214419146,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 45.0,
+            "IAE": 47.67206061205179,
+            "ISE": 38.47283917300095
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 49.82280789099034,
+          "peak_deviation": 0.1517474984375724,
+          "tolerance_absolute": 0.00758737492187862,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 239.0,
+          "IAE": 18.76543366990579,
+          "ISE": 1.9330089513533542,
+          "common_reference": {
+            "reference_final_window_mean": 49.830444756344,
+            "peak_deviation": 0.15938436379123289,
+            "tolerance_absolute": 0.007806014757667868,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 250.0,
+            "IAE": 20.4719188370525,
+            "ISE": 2.21637912586444
+          }
+        },
+        "P100": {
+          "max": 193.3638250783687,
+          "min": 155.98699756891926,
+          "peak_deviation_from_final_window_reference": 37.34968752359808,
+          "final_window_reference": 193.33668509251734,
+          "total_variation": 37.37682750944944
+        },
+        "F200": {
+          "max": 196.71712917359326,
+          "min": 183.07390467465459,
+          "peak_deviation_from_final_window_reference": 13.306077411036966,
+          "final_window_reference": 196.37998208569155,
+          "total_variation": 35.70167795510318
+        }
+      },
+      "zero_residual_baseline": {
+        "X2": {
+          "reference_final_window_mean": 25.403747001935834,
+          "peak_deviation": 1.5830924288382917,
+          "tolerance_absolute": 0.0791546214419146,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 46.0,
+          "IAE": 37.890001364276465,
+          "ISE": 37.82598783678044,
+          "common_reference": {
+            "reference_final_window_mean": 25.403747001935834,
+            "peak_deviation": 1.5830924288382917,
+            "tolerance_absolute": 0.0791546214419146,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 46.0,
+            "IAE": 37.890001364276465,
+            "ISE": 37.82598783678044
+          }
+        },
+        "P2": {
+          "reference_final_window_mean": 49.830444756344,
+          "peak_deviation": 0.15612029515335735,
+          "tolerance_absolute": 0.007806014757667868,
+          "uses_fixed_common_reference": false,
+          "settling_time_after_last_shock_seconds": 238.0,
+          "IAE": 18.843135526342195,
+          "ISE": 1.9717552743969073,
+          "common_reference": {
+            "reference_final_window_mean": 49.830444756344,
+            "peak_deviation": 0.15612029515335735,
+            "tolerance_absolute": 0.007806014757667868,
+            "uses_fixed_common_reference": true,
+            "settling_time_after_last_shock_seconds": 238.0,
+            "IAE": 18.843135526342195,
+            "ISE": 1.9717552743969073
+          }
+        },
+        "P100": {
+          "max": 193.72059296086013,
+          "min": 155.98699756891926,
+          "peak_deviation_from_final_window_reference": 37.71056137787747,
+          "final_window_reference": 193.69755894679673,
+          "total_variation": 37.73359539194087
+        },
+        "F200": {
+          "max": 198.1251295015326,
+          "min": 183.07390467465459,
+          "peak_deviation_from_final_window_reference": 14.715131342217063,
+          "final_window_reference": 197.78903601687165,
+          "total_variation": 38.07270045983
+        }
+      },
+      "paired_changes_safe_sac_minus_baseline": {
+        "X2": {
+          "peak_deviation": 0.07198012354725591,
+          "settling_time_after_last_shock_seconds": 7.0,
+          "IAE": 5.992347335529232,
+          "ISE": 5.616590829922259
+        },
+        "P2": {
+          "peak_deviation": -0.0043727967157849434,
+          "settling_time_after_last_shock_seconds": 1.0,
+          "IAE": -0.07770185643640559,
+          "ISE": -0.03874632304355319
+        },
+        "P100": {
+          "peak_deviation_from_paired_zero_residual_baseline": 3.3691334390456404,
+          "total_variation_change": -0.3567678824914253
+        },
+        "F200": {
+          "peak_deviation_from_paired_zero_residual_baseline": 1.4137006391469242,
+          "total_variation_change": -2.371022504726824
+        }
+      }
+    }
+  }
+}

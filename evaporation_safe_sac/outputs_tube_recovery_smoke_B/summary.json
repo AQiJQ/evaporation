@@ -1,0 +1,540 @@
+{
+  "scope": "diagnosis only; out-of-tube recovery is not formally certified",
+  "reference_state": [
+    25.39,
+    50.125
+  ],
+  "actor_checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\models\\last_actor.pth",
+  "actor_output_scale": 1.0,
+  "formal_domain": {
+    "current_5pct_box": {
+      "steps": 30,
+      "nonzero_action_steps": 30,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "qp_infeasible_count": 0,
+      "tube_violation_count": 0,
+      "disturbance_bound_exceedance_count": 0,
+      "ancillary_clip_max": 3.776636834314514e-15,
+      "first_failure": null,
+      "formal_domain_passed": true
+    },
+    "max_margin_symmetric_box": {
+      "steps": 30,
+      "nonzero_action_steps": 30,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "qp_infeasible_count": 0,
+      "tube_violation_count": 0,
+      "disturbance_bound_exceedance_count": 0,
+      "ancillary_clip_max": 3.777697240802072e-15,
+      "first_failure": null,
+      "formal_domain_passed": true
+    },
+    "max_margin_asymmetric_polytope": {
+      "steps": 30,
+      "nonzero_action_steps": 30,
+      "physical_state_violation_count": 0,
+      "physical_input_violation_count": 0,
+      "robust_region_violation_count": 0,
+      "qp_infeasible_count": 0,
+      "tube_violation_count": 0,
+      "disturbance_bound_exceedance_count": 0,
+      "ancillary_clip_max": 3.643700357671064e-15,
+      "first_failure": null,
+      "formal_domain_passed": true
+    }
+  },
+  "paper2016_shock_recovery": {
+    "zero_residual": {
+      "pressure_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "gate_closed_fraction": 0.0
+      },
+      "pressure_negative": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "gate_closed_fraction": 0.0
+      },
+      "concentration_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": 167,
+            "reentry_delay_seconds": 127
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 166,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "gate_closed_fraction": 0.0
+      }
+    },
+    "current_5pct_box": {
+      "pressure_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      },
+      "pressure_negative": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      },
+      "concentration_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": 166,
+            "reentry_delay_seconds": 126
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 165,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      }
+    },
+    "max_margin_asymmetric_polytope": {
+      "pressure_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": true,
+            "robust_region_violation_at_shock": true,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": 40,
+        "first_physical_violation_after_step_second": 39,
+        "first_robust_region_violation_at_shock_second": 40,
+        "first_robust_region_violation_after_step_second": 39,
+        "physical_state_violation_steps": 262,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 262,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      },
+      "pressure_negative": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      },
+      "concentration_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": 172,
+            "reentry_delay_seconds": 132
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 171,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 1.0,
+        "gate_closed_fraction": 0.0
+      }
+    },
+    "polytope_outside_Z_gated": {
+      "pressure_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "gate_closed_fraction": 1.0
+      },
+      "pressure_negative": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 300,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "gate_closed_fraction": 1.0
+      },
+      "concentration_positive": {
+        "shock_events": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "physical_violation_at_shock": false,
+            "robust_region_violation_at_shock": false,
+            "first_reentry_second_before_next_shock": 170,
+            "reentry_delay_seconds": 130
+          }
+        ],
+        "first_physical_violation_at_shock_second": null,
+        "first_physical_violation_after_step_second": null,
+        "first_robust_region_violation_at_shock_second": null,
+        "first_robust_region_violation_after_step_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "qp_infeasible_steps": 0,
+        "tube_outside_steps_after_step": 169,
+        "nonlinear_w_exceedance_steps": 0,
+        "sac_active_fraction": 0.43333333333333335,
+        "gate_closed_fraction": 0.5666666666666667
+      }
+    }
+  }
+}

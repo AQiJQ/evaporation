@@ -1,0 +1,113 @@
+{
+  "episodes": 300,
+  "steps_per_episode": 300,
+  "seed": 42,
+  "global_step": 90000,
+  "action_mapping": "interior_anchor",
+  "supervisor": "dwell20",
+  "dwell_set_source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_shock_B",
+  "observation_dimension": 23,
+  "observation_variant": "supervisor23",
+  "raw_action_saturation_threshold": 0.99,
+  "sac_hyperparameters_frozen": {
+    "actor_lr": 0.0003,
+    "critic_lr": 0.0003,
+    "entropy_lr": 0.0003,
+    "tau": 0.005,
+    "batch_size": 256,
+    "replay_capacity": 100000,
+    "hidden_dim": 256,
+    "alpha_initial": 0.1
+  },
+  "requested_applied_residual_definition": "normalized final-input displacement from the safe zero-action center, before/after final verification QP",
+  "action_collapse_thresholds": {
+    "eps_a_infinity_norm": 1e-08,
+    "eps_u_physical_input_l2": 1e-06
+  },
+  "evaluation_every_episodes": 5,
+  "fixed_scenarios": [
+    "pressure_positive",
+    "pressure_negative",
+    "concentration_positive"
+  ],
+  "training_schedule_counts": {
+    "pressure_positive": 100,
+    "pressure_negative": 100,
+    "concentration_positive": 100
+  },
+  "shock_amplitude_distribution": {
+    "uniform_probability": 0.8,
+    "uniform_bounds": [
+      0.2,
+      1.0
+    ],
+    "endpoint_probability": 0.2
+  },
+  "calibration": {
+    "mode": "frozen_previous_interior_anchor_reward_weights",
+    "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_interior_anchor_seed42_300x300\\baseline_reward_calibration.json",
+    "weights": {
+      "state_recovery": 5.501466348605391,
+      "P100_move": 108.11728453584045,
+      "F200_move": 81.880449071658,
+      "saturation": 3.666163865052666
+    },
+    "paired_supervised_baseline_J_econ": {
+      "pressure_positive": 1872175.080373695,
+      "pressure_negative": 1867566.3989547016,
+      "concentration_positive": 1783464.803564847
+    },
+    "mean_absolute_economic_reward": 0.6201996655805484,
+    "realized_penalty_means": {
+      "state_recovery": 0.06201996655805484,
+      "P100_move": 0.03100998327902742,
+      "F200_move": 0.03100998327902743,
+      "saturation": 0.031009983279027414
+    }
+  },
+  "best_economic_diagnostic_checkpoint": {
+    "episode": 295,
+    "global_step": 88500,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.6747993208766911,
+    "worst_scenario_economic_improvement_percent": 0.4268967685219521,
+    "mean_normalized_IAE_ratio": 1.6735821462866654,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 2.3753085205957807,
+    "worst_positive_performance_degradation": 27.8562770998293,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 2.7616238012474486, \"P100_TV\": 0.8145636500483708, \"P2_IAE\": 0.6309133359802516, \"P2_ISE\": 1.694257039405861, \"X2_IAE\": 1.6862886811513045, \"X2_ISE\": 0.7805068190956757}, \"pressure_negative\": {\"F200_TV\": 27.8562770998293, \"P100_TV\": -0.03926534380140807, \"P2_IAE\": 0.1129169034945546, \"P2_ISE\": 0.23555226705663462, \"X2_IAE\": 0.8322914020224267, \"X2_ISE\": 2.34544825317149}, \"pressure_positive\": {\"F200_TV\": 0.0, \"P100_TV\": -0.33183363906352736, \"P2_IAE\": -0.014936260285212584, \"P2_ISE\": -0.029417882399919916, \"X2_IAE\": 0.7940188153566671, \"X2_ISE\": 2.2108953028640737}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 94, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 0, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 300, \"SAC\": 300, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"Bj_recovery_mode_fraction\": 0.03, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 114.29563622772415, \"F200_at_robust_upper_steps\": 0, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 0.97, \"J_econ\": 1774101.4410199195, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 68.55461033421705, \"P2_IAE\": 144.80910079016, \"P2_ISE\": 83.98502086761262, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 115.48916447561018, \"X2_ISE\": 70.3185673787464, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 82.0914726356963, \"applied_displacement_from_baseline_mean\": 49.007609815478475, \"applied_over_requested_sum_ratio\": 0.9936937077625674, \"applied_residual_norm_mean\": 0.49007609815478453, \"max_recovery_steps\": 5, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 2.158601008565778, \"paired_economic_improvement_percent\": 0.5250096624397478, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.4931862749319965, \"robust_input_saturation_steps\": 94, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 5, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 5}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 5, \\\"inferred_jump_scale\\\": 0.9995427322203125, \\\"recovery_steps\\\": 4}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 0.9991780031957167, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.31365129539463615, \"supervisor_q_radius_median\": 0.26395795966681046, \"supervisor_q_radius_min\": 0.02866857508891832}, \"pressure_negative\": {\"Bj_recovery_mode_fraction\": 0.0, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 27.8562770998293, \"F200_at_robust_upper_steps\": 0, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 1.0, \"J_econ\": 1847536.9074776284, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 67.56674555038, \"P2_IAE\": 765.2436051869365, \"P2_ISE\": 2253.386239950859, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 97.06061473520384, \"X2_ISE\": 36.23376753173298, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 74.22773277037892, \"applied_displacement_from_baseline_mean\": 60.58582866978145, \"applied_over_requested_sum_ratio\": 1.0, \"applied_residual_norm_mean\": 0.6058582866978147, \"max_recovery_steps\": 0, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 1.4726041527584905, \"paired_economic_improvement_percent\": 1.0724915316683736, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.6058582866978147, \"robust_input_saturation_steps\": 0, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 0.9999988717935719, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.0, \"supervisor_q_radius_median\": 0.33251953125, \"supervisor_q_radius_min\": 0.29448044400233875}, \"pressure_positive\": {\"Bj_recovery_mode_fraction\": 0.0, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 300, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 1.0, \"J_econ\": 1864182.8254545063, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 46.91169533873037, \"P2_IAE\": 685.2955688735254, \"P2_ISE\": 1810.9767145358364, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 97.32938284220023, \"X2_ISE\": 36.43466085212206, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 52.88591056254833, \"applied_displacement_from_baseline_mean\": 30.354993895257817, \"applied_over_requested_sum_ratio\": 1.0, \"applied_residual_norm_mean\": 0.3035499389525782, \"max_recovery_steps\": 0, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 1.3895412775357272, \"paired_economic_improvement_percent\": 0.4268967685219521, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.3035499389525782, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.0, \"supervisor_q_radius_median\": 0.21816760843786054, \"supervisor_q_radius_min\": 0.1957366010717056}}"
+  },
+  "best_constrained_performance_checkpoint": null,
+  "nearest_tradeoff_diagnostic_checkpoint": {
+    "episode": 275,
+    "global_step": 82500,
+    "post_warmup": true,
+    "mean_economic_improvement_percent": 0.655874026673139,
+    "worst_scenario_economic_improvement_percent": 0.4186407298384617,
+    "mean_normalized_IAE_ratio": 1.6755999240344719,
+    "safety_passed": true,
+    "eligible_positive_economic_safe": true,
+    "performance_within_10pct_baseline": false,
+    "strict_constrained_candidate": false,
+    "mean_positive_performance_degradation": 1.8152891025869633,
+    "worst_positive_performance_degradation": 17.14831828820246,
+    "relative_changes_json": "{\"concentration_positive\": {\"F200_TV\": 3.2875664958280293, \"P100_TV\": 0.8499264735370434, \"P2_IAE\": 0.6592793969683636, \"P2_ISE\": 1.7918340476772043, \"X2_IAE\": 1.6783175306802744, \"X2_ISE\": 0.7744445552720897}, \"pressure_negative\": {\"F200_TV\": 17.14831828820246, \"P100_TV\": -0.27030848627050974, \"P2_IAE\": 0.11747695666736024, \"P2_ISE\": 0.24560944803811924, \"X2_IAE\": 0.8303193155858158, \"X2_ISE\": 2.3382456866987824}, \"pressure_positive\": {\"F200_TV\": 0.0, \"P100_TV\": -0.4274822988448964, \"P2_IAE\": -0.014637975893270655, \"P2_ISE\": -0.028832888480296682, \"X2_IAE\": 0.7828443201982876, \"X2_ISE\": 2.171021331211505}}",
+    "common_settling_json": "{\"concentration_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": 48}}, \"pressure_negative\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}, \"pressure_positive\": {\"P2\": {\"SAC\": null, \"baseline\": null}, \"X2\": {\"SAC\": null, \"baseline\": null}}}",
+    "saturation_steps_json": "{\"concentration_positive\": {\"F200_upper_steps\": 0, \"SAC\": 93, \"baseline\": 101}, \"pressure_negative\": {\"F200_upper_steps\": 0, \"SAC\": 0, \"baseline\": 300}, \"pressure_positive\": {\"F200_upper_steps\": 300, \"SAC\": 300, \"baseline\": 300}}",
+    "scenario_metrics_json": "{\"concentration_positive\": {\"Bj_recovery_mode_fraction\": 0.03, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 130.2762228234587, \"F200_at_robust_upper_steps\": 0, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 0.97, \"J_econ\": 1774573.1998567784, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 69.89062551589393, \"P2_IAE\": 147.32772866205636, \"P2_ISE\": 87.02667834721046, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 115.14646805795857, \"X2_ISE\": 70.07914694936377, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 85.42583512052717, \"applied_displacement_from_baseline_mean\": 51.31161129220016, \"applied_over_requested_sum_ratio\": 0.9944840538418187, \"applied_residual_norm_mean\": 0.5131161129220017, \"max_recovery_steps\": 5, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 2.168798463824319, \"paired_economic_improvement_percent\": 0.49855784595781105, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.5159621322632261, \"robust_input_saturation_steps\": 93, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 5, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 5}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 5, \\\"inferred_jump_scale\\\": 0.9995427652449915, \\\"recovery_steps\\\": 4}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 0.9991780379243511, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.2922102515422017, \"supervisor_q_radius_median\": 0.2751970057928579, \"supervisor_q_radius_min\": 0.02866042724118828}, \"pressure_negative\": {\"Bj_recovery_mode_fraction\": 0.0, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 17.14831828820246, \"F200_at_robust_upper_steps\": 0, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 1.0, \"J_econ\": 1847949.0425431076, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 51.31789565446962, \"P2_IAE\": 768.3791057070964, \"P2_ISE\": 2271.728412791803, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 96.9561488616877, \"X2_ISE\": 36.15575821894312, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 75.20224451047277, \"applied_displacement_from_baseline_mean\": 61.87389024061951, \"applied_over_requested_sum_ratio\": 1.0, \"applied_residual_norm_mean\": 0.6187389024061953, \"max_recovery_steps\": 0, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 1.473898136126588, \"paired_economic_improvement_percent\": 1.0504235042231445, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.6187389024061953, \"robust_input_saturation_steps\": 0, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 0.9999999235479651, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 0.9999964867557718, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.0, \"supervisor_q_radius_median\": 0.33251953125, \"supervisor_q_radius_min\": 0.2914777193739501}, \"pressure_positive\": {\"Bj_recovery_mode_fraction\": 0.0, \"Bk_recovery_failure_count\": 0, \"F200_TV\": 0.0, \"F200_at_robust_upper_steps\": 300, \"G3_low_authority_steps\": 0, \"Gm_exit_count\": 0, \"Gm_normal_mode_fraction\": 1.0, \"J_econ\": 1864337.3929533646, \"Omega_exit_count\": 0, \"Omega_mode_fraction\": 1.0, \"P100_TV\": 40.196240850820175, \"P2_IAE\": 685.5030813052805, \"P2_ISE\": 1812.0682351268013, \"QP_infeasible_rate\": 0.0, \"X2_IAE\": 96.72314242374509, \"X2_ISE\": 35.98220304924926, \"Z_mode_fraction\": 0.0, \"action_collapse_fraction\": 0.0, \"actor_raw_action_saturation_fraction\": 0.0, \"applied_displacement_from_baseline_max\": 50.0995001551928, \"applied_displacement_from_baseline_mean\": 29.909416670076066, \"applied_over_requested_sum_ratio\": 1.0, \"applied_residual_norm_mean\": 0.2990941667007608, \"max_recovery_steps\": 0, \"nonlinear_W_exceedance_steps\": 0, \"normalized_mean_IAE_ratio\": 1.3841031721525083, \"paired_economic_improvement_percent\": 0.4186407298384617, \"physical_violation_rate\": 0.0, \"requested_residual_norm_mean\": 0.2990941667007608, \"robust_input_saturation_steps\": 300, \"robust_region_violation_rate\": 0.0, \"shock_ranks_and_recovery_json\": \"[{\\\"step\\\": 0, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 20, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}, {\\\"step\\\": 40, \\\"post_jump_rank\\\": 0, \\\"inferred_jump_scale\\\": 1.0, \\\"recovery_steps\\\": 0}]\", \"supervisor_Omega_exit_count\": 0, \"supervisor_QP_infeasible_count\": 0, \"supervisor_low_authority_fraction\": 0.0, \"supervisor_projection_distance_mean_physical\": 0.0, \"supervisor_q_radius_median\": 0.2323606075086842, \"supervisor_q_radius_min\": 0.2083544764730707}}"
+  },
+  "primary_checkpoint_status": "unavailable_no_positive_safe_checkpoint_within_performance_tolerance",
+  "performance_tolerance_definition": "All X2/P2 IAE/ISE and P100/F200 TV <= 110% of paired baseline; if baseline TV=0, absolute increase <=1 physical input unit.",
+  "cumulative_omega_exit_count": 0,
+  "cumulative_omega_outside_steps": 0,
+  "cumulative_fixed_eval_omega_exit_count": 0,
+  "K_W_Z_S_Omega_fixed": true,
+  "rank_constraint_enabled": true,
+  "reachable_rank_sets_computed": 1001
+}

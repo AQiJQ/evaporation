@@ -1,0 +1,226 @@
+{
+  "scope": "offline only; no SAC training or safety-design change",
+  "actor_checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_feasible_normalized_seed42_300x300\\models\\last_actor.pth",
+  "existing_ray_episode_300": {
+    "pressure_positive": {
+      "replay_matches_saved_J_econ_and_every_applied_input": true,
+      "steps": 300,
+      "tau_le_1e_12": 299,
+      "tau_le_1e_8": 299,
+      "nonzero_raw_steps": 300,
+      "nonzero_raw_but_zero_mapped_steps": 299,
+      "nonzero_raw_but_zero_mapped_fraction": 0.9966666666666667,
+      "limiting_facet_frequency": {
+        "actual P100 robust lower": 1,
+        "actual F200 robust upper": 299
+      }
+    },
+    "pressure_negative": {
+      "replay_matches_saved_J_econ_and_every_applied_input": true,
+      "steps": 300,
+      "tau_le_1e_12": 299,
+      "tau_le_1e_8": 299,
+      "nonzero_raw_steps": 300,
+      "nonzero_raw_but_zero_mapped_steps": 299,
+      "nonzero_raw_but_zero_mapped_fraction": 0.9966666666666667,
+      "limiting_facet_frequency": {
+        "actual P100 robust lower": 1,
+        "actual F200 robust lower": 299
+      }
+    },
+    "concentration_positive": {
+      "replay_matches_saved_J_econ_and_every_applied_input": true,
+      "steps": 300,
+      "tau_le_1e_12": 80,
+      "tau_le_1e_8": 80,
+      "nonzero_raw_steps": 300,
+      "nonzero_raw_but_zero_mapped_steps": 80,
+      "nonzero_raw_but_zero_mapped_fraction": 0.26666666666666666,
+      "limiting_facet_frequency": {
+        "actual P100 robust lower": 94,
+        "actual F200 robust lower": 206
+      }
+    }
+  },
+  "zero_action_baseline": {
+    "pressure_positive": {
+      "exact": true,
+      "max_state_gap": 0.0,
+      "max_input_gap": 0.0,
+      "metrics": {
+        "J_econ": 1872175.0803736935,
+        "X2_IAE": 54.25215276956294,
+        "P2_IAE": 695.6865238709771,
+        "P100_TV": 70.20960359779411,
+        "F200_TV": 0.0
+      }
+    },
+    "pressure_negative": {
+      "exact": true,
+      "max_state_gap": 0.0,
+      "max_input_gap": 0.0,
+      "metrics": {
+        "J_econ": 1867566.3989547025,
+        "X2_IAE": 52.97225901298851,
+        "P2_IAE": 687.6017452732317,
+        "P100_TV": 70.32820676806458,
+        "F200_TV": 0.0
+      }
+    },
+    "concentration_positive": {
+      "exact": true,
+      "max_state_gap": 0.0,
+      "max_input_gap": 0.0,
+      "metrics": {
+        "J_econ": 1783464.8035648465,
+        "X2_IAE": 42.99208989933027,
+        "P2_IAE": 88.79018743391615,
+        "P100_TV": 37.780218033349,
+        "F200_TV": 30.384653614170787
+      }
+    }
+  },
+  "interior_probes": {
+    "count": 570,
+    "feasible_fraction": 1.0,
+    "final_qp_modified_count": 0,
+    "nonzero_action_zero_displacement_count": 0,
+    "nonzero_action_zero_displacement_fraction": 0.0,
+    "minimum_positive_anchor_radius": 0.05060201485354432
+  },
+  "oracle_reconstruction": {
+    "pressure_positive": {
+      "direct_candidate": "pressure_positive_0405",
+      "old_ray_exact_fraction": 1.0,
+      "interior_anchor_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 9.473903143468003e-17,
+        "max_reconstruction_error_physical": 2.842170943040401e-14,
+        "actor_action_mean": [
+          0.31629041041559114,
+          0.3831697009762352
+        ],
+        "actor_action_std": [
+          0.33260334859938057,
+          0.24541505993641782
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.2203997126543891,
+            0.04326560283074172
+          ],
+          [
+            0.35091601494389507,
+            0.35091601494389507
+          ],
+          [
+            0.8104872159427151,
+            0.8104872159427151
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 9.473903143468003e-17,
+            "max": 2.842170943040401e-14,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      }
+    },
+    "pressure_negative": {
+      "direct_candidate": "pressure_negative_1066",
+      "old_ray_exact_fraction": 1.0,
+      "interior_anchor_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 0.0,
+        "max_reconstruction_error_physical": 0.0,
+        "actor_action_mean": [
+          -0.5709354285634272,
+          -0.4282015714225701
+        ],
+        "actor_action_std": [
+          0.05624925729814969,
+          0.042186942973612244
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.6249295939988092,
+            -0.46869719549910693
+          ],
+          [
+            -0.5845001365250984,
+            -0.4383751023938238
+          ],
+          [
+            -0.462384112986467,
+            -0.34678808473985023
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      }
+    },
+    "concentration_positive": {
+      "direct_candidate": "concentration_positive_economy_recovery_reasonable_activity.csv",
+      "old_ray_exact_fraction": 1.0,
+      "interior_anchor_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 0.0,
+        "max_reconstruction_error_physical": 0.0,
+        "actor_action_mean": [
+          -0.09442848832064427,
+          -0.05174962480562359
+        ],
+        "actor_action_std": [
+          0.0789391225353688,
+          0.04900248672994694
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.21201545542516542,
+            -0.12931912504699625
+          ],
+          [
+            -0.05248319833884327,
+            -0.034688396677829914
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 170,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          },
+          "Z_mode_existing_controller": {
+            "count": 130,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      }
+    }
+  },
+  "ablation_training_authorized_by_this_script": false
+}

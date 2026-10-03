@@ -1,0 +1,506 @@
+{
+  "scope": "offline prototype only; no SAC training or design change",
+  "mapping": "ray to entire existing feasible Z/\u03a9 polygon from projected zero-residual center",
+  "actor_dimension": 2,
+  "observation_dimension_unchanged": 19,
+  "exact_tolerance_physical_input_l2": 0.001,
+  "actor_search_budget_per_scenario": 80,
+  "search_is_global_proof": false,
+  "probe_count": 570,
+  "probe_modes": {
+    "Omega_safe_one_step_QP": 532,
+    "Z_mode_existing_controller": 38
+  },
+  "probe_max_polytope_excess": 5.551115123125783e-17,
+  "probe_max_fraction_error": 3.3306690738754696e-16,
+  "probe_final_qp_modified_count": 0,
+  "scenarios": {
+    "pressure_positive": {
+      "direct_candidate": "pressure_positive_0405",
+      "paired_zero_residual_baseline": {
+        "J_econ": 1872175.0803736935,
+        "X2_IAE": 54.25215276956294,
+        "P2_IAE": 695.6865238709771,
+        "X2_ISE": 11.347196783284353,
+        "P2_ISE": 1865.8665574982638,
+        "P100_TV": 70.20960359779411,
+        "F200_TV": 0.0,
+        "robust_outer_10pct_steps": 300,
+        "F200_robust_upper_steps": 300
+      },
+      "old_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 0.61,
+        "mean_reconstruction_error_physical": 5.3448842727642605,
+        "max_reconstruction_error_physical": 36.4652819755284,
+        "actor_action_mean": [
+          0.47695430044932235,
+          -0.0004379435391942626
+        ],
+        "actor_action_std": [
+          0.5019698106783648,
+          0.007572751713418069
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.36239845525598935,
+            0.0
+          ],
+          [
+            0.5465119133421762,
+            0.0
+          ],
+          [
+            1.0,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.33,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 5.3448842727642605,
+            "max": 36.4652819755284,
+            "exact_fraction": 0.61
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "new_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 0.0,
+        "max_reconstruction_error_physical": 0.0,
+        "actor_action_mean": [
+          0.31629041041559114,
+          -0.0003649529493285522
+        ],
+        "actor_action_std": [
+          0.33260334859938057,
+          0.006310626427848432
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.2203997126543891,
+            0.0
+          ],
+          [
+            0.35091601494389507,
+            0.0
+          ],
+          [
+            0.8104872159427151,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "exact_fraction_increase": 0.39,
+      "baseline_unchanged": true,
+      "old_mapping_actor_oracle": {
+        "level_1": 23,
+        "level_2": 0,
+        "level_3": 0
+      },
+      "new_mapping_actor_oracle": {
+        "safe_candidate_count": 80,
+        "trial_count": 75,
+        "pareto_count": 76,
+        "level_counts": {
+          "level_1": 32,
+          "level_2": 0,
+          "level_3": 0
+        },
+        "selected": {
+          "level_1": {
+            "id": "pressure_positive_actor_0001",
+            "source": "inverse_direct_q",
+            "J_econ": 1871917.4138483566,
+            "X2_IAE": 30.438006305751998,
+            "P2_IAE": 703.4881089812624,
+            "P100_TV": 3146.1068630268296,
+            "F200_TV": 2.9592013510480513,
+            "robust_outer_10pct_steps": 300,
+            "F200_robust_upper_steps": 299,
+            "Z_mode_steps": 0,
+            "Omega_mode_steps": 300,
+            "economy_better": true,
+            "mean_normalized_IAE_ratio": 0.7861306009171842,
+            "level_1": true,
+            "level_2": false,
+            "level_3": false
+          },
+          "level_2": null,
+          "level_3": null
+        },
+        "best_mean_IAE_economy_positive": {
+          "id": "pressure_positive_actor_0001",
+          "source": "inverse_direct_q",
+          "J_econ": 1871917.4138483566,
+          "X2_IAE": 30.438006305751998,
+          "P2_IAE": 703.4881089812624,
+          "P100_TV": 3146.1068630268296,
+          "F200_TV": 2.9592013510480513,
+          "robust_outer_10pct_steps": 300,
+          "F200_robust_upper_steps": 299,
+          "Z_mode_steps": 0,
+          "Omega_mode_steps": 300,
+          "economy_better": true,
+          "mean_normalized_IAE_ratio": 0.7861306009171842,
+          "level_1": true,
+          "level_2": false,
+          "level_3": false
+        }
+      }
+    },
+    "pressure_negative": {
+      "direct_candidate": "pressure_negative_1066",
+      "paired_zero_residual_baseline": {
+        "J_econ": 1867566.3989547025,
+        "X2_IAE": 52.97225901298851,
+        "P2_IAE": 687.6017452732317,
+        "X2_ISE": 10.830766100591546,
+        "P2_ISE": 1823.7886814120259,
+        "P100_TV": 70.32820676806458,
+        "F200_TV": 0.0,
+        "robust_outer_10pct_steps": 300,
+        "F200_robust_upper_steps": 0
+      },
+      "old_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 0.18666666666666668,
+        "mean_reconstruction_error_physical": 4.067119033579999,
+        "max_reconstruction_error_physical": 10.84897376114705,
+        "actor_action_mean": [
+          -0.9668812651792575,
+          0.0
+        ],
+        "actor_action_std": [
+          0.09160511389327813,
+          0.0
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -1.0,
+            0.0
+          ],
+          [
+            -1.0,
+            0.0
+          ],
+          [
+            -0.7928536416541765,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.8166666666666667,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 4.067119033579999,
+            "max": 10.84897376114705,
+            "exact_fraction": 0.18666666666666668
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "new_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 0.0,
+        "max_reconstruction_error_physical": 0.0,
+        "actor_action_mean": [
+          -0.5709354285634272,
+          0.0
+        ],
+        "actor_action_std": [
+          0.05624925729814969,
+          0.0
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.6249295939988092,
+            0.0
+          ],
+          [
+            -0.5845001365250984,
+            0.0
+          ],
+          [
+            -0.462384112986467,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 300,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "exact_fraction_increase": 0.8133333333333334,
+      "baseline_unchanged": true,
+      "old_mapping_actor_oracle": {
+        "level_1": 79,
+        "level_2": 0,
+        "level_3": 0
+      },
+      "new_mapping_actor_oracle": {
+        "safe_candidate_count": 80,
+        "trial_count": 75,
+        "pareto_count": 75,
+        "level_counts": {
+          "level_1": 66,
+          "level_2": 0,
+          "level_3": 0
+        },
+        "selected": {
+          "level_1": {
+            "id": "pressure_negative_actor_0049",
+            "source": "time_local_pressure_negative_actor_0043_27_2_0",
+            "J_econ": 1859276.7288917573,
+            "X2_IAE": 2.092602587429507,
+            "P2_IAE": 699.8694341633209,
+            "P100_TV": 105.92041170112964,
+            "F200_TV": 40.32835786113071,
+            "robust_outer_10pct_steps": 299,
+            "F200_robust_upper_steps": 0,
+            "Z_mode_steps": 0,
+            "Omega_mode_steps": 300,
+            "economy_better": true,
+            "mean_normalized_IAE_ratio": 0.5286725076306468,
+            "level_1": true,
+            "level_2": false,
+            "level_3": false
+          },
+          "level_2": null,
+          "level_3": null
+        },
+        "best_mean_IAE_economy_positive": {
+          "id": "pressure_negative_actor_0049",
+          "source": "time_local_pressure_negative_actor_0043_27_2_0",
+          "J_econ": 1859276.7288917573,
+          "X2_IAE": 2.092602587429507,
+          "P2_IAE": 699.8694341633209,
+          "P100_TV": 105.92041170112964,
+          "F200_TV": 40.32835786113071,
+          "robust_outer_10pct_steps": 299,
+          "F200_robust_upper_steps": 0,
+          "Z_mode_steps": 0,
+          "Omega_mode_steps": 300,
+          "economy_better": true,
+          "mean_normalized_IAE_ratio": 0.5286725076306468,
+          "level_1": true,
+          "level_2": false,
+          "level_3": false
+        }
+      }
+    },
+    "concentration_positive": {
+      "direct_candidate": "concentration_positive_economy_recovery_reasonable_activity.csv",
+      "paired_zero_residual_baseline": {
+        "J_econ": 1783464.8035648465,
+        "X2_IAE": 42.99208989933027,
+        "P2_IAE": 88.79018743391615,
+        "X2_ISE": 39.49356813722364,
+        "P2_ISE": 31.171866544007635,
+        "P100_TV": 37.780218033349,
+        "F200_TV": 30.384653614170787,
+        "robust_outer_10pct_steps": 101,
+        "F200_robust_upper_steps": 0
+      },
+      "old_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 0.6666666666666666,
+        "mean_reconstruction_error_physical": 0.033873580796802555,
+        "max_reconstruction_error_physical": 1.6403283635517596,
+        "actor_action_mean": [
+          -0.01816218069997569,
+          -0.08390433866262123
+        ],
+        "actor_action_std": [
+          0.016537670883925798,
+          0.08513602788973312
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.030864656313685145,
+            -0.2122276831082727
+          ],
+          [
+            -0.02262300471516164,
+            -0.02661299303273671
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 170,
+            "mean": 0.059776907288474596,
+            "max": 1.6403283635517596,
+            "exact_fraction": 0.4117647058823529
+          },
+          "Z_mode_existing_controller": {
+            "count": 130,
+            "mean": 6.558856022400925e-16,
+            "max": 2.842170943040401e-14,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "new_mapping_inverse": {
+        "exact_tolerance_physical_input_l2": 0.001,
+        "exact_realizable_step_fraction": 1.0,
+        "mean_reconstruction_error_physical": 0.0,
+        "max_reconstruction_error_physical": 0.0,
+        "actor_action_mean": [
+          -0.04897353894798811,
+          -0.10693595158530897
+        ],
+        "actor_action_std": [
+          0.051486403490182714,
+          0.07584234893946136
+        ],
+        "actor_action_quantiles_05_50_95": [
+          [
+            -0.12996911791168247,
+            -0.21201545542516542
+          ],
+          [
+            -0.028093532490069486,
+            -0.11588122895061759
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "actor_action_saturation_fraction_any_abs_ge_0_99": 0.0,
+        "mode_errors": {
+          "Omega_safe_one_step_QP": {
+            "count": 170,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          },
+          "Z_mode_existing_controller": {
+            "count": 130,
+            "mean": 0.0,
+            "max": 0.0,
+            "exact_fraction": 1.0
+          }
+        },
+        "qp_infeasible_count": 0
+      },
+      "exact_fraction_increase": 0.33333333333333337,
+      "baseline_unchanged": true,
+      "old_mapping_actor_oracle": {
+        "level_1": 49,
+        "level_2": 31,
+        "level_3": 22
+      },
+      "new_mapping_actor_oracle": {
+        "safe_candidate_count": 80,
+        "trial_count": 75,
+        "pareto_count": 61,
+        "level_counts": {
+          "level_1": 34,
+          "level_2": 20,
+          "level_3": 17
+        },
+        "selected": {
+          "level_1": {
+            "id": "concentration_positive_actor_0010",
+            "source": "piecewise_inverse_direct_q_0006",
+            "J_econ": 1782683.8803283763,
+            "X2_IAE": 41.5371436877594,
+            "P2_IAE": 88.92211808208242,
+            "P100_TV": 44.20123089025179,
+            "F200_TV": 31.772654381699397,
+            "robust_outer_10pct_steps": 111,
+            "F200_robust_upper_steps": 0,
+            "Z_mode_steps": 128,
+            "Omega_mode_steps": 172,
+            "economy_better": true,
+            "mean_normalized_IAE_ratio": 0.9838218429065575,
+            "level_1": true,
+            "level_2": false,
+            "level_3": false
+          },
+          "level_2": {
+            "id": "concentration_positive_actor_0001",
+            "source": "inverse_direct_q",
+            "J_econ": 1783090.1204848506,
+            "X2_IAE": 41.92459185113891,
+            "P2_IAE": 88.52488700351978,
+            "P100_TV": 39.08271516848171,
+            "F200_TV": 28.986516616305494,
+            "robust_outer_10pct_steps": 106,
+            "F200_robust_upper_steps": 0,
+            "Z_mode_steps": 130,
+            "Omega_mode_steps": 170,
+            "economy_better": true,
+            "mean_normalized_IAE_ratio": 0.9860909743600079,
+            "level_1": true,
+            "level_2": true,
+            "level_3": true
+          },
+          "level_3": {
+            "id": "concentration_positive_actor_0001",
+            "source": "inverse_direct_q",
+            "J_econ": 1783090.1204848506,
+            "X2_IAE": 41.92459185113891,
+            "P2_IAE": 88.52488700351978,
+            "P100_TV": 39.08271516848171,
+            "F200_TV": 28.986516616305494,
+            "robust_outer_10pct_steps": 106,
+            "F200_robust_upper_steps": 0,
+            "Z_mode_steps": 130,
+            "Omega_mode_steps": 170,
+            "economy_better": true,
+            "mean_normalized_IAE_ratio": 0.9860909743600079,
+            "level_1": true,
+            "level_2": true,
+            "level_3": true
+          }
+        },
+        "best_mean_IAE_economy_positive": {
+          "id": "concentration_positive_actor_0010",
+          "source": "piecewise_inverse_direct_q_0006",
+          "J_econ": 1782683.8803283763,
+          "X2_IAE": 41.5371436877594,
+          "P2_IAE": 88.92211808208242,
+          "P100_TV": 44.20123089025179,
+          "F200_TV": 31.772654381699397,
+          "robust_outer_10pct_steps": 111,
+          "F200_robust_upper_steps": 0,
+          "Z_mode_steps": 128,
+          "Omega_mode_steps": 172,
+          "economy_better": true,
+          "mean_normalized_IAE_ratio": 0.9838218429065575,
+          "level_1": true,
+          "level_2": false,
+          "level_3": false
+        }
+      }
+    }
+  }
+}

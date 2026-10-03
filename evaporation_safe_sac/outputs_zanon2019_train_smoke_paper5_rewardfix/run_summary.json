@@ -1,0 +1,25 @@
+{
+  "episodes": 1,
+  "steps": 5,
+  "seed": 42,
+  "mode": "zanon2019_stochastic",
+  "observation_dim": 23,
+  "architecture": "frozen balanced B, interior-anchor Z/Omega; Gm/Bj unchanged and reserved for finite jumps",
+  "reward": "existing frozen weighted reward",
+  "weights": {
+    "state_recovery": 5.501466348605391,
+    "P100_move": 108.11728453584045,
+    "F200_move": 81.880449071658,
+    "saturation": 3.666163865052666
+  },
+  "variance_F1_X1_T1_T200": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "distribution": "implementation choice for reproduction: zero-mean Gaussian; iid per step only in zanon2019_stochastic",
+  "W_coverage": "not certified; strict facet exceedance logged at every training and evaluation step",
+  "best_empirical_joint_checkpoint": null,
+  "formal_safety_claim": false
+}

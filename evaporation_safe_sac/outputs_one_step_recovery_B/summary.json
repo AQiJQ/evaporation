@@ -1,0 +1,799 @@
+{
+  "scope": "offline one-step recovery QP; no MPC or SAC training",
+  "recovery_dynamics": "z_next=A*z+B*v_base+c; e_next=(A+B*K)*e+B*du_rec+w",
+  "verification_qp_semantics": "The existing nominal verification QP constrains v_base and z_next. du_rec augments actual input only, so actual input is separately constrained by robust and physical input bounds; one-step physical state bounds hold at every certified W vertex.",
+  "solver": "dependency-free 2D active-set projection with separation over all Z facets and scalar convex search in alpha; no horizon",
+  "reference_state": [
+    25.39,
+    50.125
+  ],
+  "reference_input": [
+    194.86144296829238,
+    216.27665350522335
+  ],
+  "rho": 0.1,
+  "Z_facets": 142,
+  "W_vertices": 4,
+  "actor_checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\models\\last_actor.pth",
+  "actor_output_scale": 1.0,
+  "common_reference_definition": "B steady state for all methods and scenarios; per-scenario 5% band from zero-residual peak after t=40; IAE/ISE over t=40..299",
+  "scenarios": {
+    "pressure_positive": {
+      "zero_residual": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 300,
+        "F200_at_robust_lower_steps": 0,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 1.7542986902757134,
+        "alpha_predicted_max": 5.340017152930831,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011127697117486512,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 54.03958518329021,
+          "ISE_after_last_shock": 11.260613470389849,
+          "peak_deviation_after_last_shock": 0.22255394234973025
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.145880567661861,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 695.7330601189427,
+          "ISE_after_last_shock": 1866.1071011008682,
+          "peak_deviation_after_last_shock": 2.91761135323722
+        },
+        "P100": {
+          "min": 183.09565161821823,
+          "max": 205.1847111871493,
+          "total_variation": 70.20433801905304
+        },
+        "F200": {
+          "min": 249.52860663022335,
+          "max": 249.52860663022335,
+          "total_variation": 0.0
+        }
+      },
+      "Z_outside_residual_zero": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 300,
+        "F200_at_robust_lower_steps": 0,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 1.7518199390757567,
+        "alpha_predicted_max": 5.334848950410739,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011127697117486512,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 54.25215276956294,
+          "ISE_after_last_shock": 11.347196783284353,
+          "peak_deviation_after_last_shock": 0.22263453848546888
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.145880567661861,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 695.6865238709771,
+          "ISE_after_last_shock": 1865.8665574982638,
+          "peak_deviation_after_last_shock": 2.9176142085519885
+        },
+        "P100": {
+          "min": 183.09565161821823,
+          "max": 205.17743980768537,
+          "total_variation": 70.20960359779411
+        },
+        "F200": {
+          "min": 249.52860663022335,
+          "max": 249.52860663022335,
+          "total_variation": 0.0
+        }
+      },
+      "one_step_recovery_QP": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 300,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 108.05845112961134,
+        "du_rec_norm_physical_max": 130.10895996620968,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 300,
+        "F200_at_robust_lower_steps": 0,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 1.7528048252237631,
+        "alpha_predicted_max": 5.341781120037145,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011127697117486512,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 54.25215276956294,
+          "ISE_after_last_shock": 11.347196783284353,
+          "peak_deviation_after_last_shock": 0.22263453848546888
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.145880567661861,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 695.6865238709771,
+          "ISE_after_last_shock": 1865.8665574982638,
+          "peak_deviation_after_last_shock": 2.9176142085519885
+        },
+        "P100": {
+          "min": 183.09565161821823,
+          "max": 205.17743980768537,
+          "total_variation": 70.20960359779411
+        },
+        "F200": {
+          "min": 249.52860663022335,
+          "max": 249.52860663022335,
+          "total_variation": 0.0
+        },
+        "max_input_difference_vs_gated": 0.0,
+        "max_state_difference_vs_gated": 0.0
+      }
+    },
+    "pressure_negative": {
+      "zero_residual": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 300,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 2.5280385452165346,
+        "alpha_predicted_max": 7.681174791033349,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011082280895018039,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 53.18510723452948,
+          "ISE_after_last_shock": 10.91505171621252,
+          "peak_deviation_after_last_shock": 0.22164561790036075
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.14546468099124574,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 687.5559047348521,
+          "ISE_after_last_shock": 1823.5554567085137,
+          "peak_deviation_after_last_shock": 2.909293619824915
+        },
+        "P100": {
+          "min": 184.5552817137286,
+          "max": 206.62723431836653,
+          "total_variation": 70.33364543524038
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 183.02470038022335,
+          "total_variation": 0.0
+        }
+      },
+      "Z_outside_residual_zero": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 300,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 2.5316147605421158,
+        "alpha_predicted_max": 7.688652789935137,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011082280895018039,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 52.97225901298851,
+          "ISE_after_last_shock": 10.830766100591546,
+          "peak_deviation_after_last_shock": 0.2215692788026402
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.14546468099124574,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 687.6017452732317,
+          "ISE_after_last_shock": 1823.7886814120259,
+          "peak_deviation_after_last_shock": 2.9092908111958735
+        },
+        "P100": {
+          "min": 184.54822244602792,
+          "max": 206.62723431836653,
+          "total_variation": 70.32820676806458
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 183.02470038022335,
+          "total_variation": 0.0
+        }
+      },
+      "one_step_recovery_QP": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 300,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 116.37838901639104,
+        "du_rec_norm_physical_max": 138.23377054606703,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 300,
+        "P100_at_robust_lower_steps": 0,
+        "alpha_predicted_min": 2.5336354424801404,
+        "alpha_predicted_max": 7.699113027023731,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.011082280895018039,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 52.97225901298851,
+          "ISE_after_last_shock": 10.830766100591546,
+          "peak_deviation_after_last_shock": 0.2215692788026402
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.14546468099124574,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 687.6017452732317,
+          "ISE_after_last_shock": 1823.7886814120259,
+          "peak_deviation_after_last_shock": 2.9092908111958735
+        },
+        "P100": {
+          "min": 184.54822244602792,
+          "max": 206.62723431836653,
+          "total_variation": 70.32820676806458
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 183.02470038022335,
+          "total_variation": 0.0
+        },
+        "max_input_difference_vs_gated": 0.0,
+        "max_state_difference_vs_gated": 0.0
+      }
+    },
+    "concentration_positive": {
+      "zero_residual": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": 167,
+            "reentry_delay_seconds": 127
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.0,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 70,
+        "P100_at_robust_lower_steps": 80,
+        "alpha_predicted_min": 0.7573256759392989,
+        "alpha_predicted_max": 54.333332985890145,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.08020016714260177,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": 48,
+          "IAE_after_last_shock": 43.37985719677079,
+          "ISE_after_last_shock": 39.52010747639878,
+          "peak_deviation_after_last_shock": 1.6040033428520353
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.021900825656960523,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 91.1125435302119,
+          "ISE_after_last_shock": 32.67551448897605,
+          "peak_deviation_after_last_shock": 0.4380165131392104
+        },
+        "P100": {
+          "min": 156.06749765579238,
+          "max": 193.80277103109987,
+          "total_variation": 37.735273375307486
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 198.05896531893566,
+          "total_variation": 38.102372999420055
+        }
+      },
+      "Z_outside_residual_zero": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": 170,
+            "reentry_delay_seconds": 130
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 0,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.43333333333333335,
+        "du_rec_norm_physical_mean": 0.0,
+        "du_rec_norm_physical_max": 0.0,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 76,
+        "P100_at_robust_lower_steps": 80,
+        "alpha_predicted_min": 0.7482506149158205,
+        "alpha_predicted_max": 54.33167576228894,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.08020016714260177,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 62.68261821497931,
+          "ISE_after_last_shock": 44.14199563971988,
+          "peak_deviation_after_last_shock": 1.6039351376178637
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.021900825656960523,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 92.42033539717308,
+          "ISE_after_last_shock": 33.43654088326962,
+          "peak_deviation_after_last_shock": 0.43647079515405807
+        },
+        "P100": {
+          "min": 156.06749765579238,
+          "max": 193.4540343496766,
+          "total_variation": 51.01488022392809
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 191.98584111279376,
+          "total_variation": 36.137854602619996
+        }
+      },
+      "one_step_recovery_QP": {
+        "shock_reentry": [
+          {
+            "shock_second": 0,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": true,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 20,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": null,
+            "reentry_delay_seconds": null
+          },
+          {
+            "shock_second": 40,
+            "e_in_Z_immediately_after_shock": false,
+            "e_in_Z_immediately_before_shock": false,
+            "physical_violation_at_shock": false,
+            "new_physical_violation_caused_by_shock": false,
+            "robust_region_violation_at_shock": false,
+            "new_robust_violation_caused_by_shock": false,
+            "first_reentry_second_before_next_shock": 170,
+            "reentry_delay_seconds": 130
+          }
+        ],
+        "first_physical_violation_second": null,
+        "physical_state_violation_steps": 0,
+        "physical_input_violation_steps": 0,
+        "robust_region_violation_steps": 0,
+        "verification_qp_infeasible_steps": 0,
+        "nominal_base_verification_qp_infeasible_steps": 0,
+        "recovery_qp_attempts": 170,
+        "recovery_qp_infeasible_steps": 0,
+        "recovery_qp_failure_reasons": [],
+        "nonlinear_w_bound_exceedance_steps": 0,
+        "sac_active_fraction": 0.43333333333333335,
+        "du_rec_norm_physical_mean": 34.77910001944739,
+        "du_rec_norm_physical_max": 279.45507873872396,
+        "actual_input_change_vs_existing_clip_max": 0.0,
+        "actual_input_change_vs_existing_clip_mean": 0.0,
+        "F200_at_robust_upper_steps": 0,
+        "F200_at_robust_lower_steps": 76,
+        "P100_at_robust_lower_steps": 80,
+        "alpha_predicted_min": 0.7482506149158205,
+        "alpha_predicted_max": 63.572455144159136,
+        "X2": {
+          "common_reference": 25.39,
+          "common_tolerance": 0.08020016714260177,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 62.68261821497931,
+          "ISE_after_last_shock": 44.14199563971988,
+          "peak_deviation_after_last_shock": 1.6039351376178637
+        },
+        "P2": {
+          "common_reference": 50.125,
+          "common_tolerance": 0.021900825656960523,
+          "last_shock_second": 40,
+          "settling_time_after_last_shock_seconds": null,
+          "IAE_after_last_shock": 92.42033539717308,
+          "ISE_after_last_shock": 33.43654088326962,
+          "peak_deviation_after_last_shock": 0.43647079515405807
+        },
+        "P100": {
+          "min": 156.06749765579238,
+          "max": 193.4540343496766,
+          "total_variation": 51.01488022392809
+        },
+        "F200": {
+          "min": 183.02470038022335,
+          "max": 191.98584111279376,
+          "total_variation": 36.137854602619996
+        },
+        "max_input_difference_vs_gated": 0.0,
+        "max_state_difference_vs_gated": 0.0
+      }
+    }
+  }
+}

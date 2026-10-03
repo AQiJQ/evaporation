@@ -1,0 +1,147 @@
+{
+  "reference_state_physical": [
+    25.39,
+    50.125
+  ],
+  "reference_input_physical": [
+    194.86144296829238,
+    216.27665350522335
+  ],
+  "coordinate_note": "xi=x-x_ref and q=u-u_ref, normalized by state/input scale for A,B,W",
+  "disturbance": [
+    10.0,
+    5.0,
+    40.0,
+    25.0
+  ],
+  "disturbance_half_range": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "Omega_area_physical": 17.336217498968136,
+  "admissible_input_lower_physical": [
+    156.06749765579238,
+    183.02470038022335
+  ],
+  "admissible_input_upper_physical": [
+    233.65538828079238,
+    249.52860663022335
+  ],
+  "samples": 20181,
+  "random_samples": 20000,
+  "sample_groups": {
+    "Omega_vertex_input_corners": {
+      "count": 16,
+      "violation_count": 0,
+      "maximum_W_facet_utilization": 0.8333333375434093
+    },
+    "Paper2016_shocks": {
+      "count": 15,
+      "violation_count": 0,
+      "maximum_W_facet_utilization": 0.5287446184104448
+    },
+    "representative_recovery": {
+      "count": 150,
+      "violation_count": 0,
+      "maximum_W_facet_utilization": 0.5825954171336076
+    },
+    "random_interior": {
+      "count": 20000,
+      "violation_count": 0,
+      "maximum_W_facet_utilization": 0.820665841557043
+    }
+  },
+  "W_membership_violation_count": 0,
+  "W_membership_violation_rate": 0.0,
+  "w_actual_min_normalized": [
+    -0.0002635686449343755,
+    -9.967931247079065e-08
+  ],
+  "w_actual_max_normalized": [
+    0.00022314954402241627,
+    8.474615297016097e-06
+  ],
+  "w_actual_min_physical_state_units": [
+    -0.003953529674015632,
+    -1.993586249415813e-06
+  ],
+  "w_actual_max_physical_state_units": [
+    0.003347243160336244,
+    0.00016949230594032194
+  ],
+  "W_vertices_normalized": [
+    [
+      -0.00031634257999999996,
+      1.0168489999999999e-05
+    ],
+    [
+      -0.00031598552,
+      -1.028743e-05
+    ],
+    [
+      0.0002679179,
+      -9.535999999999999e-08
+    ],
+    [
+      0.00026756083999999997,
+      2.036056e-05
+    ]
+  ],
+  "W_facet_normals": [
+    [
+      -0.9998476946546796,
+      -0.017452435180297942
+    ],
+    [
+      0.017452402828903694,
+      -0.9998476952193757
+    ],
+    [
+      0.9998476946546796,
+      0.01745243518030059
+    ],
+    [
+      -0.0174524028289037,
+      0.9998476952193757
+    ]
+  ],
+  "W_facet_bounds": [
+    0.00031611693442150704,
+    4.771156592090056e-06,
+    0.00026787543040750417,
+    1.5687879428455962e-05
+  ],
+  "W_facet_max_utilization": [
+    0.8333333375434093,
+    0.743275724770206,
+    0.833333321930519,
+    0.8333331981977196
+  ],
+  "W_worst_sample": {
+    "label": "Omega_vertex_2_input_corner_3",
+    "X2": 27.60679687495,
+    "P2": 53.4501953126,
+    "P100": 156.06749765579238,
+    "F200": 249.52860663022335,
+    "xi_X2_physical": 2.216796874949999,
+    "xi_P2_physical": 3.325195312600002,
+    "q_P100_physical": -38.7939453125,
+    "q_F200_physical": 33.251953125,
+    "w_X2_normalized": -0.0002635413525636787,
+    "w_P2_normalized": 4.0357572325677715e-06,
+    "maximum_W_facet_utilization": 0.8333333375434093,
+    "in_W": true,
+    "facet_utilization_all": [
+      0.8333333375434093,
+      -1.8097440835998215,
+      -0.9834077713462662,
+      0.5503976782739146
+    ]
+  },
+  "W_covers_tested_samples": true,
+  "W_covers_entire_continuous_domain": null,
+  "W_omega_observed_vertices_normalized": null,
+  "W_omega_note": "No replacement constructed: current W covered all tested samples"
+}
