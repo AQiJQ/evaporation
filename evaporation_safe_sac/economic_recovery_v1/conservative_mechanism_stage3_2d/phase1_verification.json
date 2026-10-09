@@ -1,0 +1,35 @@
+{
+  "phase": "2D reference and baseline selection completed",
+  "new_reference_tests": 14,
+  "main_test_count": 162,
+  "optional_CasADi_tests": 3,
+  "evaporation_test_passed": true,
+  "stage2_files_hash_unchanged": 24,
+  "Strong_frozen_source_unchanged": true,
+  "geometry_hash_unchanged": true,
+  "development_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "new_baseline_rollouts": 70,
+  "oracle_status": "not_run_pending_next_phase",
+  "oracle_candidate_count": null,
+  "conservative_seed42_training_allowed": false,
+  "training_performed": false,
+  "final_test_performed": false,
+  "commit_performed": false,
+  "push_performed": false,
+  "source_hashes": {
+    "zanon2019_reference2d.py": "00b683f9c9d931f6c1f33695693f53e1e601843a963dd9466f52d556d0053516",
+    "zanon2019_reference2d_tests.py": "c83917412dad6d304e8d45e0575abd0c4ca714c1aabcf9487623c461075ca858"
+  },
+  "protocol_sha256": "504973e326134f619cb1da8349d6986bdd4fc77a981f479a3f59545b00fc7a90"
+}

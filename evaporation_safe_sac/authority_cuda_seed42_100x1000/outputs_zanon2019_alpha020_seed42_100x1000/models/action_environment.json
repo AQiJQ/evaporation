@@ -1,0 +1,11 @@
+{
+  "stochastic_residual_scale": 0.2,
+  "disturbance_mode": "zanon2019_stochastic",
+  "observation_dim": 23,
+  "raw_action_range": [
+    -1,
+    1
+  ],
+  "scale_in_actor_network": false,
+  "require_same_scale_for_checkpoint_evaluation": true
+}

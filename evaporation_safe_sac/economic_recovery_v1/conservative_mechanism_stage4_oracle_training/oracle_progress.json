@@ -1,0 +1,9 @@
+{
+  "completed_candidates": 374,
+  "budget": 512,
+  "safety_passing": 374,
+  "positive_vs_Conservative": 19,
+  "running": true,
+  "training_allowed": false,
+  "workers": 10
+}

@@ -2,3 +2,13 @@
 __pycache__/
 *.pth
 debug_outputs/
+
+# Python virtual environments
+.venv/
+.venv-cuda/
+.venv-ecc2019/
+
+# IDE and Python caches
+.idea/
+__pycache__/
+.pytest_cache/

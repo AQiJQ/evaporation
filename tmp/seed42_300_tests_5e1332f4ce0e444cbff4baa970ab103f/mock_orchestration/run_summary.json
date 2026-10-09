@@ -1,0 +1,13 @@
+{
+  "run_state": "completed",
+  "completed_episodes": 300,
+  "planned_episodes": 300,
+  "global_step": 300000,
+  "max_action_collapse_fraction": 0.0,
+  "replay_decomposition_checked": true,
+  "failure": null,
+  "training_performed": true,
+  "final_test_performed": false,
+  "automatic_next_seed": false,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance"
+}

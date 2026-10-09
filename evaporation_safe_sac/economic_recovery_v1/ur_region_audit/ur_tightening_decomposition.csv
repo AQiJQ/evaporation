@@ -1,0 +1,5 @@
+Stage,P100_upper,F200_upper,P100_reduction,F200_reduction,active_source
+Physical U,400.0,400.0,0.0,0.0,physical upper bound
++ local P100 window,233.65538828079238,400.0,166.34461171920762,0.0,"rho*[35,30] around original Strong reference"
++ local F200 window = U_R,233.65538828079238,249.52860663022335,0.0,150.47139336977665,local_window_F200_upper; no state facet in direct formula
++ directional KZ = nominal U_R minus KZ,225.93592909494444,216.30328098761106,7.719459185847938,33.22532564261229,control._rpi_support and build_safety_design

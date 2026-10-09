@@ -1,0 +1,162 @@
+{
+  "step_convention": "zero-based transition step; physical_after at step k means x_(k+1); Omega affected count unions before/after, not number of independent exit events",
+  "seeds": [
+    {
+      "seed": 420000,
+      "first_physical_transition_step": 12,
+      "first_Omega_affected_transition_step": 12,
+      "first_Omega_before_step": 13,
+      "first_QP_infeasible_step": 13,
+      "before_first_physical": {
+        "physical": 0,
+        "Omega_affected_steps": 0,
+        "QP_infeasible": 0
+      },
+      "at_first_physical": {
+        "physical": 1,
+        "Omega_affected_steps": 1,
+        "QP_infeasible": 0
+      },
+      "strictly_after_first_physical": {
+        "physical": 0,
+        "Omega_affected_steps": 1,
+        "QP_infeasible": 1
+      },
+      "first_failure_type": "model/disturbance-domain mismatch induced safety failure",
+      "first_failure_evidence": {
+        "step": 12,
+        "physical_before_safe": true,
+        "physical_after_violation": true,
+        "Omega_before": true,
+        "Omega_after": false,
+        "Z_before": false,
+        "QP_feasible": true,
+        "QP_modification": 0.0,
+        "safety_mode": "Omega_safe_one_step_QP",
+        "W_exceedance": true,
+        "W_max_facet_excess": 0.0008020597085476507,
+        "W_max_facet_utilization": 3.5372247456955046,
+        "certified_W_next_Omega_max_excess": -2.4178869144627496e-05,
+        "actual_next_Omega_max_excess": 0.0007775542110901694,
+        "X2_minus_25": 0.03389212801285879,
+        "state_0": 25.03389212801286,
+        "state_1": 50.07439017289667,
+        "control_0": 157.62058787298596,
+        "control_1": 219.3866533151498,
+        "actual_next_0": 24.988336686833648,
+        "actual_next_1": 50.06821885857201,
+        "w_actual_0": -0.0011180756616398294,
+        "w_actual_1": -1.5543402755334532e-05,
+        "raw_action_0": -0.9941441416740417,
+        "raw_action_1": 0.07082480937242508,
+        "predicted_nominal_next_0": 25.005107821758244,
+        "predicted_nominal_next_1": 50.06852972662712,
+        "predicted_W_next_min_0": 25.00036268303717,
+        "predicted_W_next_min_1": 50.06832397801609,
+        "predicted_W_next_max_0": 25.009126590199482,
+        "predicted_W_next_max_1": 50.06893693781723,
+        "baseline_input_at_same_state_0": 233.65538828079238,
+        "baseline_input_at_same_state_1": 224.50642560788918,
+        "alpha": 1.0,
+        "seed": 420000,
+        "actor_unscaled_0": -0.9941441416740417,
+        "actor_unscaled_1": 0.07082480937242508,
+        "residual_0": -0.7603480040780642,
+        "residual_1": -0.05119772292739388,
+        "applied_residual_0": -0.7603480040780641,
+        "applied_residual_1": -0.05119772292739378,
+        "disturbance_0": 10.980917736364011,
+        "disturbance_1": 4.8137246690121005,
+        "disturbance_2": 39.842974130452305,
+        "disturbance_3": 24.20774347142913
+      }
+    },
+    {
+      "seed": 420001,
+      "first_physical_transition_step": 15,
+      "first_Omega_affected_transition_step": 15,
+      "first_Omega_before_step": 16,
+      "first_QP_infeasible_step": 16,
+      "before_first_physical": {
+        "physical": 0,
+        "Omega_affected_steps": 0,
+        "QP_infeasible": 0
+      },
+      "at_first_physical": {
+        "physical": 1,
+        "Omega_affected_steps": 1,
+        "QP_infeasible": 0
+      },
+      "strictly_after_first_physical": {
+        "physical": 0,
+        "Omega_affected_steps": 1,
+        "QP_infeasible": 1
+      },
+      "first_failure_type": "model/disturbance-domain mismatch induced safety failure",
+      "first_failure_evidence": {
+        "step": 15,
+        "physical_before_safe": true,
+        "physical_after_violation": true,
+        "Omega_before": true,
+        "Omega_after": false,
+        "Z_before": false,
+        "QP_feasible": true,
+        "QP_modification": 0.0,
+        "safety_mode": "Omega_safe_one_step_QP",
+        "W_exceedance": true,
+        "W_max_facet_excess": 0.0021421659152858806,
+        "W_max_facet_utilization": 7.776498447342081,
+        "certified_W_next_Omega_max_excess": -0.0009588869434459593,
+        "actual_next_Omega_max_excess": 0.0011832025165413908,
+        "X2_minus_25": 0.045851299191284056,
+        "state_0": 25.045851299191284,
+        "state_1": 50.04266087888789,
+        "control_0": 160.09247085316687,
+        "control_1": 215.17874413612478,
+        "actual_next_0": 24.98225196225188,
+        "actual_next_1": 50.037082067076156,
+        "w_actual_0": -0.0024584320413923826,
+        "w_actual_1": -1.290597293096031e-05,
+        "raw_action_0": -0.9481236934661865,
+        "raw_action_1": -0.031067099422216415,
+        "predicted_nominal_next_0": 25.019128442872766,
+        "predicted_nominal_next_1": 50.03734018653478,
+        "predicted_W_next_min_0": 25.01438330415169,
+        "predicted_W_next_min_1": 50.03713443792375,
+        "predicted_W_next_max_0": 25.023147211314004,
+        "predicted_W_next_max_1": 50.037747397724885,
+        "baseline_input_at_same_state_0": 233.65538828079238,
+        "baseline_input_at_same_state_1": 221.6640765479363,
+        "alpha": 1.0,
+        "seed": 420001,
+        "actor_unscaled_0": -0.9481236934661865,
+        "actor_unscaled_1": -0.031067099422216415,
+        "residual_0": -0.7356291742762551,
+        "residual_1": -0.0648533241181151,
+        "applied_residual_0": -0.7356291742762551,
+        "applied_residual_1": -0.06485332411811516,
+        "disturbance_0": 12.187560991555964,
+        "disturbance_1": 4.720217091580435,
+        "disturbance_2": 39.83423941035709,
+        "disturbance_3": 23.90416269147488
+      }
+    },
+    {
+      "seed": 420002,
+      "first_physical_transition_step": null,
+      "first_Omega_affected_transition_step": null,
+      "first_Omega_before_step": null,
+      "first_QP_infeasible_step": null,
+      "no_physical_failure": {
+        "physical": 0,
+        "Omega_affected_steps": 0,
+        "QP_infeasible": 0
+      }
+    }
+  ],
+  "totals_strictly_after_each_seed_first_physical": {
+    "physical": 0,
+    "Omega_affected_steps": 2,
+    "QP_infeasible": 2
+  }
+}

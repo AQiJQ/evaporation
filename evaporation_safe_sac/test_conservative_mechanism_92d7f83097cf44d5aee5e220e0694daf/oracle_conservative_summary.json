@@ -1,0 +1,22 @@
+{
+  "status": "blocked_before_search",
+  "reason": "no_eligible_conservative_reference",
+  "total_candidates": 0,
+  "safety_passing_candidates": 0,
+  "positive_economic_candidates": 0,
+  "best_economic_improvement_found_pct": null,
+  "best_all_seed_positive_candidate": null,
+  "worst_validation_improvement_pct": null,
+  "economic_win_fraction": null,
+  "minimum_X2_margin": null,
+  "P100_TV_ratio": null,
+  "F200_TV_ratio": null,
+  "P100_RMS_ratio": null,
+  "F200_RMS_ratio": null,
+  "finite_search_result_not_mathematical_upper_bound": true,
+  "recovery_headroom_demonstrated": false,
+  "conservative_seed42_training_allowed": false,
+  "training_performed": false,
+  "final_test_performed": false,
+  "selection_sha256": "4ae1ca734286bfbb8d5ca4840d2aa48e8a2a5cff1bb871e0c74625416c1e8e70"
+}

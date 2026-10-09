@@ -1,0 +1,253 @@
+{
+  "primary_frontier_case": "A",
+  "safe_positive_alpha": [
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.75
+  ],
+  "joint_alpha": [
+    0.05,
+    0.1
+  ],
+  "audit_representative_alpha": 0.1,
+  "actor_replay_reward_mean_change_vs_baseline": -4.321491186968896,
+  "reward_magnitude_ratios": {
+    "baseline": {
+      "economic_reward": 1.0,
+      "projection_penalty": 0.0,
+      "mapping_penalty": 0.0,
+      "move_penalty": 2.6139870994887673e-34,
+      "state_recovery_penalty": 0.00012556923462806903,
+      "p100_move_penalty": 0.24725346345357982,
+      "f200_move_penalty": 0.008758048181581867,
+      "saturation_penalty": 0.0,
+      "state_violation_penalty": 0.0,
+      "input_violation_penalty": 0.0,
+      "qp_infeasible_penalty": 0.0,
+      "state_excess_penalty": 0.0,
+      "input_excess_penalty": 0.0,
+      "actual_training_replay_reward_same_transition": 1.049292005626903,
+      "actual_evaluation_reward": 18.261181220477827
+    },
+    "episode5_actor": {
+      "economic_reward": 1.0,
+      "projection_penalty": 0.0,
+      "mapping_penalty": 0.0,
+      "move_penalty": 5.460257549608326e-05,
+      "state_recovery_penalty": 0.00037854865259968315,
+      "p100_move_penalty": 0.5347491970667262,
+      "f200_move_penalty": 0.027543157935443124,
+      "saturation_penalty": 0.003188995529003405,
+      "state_violation_penalty": 0.9293404076256817,
+      "input_violation_penalty": 0.0,
+      "qp_infeasible_penalty": 0.04646702038128409,
+      "state_excess_penalty": 1.4350125692452084e-05,
+      "input_excess_penalty": 0.0,
+      "actual_training_replay_reward_same_transition": 2.330936110959057,
+      "actual_evaluation_reward": 228.70396187632696
+    },
+    "frontier_representative": {
+      "economic_reward": 1.0,
+      "projection_penalty": 0.0,
+      "mapping_penalty": 0.0,
+      "move_penalty": 8.893163433413717e-07,
+      "state_recovery_penalty": 0.00012520853625561782,
+      "p100_move_penalty": 0.2167537397949227,
+      "f200_move_penalty": 0.008399884867605283,
+      "saturation_penalty": 3.007223733857342e-08,
+      "state_violation_penalty": 0.0,
+      "input_violation_penalty": 0.0,
+      "qp_infeasible_penalty": 0.0,
+      "state_excess_penalty": 0.0,
+      "input_excess_penalty": 0.0,
+      "actual_training_replay_reward_same_transition": 1.0249735311064756,
+      "actual_evaluation_reward": 17.272254021268335
+    }
+  },
+  "margins": [
+    {
+      "label": "baseline",
+      "alpha": 0.0,
+      "scope": "pre_state",
+      "mean_margin": 0.3816661260509622,
+      "min_margin": 0.21237140815124533,
+      "p1_margin": 0.2743927404703722,
+      "p5_margin": 0.30832710259562435,
+      "fraction_lt_0.05": 0.0,
+      "fraction_lt_0.10": 0.0,
+      "fraction_lt_0.20": 0.0
+    },
+    {
+      "label": "baseline",
+      "alpha": 0.0,
+      "scope": "post_state",
+      "mean_margin": 0.38162162418113205,
+      "min_margin": 0.21237140815124533,
+      "p1_margin": 0.2743927404703722,
+      "p5_margin": 0.3082390383205656,
+      "fraction_lt_0.05": 0.0,
+      "fraction_lt_0.10": 0.0,
+      "fraction_lt_0.20": 0.0
+    },
+    {
+      "label": "episode5_actor",
+      "alpha": 1.0,
+      "scope": "pre_state",
+      "mean_margin": 0.2257245003112833,
+      "min_margin": -0.0451624707648044,
+      "p1_margin": -0.01775053669248528,
+      "p5_margin": 0.012039771730155033,
+      "fraction_lt_0.05": 0.12333333333333334,
+      "fraction_lt_0.10": 0.21533333333333332,
+      "fraction_lt_0.20": 0.4086666666666667
+    },
+    {
+      "label": "episode5_actor",
+      "alpha": 1.0,
+      "scope": "post_state",
+      "mean_margin": 0.22549652086304384,
+      "min_margin": -0.0451624707648044,
+      "p1_margin": -0.01775053669248528,
+      "p5_margin": 0.012039771730155033,
+      "fraction_lt_0.05": 0.12333333333333334,
+      "fraction_lt_0.10": 0.21533333333333332,
+      "fraction_lt_0.20": 0.4096666666666667
+    },
+    {
+      "label": "frontier_representative",
+      "alpha": 0.1,
+      "scope": "pre_state",
+      "mean_margin": 0.3763314163495063,
+      "min_margin": 0.20451526586404611,
+      "p1_margin": 0.2702056372239545,
+      "p5_margin": 0.3022492226757009,
+      "fraction_lt_0.05": 0.0,
+      "fraction_lt_0.10": 0.0,
+      "fraction_lt_0.20": 0.0
+    },
+    {
+      "label": "frontier_representative",
+      "alpha": 0.1,
+      "scope": "post_state",
+      "mean_margin": 0.3762767165767802,
+      "min_margin": 0.20451526586404611,
+      "p1_margin": 0.2702056372239545,
+      "p5_margin": 0.3021450586491385,
+      "fraction_lt_0.05": 0.0,
+      "fraction_lt_0.10": 0.0,
+      "fraction_lt_0.20": 0.0
+    }
+  ],
+  "actor_action_statistics": [
+    {
+      "dimension": "P100",
+      "kind": "raw_actor_action",
+      "mean": -0.3116572895014542,
+      "std": 0.5684647231515313,
+      "min": -0.9945880770683289,
+      "max": 0.5953409075737,
+      "p1": -0.9929037988185883,
+      "p5": -0.9902556002140045,
+      "fraction_abs_gt_0p9": 0.2843333333333333,
+      "negative_fraction": 0.6533333333333333,
+      "positive_fraction": 0.3466666666666667,
+      "raw_nonzero_sign_disagreement_with_requested_residual": 0.11733333333333333
+    },
+    {
+      "dimension": "P100",
+      "kind": "requested_residual_normalized",
+      "mean": -0.21252628316707667,
+      "std": 0.3014430808021511,
+      "min": -0.7716799094050657,
+      "max": 0.1306101649871927,
+      "p1": -0.7698261431945138,
+      "p5": -0.7667457632342121,
+      "fraction_abs_gt_0p9": 0.0,
+      "negative_fraction": 0.543,
+      "positive_fraction": 0.299,
+      "raw_nonzero_sign_disagreement_with_requested_residual": 0.11733333333333333
+    },
+    {
+      "dimension": "F200",
+      "kind": "raw_actor_action",
+      "mean": 0.022487710555181062,
+      "std": 0.1311590213015849,
+      "min": -0.2975117564201355,
+      "max": 0.5477275848388672,
+      "p1": -0.2138655613362789,
+      "p5": -0.15642673522233963,
+      "fraction_abs_gt_0p9": 0.0,
+      "negative_fraction": 0.4683333333333333,
+      "positive_fraction": 0.5316666666666666,
+      "raw_nonzero_sign_disagreement_with_requested_residual": 0.199
+    },
+    {
+      "dimension": "F200",
+      "kind": "requested_residual_normalized",
+      "mean": 0.014661725316731723,
+      "std": 0.04819165539323381,
+      "min": -0.17222803016781152,
+      "max": 0.18385769764844678,
+      "p1": -0.10646226433429097,
+      "p5": -0.05457015617651911,
+      "fraction_abs_gt_0p9": 0.0,
+      "negative_fraction": 0.37666666666666665,
+      "positive_fraction": 0.5953333333333334,
+      "raw_nonzero_sign_disagreement_with_requested_residual": 0.199
+    }
+  ],
+  "QP_context": [
+    {
+      "seed": 420000,
+      "QP_infeasible_total": 27,
+      "QP_infeasible_with_Omega_before_false": 27,
+      "QP_infeasible_while_Omega_before_true": 0,
+      "fallback_mode_counts": {
+        "outside_certified_domain": 27
+      }
+    },
+    {
+      "seed": 420001,
+      "QP_infeasible_total": 28,
+      "QP_infeasible_with_Omega_before_false": 28,
+      "QP_infeasible_while_Omega_before_true": 0,
+      "fallback_mode_counts": {
+        "outside_certified_domain": 28
+      }
+    },
+    {
+      "seed": 420002,
+      "QP_infeasible_total": 29,
+      "QP_infeasible_with_Omega_before_false": 29,
+      "QP_infeasible_while_Omega_before_true": 0,
+      "fallback_mode_counts": {
+        "outside_certified_domain": 29
+      }
+    }
+  ],
+  "priority": "residual authority diagnostic/retraining discussion",
+  "limits": "Only 3 fixed realizations, one early actor, no causal identification or Gaussian guarantee. Small absolute economic increments and worst-seed signs must be considered.",
+  "first_failure_one_step_counterfactual": {
+    "seed": 420000,
+    "step": 12,
+    "same_state_same_disturbance": true,
+    "zero_residual_safe_input_at_this_controller_state": [
+      233.65538828079238,
+      224.50642560788918
+    ],
+    "zero_residual_counterfactual_next_state": [
+      25.049997184752083,
+      50.080408629926495
+    ],
+    "actor_actual_next_state": [
+      24.988336686833648,
+      50.06821885857201
+    ],
+    "scope": "one-step causal action comparison only, separate from autonomous scale sweep; not a certificate"
+  }
+}

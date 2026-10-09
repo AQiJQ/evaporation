@@ -1,4 +1,4 @@
-"""Frozen balanced-B stochastic SAC; paired empirical reporting, not Gaussian certification."""
+"""Fixed balanced-B stochastic SAC; optional audited reward weights, empirical scope."""
 from __future__ import annotations
 
 import argparse
@@ -21,6 +21,8 @@ from .zanon2019_training_report import (
     EvidenceController, FixedPairedEvaluator, classify, metrics,
     plot_learning, update_pareto, evaluation_safety_anomalies,
 )
+from .zanon2019_authority import (AUTHORITY_RULES, AuthoritySelection,
+    VALIDATION_SEEDS, RESERVED_TEST_SEEDS)
 
 
 class EvaluationSafetyAbort(RuntimeError):
@@ -47,7 +49,12 @@ def main():
     parser.add_argument("--episodes", type=int, default=300)
     parser.add_argument("--steps", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--eval-seeds", type=int, default=3)
+    parser.add_argument("--eval-seeds", type=int, default=None)
+    parser.add_argument("--stochastic-residual-scale", type=float, default=1.0)
+    parser.add_argument("--reward-calibration", type=Path, default=None,
+                        help="Opt-in audited stochastic reward weights; requires alpha=0.2")
+    parser.add_argument("--authority-pilot", action="store_true",
+                        help="Hierarchical validation selection; reserves final test seeds")
     parser.add_argument("--eval-seed-start", type=int, default=420000)
     parser.add_argument("--eval-every", type=int, default=5)
     parser.add_argument("--variances", type=float, nargs=4,
@@ -59,8 +66,18 @@ def main():
     parser.add_argument("--omega-vertices", type=Path, default=DEFAULT_OMEGA)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT.with_name(
         "outputs_zanon2019_stochastic_seed42_300x1000"))
-    parser.add_argument("--device", default="auto")
+    parser.add_argument("--device", default="cuda")
     args = parser.parse_args()
+    args.eval_seeds = args.eval_seeds if args.eval_seeds is not None else (10 if args.authority_pilot else 3)
+    if not np.isfinite(args.stochastic_residual_scale) or not 0 <= args.stochastic_residual_scale <= 1:
+        raise ValueError("--stochastic-residual-scale must be finite in [0,1]")
+    if args.stochastic_residual_scale != 1 and args.disturbance_mode != "zanon2019_stochastic":
+        raise ValueError("Authority scaling is only supported for zanon2019_stochastic")
+    if args.authority_pilot and (args.disturbance_mode != "zanon2019_stochastic"
+            or args.episodes > 100 or args.eval_seed_start != 420000 or args.eval_seeds != 10):
+        raise ValueError("Authority pilot requires iid stochastic, <=100 episodes, validation 420000..420009")
+    if set(range(args.eval_seed_start, args.eval_seed_start + args.eval_seeds)) & set(RESERVED_TEST_SEEDS):
+        raise ValueError("Final test seeds 430000..430049 are reserved; not permitted in training selection")
     if min(args.episodes, args.steps, args.eval_seeds, args.eval_every) < 1:
         raise ValueError("Episodes, steps, eval seeds and eval interval must be positive")
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
@@ -69,6 +86,15 @@ def main():
     cfg, model, design, omega, domain, weights = make_setup(
         args.steps, args.seed, args.design, args.omega_vertices)
     cfg.disturbance_mode, cfg.episodes = args.disturbance_mode, args.episodes
+    cfg.stochastic_residual_scale = args.stochastic_residual_scale
+    reward_calibration = None
+    if args.reward_calibration is not None:
+        if not np.array_equal(args.variances, PAPER_VARIANCES_F1_X1_T1_T200):
+            raise ValueError("Audited reward recalibration requires unchanged literal paper variances")
+        from .zanon2019_reward_audit import apply_calibration
+        weights, reward_calibration = apply_calibration(cfg, args.reward_calibration,
+            geometry_sources=(args.design, args.omega_vertices))
+    cfg.authority_pilot = args.authority_pilot
     cfg.abort_on_first_uncertified_step = True
     agent = make_agent(cfg, args.device)
     agent.zero_initialize_residual_mean()
@@ -78,16 +104,28 @@ def main():
     eval_seeds = list(range(args.eval_seed_start, args.eval_seed_start + args.eval_seeds))
     manifest = {
         "episodes": args.episodes, "steps": args.steps, "seed": args.seed,
+        "stochastic_residual_scale": args.stochastic_residual_scale,
+        "authority_pilot": args.authority_pilot,
+        "fresh_initialization": True, "warm_start": False,
+        "validation_seeds": eval_seeds, "reserved_final_test_seeds": RESERVED_TEST_SEEDS,
+        "final_test_performed": False,
+        "action_scale_location": "raw action -> environment scale -> unchanged interior anchor -> original QP; replay stores raw action",
         "mode": args.disturbance_mode, "observation_dim": 23,
         "device": str(agent.device), "certification_status": CERTIFICATION_STATUS,
         "formal_safety_claim": False,
         "architecture": "frozen balanced B interior-anchor Z/Omega; unchanged Gm/Bj inactive in no-jump Experiment I",
-        "reward": "unchanged weighted reward", "weights": weights,
+        "reward": ("audited stochastic scale recalibration; existing formula unchanged"
+                   if reward_calibration else "unchanged weighted reward"), "weights": weights,
+        "reward_calibration": reward_calibration,
+        "reward_calibration_source": str(args.reward_calibration) if args.reward_calibration else None,
+        "reward_calibration_sha256": (hashlib.sha256(args.reward_calibration.read_bytes()).hexdigest()
+                                      if args.reward_calibration else None),
         "reward_scope": "out-of-W RPI event/excess remains excluded from replay reward and fully audited",
         "variance_F1_X1_T1_T200": args.variances,
         "evaluation_seeds": eval_seeds, "evaluation_every": args.eval_every,
         "baseline": "same architecture zero residual; NOT ECC2019 RL-NMPC",
-        "warmup_steps": cfg.warmup_steps, "selection_rules": SELECTION_RULES,
+        "warmup_steps": cfg.warmup_steps,
+        "selection_rules": AUTHORITY_RULES if args.authority_pilot else SELECTION_RULES,
         "evaluation_stop_rule": "after each fixed paired evaluation, any baseline/SAC physical/input/QP/Omega anomaly stops before further training; W alone does not stop",
         "frozen_experiment_config": vars(cfg), "frozen_SAC_config": vars(agent.cfg),
         "frozen_geometry_sources": {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -98,15 +136,20 @@ def main():
             np.asarray(args.variances), args.hold_min, args.hold_max),
     }
     save_json(out / "experiment_manifest.json", manifest)
+    save_json(model_dir / "action_environment.json", {
+        "stochastic_residual_scale": args.stochastic_residual_scale,
+        "disturbance_mode": args.disturbance_mode, "observation_dim": 23,
+        "raw_action_range": [-1, 1], "scale_in_actor_network": False,
+        "require_same_scale_for_checkpoint_evaluation": True})
     agent.save_actor(model_dir / "initial_diagnostic_actor.pth")
     training_rows, fixed_rows, statuses = [], [], []
     global_step = 0
-    selector = CheckpointSelection(model_dir)
+    selector = (AuthoritySelection if args.authority_pilot else CheckpointSelection)(model_dir)
 
     def persist(state, failure=None, comparison=None):
         update_pareto(statuses)
         front = [s for s in statuses if s["pareto_nondominated"]]
-        if front:
+        if front and not args.authority_pilot:
             closest = min(front, key=lambda s: (s["distance_to_joint"],
                           -s["economic_improvement_pct"], s["mean_IAE_ratio"], s["mean_TV_ratio"]))
             destination = model_dir / "closest_pareto_actor.pth"
@@ -127,10 +170,11 @@ def main():
             "global_step": global_step, "training_safety_counters_completed_episodes": counters,
             "failure_evidence": failure,
             "selected_checkpoints": selector.best, "comparison": comparison,
-            "case": "D" if failure else classify(statuses),
+            "case": ("authority_pilot_pending_cross_run_review" if args.authority_pilot
+                     else "D" if failure else classify(statuses)),
             "multi_seed_evaluation_recommendation": (
                 "consider best_empirical_joint_actor after reviewing Pareto trade-off; empirical evaluation only"
-                if state == "completed" and classify(statuses) == "A" else
+                if not args.authority_pilot and state == "completed" and classify(statuses) == "A" else
                 "none automatically recommended; inspect Pareto/evidence first"),
         })
 
@@ -239,10 +283,16 @@ def main():
     final_name = "final_actor" if global_step >= cfg.warmup_steps else "final_diagnostic_actor"
     agent.save_actor(model_dir / f"{final_name}.pth")
     agent.save_checkpoint(model_dir / "final_checkpoint.pth")
+    selector.best["final_actor" if final_name == "final_actor" else "final_diagnostic_actor"] = {
+        "checkpoint": str(model_dir / f"{final_name}.pth"), "episode": args.episodes,
+        "global_step": global_step, "post_warmup": global_step >= cfg.warmup_steps}
     comparison_rows, comparison_statuses = [], []
     eval_agent = make_agent(cfg, args.device)
-    selected = ("best_empirical_joint_actor", "best_economic_safe_actor",
-                "best_recovery_safe_actor", "best_low_activity_safe_actor", "final_actor")
+    selected = (("best_safety_economic_actor", "best_economic_actor",
+                 "best_disturbance_rejection_actor", "best_margin_actor",
+                 "best_low_activity_actor", "final_actor") if args.authority_pilot else
+                ("best_empirical_joint_actor", "best_economic_safe_actor",
+                 "best_recovery_safe_actor", "best_low_activity_safe_actor", "final_actor"))
     for name in selected:
         source = selector.best.get(name)
         if name == "final_actor" and final_name == "final_actor":

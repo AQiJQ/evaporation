@@ -1,0 +1,8 @@
+{
+  "policy_lock_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "baseline_rollouts": 50,
+  "policy_rollouts": 150,
+  "complete": true,
+  "program_failures": 0,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance"
+}

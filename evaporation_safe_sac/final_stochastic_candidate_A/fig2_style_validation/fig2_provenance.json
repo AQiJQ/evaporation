@@ -1,0 +1,51 @@
+{
+  "scope": "validation only; not independent final test",
+  "layout_reference": "ECC2019 Fig.2; visual layout only, no external numeric comparison",
+  "baseline_identity": "our paired robust zero-residual controller, NOT naive/economic NMPC",
+  "delta_cost_definition": "stored economic_cost_SAC - stored economic_cost_baseline; negative favors SAC",
+  "sign_provenance": "explicit implementation choice for reproduction; no claimed paper subtraction formula",
+  "cost_convention": "original archived economic stage costs; no shaping or reward substituted",
+  "state_convention": "archived pre-step X2, steps 0...999; terminal state not present in this plot",
+  "realization_selection": "predeclared first validation seed 420000; not selected for best performance",
+  "smoothing": "none",
+  "source_policy_lock": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\locked_final_policies.json",
+  "source_policy_lock_sha256": "7d624c216f0bd017044b1ff0997147460c656d2c5123fe7dec2b5156de11e704",
+  "trajectories": [
+    {
+      "training_seed": 42,
+      "episode": 15,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420000.csv",
+      "source_sha256": "206930d2de0467edc21d080287adea3beef779ad1c897623ff8236d614f96510",
+      "sampling_time_s": 1.0,
+      "steps": 1000,
+      "baseline_J_econ": 6220040.155833136,
+      "SAC_J_econ": 6219476.572549338,
+      "economic_improvement_pct": 0.00906076600276143,
+      "sum_delta_cost": -563.5832837976759
+    },
+    {
+      "training_seed": 2027,
+      "episode": 20,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420000.csv",
+      "source_sha256": "2f40087bb0eebaacbead44527f3ba83952bb2e0e3dba3d40b249ba6f48173846",
+      "sampling_time_s": 1.0,
+      "steps": 1000,
+      "baseline_J_econ": 6220040.155833136,
+      "SAC_J_econ": 6219486.949189059,
+      "economic_improvement_pct": 0.00889394007461605,
+      "sum_delta_cost": -553.2066440772414
+    },
+    {
+      "training_seed": 314159,
+      "episode": 20,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420000.csv",
+      "source_sha256": "6e642a7cc6e347c6773d52478370ef41150a55131823bd9545d1a88830487c06",
+      "sampling_time_s": 1.0,
+      "steps": 1000,
+      "baseline_J_econ": 6220040.155833136,
+      "SAC_J_econ": 6219160.403413885,
+      "economic_improvement_pct": 0.014143838258439345,
+      "sum_delta_cost": -879.7524192508554
+    }
+  ]
+}

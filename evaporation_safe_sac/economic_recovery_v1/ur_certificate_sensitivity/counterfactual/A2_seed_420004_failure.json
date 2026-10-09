@@ -1,0 +1,8 @@
+{
+  "candidate": "A2",
+  "seed": 420004,
+  "status": "NUMERIC_FAIL",
+  "error": "OSError(28, 'No space left on device')",
+  "scope": "frozen_policy_geometry_sensitivity",
+  "evidence": null
+}

@@ -1,0 +1,386 @@
+{
+  "label": "ECC2019_reproduction_with_documented_assumptions",
+  "exact_reproduction": false,
+  "paper_sha256": "23e035a004b11d1eacf8e7b2e5d96bc4d7c71e4047eafd7a70b071d90b8872be",
+  "entries": [
+    {
+      "name": "horizon",
+      "value": 10,
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "state_lower",
+      "value": [
+        25,
+        40
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "state_upper",
+      "value": [
+        100,
+        80
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "input_lower",
+      "value": [
+        100,
+        100
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "input_upper",
+      "value": [
+        400,
+        400
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "variances_F1_X1_T1_T200",
+      "value": [
+        2,
+        1,
+        8,
+        5
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "slack_linear_weight",
+      "value": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "slack_quadratic_matrix",
+      "value": "I4",
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "damping_alpha",
+      "value": 0.01,
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "policy_update_steps",
+      "value": 500,
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "exploration_probability",
+      "value": 0.1,
+      "category": "specified_in_paper",
+      "source": "Numerical Example pp.2261-2262",
+      "note": ""
+    },
+    {
+      "name": "NLP_structure",
+      "value": "non-condensed quadratic arrival/stage/terminal; nominal nonlinear step+cf; learned state bounds",
+      "category": "specified_in_paper",
+      "source": "Eq3 / Numerical Example",
+      "note": ""
+    },
+    {
+      "name": "RL_update",
+      "value": "full constrained TD squared-error fit Eq8; frozen target V; damped theta update",
+      "category": "specified_in_paper",
+      "source": "Section IV Eq8",
+      "note": ""
+    },
+    {
+      "name": "reported_gains",
+      "value": {
+        "vs_naive": 14,
+        "vs_nominal_economic": 12
+      },
+      "category": "specified_in_paper",
+      "source": "p2262",
+      "note": "Not robust-baseline gains; no explicit algebraic formula."
+    },
+    {
+      "name": "plant/economic_expression",
+      "value": "existing model.py;10.09*(F2+F3)+600*F100+.6*F200",
+      "category": "derived_from_cited_model/current_common_evaporation_model",
+      "source": "ECC cites26/27; current common model",
+      "note": ""
+    },
+    {
+      "name": "nominal_F1_X1_T1_T200",
+      "value": [
+        10,
+        5,
+        40,
+        25
+      ],
+      "category": "derived_from_cited_model/current_common_evaporation_model",
+      "source": "current common benchmark",
+      "note": ""
+    },
+    {
+      "name": "gamma",
+      "value": 0.99,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "pd_floor",
+      "value": 1e-06,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "solver_scale",
+      "value": 10000.0,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "solver_tol",
+      "value": 1e-08,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "solver_max_iter",
+      "value": 300,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "fit_window",
+      "value": 32,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "fit_every",
+      "value": 1,
+      "category": "implementation_choice_for_reproduction",
+      "source": "Section IV says full fit at each step",
+      "note": "Non-unit fit_every is a separately labeled algorithm approximation, never exact schedule."
+    },
+    {
+      "name": "fit_max_iter",
+      "value": 100,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "fit_tol",
+      "value": 1e-08,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "quadratic_coordinates",
+      "value": "physical_deviation_from_nominal_steady",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper",
+      "note": ""
+    },
+    {
+      "name": "distribution",
+      "value": "iid zero-mean Gaussian each1s step; negative F1/X1 clipped/logged",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "initial_physical_state",
+      "value": [
+        25.39,
+        50.125
+      ],
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "sampling_seconds",
+      "value": 1,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "comparison_steps",
+      "value": 1000,
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "common_reference",
+      "value": [
+        25.0,
+        49.743
+      ],
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "quadratic_convention",
+      "value": "0.5*v.T H v+h.T v+c; physical-unit deviations from nominal x=[25,49.743], corresponding nonlinear steady u",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "terminal_constraint",
+      "value": "same learned soft state bounds at k=N; no invented hard terminal set",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "initial_terminal_H",
+      "value": "1e-6 I instead of zero to meet strict PD; logged inconsistency",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "soft_bound_sign",
+      "value": "[xl-x,x-xu]<=slack; paper prints reversed signs",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "exploration_literal",
+      "value": "a=clip(N(0,sqrt10),100,400); sqrt10 chosen std, independent components; near-always100",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "true_TD_stage_cost",
+      "value": "common economic cost + sum physical-bound deficit + sum deficit^2",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "constant_gauge",
+      "value": "c_lambda=0 in fitting; uniform objective scale10000 for NLP",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "gain_formula",
+      "value": "(J_reference-J_RL)/J_reference*100",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "Fig2_sign",
+      "value": "cost_RL-cost_naive; paper sign not explicit",
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "development_seeds",
+      "value": [
+        420000,
+        420001,
+        420002,
+        420003,
+        420004,
+        420005,
+        420006,
+        420007,
+        420008,
+        420009
+      ],
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    },
+    {
+      "name": "economic_gap_tolerances_pct",
+      "value": [
+        0.5,
+        1.0
+      ],
+      "category": "implementation_choice_for_reproduction",
+      "source": "not specified in the paper; implementation choice for reproduction",
+      "note": ""
+    }
+  ],
+  "protocol": {
+    "model_source_sha256": "0d1b153f4d5bc2beaeaba03a3890c8c49c1c70317f2d3077ae6f808a6ea5cea7",
+    "config_source_sha256": "b76419bedc1157473738e81d2af0a561f760fd036137a279052b5879cf224627",
+    "dt_min": 0.016666666666666666,
+    "initial_state": [
+      25.39,
+      50.125
+    ],
+    "common_reference": [
+      25.0,
+      49.743
+    ],
+    "paired_diagnostic_reference": [
+      25.39,
+      50.125
+    ],
+    "nominal": [
+      10.0,
+      5.0,
+      40.0,
+      25.0
+    ],
+    "variances": [
+      2.0,
+      1.0,
+      8.0,
+      5.0
+    ],
+    "disturbance_mode": "zanon2019_stochastic",
+    "steps": 1000,
+    "economic_cost_convention": "existing next_state/final_actual_input/current_exogenous cost",
+    "source_origin": "implementation_choice_for_reproduction",
+    "cost_excludes_slack_and_SAC_shaping": true
+  },
+  "warning": "No original learned theta or authors solver/discretization is supplied; Fig2 is never digitized."
+}

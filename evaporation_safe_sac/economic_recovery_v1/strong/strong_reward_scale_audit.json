@@ -1,0 +1,989 @@
+{
+  "mean_abs_r_econ": 0.17730491252098654,
+  "median_abs_r_econ": 0.14826537654100092,
+  "mean_smoothness_penalty": 0.0005033123462750052,
+  "median_nonzero_smoothness_penalty": 0.00024904072763973597,
+  "p95_smoothness_penalty": 0.0024030582006404847,
+  "lambda_smooth": 17.613805207960148,
+  "calibration_files": [
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420000.csv",
+      "sha256": "206930d2de0467edc21d080287adea3beef779ad1c897623ff8236d614f96510"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420001.csv",
+      "sha256": "530fcf00e73e148b6fa5f8e5e02261c0b9832b409afa7cf0eb8198e23aa89d14"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420002.csv",
+      "sha256": "4d0220ccc289f630558278af2d486df3dbdc2c509d1f4853cd0a99576634c596"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420003.csv",
+      "sha256": "7e10be92e86b9dcedc373b5cb0760d902d0b80930cdb1fb88741f3b4874098be"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420004.csv",
+      "sha256": "31feb3830a28a1d182a8e6e3cbd992f46f11ff31473ec94c5c08c99f761a1904"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420005.csv",
+      "sha256": "d1c848df02aa81a80af278e75cbda3a630c0aff831b92a0169f78c7991b1211c"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420006.csv",
+      "sha256": "0f9726082acd5077b26e363d926543b18a825b70d47fb7e487018b78552e9e2d"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420007.csv",
+      "sha256": "f7cd47f15e8168ab0b7aad7086d278405680f504ace627d65affcea1633ae4db"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420008.csv",
+      "sha256": "b129754c1661c01276130a33b5167387023c2ccd0027dda9dc013c59ff8c9576"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0015\\seed_420009.csv",
+      "sha256": "1a249b48e7d55e428562440b684f6347b587468770eb030a6a655f7b5a7f7c07"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420000.csv",
+      "sha256": "9d549030d5f5359d6600a1a8bb56ac28537bb2c8a29931e14c64f1ac8347b66c"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420001.csv",
+      "sha256": "efc00ab237a2ea05574dbbe75884f9213658af848d38f8ddbe27638e877fa5b1"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420002.csv",
+      "sha256": "faea9dd41ba696ee841cba0cb46da307d31a3ba6a3b3f374a44eea1b574ffc10"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420003.csv",
+      "sha256": "913edd252bd3ebcbf4bbdd7b5bab01cf71a2a8fd59b6de24fb5e8f127a78ce67"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420004.csv",
+      "sha256": "1247f35b14a2c43e2b621df0df391419b8b0be40c0c20cef7c50401c0680d073"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420005.csv",
+      "sha256": "b84668a7c8622354307594a69a9439bc10aa3cecb707f4bc50583f2192a8c9ff"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420006.csv",
+      "sha256": "7546881a7f441a481d4f2971a4bc72d7296c43def8c7872c7469c656e48fe6ca"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420007.csv",
+      "sha256": "bb4c11ffc6c0fea0ed846c053c49b7dfeb87635341508c37176ba1310672b397"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420008.csv",
+      "sha256": "a519a3bcd1d9001f29aee1b899444869a5bff16d967cc64aba78db2bb8259934"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\evaluation_trajectories\\episode_0100\\seed_420009.csv",
+      "sha256": "bb4a4f0f4e346a70f81ecd0070fb921a330fc2389b12cb161e1a5d545d32fea4"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420000.csv",
+      "sha256": "2f40087bb0eebaacbead44527f3ba83952bb2e0e3dba3d40b249ba6f48173846"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420001.csv",
+      "sha256": "58800bac70ef1ff69789b383c9c10f2c35f5deadc6f96d4f98fb5c20ecf90b15"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420002.csv",
+      "sha256": "e21a7a3bad370b8987c177a3d5cf27759c681c87e147695981e8270fc3f4c023"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420003.csv",
+      "sha256": "b32d59026a184992a6dc52f5736be44c32c98782c05154ac8f8efc2d712da35d"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420004.csv",
+      "sha256": "757e69bc14056ace8df6bda02b050e8b86577fde02c2114d84675939c4c81a97"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420005.csv",
+      "sha256": "068c1440149dd874c4471cece9136033fb5249c6e84f4418c25ba684b4363026"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420006.csv",
+      "sha256": "71be086462c35fd2656670cca21a7db25b23a20b9d1bd121d9ff78f112e78868"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420007.csv",
+      "sha256": "3b9d17c58134c729aa28a50fa83cc1d2f4896a72a5b4d93069ebc5b3a5e19283"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420008.csv",
+      "sha256": "08d8b2e7ca2724da1720dd786ebc8ccfa319e6c78a2e0cc2c0a6371a340176de"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0020\\seed_420009.csv",
+      "sha256": "c76f9ee69bc5951babfc353305cb2f4a74ec62c4f4657ddf1f981166196c7d4f"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420000.csv",
+      "sha256": "18d88c9be56d78bbc8ae03b81a3f6360a08900ef03233091da6d55174a180ead"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420001.csv",
+      "sha256": "881b8841efc3671aaded8a9474de3513092c2131a045943f3ad2f0297577e75d"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420002.csv",
+      "sha256": "0ddd6b7359c7e9143e0e77b29065f0421c6414cf1b4feaaf35b5b02905b2caf1"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420003.csv",
+      "sha256": "450bd7002655a51155a7a0e873c8865a3f5ace47989b891c9fd0a508687acb55"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420004.csv",
+      "sha256": "7dea54e411772fb4ba628570c4923ec31ea7f2b4ab4d84158cdfd6c2b4144d4d"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420005.csv",
+      "sha256": "d7f90a8d58437211ce531c6cc1a80f6171df36040189d24c4bd4cce57e87295c"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420006.csv",
+      "sha256": "dbd242dba0cb3580f8d468f35fe3aa9fc362b04b85829c1b0b4fb1c2c34988ad"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420007.csv",
+      "sha256": "ebd271de790830f8a44f255e693a31e4fa97944ee92c0290cb9d952d76d3e23d"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420008.csv",
+      "sha256": "56c798d9f147ca497049f7adefca09c6228847b42cb771853e8ecdf4fef0eac3"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\evaluation_trajectories\\episode_0100\\seed_420009.csv",
+      "sha256": "5bdb5cd6a0e24a22bcea54ec9c1926f77ff1c800ce33935538c7ff99b618dc1d"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420000.csv",
+      "sha256": "6e642a7cc6e347c6773d52478370ef41150a55131823bd9545d1a88830487c06"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420001.csv",
+      "sha256": "b8dd8fc894cde9cac413527cbe522012596f8baecf59d2b36e0fc7ebe609b78c"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420002.csv",
+      "sha256": "119ab5ce48fb938a765c92432d4319c4a81b3580e6b80a45a6aee134dfc4ae14"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420003.csv",
+      "sha256": "d50961bb3ee6d43189770ea1ad7c902c10bd585a46baf9ee264edab3e31af982"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420004.csv",
+      "sha256": "cb8b917b3ddc1a2284a8be1199aafbdf9f9e550b7f1c32d6f0c10e2e588f75fa"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420005.csv",
+      "sha256": "3c9441747797b263e582f51043aba7cb32a32f7a7354d73ee89eb8d59f206b26"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420006.csv",
+      "sha256": "032a4ec633161d762aede0273ed479cd33e0238d8b9b350f7d91267c11ab5b90"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420007.csv",
+      "sha256": "2c1946c1a61dbea677f285b1dd016d23f2dfee5daa2347e0d87050a29f26861d"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420008.csv",
+      "sha256": "6a366c3e240aadfbfaa3c4a322ba4a026eddb6673faeed55b1793e56c6485f80"
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0020\\seed_420009.csv",
+      "sha256": "227ea20630c7318c5fe1428aac411636a6fc5963340f85c7706d7ea3443dc7a7"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420000.csv",
+      "sha256": "0bf065d5f94ba31c8adacbac384507bb508eb2d3f328aba9c01f7348401ce578"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420001.csv",
+      "sha256": "966b57fb04e8e96b6b9efe7370d9a4f48edcc01e363c42ac41eec1433990326e"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420002.csv",
+      "sha256": "477054d35cf4b83937cc296b04d0ec1c8133794b8bcd868975a2fe4b9540b8c8"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420003,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420003.csv",
+      "sha256": "674fdc2017374a671d60aec6a2c39a92f246ca1ad942ff0f483a73dab143be7d"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420004,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420004.csv",
+      "sha256": "28bf19276950c0c26425dca0f8f1731e99452ff31b06836ec15398177a1d8744"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420005,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420005.csv",
+      "sha256": "e5abce0355fe0cb163fc7e998073fd6841c8f7c510738b0c7743621383ee428f"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420006,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420006.csv",
+      "sha256": "f53c3993bac1225e1e84742b7d3c9acb32ef6fe861c0644a4f877bf5ad8dbce1"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420007,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420007.csv",
+      "sha256": "a6fdf4d31e4e79ceb7264d9c693e5766996d5df405a1d8f421029ac6345b24a1"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420008,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420008.csv",
+      "sha256": "5cbd0efd1d05ec97a7e3fb613c21091017471abb9f8c0df3fee7352b759f813e"
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420009,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\evaluation_trajectories\\episode_0100\\seed_420009.csv",
+      "sha256": "1478e9f5f0b93951d454992fb51fe617b9b13d8e21b4408297710c7bad2cc1c8"
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0071_seed_420000.csv",
+      "sha256": "425db6a1ac543f13591dcaabbc81e4cc72ae8952706f5b97d46a1e760edf75c4"
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0071_seed_420001.csv",
+      "sha256": "e9bb10d7a1342775e1b6b5114e9845a90c88efc5320cd2b1053b4f2694ae8b5e"
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0071_seed_420002.csv",
+      "sha256": "2fdadaffbac9d7ed35a93450c2988f40c57b72565e15dc877ea53001862bed85"
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0076_seed_420000.csv",
+      "sha256": "8799ff39f994578d2cfd159cccf8affe5f07fda24b220327ac2a6324eef6e15a"
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0076_seed_420001.csv",
+      "sha256": "30222ef8fb3b4a879de002c5464d9067d3faa4815a1fb1900d26fcfb486958e9"
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0076_seed_420002.csv",
+      "sha256": "6cd9ebb28c536ff6039900abf745336b187786cd958ad07417ec476fc0342709"
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0133_seed_420000.csv",
+      "sha256": "338e3df20aab288d2d87d7eb040878f80937c281a45f6ea39b0955a8c1e4497e"
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0133_seed_420001.csv",
+      "sha256": "b14651ead0daff58677295beacf8c21ef5b8366dea6755a1d4698d7af039a2cf"
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v1\\oracle10\\witness_trajectories\\candidate_0133_seed_420002.csv",
+      "sha256": "d92cf3b256972548f565507370cf70851c0fbed1226e277ac164aec3a81ec4bf"
+    }
+  ],
+  "per_trajectory": [
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.2316022262416832,
+      "mean_smoothness_penalty": 0.0006191163200895837
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.2325996386717377,
+      "mean_smoothness_penalty": 0.0006213813381742926
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.22358522874391754,
+      "mean_smoothness_penalty": 0.0005944564035181526
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.21634300202097137,
+      "mean_smoothness_penalty": 0.0005839126339765808
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.23596069762303806,
+      "mean_smoothness_penalty": 0.0006005119252632283
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.23841367612997574,
+      "mean_smoothness_penalty": 0.0005408569639435171
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.2133378798270907,
+      "mean_smoothness_penalty": 0.000617843397681783
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.21643983618460738,
+      "mean_smoothness_penalty": 0.0005999337606570694
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.22284057710647884,
+      "mean_smoothness_penalty": 0.0005812525683260901
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 42,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.2351563740269874,
+      "mean_smoothness_penalty": 0.0005983443868226584
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.2019387158238451,
+      "mean_smoothness_penalty": 0.00046416291600997155
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.20766636616236167,
+      "mean_smoothness_penalty": 0.0005260931150094192
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.1906134841687555,
+      "mean_smoothness_penalty": 0.00041280903468006555
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.1897974761422651,
+      "mean_smoothness_penalty": 0.00045674586268113225
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.18965328298565665,
+      "mean_smoothness_penalty": 0.00046847871651787214
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.19633220111060007,
+      "mean_smoothness_penalty": 0.00045736444908264106
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.1750791180937303,
+      "mean_smoothness_penalty": 0.000497502543673214
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.18359854367472456,
+      "mean_smoothness_penalty": 0.00045204643934118713
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.18160090203227144,
+      "mean_smoothness_penalty": 0.0005209847618762424
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 42,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.2133361241374851,
+      "mean_smoothness_penalty": 0.0004667182623186747
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.1753706135079263,
+      "mean_smoothness_penalty": 0.00084059667831421
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.18743586948967725,
+      "mean_smoothness_penalty": 0.000761401907299909
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.16500078683439712,
+      "mean_smoothness_penalty": 0.0008024588172959378
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.17410667963191737,
+      "mean_smoothness_penalty": 0.0007596338424011127
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.17061396824185107,
+      "mean_smoothness_penalty": 0.0007945721459038524
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.18673563635432472,
+      "mean_smoothness_penalty": 0.0006993403527447306
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.17429228558779375,
+      "mean_smoothness_penalty": 0.0008532598172008014
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.16590606721453444,
+      "mean_smoothness_penalty": 0.0008329861021996223
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.17358189808124455,
+      "mean_smoothness_penalty": 0.000778943737505394
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 2027,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.18232522744393936,
+      "mean_smoothness_penalty": 0.0007142807391692048
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.1811885048769196,
+      "mean_smoothness_penalty": 0.0004193027336602363
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.18406659614998705,
+      "mean_smoothness_penalty": 0.0004156218894063406
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.16736730659474827,
+      "mean_smoothness_penalty": 0.0004433865639592723
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.1684156401769307,
+      "mean_smoothness_penalty": 0.00039949990231194797
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.17262013611582228,
+      "mean_smoothness_penalty": 0.0004590923926885387
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.18240582604142536,
+      "mean_smoothness_penalty": 0.0004124438510989575
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.1615412849556973,
+      "mean_smoothness_penalty": 0.0004484246222109938
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.16200104855438577,
+      "mean_smoothness_penalty": 0.0004074294391241929
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.16669649038250375,
+      "mean_smoothness_penalty": 0.00046746049006060733
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 2027,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.19656479431404725,
+      "mean_smoothness_penalty": 0.00037629471370366875
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.20488085298834227,
+      "mean_smoothness_penalty": 0.0006201223412895289
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.21322904780130306,
+      "mean_smoothness_penalty": 0.0005951527819228408
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.19505836431916473,
+      "mean_smoothness_penalty": 0.0005836500814596648
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.2012679598005231,
+      "mean_smoothness_penalty": 0.000575076104316633
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.1986634300265738,
+      "mean_smoothness_penalty": 0.0006089512273411255
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.21227420462263036,
+      "mean_smoothness_penalty": 0.0006173571675785021
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.1958741544596737,
+      "mean_smoothness_penalty": 0.0006294995735883202
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.18842577679968991,
+      "mean_smoothness_penalty": 0.0005961481709265341
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.19741893350468484,
+      "mean_smoothness_penalty": 0.0006282985852561053
+    },
+    {
+      "role": "Candidate_A",
+      "training_seed": 314159,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.21319969830041482,
+      "mean_smoothness_penalty": 0.000627945198201677
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.19522453780625754,
+      "mean_smoothness_penalty": 0.0003888452375058026
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.19834563370195632,
+      "mean_smoothness_penalty": 0.0004172541361604507
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.18848081692716828,
+      "mean_smoothness_penalty": 0.00036285066572597127
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420003,
+      "mean_abs_r_econ": 0.19249971170662253,
+      "mean_smoothness_penalty": 0.0003940875841500393
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420004,
+      "mean_abs_r_econ": 0.19641334988900847,
+      "mean_smoothness_penalty": 0.0004095938271189987
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420005,
+      "mean_abs_r_econ": 0.1972329767501517,
+      "mean_smoothness_penalty": 0.0003758220490818037
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420006,
+      "mean_abs_r_econ": 0.18814182168801022,
+      "mean_smoothness_penalty": 0.0004138590767869611
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420007,
+      "mean_abs_r_econ": 0.1821347623069845,
+      "mean_smoothness_penalty": 0.00039052283912505376
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420008,
+      "mean_abs_r_econ": 0.18681213283572948,
+      "mean_smoothness_penalty": 0.00038202313071832256
+    },
+    {
+      "role": "old_late_high_F200",
+      "training_seed": 314159,
+      "validation_seed": 420009,
+      "mean_abs_r_econ": 0.20136808905302192,
+      "mean_smoothness_penalty": 0.00040476049397970176
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.057055431382073876,
+      "mean_smoothness_penalty": 0.00018363800782343026
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.0603009888089732,
+      "mean_smoothness_penalty": 0.00016937738561609536
+    },
+    {
+      "role": "oracle_71",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.05683910110415314,
+      "mean_smoothness_penalty": 0.0002052720630031318
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.06486435213466774,
+      "mean_smoothness_penalty": 0.00020328185824016403
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.06807610108139783,
+      "mean_smoothness_penalty": 0.00022061058825396812
+    },
+    {
+      "role": "oracle_76",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.0658059112030258,
+      "mean_smoothness_penalty": 0.0002453280294606096
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420000,
+      "mean_abs_r_econ": 0.07299291985498187,
+      "mean_smoothness_penalty": 0.00022219635503905084
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420001,
+      "mean_abs_r_econ": 0.07416539359869603,
+      "mean_smoothness_penalty": 0.00023014210966779738
+    },
+    {
+      "role": "oracle_133",
+      "training_seed": null,
+      "validation_seed": 420002,
+      "mean_abs_r_econ": 0.07286049803393428,
+      "mean_smoothness_penalty": 0.0002599386857341714
+    }
+  ],
+  "pooling": "69 complete paired trajectories, 1000 equally weighted steps each; 30 A, 30 late, 9 oracle",
+  "paired_baseline_zero_identity": "baseline columns independently give zero economics and zero excess",
+  "implementation_choice": "fixed 5% pooled development scale, not an ECC2019 paper-defined coefficient",
+  "sensitivity_10pct_lambda": 35.227610415920296,
+  "training_performed": false,
+  "final_test_performed": false,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\reward_scale_audit.json",
+  "source_sha256": "93f76d24f46bc48d6b2834936c8da87c10e2f43f096a5d6fe336c1836e0e8eb9",
+  "pair": "primary_strong_baseline",
+  "copied_read_only": true
+}

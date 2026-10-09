@@ -1,0 +1,76 @@
+{
+  "training_performed": false,
+  "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000",
+  "budgets": {
+    "source_dir": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000",
+    "output_dir": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_01",
+    "device": "cuda",
+    "episodes": [
+      100
+    ],
+    "validation_seeds": [
+      420000
+    ],
+    "stochastic_repeats": 2,
+    "prediction_states": 8,
+    "mc_states": 2,
+    "mc_repeats": 2,
+    "mc_horizon": 20,
+    "steps": 20
+  },
+  "matching_critics": {
+    "100": "available",
+    "90": "unavailable",
+    "80": "unavailable"
+  },
+  "replay_snapshot": "unavailable",
+  "reward_snapshot_validation": "unavailable; official eval-path check passed",
+  "gamma": 0.99,
+  "entropy_alpha_episode100": 0.05021640285849571,
+  "entropy_excluded_from_performance": true,
+  "MC_Q_convention": "first action fixed; entropy only on stochastic continuation from step1; no critic tail bootstrap",
+  "MC_tail_factor": 0.8179069375972308,
+  "MC_scope": "finite horizon proxy for stationary soft Q; truncation, sampling and time-limit limitations",
+  "critic_calibration": {
+    "MAE": 31.85870637540154,
+    "RMSE": 32.06677569884371,
+    "bias": -31.85870637540154,
+    "Pearson": 0.9995953935508075,
+    "Spearman": 0.9912087912087912
+  },
+  "quadrants": {
+    "pred_True_actual_True": 2,
+    "pred_True_actual_False": 0,
+    "pred_False_actual_True": 0,
+    "pred_False_actual_False": 0
+  },
+  "disagreement": {
+    "zero": {
+      "mean": 0.26274871826171875,
+      "median": 0.28502655029296875,
+      "p95": 0.32594909667968747,
+      "max": 0.33922576904296875
+    },
+    "actor": {
+      "mean": 0.4800529479980469,
+      "median": 0.47127342224121094,
+      "p95": 0.8978322982788083,
+      "max": 1.0671272277832031
+    },
+    "sample": {
+      "mean": 0.37747716903686523,
+      "median": 0.36890602111816406,
+      "p95": 0.6007179260253906,
+      "max": 0.6032867431640625
+    }
+  },
+  "replay_coverage_case_C": "unavailable",
+  "OOD_case_D": "unavailable without replay",
+  "Case_A": "requires soft-Q/MC ranking review; do not compare soft Q to hard return alone",
+  "Case_B": "requires within-disturbance-seed stochastic averages, not pooling action repeats as independent disturbance seeds",
+  "Case_E": "no reward convention discrepancy in validated diagnostic path; stored replay unavailable; terminal vs truncation intent unspecified",
+  "Case_F": "not established before calibration/coverage evidence",
+  "low_margin_representative": 0.3188147161410555,
+  "source_hashes_unchanged": true,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance"
+}

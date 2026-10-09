@@ -1,0 +1,8 @@
+{
+  "source_sha256": "8ecb5a4164328ee072e15bcb43505773d866b12cbe4d2be934f9a3457879c98e",
+  "alpha": 0.1,
+  "constraint_membership_tolerance": 1e-08,
+  "definition": "u_actual belongs to original alpha-contracted Q(s) iff c+(u_actual-u_center)/alpha belongs to original Q(s)",
+  "fixed_intervention": "same state, nominal z and raw actor output, original versus candidate geometry",
+  "caveat": "No plant propagated by intervention; not a dynamic causal attribution or new controller"
+}

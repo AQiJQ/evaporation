@@ -1,0 +1,25 @@
+state_id,state_source,source_policy,source_seed,source_step,action,raw_action_0,raw_action_1,Q1,Q2,Qmin,target_Qmin,disagreement
+0,fixed evaluation regenerated context NOT replay,zero,420000,0,zero,-0.0,0.0,-33.67401,-33.381123,-33.67401,-33.22841,0.29288864
+0,fixed evaluation regenerated context NOT replay,zero,420000,0,actor,-0.7040982,0.08840488,-32.113007,-32.696434,-32.696434,-31.904284,0.5834274
+0,fixed evaluation regenerated context NOT replay,zero,420000,0,sample,-0.6876817,0.12151519,-32.12054,-32.723827,-32.723827,-31.938803,0.60328674
+1,fixed evaluation regenerated context NOT replay,zero,420000,5,zero,0.0,0.0,-36.0711,-36.37239,-36.37239,-35.727367,0.30129242
+1,fixed evaluation regenerated context NOT replay,zero,420000,5,actor,0.089509316,0.32560351,-36.190388,-35.12326,-36.190388,-35.580555,1.0671272
+1,fixed evaluation regenerated context NOT replay,zero,420000,5,sample,-0.3737148,0.24024817,-35.728443,-35.40766,-35.728443,-35.23516,0.3207817
+2,fixed evaluation regenerated context NOT replay,zero,420000,10,zero,-0.0,-0.0,-39.771587,-39.619415,-39.771587,-39.08259,0.15217209
+2,fixed evaluation regenerated context NOT replay,zero,420000,10,actor,-0.73805153,-0.14140785,-38.54024,-38.862846,-38.862846,-38.10887,0.32260513
+2,fixed evaluation regenerated context NOT replay,zero,420000,10,sample,-0.7164559,-0.16049881,-38.52842,-38.874477,-38.874477,-38.12223,0.3460579
+3,fixed evaluation regenerated context NOT replay,zero,420000,16,zero,-0.0,0.0,-32.386692,-32.6563,-32.6563,-32.239506,0.26960754
+3,fixed evaluation regenerated context NOT replay,zero,420000,16,actor,-0.13574596,0.25059667,-32.128605,-32.635838,-32.635838,-32.089504,0.50723267
+3,fixed evaluation regenerated context NOT replay,zero,420000,16,sample,-0.22693615,0.21840419,-32.1663,-32.54266,-32.54266,-32.032234,0.37635803
+4,fixed evaluation regenerated context NOT replay,deterministic,420000,0,zero,-0.0,0.0,-33.67401,-33.381123,-33.67401,-33.22841,0.29288864
+4,fixed evaluation regenerated context NOT replay,deterministic,420000,0,actor,-0.7040982,0.08840488,-32.113007,-32.696434,-32.696434,-31.904284,0.5834274
+4,fixed evaluation regenerated context NOT replay,deterministic,420000,0,sample,-0.6745881,0.11544413,-32.125813,-32.72176,-32.72176,-31.937971,0.59594727
+5,fixed evaluation regenerated context NOT replay,deterministic,420000,5,zero,-0.0,0.0,-37.208057,-37.384808,-37.384808,-36.841606,0.17675018
+5,fixed evaluation regenerated context NOT replay,deterministic,420000,5,actor,-0.49374622,0.12274121,-36.804043,-37.10581,-37.10581,-36.519108,0.30176544
+5,fixed evaluation regenerated context NOT replay,deterministic,420000,5,sample,-0.2629528,0.06925347,-36.899902,-37.261356,-37.261356,-36.73142,0.361454
+6,fixed evaluation regenerated context NOT replay,deterministic,420000,10,zero,-0.0,-0.0,-40.911674,-40.57245,-40.911674,-40.125656,0.33922577
+6,fixed evaluation regenerated context NOT replay,deterministic,420000,10,actor,-0.73391986,-0.14591882,-39.569653,-40.004967,-40.004967,-39.155384,0.43531418
+6,fixed evaluation regenerated context NOT replay,deterministic,420000,10,sample,-0.85031766,-0.0721067,-39.642086,-40.0426,-40.0426,-39.19528,0.4005127
+7,fixed evaluation regenerated context NOT replay,deterministic,420000,19,zero,-0.0,-0.0,-45.55224,-45.275074,-45.55224,-44.774696,0.27716446
+7,fixed evaluation regenerated context NOT replay,deterministic,420000,19,actor,-0.05472649,-0.2681233,-44.638836,-44.59931,-44.638836,-44.090717,0.03952408
+7,fixed evaluation regenerated context NOT replay,deterministic,420000,19,sample,-0.23317254,-0.38077372,-44.702152,-44.686733,-44.702152,-44.278687,0.015419006

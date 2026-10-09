@@ -1,0 +1,59 @@
+[
+  {
+    "potential_reducible_conservatism": "reference-centered rectangular mismatch domain with shared scale and fixed aspect ratio",
+    "source": {
+      "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\theta_learning.py",
+      "function": "OnlineThetaLearner._robust_region_bounds",
+      "line": 334,
+      "expression": null
+    },
+    "mathematical_reason": "not a globally maximal robust admissible domain; requires local bounded mismatch certificate",
+    "physical_minus_UR_F200": 150.47139336977665,
+    "estimated_certified_extra_F200_headroom": null,
+    "effect_note": "150.471393369777 is removed-box geometric cap, NOT certified recoverable headroom",
+    "would_alter_formal_proof": true,
+    "requires_redesign_recertification": true
+  },
+  {
+    "potential_reducible_conservatism": "finite joint scale/gain/angle search and box S inner approximation",
+    "source": {
+      "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\theta_learning.py",
+      "function": "OnlineThetaLearner.build_certified_robust_operating_design",
+      "line": 637,
+      "expression": null
+    },
+    "mathematical_reason": "coupled X_R/U_R growth and finite bisection are implementation choices; failed-scale trace for exact candidate not saved",
+    "estimated_certified_extra_F200_headroom": null,
+    "would_alter_formal_proof": true,
+    "requires_redesign_recertification": true
+  },
+  {
+    "potential_reducible_conservatism": "directional support tail enclosure and saved outer Z polygon",
+    "source": {
+      "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\control.py",
+      "function": "_rpi_support",
+      "line": 251,
+      "expression": null
+    },
+    "estimated_F200_polygon_vs_directional_gap": 1.5148771126405336e-11,
+    "UR_upper_direct_effect": 0,
+    "estimated_tail_bound_economic_headroom": null,
+    "would_alter_formal_proof": true,
+    "requires_redesign_recertification": true
+  },
+  {
+    "potential_reducible_conservatism": "frozen raw-actor alpha=0.1 homothety and safe projected baseline",
+    "source": {
+      "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_authority.py",
+      "function": "AuthorityController.act",
+      "line": 33,
+      "expression": null
+    },
+    "mathematical_reason": "rho restricted before interior-anchor boundary interpolation; reduces image without changing hard polytope",
+    "full_vs_used_image_width_ratio": 10.0,
+    "UR_upper_direct_effect": 0,
+    "estimated_certified_extra_F200_headroom": null,
+    "would_alter_formal_proof": "hard geometry need not change, but action mapping/performance protocol and empirical validation would change",
+    "requires_redesign_recertification": "not authorized; requires separate action-authority review and closed-loop validation"
+  }
+]

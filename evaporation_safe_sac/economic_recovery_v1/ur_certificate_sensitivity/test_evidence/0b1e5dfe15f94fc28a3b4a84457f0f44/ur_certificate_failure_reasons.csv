@@ -1,0 +1,2 @@
+candidate,failed_gate,check,value,threshold,associated_state_input,failure_type,numerical
+A0,reference_input,v_ref in U_R minus KZ,-0.032985678301123034,-1e-08,,structural,False

@@ -1,0 +1,12 @@
+{
+  "proposed_alpha010_ep100": {
+    "checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\models\\evaluation\\episode_0100_actor.pth",
+    "sha256": "b6f67b1e3ee5ff33dcef84dd2381eb5888b52c6dde517e0492b1a4d13eedcfd3",
+    "selection": "predeclared episode100, existing validation only; no held-out access"
+  },
+  "proposed_alpha020_rewardcal_ep100": {
+    "checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\models\\evaluation\\episode_0100_actor.pth",
+    "sha256": "6fb6ffb359d7892b3a779ddfaaf008b7f9ae2b79bdfbcf3c94deeddd5282cc82",
+    "selection": "predeclared episode100, existing validation only; no held-out access"
+  }
+}

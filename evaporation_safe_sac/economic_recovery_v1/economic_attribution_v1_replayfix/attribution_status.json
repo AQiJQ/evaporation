@@ -1,0 +1,6 @@
+{
+  "status": "COMPLETE",
+  "missing": [],
+  "correlation_caveat": "correlation is not causation; local residual and paired closed-loop difference are distinct",
+  "state_bins": "per-geometry pooled X2/P2 tertiles; labels 0=low,1=mid,2=high; not safety thresholds"
+}

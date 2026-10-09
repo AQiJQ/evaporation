@@ -1,0 +1,61 @@
+{
+  "schema": "paired_actor_oracle_v1",
+  "protocol": {
+    "schema": "zanon2019_paired_economics_v1",
+    "alpha": 0.1,
+    "steps": 3,
+    "dt_min": 0.016666666666666666,
+    "disturbance_mode": "zanon2019_stochastic",
+    "variances": [
+      2.0,
+      1.0,
+      8.0,
+      5.0
+    ],
+    "initial_state": [
+      25.39,
+      50.125
+    ],
+    "geometry_sha256": [
+      "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+      "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+    ],
+    "safety_constraint_policy": "unchanged; abort physical/input/QP/Omega/robust-region anomalies; W audit only",
+    "baseline": "unchanged paired zero-residual balanced-B controller; not ECC2019 NMPC",
+    "objective": "paired baseline minus SAC economic stage cost; independent normalized constraints",
+    "economic_scale": 200.0,
+    "IAE_TV_tolerance": 0.1,
+    "boundary_allowance": "10% additional baseline outer-10% occupancy; new implementation choice, not paper-defined",
+    "nonlinear_safety_scope": "empirical_only_under_ECC2019_stochastic_disturbance",
+    "observation_dim": 23,
+    "architecture": "original interior anchor Z/Omega, inactive no-jump Gm/Bj",
+    "extra_baseline": "never used for main reward or checkpoint selection"
+  },
+  "search_seed": 2019001,
+  "disturbance_seeds": [
+    420000
+  ],
+  "segment_steps": 10,
+  "candidates": 2,
+  "failed_candidates": 0,
+  "fully_safe_candidates": 2,
+  "joint_witness_count": 0,
+  "witnesses": [],
+  "trajectory_evidence": [
+    {
+      "candidate": 0,
+      "seed": 420000,
+      "path": "evaporation\\tmp\\paired_oracle_smoke_v1\\witness_trajectories\\candidate_0000_seed_420000.csv",
+      "sha256": "bcc49e5a2c8f21568cf0e93faefdf28ff9211da8feca8266396701d9bae45117"
+    },
+    {
+      "candidate": 1,
+      "seed": 420000,
+      "path": "evaporation\\tmp\\paired_oracle_smoke_v1\\witness_trajectories\\candidate_0001_seed_420000.csv",
+      "sha256": "f6ceb0b3fcab531f0b40d4cf77d378d2d8d29176859b0a93224adbb00f9d6568"
+    }
+  ],
+  "interpretation": "No joint witness found by this finite search; not a global impossibility proof",
+  "privileged_oracle": "offline direct shooting knows the evaluated paths; not a deployable policy or fair controller comparator",
+  "training_performed": false
+}

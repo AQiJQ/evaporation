@@ -1,0 +1,21 @@
+{
+  "local_compensation_dP2_dX2": 1.0555935318112437,
+  "compensated_input_derivative_per_X2": [
+    8.338715352593741,
+    0.0
+  ],
+  "compensation_exists": true,
+  "closest_tightened_input_facet": "F200 upper",
+  "input_nearest_margins": [
+    31.07448612665206,
+    0.026627482387709733
+  ],
+  "fixed_P2_X2_increment_linear_upper_limit": 0.0023490559611776835,
+  "local_P2_search_range": [
+    49.7027625872755,
+    50.5472374127245
+  ],
+  "narrow_channel_interpretation": "fixed-P2 headroom is tiny; raising P2 offsets F200 growth. The full P2 corridor width is measured per target, not assumed narrow.",
+  "selected_using_economic_results": false,
+  "selected_using_SAC_results": false
+}

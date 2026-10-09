@@ -1,0 +1,2378 @@
+[
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "reference_reset",
+      "step": 0,
+      "state": [
+        25.39,
+        50.125
+      ],
+      "z": [
+        0.0,
+        0.0
+      ],
+      "source": null,
+      "archived_action": null,
+      "archived_control": null
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14345127365560295,
+      0.13809398487995098,
+      0.021102278215190593,
+      0.1465300263285041
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "reference_reset",
+      "step": 0,
+      "state": [
+        25.400000000000002,
+        50.13307219798317
+      ],
+      "z": [
+        0.0006666666666667708,
+        0.00040360989915839697
+      ],
+      "source": null,
+      "archived_action": null,
+      "archived_control": null
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14278858305493308,
+      0.13769092467020447,
+      0.021764968815860476,
+      0.1469330865382506
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0007364852836630573,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:initial,near_reference",
+      "step": 0,
+      "state": [
+        25.39,
+        50.125
+      ],
+      "z": [
+        0.0,
+        0.0
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        194.86144296829238,
+        212.2551197596565
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14345127365560295,
+      0.13809398487995098,
+      0.021102278215190593,
+      0.1465300263285041
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:early",
+      "step": 20,
+      "state": [
+        25.307152591530865,
+        50.142975795904455
+      ],
+      "z": [
+        -5.201227083474353e-06,
+        0.00011352825318713661
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        210.99316003399423,
+        216.60371018000666
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.387939453125,
+      0.33251953125,
+      0.387939453125,
+      0.33251953125,
+      0.1671488713746552,
+      0.1530267004746328,
+      0.16534001189528785,
+      0.020175497377879627
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.16131717065701848,
+      0.00327056674783318
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:near_maximum_P2",
+      "step": 118,
+      "state": [
+        25.40938712344415,
+        50.25527735818758
+      ],
+      "z": [
+        -0.00010683964058672778,
+        0.0006476466878771795
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        189.3630128584374,
+        217.82229048434783
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.387939453125,
+      0.33251953125,
+      0.387939453125,
+      0.33251953125,
+      0.17275694340711578,
+      0.1462580152598005,
+      0.15973193986282727,
+      0.026944182592711925
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      -0.0549843010985499,
+      0.015456369791244672
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:additional_coverage",
+      "step": 249,
+      "state": [
+        25.383129832678165,
+        50.14055652335405
+      ],
+      "z": [
+        -0.0002868348033654656,
+        0.0013261195255779917
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        195.55709383192777,
+        211.76028577427184
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14374274073736026,
+      0.1367690254236653,
+      0.020810811133433273,
+      0.14785498578478976
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0006044932526483361,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:mid_horizon",
+      "step": 499,
+      "state": [
+        25.39986212749717,
+        50.119261959879886
+      ],
+      "z": [
+        -0.0006190787227560676,
+        0.0025342103401668576
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        191.88660697028195,
+        208.34655288480135
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.144078963160746,
+      0.13556197292941927,
+      0.020474588710047533,
+      0.1490620382790358
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0013616321912829988,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:near_minimum_X2",
+      "step": 557,
+      "state": [
+        25.229246843742377,
+        50.13728452703582
+      ],
+      "z": [
+        -0.0006921087800855019,
+        0.0027993404115085364
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        225.1723298083958,
+        216.18368182958164
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.387939453125,
+      0.33251953125,
+      0.387939453125,
+      0.33251953125,
+      0.16686592732630479,
+      0.15820153306030985,
+      0.16562295594363827,
+      0.015000664792202582
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.3031088684010342,
+      -0.000929716756417058
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:near_median_state",
+      "step": 568,
+      "state": [
+        25.382895589303768,
+        50.15751826223759
+      ],
+      "z": [
+        -0.0007057891277566792,
+        0.0028490049978519283
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        194.61867068336593,
+        210.7634826148847
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14416670978638754,
+      0.13524744879324754,
+      0.02038684208440599,
+      0.14937656241520753
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.001559319931004272,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Strong",
+      "role": "Strong_baseline:late",
+      "step": 999,
+      "state": [
+        25.34139553421396,
+        50.16025327626888
+      ],
+      "z": [
+        -0.0012014972785334465,
+        0.004648577907790551
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage2\\baseline_trajectories\\delta_0.00\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        201.83835521717089,
+        210.36921692326868
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.387939453125,
+      0.33251953125,
+      0.387939453125,
+      0.33251953125,
+      0.168011345638923,
+      0.15075526261395694,
+      0.16447753763102005,
+      0.022446935238555496
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.06976912248878495,
+      -0.05907436581954677
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:initial",
+      "step": 0,
+      "state": [
+        25.39,
+        50.125
+      ],
+      "z": [
+        0.0,
+        0.0
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        195.13611568058496,
+        212.2551197596565
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.1434512732256141,
+      0.1380939848790096,
+      0.02110227864517945,
+      0.14653002632944548
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.002746727122925838,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:early",
+      "step": 20,
+      "state": [
+        25.310856127578056,
+        50.14371818916761
+      ],
+      "z": [
+        0.0002415034689311717,
+        0.00015048202285521779
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        211.19477043783905,
+        216.6037677407771
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.16718644177572353,
+      0.1527768190727496,
+      0.16530244149421952,
+      0.020425378779762835
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.16259678941180356,
+      0.0030048676320732137
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:near_maximum_P2",
+      "step": 118,
+      "state": [
+        25.419536986679166,
+        50.25748508730885
+      ],
+      "z": [
+        0.0005679028090552524,
+        0.0007578524685748075
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        189.43370016450592,
+        217.82127962278702
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.1728676003046269,
+      0.14558015155612952,
+      0.15962128296531616,
+      0.027622046296382926
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      -0.05501391332152763,
+      0.015179986452172195
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:near_reference",
+      "step": 401,
+      "state": [
+        25.400099740861478,
+        50.13418719635659
+      ],
+      "z": [
+        0.00024264183155287152,
+        0.0022306151251719492
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        194.17004226997196,
+        210.0353019282776
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14321889160432025,
+      0.13586551015716425,
+      0.021334660266473286,
+      0.14875850105129082
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0016532616082911148,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:mid_horizon",
+      "step": 499,
+      "state": [
+        25.410851632955865,
+        50.12264540403655
+      ],
+      "z": [
+        0.00011265761521225775,
+        0.0027033674258399067
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        191.94273254964142,
+        208.34600275645158
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14335043279849785,
+      0.13539316418175062,
+      0.0212031190722957,
+      0.14923084702670444
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.0019494590582413403,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:near_minimum_X2",
+      "step": 557,
+      "state": [
+        25.240146056881297,
+        50.14080817141349
+      ],
+      "z": [
+        3.774410160205432e-05,
+        0.0029754237607152196
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        225.24109405591378,
+        216.18583604844534
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.16704230569060288,
+      0.15747416103632467,
+      0.16544657757934017,
+      0.015728036816187757
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.30306002559255085,
+      -0.0011744492912443847
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:near_median_state",
+      "step": 568,
+      "state": [
+        25.39384333384714,
+        50.16106792877941
+      ],
+      "z": [
+        2.370865134032808e-05,
+        0.003026385471213862
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        194.67689738789954,
+        210.76337349351738
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14344044514270474,
+      0.13507042373166062,
+      0.02111310672808881,
+      0.14955358747679443
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.002152233648045575,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "Conservative_baseline:late",
+      "step": 999,
+      "state": [
+        25.352116766929008,
+        50.164756694716594
+      ],
+      "z": [
+        -0.0004849347559295128,
+        0.0048729496880796095
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage3_2d\\baseline_trajectories\\delta_0.01\\seed_420000.csv",
+      "archived_action": [
+        0.0,
+        0.0
+      ],
+      "archived_control": [
+        201.9057702129354,
+        210.37124121067055
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.1682366701831493,
+      0.1500399227534992,
+      0.16425221308679375,
+      0.02316227509901324
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.0697067871627671,
+      -0.05932039766899241
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:initial",
+      "step": 0,
+      "state": [
+        25.39,
+        50.125
+      ],
+      "z": [
+        0.0,
+        0.0
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        191.85255894738046,
+        212.15391573240845
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.1434512732256141,
+      0.1380939848790096,
+      0.02110227864517945,
+      0.14653002632944548
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.002746727122925838,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:early",
+      "step": 20,
+      "state": [
+        25.276181623357473,
+        50.13657176525514
+      ],
+      "z": [
+        -0.001064851195052981,
+        -4.4228196990955954e-05
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        208.73709361688236,
+        216.98154493518285
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.16683005613973328,
+      0.15507907218682745,
+      0.16565882713020977,
+      0.018123125665684976
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.1965417954612727,
+      0.007565852289053091
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:near_reference",
+      "step": 27,
+      "state": [
+        25.40137976619275,
+        50.133249370978646
+      ],
+      "z": [
+        -0.0015206540890725523,
+        -7.277577983877034e-05
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        185.45986992032547,
+        211.84190885720727
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.1666619145116856,
+      0.14676023995372928,
+      0.16582696875825745,
+      0.02644195789878317
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      -0.06209402381757879,
+      -0.04954121533856002
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:near_maximum_P2",
+      "step": 118,
+      "state": [
+        25.371832136390548,
+        50.24566944913597
+      ],
+      "z": [
+        -0.001279981635085821,
+        0.00045149491306652184
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        190.66381180057328,
+        218.2488475767564
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14472880712304104,
+      0.13764257660131612,
+      0.019824744747752514,
+      0.14698143460713894
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.006393383825431673,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:mid_horizon",
+      "step": 499,
+      "state": [
+        25.32405437242177,
+        50.09409337828528
+      ],
+      "z": [
+        -0.0049894424529901326,
+        0.0016943100142805007
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        192.14152476313666,
+        208.2167811939606
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.1484308966225536,
+      0.13639995144803774,
+      0.01612265524823993,
+      0.14822405976041733
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.016973004055726656,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:near_minimum_X2",
+      "step": 557,
+      "state": [
+        25.151820792425262,
+        50.11030617527446
+      ],
+      "z": [
+        -0.004551400532230694,
+        0.00199566353558687
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        223.1141884390835,
+        216.3936918170716
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.16552016160039848,
+      0.16333601664814784,
+      0.16696872166954457,
+      0.009866181204364588
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.3562872937502181,
+      0.0010341509658918216
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:near_median_state",
+      "step": 772,
+      "state": [
+        25.322348241708838,
+        50.13686852431188
+      ],
+      "z": [
+        -0.004527562612677848,
+        0.002873739441345141
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        193.47852277951682,
+        209.63528677326272
+      ]
+    },
+    "mode": "Z_mode_existing_controller",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ]
+    ],
+    "rhs": [
+      0.31074486126652057,
+      0.00026627482387697743,
+      0.3256089413046435,
+      0.10093775488321166,
+      0.14797557741284853,
+      0.13522174074292637,
+      0.016577974457945004,
+      0.1494022704655287
+    ],
+    "row_meanings": [
+      "UR_minus_KZ_nominal_P100_upper",
+      "UR_minus_KZ_nominal_F200_upper",
+      "UR_minus_KZ_nominal_P100_lower",
+      "UR_minus_KZ_nominal_F200_lower",
+      "S_next_X2_upper",
+      "S_next_P2_upper",
+      "S_next_X2_lower",
+      "S_next_P2_lower"
+    ],
+    "center": [
+      0.015424029196170714,
+      -0.04021533745566854
+    ],
+    "omega_next_facet_normals": null
+  },
+  {
+    "context": {
+      "reference": "Primary_Conservative",
+      "role": "archived_oracle_candidate_0002:late",
+      "step": 999,
+      "state": [
+        25.273605395453814,
+        50.12796366557464
+      ],
+      "z": [
+        -0.005001352911766948,
+        0.0036056707273889196
+      ],
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\economic_recovery_v1\\conservative_mechanism_stage4_oracle_training\\oracle\\candidates\\candidate_0002\\seed_420000_trajectory.npz",
+      "archived_action": [
+        -1.0,
+        0.0
+      ],
+      "archived_control": [
+        200.55589927196655,
+        210.8032433845445
+      ]
+    },
+    "mode": "Omega_safe_one_step_QP",
+    "rows": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ],
+      [
+        -0.0,
+        -1.0
+      ],
+      [
+        -0.0007978830751653732,
+        0.00014248341173583867
+      ],
+      [
+        0.005398594863000501,
+        3.0167276084587985e-07
+      ],
+      [
+        0.0007978830751653732,
+        -0.00014248341173583867
+      ],
+      [
+        -0.005398594863000501,
+        -3.0167276084587985e-07
+      ]
+    ],
+    "rhs": [
+      0.38720296784133695,
+      0.33225325652653565,
+      0.38867593840866305,
+      0.33278580597346435,
+      0.16640009673311776,
+      0.15524841568513956,
+      0.1660887865368253,
+      0.017953782167372874
+    ],
+    "row_meanings": [
+      "UR_actual_P100_upper",
+      "UR_actual_F200_upper",
+      "UR_actual_P100_lower",
+      "UR_actual_F200_lower",
+      "Omega_robust_next_facet_0",
+      "Omega_robust_next_facet_1",
+      "Omega_robust_next_facet_2",
+      "Omega_robust_next_facet_3"
+    ],
+    "center": [
+      0.105639635922814,
+      -0.061081942831698925
+    ],
+    "omega_next_facet_normals": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        -0.0
+      ],
+      [
+        0.0,
+        1.0
+      ],
+      [
+        -1.0,
+        -0.0
+      ]
+    ]
+  }
+]

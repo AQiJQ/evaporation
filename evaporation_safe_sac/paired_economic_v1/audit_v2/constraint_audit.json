@@ -1,0 +1,59 @@
+{
+  "schema": "paired_constraint_audit_v1",
+  "protocol": {
+    "schema": "zanon2019_paired_economics_v1",
+    "alpha": 0.1,
+    "steps": 1000,
+    "dt_min": 0.016666666666666666,
+    "disturbance_mode": "zanon2019_stochastic",
+    "variances": [
+      2.0,
+      1.0,
+      8.0,
+      5.0
+    ],
+    "initial_state": [
+      25.39,
+      50.125
+    ],
+    "geometry_sha256": [
+      "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+      "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+    ],
+    "safety_constraint_policy": "unchanged; abort physical/input/QP/Omega/robust-region anomalies; W audit only",
+    "baseline": "unchanged paired zero-residual balanced-B controller; not ECC2019 NMPC",
+    "objective": "paired baseline minus SAC economic stage cost; independent normalized constraints",
+    "economic_scale": 200.0,
+    "IAE_TV_tolerance": 0.1,
+    "boundary_allowance": "10% additional baseline outer-10% occupancy; new implementation choice, not paper-defined",
+    "nonlinear_safety_scope": "empirical_only_under_ECC2019_stochastic_disturbance",
+    "observation_dim": 23,
+    "architecture": "original interior anchor Z/Omega, inactive no-jump Gm/Bj",
+    "extra_baseline": "never used for main reward or checkpoint selection"
+  },
+  "row_count": 630,
+  "sources": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\fixed_evaluation.csv": "85293c1c02b9dd458789d06f30ad1649b53276b4f85cafdc6ca884a1f4c7d60b",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\fixed_evaluation.csv": "235694153ca583b74f824f3f04abbd1c39aafcc9b4d7e3bc938f74477b8a0ae7",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\fixed_evaluation.csv": "63333cbdf4051b032e7640d19a0da126e65f9f3306e540abf2c173fc84221bf9"
+  },
+  "component_scales": [
+    0.2493898964587176,
+    0.05,
+    0.0001,
+    0.005576911801968532,
+    0.01
+  ],
+  "preconditioning": "fixed positive-violation p90, numerical floors; inequality thresholds unchanged",
+  "dominant_constraint_counts": {
+    "x2": 215,
+    "p2": 9,
+    "tv_p100": 0,
+    "tv_f200": 369,
+    "boundary": 2
+  },
+  "feasible_positive_rows": 5,
+  "joint_checkpoint_count": 0,
+  "late_infeasible_rows": 150,
+  "warning": "reused development validation; no independent test; no proof of global feasibility/infeasibility"
+}

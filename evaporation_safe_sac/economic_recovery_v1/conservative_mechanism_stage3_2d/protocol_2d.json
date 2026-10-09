@@ -1,0 +1,122 @@
+{
+  "schema": "reference2d_stage3",
+  "deltas_X2": [
+    0.01,
+    0.02,
+    0.03,
+    0.05,
+    0.1,
+    0.15,
+    0.2
+  ],
+  "strong_reference": [
+    25.39,
+    50.125
+  ],
+  "common_initial_state": [
+    25.39,
+    50.125
+  ],
+  "difference_step_sizes": [
+    0.0001,
+    0.0001
+  ],
+  "sensitivity_step_multipliers": [
+    0.5,
+    2.0
+  ],
+  "derivative_rtol": 1e-06,
+  "derivative_atol": 1e-07,
+  "P2_range": [
+    49.7027625872755,
+    50.5472374127245
+  ],
+  "P2_range_rule": "intersection of physical/S bounds and Strong P2 +/- max(0.05, 2*abs(local compensation slope)*0.20)",
+  "P2_compensation_slope": 1.0555935318112437,
+  "P2_fallback_grid_points": 401,
+  "P2_root_xtol": 1e-10,
+  "P2_gate_boundary_tolerance": 1e-08,
+  "tightened_input_numerical_inset_physical": 1e-08,
+  "search_rule": "nearest P2 to Strong: monotone exact steady-input bracket roots, then complete gates; if root fails, fixed 401-point full-gate grid and nearest pass/fail boundary refinement",
+  "nearest_claim": "exact input-bound root if complete gates pass; otherwise nearest detected full-gate interval to 1e-8, not a proof excluding sub-grid disconnected islands",
+  "validation_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "steps": 1000,
+  "dt_min": 0.016666666666666666,
+  "disturbance_variances": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "margin_increase_tolerance": 0.0001,
+  "penalty_numerical_guard_abs": 0.0002,
+  "selection_rule": "first ascending X2 target with full reference gates, ten safe rollouts, each minimum margin increased >1e-4 and mean J increased >2e-4; never replace after selection",
+  "reference_only_changes": [
+    "exact nonlinear reference/steady input",
+    "affine equilibrium intercept",
+    "nominal policy offset",
+    "Omega coordinate origin only (same physical set)"
+  ],
+  "frozen_geometry_sha256": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\candidate_designs\\refine_1_X2_25.39000000_P2_50.12500000.npz": "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\Omega_anchor_B_vertices.csv": "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  },
+  "frozen_v2_sources": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2.py": "1fcb5df433a073887d4124fa9c3593645eebd39273d4d6bea80ad775c152033c",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_objective.py": "fe1f9ba0d7615d8b6f82652fd56dc96b99c6c0046438c65c8f30aa0dc6c26043",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_report.py": "5305d1d03127a3dbb0ad412cfbbac557a63f98ac5bf76b9c4a64da9cbfa1e654",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_tests.py": "a9ff0029d3e5f93f70f408478b16d14d5b3699b9d6e4d5ab1b6197179ac5dd3a"
+  },
+  "stage2_snapshot": {
+    "baseline_conservatism_sweep.csv": "41be1bb1c55d4db126e15365253c99a48a11588ed4b50ea801cb57dfcd61c900",
+    "baseline_conservatism_sweep.json": "5e6c59106dd054f15ba45cd45553c513ee36b5ac67ed42c3d369b34d2c158b0f",
+    "baseline_conservatism_sweep_per_seed.csv": "9087b58857b198f8d8d897ed35e88cdabbccaca585576dd77f8f794bcf7a4da4",
+    "baseline_safety_economics_tradeoff.png": "6b42507f335969ba76e8d3285b8fd3a0773d5066ff495b85b54adf715948094d",
+    "baseline_trajectories\\delta_0.00\\seed_420000.csv": "b3de7cc136d1a6c1d220b58614d7fa5d162fbb79b81dadbfb1318092da3fff13",
+    "baseline_trajectories\\delta_0.00\\seed_420001.csv": "074cfbf1869f255212d35cd66ba21ecc2942db4dc5b72ce8ec285d633c883ee0",
+    "baseline_trajectories\\delta_0.00\\seed_420002.csv": "338ca2d2cda43038b681116ec05f9c01b74e50686b8cd51897667c75ec32a82c",
+    "baseline_trajectories\\delta_0.00\\seed_420003.csv": "754f5049f9b15bb098655f1c679e68e09b0df5eb27ada966da7550170ea04413",
+    "baseline_trajectories\\delta_0.00\\seed_420004.csv": "6d18ae9a4ed2974aa74ce186cbba160aefda53bb4ddba62f9fd2b7402489b54e",
+    "baseline_trajectories\\delta_0.00\\seed_420005.csv": "c9ed2af000c3a20bc804f71e6bd87f4662d7dc775541270415c2e97aef380670",
+    "baseline_trajectories\\delta_0.00\\seed_420006.csv": "2e15186fde5552e0f003a453570868f9652f754abba168be5633dcb0a2848b38",
+    "baseline_trajectories\\delta_0.00\\seed_420007.csv": "23dd6201c9f749d787c97d4748ad231040313f2b6e1fc3ca269b095b01a180d3",
+    "baseline_trajectories\\delta_0.00\\seed_420008.csv": "744a7921a06e442461597f337c7653ae420532bfb50af959b657787d208d838e",
+    "baseline_trajectories\\delta_0.00\\seed_420009.csv": "c86a7d0d28a7dd22ad637510561a996d699d0ad8398e05538549f4f6b07c9b60",
+    "conservatism_economic_penalty.json": "76c864e9c3bb5c12c9172ce8fd39c89519c4d8e66cb7caa1a1d5b019e892ae73",
+    "conservative_baseline_selection.json": "1ae6b8a0fca56504a139a392b03c8b2aea0b9096f9dfe90f331fac70579ed8f5",
+    "oracle_conservative_summary.json": "29b37d631ecbdb2b52242336e65b812c44f7f027a1f02f89df9809e6ee36e33e",
+    "protocol.json": "2ac0e3066f55f3ecebf82693a405feb50832b05ade01adaeb74e86aebad7467b",
+    "reference_checks\\delta_0.00.json": "682a9cfbd51ea5e4cd6ce68f42e8d2195b122379ba7cd3529e3a9bb1006812bb",
+    "reference_checks\\delta_0.05.json": "7a30b50cf5ca3fd784fc2a220a25fd2213d3686c898c8f886a65b25ea13bed91",
+    "reference_checks\\delta_0.10.json": "8339130e544e1dac77382d88ded135b69a38cc74ca3e2452b38b050d25e53be3",
+    "reference_checks\\delta_0.15.json": "3801a6afcd097299440f90a576c8bce2a87ce3f8ed4890a1a39adc5f7418dcb8",
+    "reference_checks\\delta_0.20.json": "f4ae30f53cce6d0b57f4dabd5144867b1277595bd053e847d0d4b1b18c084d09",
+    "tests_receipt.json": "b1d5a660b609da0bd9b1047c46ca700294fee22bb2b7f6671788637810ca3bc2"
+  },
+  "source_hashes": {
+    "zanon2019_reference2d.py": "00b683f9c9d931f6c1f33695693f53e1e601843a963dd9466f52d556d0053516",
+    "zanon2019_reference2d_tests.py": "c83917412dad6d304e8d45e0575abd0c4ca714c1aabcf9487623c461075ca858"
+  },
+  "smoothness_lambda": 17.613805207960148,
+  "economic_scale": 200.0,
+  "oracle_budget": 512,
+  "oracle_segments": [
+    10,
+    5
+  ],
+  "oracle_search_seed": 190019,
+  "training_performed": false,
+  "final_test_performed": false,
+  "statistical_scope": "finite nominal coverage and stochastic numerical validation; not continuous-domain nonlinear certification"
+}

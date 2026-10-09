@@ -1,0 +1,549 @@
+{
+  "episodes": 100,
+  "steps": 1000,
+  "seed": 42,
+  "stochastic_residual_scale": 0.3,
+  "authority_pilot": true,
+  "fresh_initialization": true,
+  "warm_start": false,
+  "validation_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "reserved_final_test_seeds": [
+    430000,
+    430001,
+    430002,
+    430003,
+    430004,
+    430005,
+    430006,
+    430007,
+    430008,
+    430009,
+    430010,
+    430011,
+    430012,
+    430013,
+    430014,
+    430015,
+    430016,
+    430017,
+    430018,
+    430019,
+    430020,
+    430021,
+    430022,
+    430023,
+    430024,
+    430025,
+    430026,
+    430027,
+    430028,
+    430029,
+    430030,
+    430031,
+    430032,
+    430033,
+    430034,
+    430035,
+    430036,
+    430037,
+    430038,
+    430039,
+    430040,
+    430041,
+    430042,
+    430043,
+    430044,
+    430045,
+    430046,
+    430047,
+    430048,
+    430049
+  ],
+  "final_test_performed": false,
+  "action_scale_location": "raw action -> environment scale -> unchanged interior anchor -> original QP; replay stores raw action",
+  "mode": "zanon2019_stochastic",
+  "observation_dim": 23,
+  "device": "cuda",
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "formal_safety_claim": false,
+  "architecture": "frozen balanced B interior-anchor Z/Omega; unchanged Gm/Bj inactive in no-jump Experiment I",
+  "reward": "unchanged weighted reward",
+  "weights": {
+    "state_recovery": 5.501466348605391,
+    "P100_move": 108.11728453584045,
+    "F200_move": 81.880449071658,
+    "saturation": 3.666163865052666
+  },
+  "reward_scope": "out-of-W RPI event/excess remains excluded from replay reward and fully audited",
+  "variance_F1_X1_T1_T200": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "evaluation_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "evaluation_every": 5,
+  "baseline": "same architecture zero residual; NOT ECC2019 RL-NMPC",
+  "warmup_steps": 5000,
+  "selection_rules": {
+    "hard_gate": "all validation physical/input/QP/Omega counts zero; W diagnostic only",
+    "economics": "every validation seed J_policy<=1.005 J_base (1% also reported)",
+    "hierarchy": "post-warmup, empirical safety, 0.5% comparability, min/p1/p5 margin and near-boundary fraction, disturbance rejection, control quality, economics tie-break",
+    "selection_ties": "exact lexicographic tuple, no scalar weighted sum; Pareto comparison tolerance 1e-10",
+    "boundary_occupancy": "reported, not an invented absolute rejection threshold",
+    "sweet_spot": "review full validation Pareto front; never select smallest alpha automatically",
+    "scope": "implementation choice for reproduction; not specified in the paper"
+  },
+  "evaluation_stop_rule": "after each fixed paired evaluation, any baseline/SAC physical/input/QP/Omega anomaly stops before further training; W alone does not stop",
+  "frozen_experiment_config": {
+    "seed": 42,
+    "episodes": 100,
+    "steps_per_episode": 1000,
+    "benchmark_profile": "zanon2016",
+    "dt_min": 0.016666666666666666,
+    "experiment_mode": "proposed",
+    "liquid_holdup": 20.0,
+    "pressure_capacitance": 4.0,
+    "recirculation_f3": 50.0,
+    "cp": 0.07,
+    "latent_evaporation": 38.5,
+    "latent_steam": 36.6,
+    "ua2": 6.84,
+    "ua1_factor": 0.16,
+    "t2_p_coeff": 0.5616,
+    "t2_x_coeff": 0.3126,
+    "t2_offset": 48.43,
+    "t3_p_coeff": 0.507,
+    "t3_offset": 55.0,
+    "t100_p_coeff": 0.1538,
+    "t100_offset": 90.0,
+    "disturbance_nominal": [
+      10.0,
+      5.0,
+      40.0,
+      25.0
+    ],
+    "disturbance_half_range": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "disturbance_full_half_range": [
+      0.5,
+      0.5,
+      4.0,
+      5.0
+    ],
+    "disturbance_scale_scan_enabled": true,
+    "disturbance_scale_scan_grid": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "disturbance_scale_bisection_iterations": 8,
+    "disturbance_scale_scan_seed": 420016,
+    "disturbance_scale_random_samples": 2000,
+    "disturbance_scale_static_outer_iterations": 1,
+    "disturbance_scale_k_max_iterations": 8,
+    "disturbance_scale_m_angle_max_degrees": 8.0,
+    "disturbance_scale_m_angle_step_degrees": 4.0,
+    "full_disturbance_stress_steps": 2000,
+    "disturbance_mode": "zanon2019_stochastic",
+    "disturbance_hold_steps": 50,
+    "disturbance_estimate_ema": 0.8,
+    "main_experiment_protocol": "zanon2019_stochastic_operating_uncertainty",
+    "paper2016_training_scenarios": [
+      "pressure_positive",
+      "pressure_negative",
+      "concentration_positive"
+    ],
+    "state_lower": [
+      25.0,
+      40.0
+    ],
+    "state_upper": [
+      100.0,
+      80.0
+    ],
+    "input_lower": [
+      100.0,
+      100.0
+    ],
+    "input_upper": [
+      400.0,
+      400.0
+    ],
+    "linearization_state": [
+      25.39,
+      50.125
+    ],
+    "linearization_input": [
+      194.86144296829238,
+      216.27665350522335
+    ],
+    "safe_center_state": [
+      25.39,
+      50.125
+    ],
+    "state_scale": [
+      15.0,
+      20.0
+    ],
+    "input_scale": [
+      100.0,
+      100.0
+    ],
+    "hinf_q": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "hinf_r": [
+      [
+        0.002,
+        0.0
+      ],
+      [
+        0.0,
+        0.25
+      ]
+    ],
+    "hinf_gamma": 3000.0,
+    "hinf_state_weight_scales": [
+      0.5,
+      1.0,
+      2.0,
+      4.0
+    ],
+    "hinf_input_weight_scales": [
+      0.5,
+      0.75,
+      1.0,
+      1.5,
+      2.0,
+      3.0,
+      4.0
+    ],
+    "rpi_inflation": 1.2,
+    "rpi_series_max_terms": 5000,
+    "disturbance_bound_samples": 8000,
+    "invariant_set_margin": 0.995,
+    "safety_design_state_half_range": [
+      2.0,
+      3.0
+    ],
+    "safety_design_input_half_range": [
+      35.0,
+      30.0
+    ],
+    "invariant_nominal_half_range_physical": [
+      1.0,
+      1.0
+    ],
+    "restrict_invariant_to_local_window": false,
+    "theta_initial_safe_state_half_range": [
+      0.5,
+      0.5
+    ],
+    "theta_initial_safe_input_half_range": [
+      5.0,
+      5.0
+    ],
+    "theta_learning_enabled": true,
+    "theta_cost_learning_rate": 0.01,
+    "theta_cost_scale": 600.0,
+    "theta_cost_update_every_episodes": 1,
+    "theta_set_update_every_episodes": 5,
+    "theta_min_transition_samples": 256,
+    "theta_batch_size": 256,
+    "theta_replay_capacity": 20000,
+    "theta_parameter_clip": 2.0,
+    "theta_m_angle_step_degrees": 2.0,
+    "theta_m_max_angle_degrees": 35.0,
+    "theta_w_online_inflation": 1.05,
+    "theta_k_initial_gain": [
+      [
+        -8.02154403,
+        -1.67958159
+      ],
+      [
+        -0.30078081,
+        1.75387715
+      ]
+    ],
+    "theta_k_update_every_episodes": 5,
+    "theta_k_initial_step": [
+      [
+        0.2,
+        0.08
+      ],
+      [
+        0.03,
+        0.05
+      ]
+    ],
+    "theta_k_min_step": 0.001,
+    "theta_k_max_step": 0.5,
+    "theta_k_step_growth": 1.1,
+    "theta_k_step_shrink": 0.7,
+    "theta_k_acceptance_tolerance": 1e-05,
+    "theta_k_evaluation_steps": 250,
+    "theta_k_evaluation_seed_count": 2,
+    "theta_rpi_area_weight": 1.0,
+    "theta_x_minus_z_area_weight": 0.5,
+    "theta_invariant_area_weight": 0.2,
+    "theta_static_k_max_iterations": 100,
+    "theta_static_outer_iterations": 2,
+    "robust_set_refinement_samples": 10000,
+    "robust_set_refinement_max_iterations": 6,
+    "robust_set_refinement_tolerance": 0.001,
+    "robust_region_initial_state_half_range": [
+      2.0,
+      3.0
+    ],
+    "robust_region_initial_input_half_range": [
+      35.0,
+      30.0
+    ],
+    "robust_region_growth_factor": 1.25,
+    "robust_region_max_scale": 4.0,
+    "robust_region_bisection_iterations": 8,
+    "robust_region_random_samples": 10000,
+    "robust_region_membership_tolerance": 1e-08,
+    "nominal_mpc_horizon": 10,
+    "nominal_mpc_stage_hessian": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.6,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.02,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.02
+      ]
+    ],
+    "nominal_mpc_terminal_hessian": [
+      [
+        4.0,
+        0.0
+      ],
+      [
+        0.0,
+        2.0
+      ]
+    ],
+    "residual_action_scale": [
+      0.36,
+      0.3
+    ],
+    "qp_min_residual_authority": 0.05,
+    "residual_parameterization": "state_dependent_polytope",
+    "residual_reserve_mode": "fraction_of_max",
+    "residual_reserve_fraction": 0.8,
+    "proposed_nominal_controller": "safe_center_tracking",
+    "gamma_rl": 0.99,
+    "tau": 0.005,
+    "alpha_initial": 0.1,
+    "alpha_min": 0.005,
+    "entropy_tuning_warmup_updates": 2000,
+    "auto_entropy_tuning": true,
+    "target_entropy": -2.0,
+    "actor_learning_rate": 0.0003,
+    "critic_learning_rate": 0.0003,
+    "entropy_learning_rate": 0.0003,
+    "hidden_dim": 256,
+    "batch_size": 256,
+    "replay_capacity": 100000,
+    "warmup_steps": 5000,
+    "updates_per_step": 1,
+    "evaluation_every": 5,
+    "evaluation_seed_count": 3,
+    "holdout_seed_count": 20,
+    "save_every": 25,
+    "actor_ema_decay": 0.0,
+    "sac_selection_scales": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "sac_min_incremental_return_per_step": 0.0,
+    "sac_min_economic_improvement_percent": 0.001,
+    "sac_final_candidate_count": 0,
+    "safe_reference_grid_points": 81,
+    "safe_reference_derivative_tolerance": 1e-07,
+    "training_initial_radius_fraction": 0.9,
+    "evaluation_initial_radius_fraction": 0.75,
+    "reset_within_disturbance_identification_window": false,
+    "training_boundary_start_probability": 0.3,
+    "training_segment_steps": 0,
+    "disturbance_adaptation_steps": 2000,
+    "disturbance_adaptation_switch_steps": 250,
+    "projection_penalty_weight": 5.0,
+    "feasible_action_mapping_penalty_weight": 0.2,
+    "input_move_penalty_weight": 0.01,
+    "state_violation_event_penalty": 100.0,
+    "input_violation_event_penalty": 100.0,
+    "rpi_violation_event_penalty": 20.0,
+    "qp_infeasible_event_penalty": 5.0,
+    "state_excess_square_weight": 1000.0,
+    "input_excess_square_weight": 1000.0,
+    "rpi_excess_square_weight": 200.0,
+    "qp_intervention_tolerance": 0.001,
+    "paper2016_state_recovery_penalty_weight": 5.501466348605391,
+    "paper2016_f200_move_penalty_weight": 81.880449071658,
+    "omega_performance_shaping_enabled": true,
+    "paper2016_p100_move_penalty_weight": 108.11728453584045,
+    "paper2016_saturation_penalty_weight": 3.666163865052666,
+    "paper2016_random_shock_episode_probability": 0.8,
+    "paper2016_endpoint_shock_episode_probability": 0.2,
+    "paper2016_training_shock_scale_lower": 0.2,
+    "paper2016_training_shock_scale_upper": 1.0,
+    "reward_cost_scale": 200.0,
+    "output_dir": "evaporation_safe_sac\\outputs_state_dependent_safe_sac_500x300\\seed_42",
+    "paper2016_steady_state": [
+      25.0,
+      49.743
+    ],
+    "paper2016_steady_input": [
+      191.713,
+      215.888
+    ],
+    "robust_economic_reference_state": [
+      25.39,
+      50.125
+    ],
+    "robust_economic_reference_input": [
+      194.86144296829238,
+      216.27665350522335
+    ],
+    "paper2016_prediction_horizon": 200,
+    "paper2016_smoke_horizon": 20,
+    "paper2016_simulation_seconds": 300,
+    "stochastic_residual_scale": 0.3,
+    "authority_pilot": true,
+    "abort_on_first_uncertified_step": true
+  },
+  "frozen_SAC_config": {
+    "gamma": 0.99,
+    "tau": 0.005,
+    "actor_lr": 0.0003,
+    "critic_lr": 0.0003,
+    "alpha_lr": 0.0003,
+    "hidden_dim": 256,
+    "alpha": 0.1,
+    "alpha_min": 0.005,
+    "entropy_tuning_warmup_updates": 2000,
+    "auto_entropy_tuning": true,
+    "target_entropy": -2.0,
+    "actor_ema_decay": 0.0
+  },
+  "frozen_geometry_sources": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\candidate_designs\\refine_1_X2_25.39000000_P2_50.12500000.npz": "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\Omega_anchor_B_vertices.csv": "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  },
+  "training_disturbance_seed_rule": "seed*1000000 + episode; action RNG=path_seed+77",
+  "empirical_G_definition": "L2 norm of fixed-B state error / L2 norm of disturbance standardized by literal standard deviations; not Hinf gain",
+  "paper_specification": {
+    "source": "Zanon, Gros, Bemporad, ECC 2019, Numerical Example pp. 2261-2262 and Fig. 2 p. 2263",
+    "paper_reported_disturbance_variances": {
+      "X1": 1,
+      "F1": 2,
+      "T1": 8,
+      "T200": 5
+    },
+    "paper_feed_flow_notation_note": "prose says flow F2, variance subscript says F1; project plant uses exogenous F1",
+    "paper_model_equations_and_economic_cost": "omitted in ECC2019; referred to earlier publications",
+    "paper_random_distribution": "not specified in the paper",
+    "paper_per_step_independence": "not specified in the paper",
+    "paper_initial_state": "not specified in the paper",
+    "paper_sampling_time": "not specified in the paper",
+    "paper_evaluation_seed_or_realization": "not specified in the paper",
+    "paper_exact_gain_formula": "not specified in the paper",
+    "paper_gain_baselines": "14% vs naive-initial-guess NMPC; 12% vs nominal-economic-tuned NMPC",
+    "paper_state_relaxation": "all state bounds softened by s_k in Eq. (3e); W_s=I and w_s=1 in Numerical Example; exact solver handling not specified in the paper",
+    "paper_fig2_horizon": "horizontal axis shown 0-1000; textual simulation horizon not specified in the paper",
+    "paper_fig2_cost_difference_sign": "not algebraically specified in the paper; plotted values are mostly negative",
+    "implementation_choice_for_reproduction": {
+      "mode": "zanon2019_stochastic",
+      "distribution": "independent zero-mean Gaussian per step",
+      "reported_scale_interpretation": "literal variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "nominal_F1_X1_T1_T200": [
+        10.0,
+        5.0,
+        40.0,
+        25.0
+      ],
+      "initial_state": [
+        25.39,
+        50.125
+      ],
+      "horizon_samples": 1000,
+      "sampling_seconds": 1.0,
+      "piecewise_hold_min_max": null,
+      "negative_F1_X1_clipping": "clip to zero, count each clip",
+      "Fig2_difference": "l_SAC - l_paired_zero_residual; negative favors SAC",
+      "training_observation": "23D: original 19D plus [0,0,0,normalized Omega q radius]; no future information",
+      "finite_jump_supervisor": "not used in no-state-jump Experiment I; unchanged in Experiment III",
+      "state_constraints": "unchanged hard physical constraints, unlike the paper's softened NMPC state bounds"
+    }
+  }
+}

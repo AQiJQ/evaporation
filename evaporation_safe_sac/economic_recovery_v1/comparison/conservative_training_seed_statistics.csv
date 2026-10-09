@@ -1,0 +1,11 @@
+metric,n,mean,sample_std,ci95_half_width,minimum,maximum
+mean_economic_improvement_pct,0,,,,,
+economic_win_fraction,0,,,,,
+mean_X2_shift_vs_baseline,0,,,,,
+std_X2,0,,,,,
+centered_X2_MAE,0,,,,,
+minimum_X2_margin,0,,,,,
+P100_TV,0,,,,,
+F200_TV,0,,,,,
+P100_delta_RMS,0,,,,,
+F200_delta_RMS,0,,,,,

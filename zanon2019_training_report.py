@@ -1,7 +1,8 @@
 """Reporting and checkpoint selection for the frozen stochastic SAC experiment.
 
-No controller, reward, observation, disturbance, or optimization rule is
-changed here. Performance thresholds are empirical selection references.
+No controller, observation, disturbance, or optimization rule is changed
+here. Reward components are reported without changing their computation.
+Performance thresholds are empirical selection references.
 """
 from __future__ import annotations
 
@@ -15,6 +16,7 @@ from .zanon2019_benchmark import (
     StochasticInterior23, paired_rollouts, sample_disturbance_path,
     trajectory_metrics, write_csv,
 )
+from .zanon2019_authority import AuthorityController, authority_assessment
 
 
 CERTIFICATION_STATUS = "empirical_only_under_ECC2019_stochastic_disturbance"
@@ -76,6 +78,8 @@ def evaluation_safety_anomalies(rows):
 
 def metrics(records, cfg, model, design, omega):
     result = trajectory_metrics(records, cfg, model, design)
+    from .zanon2019_reward_audit import reward_metrics
+    result.update(reward_metrics(records))
     states = np.asarray([r["state"] for r in records])
     inputs = np.asarray([r["control"] for r in records])
     w = np.asarray([r["w_hat"] for r in records])
@@ -83,6 +87,11 @@ def metrics(records, cfg, model, design, omega):
     next_n = (model.normalized_state(states) @ design.a.T
               + model.normalized_input(inputs) @ design.b.T + design.affine + w)
     next_x = model.physical_state(next_n)
+    for axis, name in enumerate(("X2", "P2")):
+        loss = float(np.mean(((next_x[:, axis] - cfg.robust_economic_reference_state[axis])
+                             / cfg.state_scale[axis]) ** 2))
+        result[f"reward_{name}_recovery_loss_mean"] = loss
+        result[f"reward_{name}_recovery_penalty_mean"] = cfg.paper2016_state_recovery_penalty_weight * loss
     hx, bx = facets(omega)
     omega_after = np.max((next_n - design.z_ref) @ hx.T - bx, axis=1) > 1e-8
     omega_before = np.array([not bool(r["in_Omega_before"]) for r in records])
@@ -98,6 +107,14 @@ def metrics(records, cfg, model, design, omega):
     next_bad = np.any((next_x < cfg.state_lower - 1e-8)
                      | (next_x > cfg.state_upper + 1e-8), axis=1)
     result["physical_state_violation_steps"] = int(np.sum(next_bad))
+    # Include the final transition in safety-margin diagnostics. Performance
+    # IAE/G definitions above remain unchanged for historical comparability.
+    margin = next_x[:, 0] - 25.
+    result.update({"X2_margin_mean": float(np.mean(margin)),
+        "X2_margin_min": float(np.min(margin)),
+        **{f"X2_margin_p{p}": float(np.percentile(margin, p)) for p in (1, 5, 50)},
+        **{f"X2_margin_fraction_lt_{label}": float(np.mean(margin < threshold))
+           for label, threshold in (("0p05", .05), ("0p10", .10), ("0p20", .20))}})
     result["X2_violation_count"] = int(np.sum(
         (states[:, 0] < 25. - 1e-8) | (next_x[:, 0] < 25. - 1e-8)))
     result["P2_physical_violation_count"] = int(np.sum(
@@ -110,6 +127,13 @@ def metrics(records, cfg, model, design, omega):
     result["Omega_mode_fraction"] = float(np.mean(modes == "Omega_safe_one_step_QP"))
     result["outside_Omega_fraction"] = float(np.mean(omega_before))
     raw = np.asarray([r["raw_action"] for r in records])
+    result["stochastic_residual_scale"] = float(getattr(cfg, "stochastic_residual_scale", 1.))
+    result["scaled_action_norm_mean"] = float(np.mean(np.linalg.norm(
+        result["stochastic_residual_scale"] * raw, axis=1)))
+    for axis in range(2):
+        result[f"raw_actor_mean_{axis}"] = float(np.mean(raw[:, axis]))
+        result[f"raw_actor_std_{axis}"] = float(np.std(raw[:, axis]))
+        result[f"raw_actor_saturation_fraction_{axis}"] = float(np.mean(np.abs(raw[:, axis]) >= .99))
     rho = np.max(np.abs(raw), axis=1)
     requested = np.asarray([r["residual"] for r in records])
     applied = np.asarray([r["applied_residual"] for r in records])
@@ -183,6 +207,12 @@ def assessment(rows, episode, global_step, warmup):
         "pareto_nondominated": False,
         "certification_status": CERTIFICATION_STATUS,
     }
+    # Component diagnostics do not change selection or the evaluation protocol.
+    # Replay-equivalent excludes RPI terms, while raw eval return retains them.
+    for label in ("baseline", "SAC"):
+        for key in rows[0]:
+            if key.startswith(label + "_reward_"):
+                result[key] = mean(key)
     for key in (
         "residual_applied_ratio", "residual_requested_applied_ratio",
         "residual_requested_norm_mean", "residual_applied_norm_mean",
@@ -245,7 +275,7 @@ class CheckpointSelection:
                                    "checkpoint": str(self.model_dir / (name + ".pth"))}
 
 
-def trace_rows(baseline, policy):
+def trace_rows(baseline, policy, alpha=1.):
     rows, cumulative = [], 0.
     for step, (b, p) in enumerate(zip(baseline, policy)):
         delta = float(p["economic_cost"] - b["economic_cost"])
@@ -255,6 +285,9 @@ def trace_rows(baseline, policy):
                **{name: float(p["disturbance"][i])
                   for i, name in enumerate(("F1", "X1", "T1", "T200"))}}
         for prefix, r in (("baseline", b), ("SAC", p)):
+            row[f"{prefix}_stochastic_residual_scale"] = alpha
+            for i, v in enumerate(r["raw_action"]):
+                row[f"{prefix}_scaled_action_{i}"] = float(alpha * v)
             for key in ("state", "control", "raw_action", "residual",
                         "applied_residual", "interior_anchor", "boundary_target", "w_hat"):
                 for i, v in enumerate(r[key]):
@@ -263,7 +296,15 @@ def trace_rows(baseline, policy):
                         "qp_feasible", "safety_mode", "collapsed_action",
                         "interior_chebyshev_radius", "final_verification_gap",
                         "applied_displacement_from_baseline", "physical_state_violation",
-                        "physical_input_violation", "robust_region_violation"):
+                        "physical_input_violation", "robust_region_violation",
+                        "economic_reward", "state_recovery_loss", "state_recovery_penalty",
+                        "p100_move_loss", "p100_move_penalty", "f200_move_loss", "f200_move_penalty",
+                        "saturation_loss", "saturation_penalty", "projection_penalty",
+                        "mapping_penalty", "move_penalty", "rpi_violation_event_penalty",
+                        "rpi_excess_penalty", "total_reward", "safety_penalty", "reward_safety_penalty",
+                        "state_violation_penalty", "input_violation_penalty", "qp_infeasible_penalty",
+                        "state_excess_penalty", "input_excess_penalty",
+                        "rpi_penalty_excluded_from_training_reward"):
                 row[f"{prefix}_{key}"] = r[key]
         rows.append(row)
     return rows
@@ -287,7 +328,7 @@ class FixedPairedEvaluator:
     def evaluate(self, agent, episode, global_step, label=None):
         rows = []
         for seed, (path, base, bm, metadata) in self.cache.items():
-            ctrl = StochasticInterior23(self.cfg, self.model, self.design, self.omega, self.domain)
+            ctrl = AuthorityController(self.cfg, self.model, self.design, self.omega, self.domain)
             _, records, _ = run_episode(
                 self.cfg, self.model, ctrl, agent, None,
                 np.random.default_rng(seed + 900000), training=False, global_step=0,
@@ -310,11 +351,18 @@ class FixedPairedEvaluator:
                 "disturbance_clip_count_X1": metadata["physical_clip_counts_F1_X1"][1],
                 "certification_status": CERTIFICATION_STATUS,
             }
+            row.update({"economic_degradation_pct": -row["economic_improvement_percent"],
+                "economic_comparable_0p5pct": pm["J_econ"] <= 1.005 * bm["J_econ"],
+                "economic_comparable_1pct": pm["J_econ"] <= 1.01 * bm["J_econ"],
+                "stochastic_residual_scale": float(getattr(self.cfg, "stochastic_residual_scale", 1.))})
             rows.append(row)
             folder = label or f"episode_{episode:04d}"
             write_csv(self.output_dir / "evaluation_trajectories" / folder / f"seed_{seed}.csv",
-                      trace_rows(base, records))
-        return rows, assessment(rows, episode, global_step, self.cfg.warmup_steps)
+                      trace_rows(base, records, getattr(self.cfg, "stochastic_residual_scale", 1.)))
+        status = assessment(rows, episode, global_step, self.cfg.warmup_steps)
+        if getattr(self.cfg, "authority_pilot", False):
+            status = authority_assessment(rows, status)
+        return rows, status
 
 
 def plot_learning(rows, output_dir):
@@ -370,7 +418,7 @@ def classify(statuses):
     return "C" if learned else "not_assessed_no_post_warmup_checkpoint"
 
 
-class EvidenceController(StochasticInterior23):
+class EvidenceController(AuthorityController):
     """Read-only audit hook; never changes the candidate, input or observation.
 
     Capture before run_episode can raise, and audit the final next state too.
@@ -393,6 +441,7 @@ class EvidenceController(StochasticInterior23):
                "next_state_observed": False}
         for name, values in (("state", state), ("control", control),
                              ("raw_action", actor_action),
+                             ("scaled_action", info["scaled_actor_action"]),
                              ("disturbance", self.disturbance_path[index]),
                              ("requested_residual", info["requested_residual"]),
                              ("applied_residual", info["applied_residual"])):

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "attribution_paths": 50,
+  "component_rows": 200,
+  "p100_certificates": 5,
+  "p100_paths": 50,
+  "frozen_C2_8_reproduced": true,
+  "production_hashes_unchanged": true,
+  "source_sha256": "04ef84ffb86b1443d45fc6471f5299c5b281378ab43c140c4e96618e73026452",
+  "witness_not_claimed_complete": true,
+  "safety_scope": "Gaussian empirical only; no continuous-domain claim"
+}

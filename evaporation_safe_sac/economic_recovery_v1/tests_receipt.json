@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "unit_tests": 132,
+  "optional_CasADi_passed": true,
+  "integration_suites": [
+    "evaporation.test"
+  ],
+  "source_hashes": {
+    "zanon2019_economic_recovery.py": "fc85c8260290db10c2b08d935d31285f98ca4bf55560bc301a49a31af257fa47",
+    "zanon2019_economic_recovery_metrics.py": "3ea11340aaa6026480a4eb620da86074a3fc33eb1382b6db78738711df9d683d",
+    "zanon2019_economic_recovery_reference.py": "3406e3065ac0975ae20bcfda1b41e4e0b6a391c415cdf8fffbfe67fd4243aaed",
+    "zanon2019_economic_recovery_report.py": "cc5b496fc61ffa0a9eb1768547ec71d950f09e8edfcc3790f0aac8bb727703ca",
+    "zanon2019_economic_recovery_tests.py": "d12ca9e0d3fed79854c77264c9f1317512fe1b1f8e17bbef48c2edeabda8c7bd"
+  },
+  "training_performed": false
+}

@@ -1,0 +1,17 @@
+{
+  "training_seeds_available": [
+    42
+  ],
+  "training_seeds_not_run": [
+    2027,
+    314159
+  ],
+  "representative_seed": 420000,
+  "presentation_checkpoint": "episode100 for each seed, not chosen by performance",
+  "final_selection_rule_locked": false,
+  "final_test_performed": false,
+  "figures_pending": false,
+  "total_control_activity_definition": "(TV_P100/100+TV_F200/100)/1000",
+  "performance_sampling": "pre-step 1000 states; minimum margin includes terminal next-state",
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance"
+}

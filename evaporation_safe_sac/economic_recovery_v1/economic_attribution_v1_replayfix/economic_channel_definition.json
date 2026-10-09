@@ -1,0 +1,20 @@
+{
+  "identity": "Delta ell = c_X2(d)*Delta next_X2 + c_P2(d)*Delta next_P2 + c_P100(d)*Delta P100 + 0.6*Delta F200",
+  "c_Q": "600/latent_steam - 10.09/latent_evaporation",
+  "c_heat": "c_Q * ua1_factor*(F1+F3)",
+  "c_state": "-c_heat + 10.09*F1*cp/latent_evaporation",
+  "c_X2": "c_state*t2_x_coeff",
+  "c_P2": "c_state*t2_p_coeff",
+  "c_P100": "c_heat*t100_p_coeff",
+  "reference_coefficients": [
+    -48.352232321822434,
+    -86.86696632097083,
+    23.81763735354481,
+    0.6
+  ],
+  "runtime_model_sha256": "0d1b153f4d5bc2beaeaba03a3890c8c49c1c70317f2d3077ae6f808a6ea5cea7",
+  "diagnostic_source_sha256": "a78a1415a016e556a5ee49118da2f10b2953d06b0fbbd7627f4b4b8537404de5",
+  "no_plant_linearization": true,
+  "per_stage_identity_tolerance": 1e-08,
+  "physical_cost_not_reward": true
+}

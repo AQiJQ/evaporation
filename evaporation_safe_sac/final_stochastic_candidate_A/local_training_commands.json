@@ -1,0 +1,60 @@
+[
+  {
+    "training_seed": 2027,
+    "argv": [
+      "C:\\Users\\cushy\\PycharmProjects\\evaporation\\.venv-cuda\\Scripts\\python.exe",
+      "-m",
+      "evaporation.zanon2019_train",
+      "--disturbance-mode",
+      "zanon2019_stochastic",
+      "--stochastic-residual-scale",
+      "0.10",
+      "--authority-pilot",
+      "--episodes",
+      "100",
+      "--steps",
+      "1000",
+      "--seed",
+      "2027",
+      "--eval-every",
+      "5",
+      "--eval-seeds",
+      "10",
+      "--eval-seed-start",
+      "420000",
+      "--device",
+      "cuda",
+      "--output-dir",
+      "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027"
+    ]
+  },
+  {
+    "training_seed": 314159,
+    "argv": [
+      "C:\\Users\\cushy\\PycharmProjects\\evaporation\\.venv-cuda\\Scripts\\python.exe",
+      "-m",
+      "evaporation.zanon2019_train",
+      "--disturbance-mode",
+      "zanon2019_stochastic",
+      "--stochastic-residual-scale",
+      "0.10",
+      "--authority-pilot",
+      "--episodes",
+      "100",
+      "--steps",
+      "1000",
+      "--seed",
+      "314159",
+      "--eval-every",
+      "5",
+      "--eval-seeds",
+      "10",
+      "--eval-seed-start",
+      "420000",
+      "--device",
+      "cuda",
+      "--output-dir",
+      "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159"
+    ]
+  }
+]

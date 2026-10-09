@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "unit_tests": 221,
+  "skipped": [
+    {
+      "test": "setUpClass (evaporation.ecc2019_reproduction_tests.SolverTests)",
+      "reason": "Optional CasADi solver unavailable in this environment"
+    }
+  ],
+  "optional_environment_checks": {
+    "command": [
+      "C:\\Users\\cushy\\PycharmProjects\\evaporation\\.venv-ecc2019\\Scripts\\python.exe",
+      "-m",
+      "unittest",
+      "evaporation.ecc2019_reproduction_tests.SolverTests",
+      "-v"
+    ],
+    "passed": true,
+    "tests": 3
+  },
+  "total_test_methods": 224,
+  "integration_suites": [
+    "evaporation.test"
+  ],
+  "source_hashes": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2.py": "1fcb5df433a073887d4124fa9c3593645eebd39273d4d6bea80ad775c152033c",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_objective.py": "fe1f9ba0d7615d8b6f82652fd56dc96b99c6c0046438c65c8f30aa0dc6c26043",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_report.py": "5305d1d03127a3dbb0ad412cfbbac557a63f98ac5bf76b9c4a64da9cbfa1e654",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_tests.py": "a9ff0029d3e5f93f70f408478b16d14d5b3699b9d6e4d5ab1b6197179ac5dd3a"
+  },
+  "training_performed": false
+}

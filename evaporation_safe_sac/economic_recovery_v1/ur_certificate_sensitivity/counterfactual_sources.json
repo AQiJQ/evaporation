@@ -1,0 +1,56 @@
+{
+  "actor": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\models\\episode_0100_actor.pth",
+  "actor_sha256": "1720aa431ff64414f6d3ed38d1de1b7768fefbfaeeea393d786ec872e5264007",
+  "paths": {
+    "420000": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420000.csv",
+      "sha256": "58142870da6a6541991bf98ffedb969145e7b89a76c79af9cf102f01a4541847",
+      "disturbance_sha256": "d6ce907f7015ee5b91110f32465a72a26651da028ad6404d7e579afb1e76ac91"
+    },
+    "420001": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420001.csv",
+      "sha256": "8200800cd869ff77d8ad4ce20ac320fadbfbcbbc1c78a541b617716e0334189a",
+      "disturbance_sha256": "8a7386283c865522e55125378cd67caf8501f7b7d2f109eb762e172adb57762a"
+    },
+    "420002": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420002.csv",
+      "sha256": "0027370ffd7a51dc2613df73f08455f192b21a7ab8052d828034fabae6a93375",
+      "disturbance_sha256": "b8d7491f5a6c977861bb7d08ba3e543e9606efaedbefe2221892c3bccba78078"
+    },
+    "420003": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420003.csv",
+      "sha256": "4bf051ed9849c875c3b77a6a56327fb24254ee38d23c33243fc17054296a87b1",
+      "disturbance_sha256": "320e904b8cab530f3e315791ab872cfa1c9a3c91f112599e2cef82d1b31f2708"
+    },
+    "420004": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420004.csv",
+      "sha256": "8e402c10bf8fbcfd1541d0e4c797b3cd09ca94db6df454c88fc52e38ba6421a5",
+      "disturbance_sha256": "c3aa0905c8056f57655908d2241858123b782cb536b467ada3d096a1f0e7ba68"
+    },
+    "420005": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420005.csv",
+      "sha256": "72d56b6b146c9a0d7ff1d8652c695bbe8bb20f3ca4b179184180e420de9ca1ad",
+      "disturbance_sha256": "87ba1ad8455c0d0155d3da0ca0610a6a38526e0ce71a8551ec88875a70cdaca2"
+    },
+    "420006": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420006.csv",
+      "sha256": "c939e7b0bb52a85d62447ff5d3f034627ca308a25a5653bd18d5f26bd981b0cd",
+      "disturbance_sha256": "f394512c18a3d5f4376d3f186b190b057dcc64e64c526a40aae6f0fb928259f9"
+    },
+    "420007": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420007.csv",
+      "sha256": "1ef89e6851baec7294f87d73628a95a54e334a10cbda0fe933e711d0ad1026fc",
+      "disturbance_sha256": "cf60c747f142a0c5462e18aac48b90408fce78db24c4560569e70b806e824418"
+    },
+    "420008": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420008.csv",
+      "sha256": "51f5bdd0e662e6109af820b135459f95bc8d74c1d3c848b3360cd1d5a1d67c1b",
+      "disturbance_sha256": "ef6a3f16677478ea0e8f78e7483422bba1bad06476fee821ae0aa75038cbec5a"
+    },
+    "420009": {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\evaluation_trajectories\\episode_0100\\seed_420009.csv",
+      "sha256": "7518550a67bd39507684c92c9aeb8aa76753b5e35599c3bcb4f7d204d9aa9033",
+      "disturbance_sha256": "8bdb21e83d3a71536f762ffe38ff7c1941a2ac57acf4755bb447a40774346707"
+    }
+  }
+}

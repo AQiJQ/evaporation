@@ -1,0 +1,31 @@
+{
+  "schema": "zanon2019_paired_economics_v1",
+  "alpha": 0.1,
+  "steps": 1000,
+  "dt_min": 0.016666666666666666,
+  "disturbance_mode": "zanon2019_stochastic",
+  "variances": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "initial_state": [
+    25.39,
+    50.125
+  ],
+  "geometry_sha256": [
+    "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  ],
+  "safety_constraint_policy": "unchanged; abort physical/input/QP/Omega/robust-region anomalies; W audit only",
+  "baseline": "unchanged paired zero-residual balanced-B controller; not ECC2019 NMPC",
+  "objective": "paired baseline minus SAC economic stage cost; independent normalized constraints",
+  "economic_scale": 200.0,
+  "IAE_TV_tolerance": 0.1,
+  "boundary_allowance": "10% additional baseline outer-10% occupancy; new implementation choice, not paper-defined",
+  "nonlinear_safety_scope": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "observation_dim": 23,
+  "architecture": "original interior anchor Z/Omega, inactive no-jump Gm/Bj",
+  "extra_baseline": "never used for main reward or checkpoint selection"
+}

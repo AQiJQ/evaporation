@@ -1,0 +1,43 @@
+{
+  "schema": "strong_paired_v2_seed42_300",
+  "training_seed": 42,
+  "episodes": 300,
+  "steps": 1000,
+  "eval_every": 5,
+  "device": "cpu",
+  "fresh_initialization": true,
+  "resume": false,
+  "original_production_UR": true,
+  "C2_8_enabled": false,
+  "protocol": {},
+  "frozen_SAC_config": {},
+  "frozen_experiment_config": {
+    "replay_capacity": 20,
+    "warmup_steps": 1000,
+    "robust_economic_reference_state": [
+      25.39,
+      50.125
+    ],
+    "batch_size": 256
+  },
+  "source_and_evidence_hashes": {},
+  "lambda_smooth": 17.613805207960148,
+  "fixed_validation_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "disturbance_seed_rule": "42*1000000+episode; local action rng=path_seed+77",
+  "objective": "unchanged v2 paired economics /200 minus fixed excess-move smoothness and safety dual",
+  "return_definition": "undiscounted sum of actual replay-objective components; not legacy diagnostic reward",
+  "presentation": "all fixed evaluations; no economic-only automatic final selection",
+  "final_test_performed": false,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance"
+}

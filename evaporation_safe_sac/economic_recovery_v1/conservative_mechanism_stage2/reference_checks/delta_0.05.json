@@ -1,0 +1,72 @@
+{
+  "reference": [
+    25.44,
+    50.125
+  ],
+  "steady_input": [
+    195.07140239372663,
+    216.84351882333064
+  ],
+  "derivative": [
+    2.842170943040401e-15,
+    4.440892098500626e-16
+  ],
+  "gates": {
+    "nonlinear_steady": true,
+    "affine_steady": true,
+    "reference_in_S": true,
+    "reference_input_tightened": false,
+    "frozen_arrays_identical": true,
+    "physical_Omega_identical": true,
+    "Hinf": true,
+    "RPI": true,
+    "Omega": true,
+    "verification_QP": true,
+    "residual_authority": true,
+    "nominal_W_sample_coverage": true
+  },
+  "passed": false,
+  "limiting_gates": [
+    "reference_input_tightened"
+  ],
+  "minimum_residual_authority": 0.05748429746599868,
+  "spectral_radius": 0.9980369585493017,
+  "sampled_Hinf_norm": 2999.9974135453253,
+  "gamma": 3000.0,
+  "RPI_max_facet_excess": 7.23076952837548e-07,
+  "nominal_W_max_facet_excess": -2.0175659217047067e-06,
+  "RPI_gate_definition": "unchanged stable infinite Minkowski-sum support with existing eigenbasis tail bound",
+  "saved_RPI_outer_polygon_direct_containment_passed": false,
+  "changed_because_reference_changed": [
+    "nonlinear steady state/input",
+    "z_ref/v_ref",
+    "nominal policy offset",
+    "affine predictor equilibrium intercept",
+    "Omega error coordinates (same physical set)",
+    "recovery reward reference"
+  ],
+  "kept_identical": [
+    "a",
+    "b",
+    "k",
+    "w_vertices",
+    "rpi_boundary",
+    "robust_state_lower",
+    "robust_state_upper",
+    "robust_input_lower",
+    "robust_input_upper",
+    "u_lower_tight",
+    "u_upper_tight",
+    "invariant_lower",
+    "invariant_upper",
+    "nominal_policy_gain",
+    "physical/robust constraints",
+    "normalization origins at B",
+    "QP formulation",
+    "interior-anchor mapping",
+    "SAC/observation",
+    "stochastic distribution"
+  ],
+  "predictor_choice": "fixed B Jacobians with exact new equilibrium intercept; not new Jacobian linearization",
+  "nonlinear_certification": "finite nominal mismatch probes only; stochastic safety is empirical"
+}

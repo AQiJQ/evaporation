@@ -1,0 +1,20 @@
+Layer,P100_lower,P100_upper,F200_lower,F200_upper,Variable_Type,Source_Function,Context
+A Physical U,100.0,400.0,100.0,400.0,absolute applied physical u,config.ExperimentConfig.input_lower/input_upper,both references
+B KZ saved outer polygon LP,-6.233117589043205,7.719525592855468,-23.158177636688016,33.22532564262745,physical feedback correction,min/max diag(input_scale) K e over saved polygon,both references
+B KZ design support,-6.233051182035646,7.719459185847944,-23.158177636678833,33.225325642612304,physical feedback correction,"control._rpi_support(A+BK,W,+/-K)",both references
+B Pure physical U minus KZ (design support),106.23305118203565,392.28054081415206,123.15817763667883,366.7746743573877,absolute nominal physical v,physical U minus directional RPI supports,both references
+B Pure physical U minus saved polygon KZ,106.2331175890432,392.28047440714454,123.15817763668801,366.77467435737253,absolute nominal physical v,vertex/LP support of saved outer polygon,both references
+C Frozen robust actual-input region U_R,156.06749765579238,233.65538828079238,183.02470038022335,249.52860663022335,absolute actual physical u,theta_learning.OnlineThetaLearner._robust_region_bounds,both references
+C/D Actual runtime U_R minus KZ,162.30054883782802,225.93592909494444,206.18287801690218,216.30328098761106,absolute nominal/reference physical v,"control.build_safety_design: u_lo+support_lower, u_hi-support_upper",both references
+E Full interior-anchor feasible mapping,162.30054883782802,225.93592909494444,206.18287801690218,216.30328098761106,absolute nominal v at reference e=0,omega_interior_anchor.InteriorAnchorController.act,Strong
+E Raw actor image (frozen alpha),191.60535355524596,197.96889158095757,211.64789558538106,212.65993588245195,absolute applied u at reference e=0,zanon2019_authority.AuthorityController.act,Strong
+E Raw actor applied residual,-3.2560894130464355,3.107448612665206,-0.6072241742754312,0.40481612279545515,physical residual relative to safe zero-residual baseline,interior-anchor homothety; verified real act calls,Strong
+F Z QP nominal input rows,162.30054883782802,225.93592909494444,206.18287801690218,216.30328098761106,absolute nominal v; not final u,control.SafeController.act rows 0..3,Strong
+G Omega QP actual input rows,156.06749765579238,233.65538828079238,183.02470038022335,249.52860663022335,absolute final applied u; q=u_norm-v_ref,omega_safe_action_filter_diagnosis.qp_rows rows 0..3,Strong
+G Omega QP full feasible extrema at xi=0,156.06749765579238,233.65538828079238,183.02470038022335,249.52860663022335,absolute final applied u; diagnostic unselected mode,Omega input rows plus robust-next-Omega facets,Strong
+E Full interior-anchor feasible mapping,162.30054883782802,225.93592909494444,206.18287801690218,216.30328098761106,absolute nominal v at reference e=0,omega_interior_anchor.InteriorAnchorController.act,Primary_Conservative
+E Raw actor image (frozen alpha),191.67163723077562,198.03517525648726,211.64789558538106,212.65993588245195,absolute applied u at reference e=0,zanon2019_authority.AuthorityController.act,Primary_Conservative
+E Raw actor applied residual,-3.263454265883066,3.1000837598285753,-0.6072241742754312,0.40481612279545515,physical residual relative to safe zero-residual baseline,interior-anchor homothety; verified real act calls,Primary_Conservative
+F Z QP nominal input rows,162.30054883782802,225.93592909494444,206.18287801690218,216.30328098761106,absolute nominal v; not final u,control.SafeController.act rows 0..3,Primary_Conservative
+G Omega QP actual input rows,156.06749765579238,233.65538828079238,183.02470038022335,249.52860663022335,absolute final applied u; q=u_norm-v_ref,omega_safe_action_filter_diagnosis.qp_rows rows 0..3,Primary_Conservative
+G Omega QP full feasible extrema at xi=0,156.06749765579238,233.65538828079238,183.02470038022335,249.52860663022335,absolute final applied u; diagnostic unselected mode,Omega input rows plus robust-next-Omega facets,Primary_Conservative

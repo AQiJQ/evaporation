@@ -1,0 +1,2 @@
+status,reason
+unavailable,Replay not serialized by save_checkpoint; no training transition trace; evaluation is not a replay proxy

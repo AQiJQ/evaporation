@@ -1,0 +1,38 @@
+{
+  "reward_source": "training_log.csv: reward_return",
+  "definition": "undiscounted episode sum of actual replay reward; no entropy bonus",
+  "training_steps_per_episode": 1000,
+  "alpha": 0.1,
+  "moving_average_window": 5,
+  "missing_component_policy": "seed42 has no historical decomposition; no imputation",
+  "CI": "mean +/- t(0.975,df=2)*sample_std/sqrt(3), pointwise raw episodic returns",
+  "warning": "Supplementary randomized training evidence, not fixed paired evaluation or independent final test",
+  "policy_lock": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\locked_final_policies.json",
+  "policy_lock_sha256": "7d624c216f0bd017044b1ff0997147460c656d2c5123fe7dec2b5156de11e704",
+  "seeds": [
+    {
+      "training_seed": 42,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\training_log.csv",
+      "sha256": "0a8453d35caf20e32a0d5720deea318b79ce2bdde58edeae6cc72a5ffffce801",
+      "mean_first10": -296.7154216195614,
+      "mean_last10": -155.435345734268,
+      "episode100": -127.9672844021419
+    },
+    {
+      "training_seed": 2027,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed2027\\training_log.csv",
+      "sha256": "e7d2911433940961eeb7eeb26e5661ef90f1c77542e8f0e5ed1e4caa1afa330d",
+      "mean_first10": -259.7750949809952,
+      "mean_last10": -177.39383368258342,
+      "episode100": -330.78322959857627
+    },
+    {
+      "training_seed": 314159,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed314159\\training_log.csv",
+      "sha256": "a32c4cca143d182741ad83609f02c47c29c0e40105de410529dd1005a6da0633",
+      "mean_first10": -337.5869509214538,
+      "mean_last10": -173.18551928514427,
+      "episode100": -271.99572978096256
+    }
+  ]
+}

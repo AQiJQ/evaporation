@@ -1,0 +1,300 @@
+{
+  "protocol": {
+    "model_source_sha256": "0d1b153f4d5bc2beaeaba03a3890c8c49c1c70317f2d3077ae6f808a6ea5cea7",
+    "config_source_sha256": "b76419bedc1157473738e81d2af0a561f760fd036137a279052b5879cf224627",
+    "dt_min": 0.016666666666666666,
+    "initial_state": [
+      25.39,
+      50.125
+    ],
+    "common_reference": [
+      25.0,
+      49.743
+    ],
+    "paired_diagnostic_reference": [
+      25.39,
+      50.125
+    ],
+    "nominal": [
+      10.0,
+      5.0,
+      40.0,
+      25.0
+    ],
+    "variances": [
+      2.0,
+      1.0,
+      8.0,
+      5.0
+    ],
+    "disturbance_mode": "zanon2019_stochastic",
+    "steps": 1000,
+    "economic_cost_convention": "existing next_state/final_actual_input/current_exogenous cost",
+    "source_origin": "implementation_choice_for_reproduction",
+    "cost_excludes_slack_and_SAC_shaping": true
+  },
+  "source_manifests": {
+    "proposed_alpha010_ep100": "1e2ad8c121fd3b4a9e684b51356db40bace117f5a795c80c415a10f65a7948b9",
+    "proposed_alpha020_rewardcal_ep100": "eb6892ef38f168fac94f9cf96bee7c12789b4a635e4e9dfb676f4926e5c254fb"
+  },
+  "frozen_design_hashes": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\candidate_designs\\refine_1_X2_25.39000000_P2_50.12500000.npz": "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\Omega_anchor_B_vertices.csv": "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  },
+  "frozen_SAC_candidates": {
+    "proposed_alpha010_ep100": {
+      "checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\models\\evaluation\\episode_0100_actor.pth",
+      "sha256": "b6f67b1e3ee5ff33dcef84dd2381eb5888b52c6dde517e0492b1a4d13eedcfd3",
+      "selection": "predeclared episode100, existing validation only; no held-out access"
+    },
+    "proposed_alpha020_rewardcal_ep100": {
+      "checkpoint": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\models\\evaluation\\episode_0100_actor.pth",
+      "sha256": "6fb6ffb359d7892b3a779ddfaaf008b7f9ae2b79bdfbcf3c94deeddd5282cc82",
+      "selection": "predeclared episode100, existing validation only; no held-out access"
+    }
+  },
+  "paired_disturbance_identity_verified": true,
+  "archived_nonlinear_transition_verified": true,
+  "archived_economic_cost_verified": true,
+  "disturbance_metadata": {
+    "420000": {
+      "seed": 420000,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420001": {
+      "seed": 420001,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420002": {
+      "seed": 420002,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420003": {
+      "seed": 420003,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420004": {
+      "seed": 420004,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420005": {
+      "seed": 420005,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420006": {
+      "seed": 420006,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420007": {
+      "seed": 420007,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420008": {
+      "seed": 420008,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    },
+    "420009": {
+      "seed": 420009,
+      "mode": "zanon2019_stochastic",
+      "steps": 1000,
+      "reported_scale_interpretation": "literal_variance",
+      "variances_F1_X1_T1_T200": [
+        2.0,
+        1.0,
+        8.0,
+        5.0
+      ],
+      "standard_deviations_F1_X1_T1_T200": [
+        1.4142135623730951,
+        1.0,
+        2.8284271247461903,
+        2.23606797749979
+      ],
+      "physical_clip_counts_F1_X1": [
+        0,
+        0
+      ],
+      "hold_lengths": null
+    }
+  },
+  "final_test_performed": false,
+  "ECC_label": "ECC2019_reproduction_with_documented_assumptions",
+  "ECC_available": false,
+  "performance_state_samples": "1000 left endpoints",
+  "safety_state_samples": "1001 including final endpoint",
+  "G_emp_definition": "||state-B||2 / ||exogenous disturbance standardized by sqrt(literal variance)||2; NOT Hinf norm",
+  "boundary_definition": "COMMON physical100..400 inputs; frozen ours robust-bound occupancy is separate internal diagnostic",
+  "qualitative_Fig2_status": "pending review of trained ECC traces, no numerical curve fitting",
+  "economics_comparison_excludes_slack_and_shaping": true
+}

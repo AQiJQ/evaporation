@@ -1,0 +1,2925 @@
+{
+  "passed": true,
+  "collisions": [],
+  "scanned_files": [
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\comparison\\authority_decision.json",
+      "sha256": "fb4a6595d8749b05a0227e1ff90314cb067a325fbf07c90593301d95631d355f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\comparison\\pilot_commands.json",
+      "sha256": "173a2cdde4ceaf5a1b8b731150debee2674ade625f901cd309e6c8ca922cb0ab",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "8a6a0fc61825e59bb4555f90ee61d7c608c6311ecefd6a35282e5f2642f0748b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "1e2ad8c121fd3b4a9e684b51356db40bace117f5a795c80c415a10f65a7948b9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "85293c1c02b9dd458789d06f30ad1649b53276b4f85cafdc6ca884a1f4c7d60b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "c0aeb32fc785cf55161a04fdf40f96de37c45de7948ef68b48fb46de469f66b9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\run_summary.json",
+      "sha256": "dbe95312432f8ae41f367251cdf3e53e0576f951a54536db578e64179a9c6855",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\selected_checkpoint_per_seed.csv",
+      "sha256": "be681b610169986df34c9f86b1c397ee89c752d30469b6c19602706f6c93c26e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha010_seed42_100x1000\\training_log.csv",
+      "sha256": "0a8453d35caf20e32a0d5720deea318b79ce2bdde58edeae6cc72a5ffffce801",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "6b420087d5d51f27188b31674470a240cdf44bc9977b8cee81c93b10cbc87130",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "2d2d06abed9ec2b70b623b43452bc0177909eec992ca6abfdf8304fe1f599bda",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "49d9d749b70acd5352eaccd17153f039a60181f4e100d9f807e1323bd243f89c",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "ea0b5b5ec0c7f6b0c9d0466a54b1a9614330151baa64e1c218f4b9c2e7326213",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\run_summary.json",
+      "sha256": "8c29a9661d32a4cf805557a79cf6c25d45adf6bf6f405b6a82e8aa550ae4887c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\selected_checkpoint_per_seed.csv",
+      "sha256": "d39caf623a32f6131854962990355c866987ef389e8628b2e6d3f03f33d859d4",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000\\training_log.csv",
+      "sha256": "fef885b5d8e7809a585fb2066d15423c18f46da1c68a0356ae5e6380116ed43f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "8fec823b87a77578496226c8499c4f2f023b7d0cc8154b7df687e0e0f0c00a25",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "585250a72e904a9cc69bdbe04be86313dd764a9bc91d3f37a13df25eed755b2e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "fe29ff82937e78dc66389c5871a56f220d9a74dce3bcbdbcfa43dd02f8b52d07",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "b0d78892c72214f06a5a47f57adfa70d10636646c3421185f9223ea77a1b5259",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\run_summary.json",
+      "sha256": "ee3371171b0504cbd2645eb537a778ad754b42a027870bec50639727c5205b1b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\selected_checkpoint_per_seed.csv",
+      "sha256": "51a682eede6daf9c090f4a5374b682626eb8e026daaba7b9f7b0b5767897b86f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha030_seed42_100x1000\\training_log.csv",
+      "sha256": "ef26a552e45ef378451c42caa90bcf2eb87a25678ba3a2dca1eacd1472dccac6",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "8faeda5f36363212799e61039e6a916337d1219cfd4d10e2c2484a23f39bc298",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\evaluation_abort.json",
+      "sha256": "4e7574f134efa6fe721d4e1f60ff135b3b0472d6ea4d03bd3d3699ca6793ab1d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\evaluation_failure_metrics.csv",
+      "sha256": "7b94e0255a0c51a166d9ecd3a132a839bae9da888a7d5cd510b88753154e9005",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "0809ee1cf9819d8ca35a2591429b9c7dac175d021a6b2817f51fbce5c3ac4db9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "b640063fcd9847f622d70d39760a2c41e8c218988699504fab7861b01d026880",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "5dbf2a07ab13c1c99f4e7585083699cbf101b8b5d8058938e0f08c54cd924c40",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\run_summary.json",
+      "sha256": "703633ff529c7f82401410b271901cb1a888d4660f8d33de1840d303ad9c1ee3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha050_seed42_100x1000\\training_log.csv",
+      "sha256": "246c3ce32660e2e254dbf65219c48044de0238d6efd9ec5411a3f3f744ac514f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_rho_d_smoke\\disturbance_experiment_summary.json",
+      "sha256": "4bedd1c0034203ddceb80c97ccc15273f60eb63ab19e9a7b2d2eaf6d1addb606",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_rho_d_smoke\\disturbance_scale_summary.json",
+      "sha256": "b0c6fad6fabb0d197c8b6749f8198d8a507ba4b1cbbce86c756a139cfb190255",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_scale_scan_zanon2016\\disturbance_experiment_summary.json",
+      "sha256": "a28fb55372630021519620083801a750773315bbf55c45892c9d414ba537d7a7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_scale_scan_zanon2016\\disturbance_scale_summary.json",
+      "sha256": "bd154664918dea781a6da3950b9c15919c4af154ecff6aef5074be6518882e52",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_scale_scan_zanon2016_independent_k\\disturbance_experiment_summary.json",
+      "sha256": "3cc4f4aa7a5c8c568c777fbc693e5fa39ada2e872db82d35f97e252cbda335c4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\disturbance_scale_scan_zanon2016_independent_k\\disturbance_scale_summary.json",
+      "sha256": "76c6fa776fab2c7f8831701ab4bcb34f8e2895e4d0f3489ef20ef972764ed23f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\final_checkpoint_selection_rule.json",
+      "sha256": "9869d3b770a556d4206407db1689bbcf3de8baebbc36da34aebaf33738e1a210",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\history\\pre_final_v1_protocol_lock.json",
+      "sha256": "018a76e5196f64cffffd6056687d50abbbccd83a7ef00e110f0b3fce71796fdb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\history\\pre_final_v1_seed42_validation_lock.json",
+      "sha256": "f2634891d97775f7b567cafce027005810a065e0621aa17bf4c7ae5eca0a0c6b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed_reproducibility_validation.csv",
+      "sha256": "6161e3f36038bffff025f08d8cda67d425fcefed76c49e03e5d741cf5d46751e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\final_stochastic_candidate_A\\training_seed_reproducibility_validation.json",
+      "sha256": "25cdb0c0ebe7a8fd3d0b42a25826cdef2ede9e944bbfc4fa6db14bf363274e4c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_economic_reference_search_07faaa1\\reference_search_summary.json",
+      "sha256": "ad82860a3325df72167ace10bcca4136c94a29beabf9407f891791f091ad4645",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_economic_reference_search_07faaa1\\top10_certified_candidates.json",
+      "sha256": "c12549422b157d77ea51e5636e1cad332384b561b82a07b4458fd9e8a495be38",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\reference_search_summary.json",
+      "sha256": "e838af56371403a90086481ecf318c18793f5644ab2820ffb4188a69652ac530",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\top10_certified_candidates.json",
+      "sha256": "c27ac8251665a1a9cb9f723c74674dbcc47b22d55af1a49640009b9087a2ccb4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_pareto\\pareto_summary.json",
+      "sha256": "8e53c92abd92138c643c4326986b62ce70d86b14e2390a6bf9b747318b2dbfb8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\summary.json",
+      "sha256": "4ae30368cbc77a6485e0ac086ea00beb85118d2aa1a0768d62f621caeef48d88",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\comparison_protocol.json",
+      "sha256": "ed7f765be7e90a0547a9c265d806f7a58378f6444b8bcfc708a391c75ae71685",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\development_candidate_registry.json",
+      "sha256": "8c25b894230e9ed09455217620061b30625b43ed9cb95abbf39e660dea0a7084",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\ecc2019_assumptions.json",
+      "sha256": "c9f024dbb16f57ed45697f617348256961223f007243f4f4e695520ebe66a91f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\ecc2019_development_comparison.csv",
+      "sha256": "ee402e8903b69876cdbfda679689555c43aca8513399dcf2e848c2784453c536",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\matched_economic_comparison.csv",
+      "sha256": "d62923ae1100b062baf676db0a6ac930eae3cf4fce9264410cd2dfe5ba04b567",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\ours_internal_safety_diagnostics.csv",
+      "sha256": "2db356bb694bfa3041601aa3c7676d176218a9d11fa9c724494ae442711269cc",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\per_seed_comparison.csv",
+      "sha256": "ee402e8903b69876cdbfda679689555c43aca8513399dcf2e848c2784453c536",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_ecc2019_reproduction\\solver_smoke.json",
+      "sha256": "fda6b124dba1eee2f2c075a80a5cf254177f4f6d688554217cca3aad8a07b262",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_action_realizability_B\\action_realizability_summary.json",
+      "sha256": "772deeafaaea25e8eef47bd03b76ce1dec933331a366906fc6f145f7d405a712",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x300\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x300\\run_summary.json",
+      "sha256": "618d614066f550de328c887f9356b311c72032f6d18b555049a6ddf730dc866f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50\\baseline_reward_calibration.json",
+      "sha256": "32a03fce377805868b9dade3542cc2cd123c3c472b6108ee60db518a749bda48",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50\\run_summary.json",
+      "sha256": "90ae6da1a29ee48d9dfa4e3cde1e74bb75cbf2184658769d7ab83d7224355490",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_evalidentity\\baseline_reward_calibration.json",
+      "sha256": "32a03fce377805868b9dade3542cc2cd123c3c472b6108ee60db518a749bda48",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_evalidentity\\run_summary.json",
+      "sha256": "90ae6da1a29ee48d9dfa4e3cde1e74bb75cbf2184658769d7ab83d7224355490",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_final\\baseline_reward_calibration.json",
+      "sha256": "32a03fce377805868b9dade3542cc2cd123c3c472b6108ee60db518a749bda48",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_final\\run_summary.json",
+      "sha256": "90ae6da1a29ee48d9dfa4e3cde1e74bb75cbf2184658769d7ab83d7224355490",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_identity\\baseline_reward_calibration.json",
+      "sha256": "32a03fce377805868b9dade3542cc2cd123c3c472b6108ee60db518a749bda48",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_identity\\run_summary.json",
+      "sha256": "90ae6da1a29ee48d9dfa4e3cde1e74bb75cbf2184658769d7ab83d7224355490",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_paircheck\\baseline_reward_calibration.json",
+      "sha256": "32a03fce377805868b9dade3542cc2cd123c3c472b6108ee60db518a749bda48",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constrained_smoke_1x50_paircheck\\run_summary.json",
+      "sha256": "90ae6da1a29ee48d9dfa4e3cde1e74bb75cbf2184658769d7ab83d7224355490",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_constraint_audit_obs23\\audit_summary.json",
+      "sha256": "606050b8a53f2986309fb7e1c11e7669e011ae370243b0d12a57e91dc0daee57",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_event_supervisor_B\\summary.json",
+      "sha256": "e71b80929ab02c7fc4fbc6330ef248839747868399547485df283d1be21e32d6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_event_supervisor_B\\trajectory_summary.csv",
+      "sha256": "db9526811d382085d79b1b909ba9a70886869b5068241db2597d6a695367b5fb",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_obs23_smoke_1x41\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_obs23_smoke_1x41\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "367759b15f6078922a3ea2122645d400d3d43d766696ab8bbeaff8a80d268c27",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_obs23_smoke_1x41\\run_summary.json",
+      "sha256": "bd9dc49452a7c6842911da58d80c7be3e1cc16f0e36feb3efd5266c314ee0977",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_1x50\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_1x50\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "63aa2d254db0c861e33eb1c86ab6c759bec873b7cdc300e93f88c4211cbaebde",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_1x50\\run_summary.json",
+      "sha256": "ade5d82a7843b6287bd13a3ab34e7509aaaa6e251c7defca8995fbef30dbb859",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_3x50\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_3x50\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "4ab5780bb9ecc04cc865d06c259c79a73380819b95d32093588d2fc6bb934f28",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_sac_smoke_3x50\\run_summary.json",
+      "sha256": "6fc5a297b9427461f4d660a021246252456476a579cbafac324568c01908d23b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_dwell_shock_B\\summary.json",
+      "sha256": "fe581556af2e18bd5217824d25321d4fe82704ae8cbca4ec83f9d1520fdaeb3f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_feasible_mapping_smoke\\baseline_reward_calibration.json",
+      "sha256": "bb54742995a7279999b7aaca3edec16f660a881aa237738347791b22ac8a13e8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_feasible_mapping_train_smoke_1x41\\baseline_reward_calibration.json",
+      "sha256": "bb54742995a7279999b7aaca3edec16f660a881aa237738347791b22ac8a13e8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_feasible_mapping_train_smoke_1x41\\run_summary.json",
+      "sha256": "1380a37aa4b7e848e314bbbf850d02039b1188092abefeb811dec8babf8740b7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_feasible_normalized_B\\feasible_normalized_audit_summary.json",
+      "sha256": "ad0fcf9ce9d7b3fadc1594b7dfc0b1b5ecb652193b02570ec15397afa5278424",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_finite_state_shock_B\\summary.json",
+      "sha256": "9520f9eb719731f536c872ea49109c6894121bff84cbc14d81cfa5880d02130d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_interior_anchor_B\\interior_anchor_audit_summary.json",
+      "sha256": "6c9df5d010462a143cb6f9b35f6bec54b72df26a0a7600f56c42c085821e7ecc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_interior_anchor_recheck_cached_B\\interior_anchor_audit_summary.json",
+      "sha256": "6c9df5d010462a143cb6f9b35f6bec54b72df26a0a7600f56c42c085821e7ecc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_interior_anchor_train_smoke_1x41\\baseline_reward_calibration.json",
+      "sha256": "a87be0700e8b86545ccceb55c74f1442232cb39147266483a8f44dd88e4dcbef",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_interior_anchor_train_smoke_1x41\\comparison_tool_selftest_M1_placeholder\\three_mapping_summary.json",
+      "sha256": "f416fe5af22dca8aafc45ac3d6db5b4dccc02e3e9b4d3479f47bed8ecfa4a6d3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_interior_anchor_train_smoke_1x41\\run_summary.json",
+      "sha256": "b02aa1f321db2180c9539f7bb0a7f56b8a1085db3e0464111dc03b35e70838c2",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_legacy_mapping_calibration_smoke\\baseline_reward_calibration.json",
+      "sha256": "ea99a1f338972734dada487437f21c101c7e6df3f224adb1f4e058da3a327b0d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_nonlinear_mismatch_B\\coverage_summary.json",
+      "sha256": "0c924bfd068e062ae28b6f11ab5e4471cb0a79991d95a29d567b50a7d649c36a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_observation_audit_B\\observation_audit.json",
+      "sha256": "d5e09cd38a3e2dc331a2eeb592de29c151c6a0df01e294dea27cddc918de0dcb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_offline_pareto_B\\oracle_summary.json",
+      "sha256": "caa68e33efa47948832a422df8b3b2b63cb61d7a7c27b0c0c8fa176102d9752c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_offline_pareto_B_500\\oracle_summary.json",
+      "sha256": "52eed17a350fb87f033ffdb051a035cb03bb42f257830cca01544a87976a467f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_offline_pareto_B_pressure_refined\\oracle_summary.json",
+      "sha256": "0fa6005d9789b82f5373cdbf8d36983bb30be0a3f773bdaa10e2e5691094a3c5",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_offline_pareto_B_smoke\\oracle_summary.json",
+      "sha256": "9c97fbf34a7a3c3db2ab1c9197039ec4d309ca0201a870285eac77e1c9e68780",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_online_closed_loop_B\\summary.json",
+      "sha256": "86ce2d6f5430d5ee2647fd416ad12fa1991ea1da7abc54766b22d4b15ab87637",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_online_closed_loop_B_smoke\\summary.json",
+      "sha256": "892f89a677c55db52102dc68e4511dc57639b5d122bda027ad78edce692c6518",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_reward_alignment_audit_19D_replay\\reward_alignment_summary.json",
+      "sha256": "91846e396efb3d74a3aebe7a8f7f6510d0310b59fbe33fd2e4f0b24984a068f8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_reward_alignment_audit_smoke\\reward_alignment_summary.json",
+      "sha256": "a1a618c4706229527300bfc1b46c602a9de99012850f1aa42f2227396e9609d8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_calibration\\baseline_reward_calibration.json",
+      "sha256": "a8c5558e667254636114a301741e7e57b9ddfa4ff5921668aa268831e706992b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_calibration_final\\baseline_reward_calibration.json",
+      "sha256": "669fc184e802a4145b235676dad92b2f12550bf2279b054508cac14581d62f6c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full\\observation_ablation_comparison\\comparison.json",
+      "sha256": "728d43af2bc9ce80919517d96adf62d3131efe8af2c95b37bd98f0aa78e8b68d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "556890dff45670502ba26b475b1d783d73af18df6615ece46f0ca386b7920314",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_obs23_seed42_300x300_local_full\\run_summary.json",
+      "sha256": "8d48925e6efa54c30b7f829833ee8a6c99a763e072ed01cd99c4fb2806e4bcd9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_seed42_300x300_local\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_seed42_300x300_local\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "ad5fefaba704b68001393d644e560b5056370caa39c9c2df1cf40ea34af5eba4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_interior_seed42_300x300_local\\run_summary.json",
+      "sha256": "83b7c25812c6803a239656a77edbcd6f84e47b583165e30220731543f45070d0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_obs23_constrained_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "e6c4b891e5ff021a5bd60821a94e55832d5c8edfd14774de32b2e501a7b71521",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_obs23_constrained_seed42_300x300\\random_dwell_final_evaluation\\summary.json",
+      "sha256": "75e8b03c5103a88ad8868a8e1f714f5aafbc84ff2321ee5947b187a617edef97",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_dwell20_obs23_constrained_seed42_300x300\\run_summary.json",
+      "sha256": "2fe72adf236e297471229f3439f9de036c67cebe81e39571a4d497130c847b39",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_feasible_normalized_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "47373c08d74f163e09d7665d246b8765d7b4382e3bb6df15602d322768cbc9b4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_feasible_normalized_seed42_300x300\\run_summary.json",
+      "sha256": "3c47e80ea13848f739b96878ddbda6050de9ed7b9f6d142c20e00ec4cf710ab7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_final_io_smoke_45\\baseline_reward_calibration.json",
+      "sha256": "669fc184e802a4145b235676dad92b2f12550bf2279b054508cac14581d62f6c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_final_io_smoke_45\\run_summary.json",
+      "sha256": "6e90d8ebd72c383f32e8899b4c0ac71446ec7eb6f835d9bfa78c347d011d9fb4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_interior_anchor_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "a87be0700e8b86545ccceb55c74f1442232cb39147266483a8f44dd88e4dcbef",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_interior_anchor_seed42_300x300\\training_abort.json",
+      "sha256": "e684379874d7008952e303588228b9e0847584db11ad56e160b85c072b54dc87",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_rewardshape_seed42_300x300\\baseline_reward_calibration.json",
+      "sha256": "bb54742995a7279999b7aaca3edec16f660a881aa237738347791b22ac8a13e8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_rewardshape_seed42_300x300_local\\baseline_reward_calibration.json",
+      "sha256": "bb54742995a7279999b7aaca3edec16f660a881aa237738347791b22ac8a13e8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_rewardshape_seed42_300x300_local\\run_summary.json",
+      "sha256": "6ece5a1a4bcb27b0d02717f4b3a7914f38dbbbfd1dae64ae52a182b9460e36e9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_rewardshape_smoke_300\\baseline_reward_calibration.json",
+      "sha256": "bb54742995a7279999b7aaca3edec16f660a881aa237738347791b22ac8a13e8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_rewardshape_smoke_300\\run_summary.json",
+      "sha256": "8980661f6d5c2c7186f3806a9699122a54fa7d131b21e44430f73389750cb3e7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_seed42_2000x300\\baseline_reward_calibration.json",
+      "sha256": "669fc184e802a4145b235676dad92b2f12550bf2279b054508cac14581d62f6c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_seed42_2000x300\\run_summary.json",
+      "sha256": "b295e802b0d9e66b4b7468661ab80b23c1957a8d824aade32c6aa29486162b26",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_final_smoke_300\\baseline_reward_calibration.json",
+      "sha256": "a8c5558e667254636114a301741e7e57b9ddfa4ff5921668aa268831e706992b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_final_smoke_300\\run_summary.json",
+      "sha256": "cfb2477335692568d5d006aeb16c87f464dc4d38a9dd9428ae9d9fb05a4cc72c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_smoke\\baseline_reward_calibration.json",
+      "sha256": "a8c5558e667254636114a301741e7e57b9ddfa4ff5921668aa268831e706992b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_smoke\\run_summary.json",
+      "sha256": "2fca1648ec7146ebeb5b4fd563a4dd7bbaa6c3bd665149ff47c8e03d6cfbceb2",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_smoke_300\\baseline_reward_calibration.json",
+      "sha256": "a8c5558e667254636114a301741e7e57b9ddfa4ff5921668aa268831e706992b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_B_train_smoke_300\\run_summary.json",
+      "sha256": "c23ab516a300beea710c186ee372505add9db2fdab0846be8cfe16919a708b3c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_safe_filter_B\\summary.json",
+      "sha256": "713975252fca10e2d6fc35597b77efbd82943f5575af8555ae90ae66bac100db",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_B_120_60\\concentration_positive_baseline.json",
+      "sha256": "faf1d6ade3e9b0800c3c92637f24986cbc84ad91aed3dc6efd1d068c6134c9b7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_B_120_60\\pressure_negative_baseline.json",
+      "sha256": "1c686a18181a5ebf7aeffd96950dfe584d24da9a84ee9ec2616976c68bb11069",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_B_120_60\\pressure_positive_baseline.json",
+      "sha256": "3ae76121bebf1b700fd90bdde0e5dd060d663ec8cba6637d51e81ec45d9a2733",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_B_120_60\\pressure_positive_ep300_oscillation.json",
+      "sha256": "8ede7c215a323121b559c2cde297296c9a650e7527bf3dce76acde07b6365031",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_B_120_60\\summary.json",
+      "sha256": "0d8c5315887198459dca3569b621c872d6b0e51fbd484c06e47a80c85217284e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_smoke\\pressure_positive_baseline.json",
+      "sha256": "3ae76121bebf1b700fd90bdde0e5dd060d663ec8cba6637d51e81ec45d9a2733",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_smoke\\pressure_positive_ep300_oscillation.json",
+      "sha256": "8ede7c215a323121b559c2cde297296c9a650e7527bf3dce76acde07b6365031",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_omega_segment_pareto_smoke\\summary.json",
+      "sha256": "f1368a52ae2d977f7cff07ed4b11829604f0082698df847ab355f2c53c7906da",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_one_step_recovery_B\\summary.json",
+      "sha256": "dd353a21280d15d5e0caaf694764cd23ef659a1b8f0db0b0b22fdc6765ae87c7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\feedback_control_law.json",
+      "sha256": "d3bf7d0681e1e92d50325b7d05dc2292806ece1f2f5036f02c387107febfa4ce",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\metrics.json",
+      "sha256": "b52f5c3163590919c0f771866bd1d3112799c4801ff2dcd82178842fc0908080",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\paper2016_control_performance_metrics.json",
+      "sha256": "f0f4e96161b51f9bab264f938886ff5790dff520da7a98632cb8804a411b817f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\paper2016_G_status.json",
+      "sha256": "90329738e670cfaf05053af13d3ca72a649d020681caac9af6845b99cfb74df2",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "1afcd1f54c189b18e3cb45c1dbf1987c2639ddc9cb61e6db23d596c2b6896b84",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_200x300_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "421f482e18541b88613a0d400de6397444c25c0686025fefb7f9093c996b44b0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\aggregate_per_seed.csv",
+      "sha256": "a8bcd247182383d9c2b739ca4a07f2ad1a0af610759ebc121e3fbedded9e107b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\aggregate_summary.json",
+      "sha256": "4e96bcb5c1a6c1b73813422d73387d3b6e5a5b950a2f3331a8dba543863e725f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\formal_protocol.json",
+      "sha256": "26d0731fb4a898e2f0a26b7218be08dc680fdb4262e6682b14365dc41c73a998",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\multi_seed_summary.json",
+      "sha256": "4e96bcb5c1a6c1b73813422d73387d3b6e5a5b950a2f3331a8dba543863e725f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\feedback_control_law.json",
+      "sha256": "d416d0ce6c964b9ed747a1cf13b3cfe91c12900c6890aef0de31de21751ab4fb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\metrics.json",
+      "sha256": "9f583471ef4b035129617998262b0f3249807a40d78e29377c4a32e67d0e1b59",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\paper2016_control_performance_metrics.json",
+      "sha256": "16c506c7f448693bda37fbd4d9c4044cc7bfe1f876e3863d1687911197a71563",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\paper2016_G_status.json",
+      "sha256": "1b4315fb97c7f065c863372cfa7caf7cb95df025590b5a2818343503ee784f47",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "88f69df2947951bdbbf8109a5138c3ea879522455c8814bf1079587c1495378d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_2027\\rl_vs_no_rl_metrics.json",
+      "sha256": "aba8366a3f7688ccaba6a545148e3661dca9e350aa035fb3173f674eb52e820e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\feedback_control_law.json",
+      "sha256": "5e2a05c29111a446c3570104f4abe122d75e818662195aad5d5ee71d0703de4f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\metrics.json",
+      "sha256": "f8fb28d3ef3ba438c493b07eeef1ec6a4e0a9361e3cfcbf42e979f2da9d1d45e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\paper2016_control_performance_metrics.json",
+      "sha256": "8dd118f63df4cacdb49527b054dead8f7f0b735a2add030d21fb22990f533395",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\paper2016_G_status.json",
+      "sha256": "aa75a184670a2d1b4e9ef8cc1e8c296389060f76b256076b02af51ce7f320d73",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "f9982a950268791f5f33e3bb187d8e6c44ae6a5de504041af5c69d7eed81415e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_314159\\rl_vs_no_rl_metrics.json",
+      "sha256": "595bd9c36051397a93c8ea9e4e4aee178ae896e6d2f27bdfc002aad80a8a456d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\feedback_control_law.json",
+      "sha256": "d3bf7d0681e1e92d50325b7d05dc2292806ece1f2f5036f02c387107febfa4ce",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\metrics.json",
+      "sha256": "34dc228f7bded180bdc911825252a550b30d3f031eb2f2bb101abb64bc26afcd",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\paper2016_control_performance_metrics.json",
+      "sha256": "d2b5d5ef5cfbb7069854b7def2a1a1eec505c5c4b6ea10e201faeba26601f482",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\paper2016_G_status.json",
+      "sha256": "f5100d9d559c831a82fe356091383cede52db6801051b64492ac187f3005c005",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "1afcd1f54c189b18e3cb45c1dbf1987c2639ddc9cb61e6db23d596c2b6896b84",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_rewardfix_500x300_3seeds\\seed_42\\rl_vs_no_rl_metrics.json",
+      "sha256": "2f580dee309cfba1fc3589a02244cdb3fdeb31cd0db76d196b17299161a57476",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_short_200x300_seed42\\feedback_control_law.json",
+      "sha256": "d3bf7d0681e1e92d50325b7d05dc2292806ece1f2f5036f02c387107febfa4ce",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_short_200x300_seed42\\metrics.json",
+      "sha256": "c7bb1b4e19281b56b2bbbb7431d2c90374617554fab8be74bff1d407bfc4ff8c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_authority3x_short_200x300_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "540ec377f66fe803cc3312e2266594d6cc0cdc1b816c292c265859284919ba8e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_300x2000\\formal_protocol.json",
+      "sha256": "adf83cff3de72405c6cef550bf5f791d3a002eacae24dd8b7a558bfefe938090",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_300x2000\\seed_42\\feedback_control_law.json",
+      "sha256": "646e4826b8925b0944afd26896f93369349f0f71551898bf5d8980aa547ab430",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_300x2000\\seed_42\\metrics.json",
+      "sha256": "a714d677914bcc61b307aa14553163b4526ae486885d1cbf6ed8465efc8bde17",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_300x2000\\seed_42\\rl_vs_no_rl_metrics.json",
+      "sha256": "ba235bbd084d82a5f4002ba6ebf600137db7e46652876063acd4c9d2f402338f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\formal_protocol.json",
+      "sha256": "a38c702a30844f4a5ff40af9980a81fdf6d8e72aedbec45ab242caf7dddd17cf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\learning_curve_summary.json",
+      "sha256": "b39dac788f1f62d40b8f88ef2ec1894d99cbbb23a092807fbc4acc5037fe5fae",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\multi_seed_summary.csv",
+      "sha256": "1f113cec6a98c2f1322641b55b584234162d9674a74dc7e8f2fab857ad39b5a3",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\multi_seed_summary.json",
+      "sha256": "24ae5d2218377c1188b79d0b4d7ed059bf4304e5419ab660749739b25a306cfa",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_2027\\feedback_control_law.json",
+      "sha256": "85787fa6f05e4501963d0fafc9294fc0e17149474da2b137b95f351be48bb19f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_2027\\metrics.json",
+      "sha256": "de1c82422ef067b86ef509f2f71b2eed17c182c625a05fd976f35224f0497938",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_2027\\rl_vs_no_rl_metrics.json",
+      "sha256": "27b27d4502c4dba6efeab8db83430abcaa1a3489b6f429192bd41ef549417f2b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_314159\\feedback_control_law.json",
+      "sha256": "878c9f3f914f452b71dca16e70e568c5704e83766e033614b93ef3e46a8488f8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_314159\\metrics.json",
+      "sha256": "bb3ae54493f2a2089daec148bab23b3507951663bbfaf5905ae31d7a2ba01a88",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_314159\\rl_vs_no_rl_metrics.json",
+      "sha256": "49c8168fe74b012b4845ec96fdd91d6ddfd1539f03d15ea705b317498e893ca6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_42\\feedback_control_law.json",
+      "sha256": "ebaedff631b7f97965325239b3315a94e6e18f043042162d578718878067da55",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_42\\metrics.json",
+      "sha256": "da2246dc594a0862a6bf531a593bdba80ad681af000d5d2953f64cbdbc71b75c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_main_500x300\\seed_42\\rl_vs_no_rl_metrics.json",
+      "sha256": "c792e11c9a99a65c831e0b5e568ec05a44d7c4b5d7566b8bbde77f90cc73e890",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\feedback_control_law.json",
+      "sha256": "d3bf7d0681e1e92d50325b7d05dc2292806ece1f2f5036f02c387107febfa4ce",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\metrics.json",
+      "sha256": "6f9ca6791494961ee06d0c9b80372a4c86dffafcae0790de4f96b444cc20e775",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\paper2016_control_performance_metrics.json",
+      "sha256": "2555828bf6addc8a33f34eb114b6f379cf4b1641765d389f4e757f3ab61b177d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\paper2016_G_status.json",
+      "sha256": "0f70563aa16b8236cc39b6dcc250cbf8ace7c9522a97c57e596d3f325e96041d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "5599124202623831333760006269289b891cd50853bff55b7401b7560931e770",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_paper2016_randomshock_reward_800x300_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "0154616792276dab92d64a2f183f49252e012b3cb4331d3708fb3b4b17f9d9e1",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\multi_seed_summary.csv",
+      "sha256": "ca251f7eff2e1dbe909b77b0543853797e5aca2f54050ad61bcde2d8b49b6176",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\multi_seed_summary.json",
+      "sha256": "2f8f95e4208454312b5ed830cb0b8f1d2e2fe464bffac6a0f1c4952890d61a73",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_2027\\feedback_control_law.json",
+      "sha256": "7ca8e512a4d736f3cdf3734ddf25dde57a1cb816bc54d427b416a989a56c93d0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_2027\\metrics.json",
+      "sha256": "0c1f99dcb0d9d2f01870a22c077e127b523d497d3cc1ed8b98ce8b4580691892",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_2027\\rl_vs_no_rl_metrics.json",
+      "sha256": "948e20393ec069314cc5f2fca634ae90a5409a7ff97814cf9730e162e1027a7a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_314159\\feedback_control_law.json",
+      "sha256": "7ca8e512a4d736f3cdf3734ddf25dde57a1cb816bc54d427b416a989a56c93d0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_314159\\metrics.json",
+      "sha256": "abec294a4ff1c29cffb931f4942ba27695f53cd9919c4bafb1fcbbed78010966",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_314159\\rl_vs_no_rl_metrics.json",
+      "sha256": "d3fb26e37d519f26c5688c9d3d5a8cf7d1f36d1af8fb38ab14897dfb12672128",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_42\\feedback_control_law.json",
+      "sha256": "7ca8e512a4d736f3cdf3734ddf25dde57a1cb816bc54d427b416a989a56c93d0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_42\\metrics.json",
+      "sha256": "b79dbcfc76efbf6d6a3be68bbf998d480e0a084ef131d8daddb59ef9fef2b5f8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_proposed_200x2000\\seed_42\\rl_vs_no_rl_metrics.json",
+      "sha256": "eda1bbc7774f1d66a62734ea535d8505e7d8daba3d15ae9c1e8549287bcd5abc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_residual_action_space_B\\summary.json",
+      "sha256": "40985dfe98fcf79b7f4ac637625be90926db228ebbaf2aaffe23068b6c0a67cc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_backward_reachability_B\\summary.json",
+      "sha256": "2a95984b5d91c5335c4e740e7513e1a92d129839672b2d9e6a159a3332cbd015",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_backward_reachability_B_smoke\\summary.json",
+      "sha256": "29b95c4fd4b1df47b72ae3f6fc8753261d8270c0cf58155784d40515fe882506",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_margin_audit\\audit_summary.json",
+      "sha256": "9494b653732e27114bb82a60c3b251a8c0a267bb67dd9d2f9a4639949e59555b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\feedback_control_law.json",
+      "sha256": "bb6968f4d99ac71cdc6a97f1a932b7d9601c770863e07803ecf214ad45e7c558",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\metrics.json",
+      "sha256": "221075a4df80494f19dcf2526f31a57e7fa44570809bfd6d8e7981703606f700",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\paper2016_control_performance_metrics.json",
+      "sha256": "7bcaddf82cf2526af666c6f7e53fa1844c85bd4b06aa7058d9af6afe05404d01",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\paper2016_G_status.json",
+      "sha256": "00582089b8f50bfd19a1616e23479f03e6fb2e8bcd050ac11a067c5cb24d9277",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\policy_evolution\\policy_evolution_summary.json",
+      "sha256": "03e8128c75690d605b8c85d62698ad471c0f5f7e7482f158b24dcadf6be549cc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_robust_reference_seed42_200x300\\rl_vs_no_rl_metrics.json",
+      "sha256": "0ac030ff0b38e812a71b3e32e45fe6e694ec2549e9d0d7cbea0a2288aaa81fe3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_tube_recovery_diagnosis_B\\formal_domain_summary.json",
+      "sha256": "ebb128379916a1b788eb7c94f49ee574b8406576b39ef81210d09bea9f33d870",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_tube_recovery_diagnosis_B\\summary.json",
+      "sha256": "d8785bd56941428feac9240c529e7a6dbabf60b4f5440aaf18fe88b12699c6cf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_tube_recovery_smoke_B\\formal_domain_summary.json",
+      "sha256": "31cd0b87e067828963ffc3425647f1006cd175b247ad2b03b891f589a39f6321",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_tube_recovery_smoke_B\\summary.json",
+      "sha256": "c34829c50d95db7a118a319f51f2330d5c4206d5c7ed96e0d82b089734ce12eb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_certified_debug_10x500_seed42\\disturbance_scale_summary.json",
+      "sha256": "bd154664918dea781a6da3950b9c15919c4af154ecff6aef5074be6518882e52",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_certified_debug_10x500_seed42\\feedback_control_law.json",
+      "sha256": "76e132222abe11538fff0a65415c2d6a4ad342908c2e7eed1050e5d9e6bb7e5a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_certified_debug_10x500_seed42\\metrics.json",
+      "sha256": "5c1738b2efea3ca419bfedebc8d9a32b1bea1d69cd82b1776d4a1781f40b19c3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_certified_debug_10x500_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "2e8ed5fe49d2fee5a80bec2607f677e9bbb53e6bade390330b4fd99cbdb7cc8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_debug_10x500_seed42\\disturbance_scale_summary.json",
+      "sha256": "76c6fa776fab2c7f8831701ab4bcb34f8e2895e4d0f3489ef20ef972764ed23f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_debug_10x500_seed42\\feedback_control_law.json",
+      "sha256": "d7eae0e989f29cdfb4012df50cde48e15033002161f067ca910ea660dbf2efa0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_debug_10x500_seed42\\metrics.json",
+      "sha256": "d5242b5baa1aadbf7946a47780f087d4c7ac599992643dbcacd51ca5bfb31e58",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_debug_10x500_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "5a56cbd30f2f660ca049791af178a44f6f5e42b9dab86f6c4198537d585a5ccf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_independent_k_debug_10x500_seed42\\disturbance_scale_summary.json",
+      "sha256": "76c6fa776fab2c7f8831701ab4bcb34f8e2895e4d0f3489ef20ef972764ed23f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_independent_k_debug_10x500_seed42\\feedback_control_law.json",
+      "sha256": "d7eae0e989f29cdfb4012df50cde48e15033002161f067ca910ea660dbf2efa0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_independent_k_debug_10x500_seed42\\metrics.json",
+      "sha256": "e453ad6603f6abfd06d73566381fc4d0743770c819df3f6cf5333a1eb1d88534",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2016_independent_k_debug_10x500_seed42\\rl_vs_no_rl_metrics.json",
+      "sha256": "5a56cbd30f2f660ca049791af178a44f6f5e42b9dab86f6c4198537d585a5ccf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "cd383576e78d7b007895088d233b4aaa4b9f29953430b6e747d49f52d211eb92",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "ce160ac282bb82e045d84cedaefb7cdc28c7e6f2b6c332bb594d2bfa2be0f9f7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "c0aeb32fc785cf55161a04fdf40f96de37c45de7948ef68b48fb46de469f66b9",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\run_summary.json",
+      "sha256": "12b451d89c063a1873c827fdb528d1590f9a6527e5aa68cad6ee9bd0246dba7c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha010_seed42_100x1000\\training_log.csv",
+      "sha256": "6b38e5ab769577d2cb583781203280865d621f1d2c3183475e4b99720192fb61",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_reward_scale_audit\\reward_calibration.json",
+      "sha256": "cb4911be8250fee00c9d55d1a14688cea099ce58f1dbbd45899241403cbbb3f4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_reward_scale_audit\\reward_components_per_seed.csv",
+      "sha256": "f0b48b4a1da28fd9296362fd1da00a3e440605196bf18ec76c10f574f15a78bc",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_reward_scale_audit_v1\\reward_calibration.json",
+      "sha256": "43fa13a8dd79937da897ac5200ccbac57768adb123e10177cc0958a5566badab",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_reward_scale_audit_v1\\reward_components_per_seed.csv",
+      "sha256": "f0b48b4a1da28fd9296362fd1da00a3e440605196bf18ec76c10f574f15a78bc",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\checkpoint_selection.json",
+      "sha256": "b73d6002be5e258ea7c0a07e68058664e58baa57680e429b14ca5eb2800bba7f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\experiment_manifest.json",
+      "sha256": "eb6892ef38f168fac94f9cf96bee7c12789b4a635e4e9dfb676f4926e5c254fb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\fixed_evaluation.csv",
+      "sha256": "b29dc8ea7f296bdf7b56b660d452d1ad8fbb063854a4047dd3e8637e939971e9",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\models\\action_environment.json",
+      "sha256": "ea0b5b5ec0c7f6b0c9d0466a54b1a9614330151baa64e1c218f4b9c2e7326213",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\run_summary.json",
+      "sha256": "65f692c78b40b699bdc85f98f9461d30dd641dfe89e56b59de047a184049d663",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\selected_checkpoint_per_seed.csv",
+      "sha256": "4e835b54a94e3d196b40fae729735fd514197d7e5ac1882ab7a0434445211492",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_alpha020_rewardcal_seed42_100x1000\\training_log.csv",
+      "sha256": "4a3f4991cecf15809a30452bd598df61fcb173e02bbf69add0f7401b7224395f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_authority_comparison\\authority_decision.json",
+      "sha256": "9cf0c6b106d85013e691c77237d88fc44bf81cda200c0fce90d723416272bc58",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_authority_comparison\\pilot_commands.json",
+      "sha256": "57dda55c1a9a409f9b16cc5e016a54eb48acf59bbdcb695155427d3fdef26b12",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_benchmark_smoke_actor30_final\\aggregate_summary.json",
+      "sha256": "ae401bf4a4a71afa08ef5b17ea466481851d667ae0ade3d7c727922c04cdb392",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_benchmark_smoke_actor30_final\\per_seed_metrics.csv",
+      "sha256": "139f9df9df8a4156dbd0d4a289e0c4ef0bbd448c03f92e58ae47e82900dc6613",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_benchmark_smoke_actor30_final\\summary.json",
+      "sha256": "0b02b9c9e0dcedf37eceb20f59dc419bca9a8b730ba81b9e61272db624c42103",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\calibration_summary.json",
+      "sha256": "c9dec3425dd333d68e226a6acdfcdb1aeefef5bf3bf9ed2a5bb299d756269a3f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\control_activity_statistics.csv",
+      "sha256": "4e5c29f4968960533f744b8addec1d30e2138fb87e9014b4113fbfa5a57b15e4",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\disturbance_ablation.csv",
+      "sha256": "cf2384b76d301f3cc75e92f60dbe455f313c4cfa9a364e9daef8a8c36c5f1cef",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\disturbance_attenuation_metrics.csv",
+      "sha256": "1ca9e04c74b0202966bbe9d0cd103d822157e36f7c0dcb005e13867e246eea51",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\disturbance_statistics.csv",
+      "sha256": "ffb3565413029698aba4b76922bf868f00e1b5718a92c7fbb02cc4f4cacdd89f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\legacy_vs_facet_w_audit.csv",
+      "sha256": "c62fac3223755790ed05238edf407d0d812b76791bf0d928035fc8dbf328a9ff",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\per_seed_baseline_metrics.csv",
+      "sha256": "609de25add76a7a6185e227bae0cef24846840307c26ff8a7511d38b41f4b38d",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\sigma_interpretation_sensitivity.csv",
+      "sha256": "abb0e6d38937804632ac5c5f4e131e233e1743581a6e7aedf5421a48e3640b69",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\state_statistics.csv",
+      "sha256": "54261e676bd2df79afecc0a975026aa2767af09aae33fd4e4146cf64f4f6d0df",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\w_exceedance_statistics.csv",
+      "sha256": "564d76b2ec951a384dd078c28d04c1e16c94de7a4b4816d7f6d5e3577f1b21b4",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\W_facet_geometry.json",
+      "sha256": "f341a60ef503e0cc2c2dd0237c63b1316b637cddc443ab2cdbf0d60de7d9a72c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\w_facet_per_step.csv",
+      "sha256": "3f5ec01813e162345aa3e804dadeb210344a0d273362635ab553abee7373b635",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\w_worst_case_sample.json",
+      "sha256": "edb96aea7d6a7a5e72238e5cb2b97578866c0b917828fb4d30205b0ba2e128c4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration\\w_worst_relative_utilization_sample.json",
+      "sha256": "46444fe1e0251b8d9df1819daa1e3e3b1b4992fc9cc928e53e3c86b5a1fe91c0",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\calibration_summary.json",
+      "sha256": "c37bd5253a150e5b42cc494c4d8a4845f903576e93f6eff71ed630dbb494303a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\control_activity_statistics.csv",
+      "sha256": "0c439d48ee6b82504a4161a0d18b623f3e3c38c716acc15da923a13aaa746be2",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\disturbance_ablation.csv",
+      "sha256": "70e4b1a39e67c3edcbdaad92d4337b666cd9c1b12358c2246e2c24e60d8e0461",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\disturbance_attenuation_metrics.csv",
+      "sha256": "33189895750195c38930e400dd664a9adaffb1f574be8a2de8b54b838b6f7905",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\disturbance_statistics.csv",
+      "sha256": "e9ce8c7189a6fb1000682a4addd8ae2b45bc9d80b35009a03b9094872a088c59",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\per_seed_baseline_metrics.csv",
+      "sha256": "6d7f2d1ad964c242a3ce4a02f79ab64c18d840988ef7b8ffab3f7920d2eddf24",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\sigma_interpretation_sensitivity.csv",
+      "sha256": "12018f9fbde357e92614d662f5d4b965e25ebd1208b1a6fce08b503059da4b78",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\state_statistics.csv",
+      "sha256": "0d8e598b9c253f09b3d13a86a41ecb2e230245025b00bcd38ba99dcb5b4c4983",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\w_exceedance_statistics.csv",
+      "sha256": "a492a3e59ff8e859838fbed51e5e297fa6da26b3245211cc730f7c96c6ecf7a7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\W_facet_geometry.json",
+      "sha256": "f341a60ef503e0cc2c2dd0237c63b1316b637cddc443ab2cdbf0d60de7d9a72c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\w_facet_per_step.csv",
+      "sha256": "fab53c01291ef55fd545c5f992b6916f99228cc08c42963c0f894796dad6812e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_calibration_smoke15\\w_worst_case_sample.json",
+      "sha256": "68283c85c7752255771e573862180bcee38af6b721fd7b52552a4dc0e12658a7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\actor_action_statistics.csv",
+      "sha256": "99f5462d92326dd5dfeae0a761c7f6fdffcd9f90a810bc8925985c895c72a3d9",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\cascade_analysis.json",
+      "sha256": "e1f3b05a0d440635ec335a160680dd5ae6ee78ac2a26e37264e0b47ccc6c5a69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\diagnosis_findings.json",
+      "sha256": "a3b109855c35377798c81fff7edf24242fb48c36945c415035c99450193505df",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\diagnosis_manifest.json",
+      "sha256": "3e6a4942d0e7948a9f4471d7b3dbe99b86c1db61b3ba843fff28a8baa8754411",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\diagnosis_results.json",
+      "sha256": "3f58c52d5e93b5d8da80462042d7e6153d6d776ec5026fc188fd25bddcf79458",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\first_failure_trace.csv",
+      "sha256": "e2e935c3ef99a5da035c1d5119d601fd7560fd2b9f606f413011d6d675d05343",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\residual_scale_per_seed.csv",
+      "sha256": "7a18078425a831e70c473c61c5c1957842878be7c275e8416172a79ad0c09cc3",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\reward_component_audit.csv",
+      "sha256": "d5876979813f7a482d1100d31405ecc58a1c5e028dec3c68ec5aad7f77025030",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\reward_components_per_step.csv",
+      "sha256": "0546e619277a0a9434677163e327b7a74d06d9fb834f0d7181f716632e781bc1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.00\\seed_420000.csv",
+      "sha256": "fdcc99185717e0cd73408056c0890c279e8c639199ae419f5c614b96ccfe2dfd",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.00\\seed_420001.csv",
+      "sha256": "a721dc57a71f59e5cf30e42fbf1a08ade7beb962d78da73b66755823e2718c33",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.00\\seed_420002.csv",
+      "sha256": "90ca4663c18137bc8ed83137cb5ab02a44f978c03d01b21871b99c2e3913979b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.05\\seed_420000.csv",
+      "sha256": "1dc0a710aa33bb3290132218614160f149dc04190058487ea99ec9570b34716e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.05\\seed_420001.csv",
+      "sha256": "c436d426ad2ebc3c1d56a1dd31723ec0c69f4c19a9cbae462f24d7f65ed43529",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.05\\seed_420002.csv",
+      "sha256": "63aa69d8acd82beed0c1f8de6232614e3710bba1406b5e232c26827d4be55239",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.10\\seed_420000.csv",
+      "sha256": "3079b10e98d9f5b3923876787eac5c866fa229012bdbf863c307cc02735556e6",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.10\\seed_420001.csv",
+      "sha256": "2def939df06395eb8e5032a7d60d1009317faffac36eb0ee01cfb5a05e2fd5a8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.10\\seed_420002.csv",
+      "sha256": "853363e9df24897cde6d3ac90b286c5b3d039401f015945b6beeff218e8ae585",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.20\\seed_420000.csv",
+      "sha256": "8036a464d30d517908896dd9c1253f1e637b3c32fb17faf4bcd55f7417f066e8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.20\\seed_420001.csv",
+      "sha256": "53535f194a850c4871532930cdb1388caf88970600d1ced8e42850ea6e15bee7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.20\\seed_420002.csv",
+      "sha256": "3c03b314c89d3570e7eb2969d9ac1a999a7be0d5ee5ff05a79e198f471a08459",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.30\\seed_420000.csv",
+      "sha256": "83649c4c1e67c489238d50e41b1d0231b77c22f070ac981632a09fdd7d99d267",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.30\\seed_420001.csv",
+      "sha256": "8a989460dac1521b48b79bb8610a74a0924ea7a9fd70bf9ee01cd8bb9ede305c",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.30\\seed_420002.csv",
+      "sha256": "a3daad47779ac051e170c9d7254abca2d60b7c4be84c8b34725cc153ab32e27b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.40\\seed_420000.csv",
+      "sha256": "5c671b2e4522b76f9ed1adfedb9d6aff5c4e94dcb5347e35665009807b835090",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.40\\seed_420001.csv",
+      "sha256": "448a6d9c5bb5d3dca79d13237f914073b2c173e772df8f51a9aba969e2f7b8c7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.40\\seed_420002.csv",
+      "sha256": "e32cd69e521c87b72250b77b080fcba758f5b255d3ac6cd079081878b5c764f8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.50\\seed_420000.csv",
+      "sha256": "bc66788076e246700084ecc54f44b8bd0963331fa7d3896d45b3a9f39bfe4353",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.50\\seed_420001.csv",
+      "sha256": "5746383b6a2417780bb98a1aca5f4014e1b412939e9733471b8e3ba38cd90db1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.50\\seed_420002.csv",
+      "sha256": "69c14d5289981ba74661b471881ea3378fee74c4326f5fe0b086cd1475c6360f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.60\\seed_420000.csv",
+      "sha256": "eba2aec4b832f255e2ea0ebe5b28b181aa93ad66179f88bdf4ff539c01e228d4",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.60\\seed_420001.csv",
+      "sha256": "b4e84732df702ca965ff9de667c11529bf3cc3e0478fbad3d3c1a6b29e5d935c",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.60\\seed_420002.csv",
+      "sha256": "ed53dc545f5511566c78a364a754278d37d8b210d6c08ed4022098cad867aa53",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.75\\seed_420000.csv",
+      "sha256": "6df5250c8e3e21b15acda32ed5a57cb85fc9ba1d7d5c3c20293d2e128771c1eb",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.75\\seed_420001.csv",
+      "sha256": "cd5cbab769eaeab08fd840136d3e6d9829bedbbb1fe37a9f8153be7801d735ed",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_0.75\\seed_420002.csv",
+      "sha256": "b0172ca3e9d4187a5666003bc50248496218d7489f8391674596bddf79a51642",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_1.00\\seed_420000.csv",
+      "sha256": "a19b2dbd474951c4c7d06c6b49504f134c4660e279b14131c6ad8522f7a2596c",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_1.00\\seed_420001.csv",
+      "sha256": "dce809d2ce9dfd638faa2416c646f39182fe1b17bf39521d7ed4821dd9c9af33",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\trajectories\\alpha_1.00\\seed_420002.csv",
+      "sha256": "b4acebbfa9004258e905ef587a2e2ff52aa5cb9c1ef2e1842b66399ad4d62273",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_failure_diagnosis\\X2_margin_statistics.csv",
+      "sha256": "945a8527b82d64a918b63ceca9ebb1cfad8d899c98f506205ea81b6d2752dff0",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_sac_optimization_audit\\deterministic_vs_stochastic_eval.csv",
+      "sha256": "abfec4565249fec92ffdd373d5a3d216e938da9469283d90098deb08d73e73b6",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_sac_optimization_audit\\evaluation_state_contexts.json",
+      "sha256": "d7601479c191e9277608d3b04e3d5cee3003ccba7c2b752531ac109b6e86bbcf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_sac_optimization_audit\\summary.json",
+      "sha256": "299ac278566fb960b6f6638b38fa03d1f77f1081b2523b8b0595b6c52e0b3f68",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_actor_20\\aggregate_summary.json",
+      "sha256": "4fb0c8abe15b8015c82ae921ea6e4db54b432325eda936eea54792b00874ea0c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_actor_20\\per_seed_metrics.csv",
+      "sha256": "2b2657ed6905aedbd928b7631b968c5752e51a25e5d08f04cea1b52be4c316d3",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_actor_20\\summary.json",
+      "sha256": "22902c7e382fa1324991e279a3fef6cb5d7bfb1ded0dd1f7569ef95869d631ce",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_baseline_15\\aggregate_summary.json",
+      "sha256": "36a66eab864c60b6c2a662e9fe29bf0449331070c9d3bcc75ad5f36fe8b7c097",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_baseline_15\\per_seed_metrics.csv",
+      "sha256": "5627b105d09cc2fa2e620b45aa563f71c6f8aca41d2a0360691ade12ce002d57",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_smoke_baseline_15\\summary.json",
+      "sha256": "3c021fd7f3e1e7b2e62acc1950a455316100a37cfb468a12d687143a350aec74",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\experiment_manifest.json",
+      "sha256": "b354dcf158f22e3d7538c7cd1088157e769793361fe3234d924b4642a0c38946",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\fixed_evaluation.csv",
+      "sha256": "5b5f9f061618506f31787db03d1ec0cab4ca830f879f9728622b7798072edffc",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\run_summary.json",
+      "sha256": "08cfc391abfe9ed20acd95e438d998a404b4b514c9bbfc4c67b361b18d148414",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\training_abort.json",
+      "sha256": "af71ab6fc311ed482f8abe9a2b06923a72927f35e49952c31dd4276abbe8b61d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\training_log.csv",
+      "sha256": "59a8081f0d8177459da91cdd2cceb7844c4a164b35f15f808b595156b4ef126e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper20\\fixed_evaluation.csv",
+      "sha256": "3f4d5fbe1c233f9a680c3f8943584b01ddcd665f7fb7cad9e0b5b75f363d347b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper20\\run_summary.json",
+      "sha256": "734436440973f8ba79101ac439c3f1aee0cd9cfc164d7a36b418e1479715a6bf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper20\\training_log.csv",
+      "sha256": "1233023db862f6a95ab1a58046b9d0857681200b0d3da4bd3981ad661e0c798f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper5_rewardfix\\fixed_evaluation.csv",
+      "sha256": "47e5af782f081dd4af644047e50b2997daee9b4ea50eeda16458e51e8618d6a9",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper5_rewardfix\\run_summary.json",
+      "sha256": "33560d5ddfc7e71f3ced0f8fefb12833e3a9d4235082bbe3e2170f28c9468ac4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_paper5_rewardfix\\training_log.csv",
+      "sha256": "e223cce446d0b194f6e0ae96d06eb17fab15c7ed97cf820628519451394f4365",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_zero3\\fixed_evaluation.csv",
+      "sha256": "45f15ef3bdc57179101ede62a2af25218c3c2e9a947dee088c0f93e6ade1e1fd",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_zero3\\run_summary.json",
+      "sha256": "3604a1fe48102e61739b4b1221273002255167d98c81106faf4ee6ff5ebc274f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_train_smoke_zero3\\training_log.csv",
+      "sha256": "ef723291121b9ed6a9a531ad0a90898e34b1698b93e602a8f555b5c7b96b8213",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_baselines_only\\paper2016_dependency_diagnostics.json",
+      "sha256": "44aaab465b46a25f4f018da3920db46eb5ef87bd4f4a136f3cdad6d4f1a475d4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_baselines_only\\paper2016_protocol.json",
+      "sha256": "a85525741a36c33216dbea77be938bd7ae7009f4a0099b1626c857e78c2562f3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_check\\paper2016_dependency_diagnostics.json",
+      "sha256": "53d5476ee2b172153ba2bafd0f6427d0b3e4a20e5f0854f2c6782cf967b5be75",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_check\\paper2016_protocol.json",
+      "sha256": "0508440789658a61a62bae8fc6faf6e4e0db2b182a93a1a1ad480ba87a49e0f6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_legacy_checkpoint_smoke\\paper2016_dependency_diagnostics.json",
+      "sha256": "14a08c14b448f11d46461236a516e565b4d1a007494a8a83b9ebc3ca8cadc1aa",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_legacy_checkpoint_smoke\\paper2016_protocol.json",
+      "sha256": "04d620c3665721f2874d6235aea06909819eb492a3503e74626b2f565fb2bf78",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_rho_d_smoke\\paper2016_dependency_diagnostics.json",
+      "sha256": "53d5476ee2b172153ba2bafd0f6427d0b3e4a20e5f0854f2c6782cf967b5be75",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper2016_protocol_rho_d_smoke\\paper2016_protocol.json",
+      "sha256": "0508440789658a61a62bae8fc6faf6e4e0db2b182a93a1a1ad480ba87a49e0f6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper_results_stochastic\\paper_per_seed_metrics.csv",
+      "sha256": "08763c725d32280cac874d6b929e756a68502902df7c427d8ccc24ebb99d0a6e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper_results_stochastic\\paper_results_manifest.json",
+      "sha256": "6af7c16054bf386d456140933e61ecd7cbf9a30075c0cdd7ed90e02a97248742",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paper_results_stochastic\\seed_usage_audit.csv",
+      "sha256": "ab6723449c393a5e04b00a4d75d656af3ee31d73f279d4ddad0dea01ddf64bec",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\residual_authority_scan_e6112b1\\residual_authority_scan.json",
+      "sha256": "53e551dfc5ac1188efd41bec4b39b4634dfcb6542309f9094b6a7854d5eb3f9e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\missing_results\\authority_decision.json",
+      "sha256": "507885cf9a00c8e820f17d9c9f1caf2378c36af61c59c03334d9971175845706",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\checkpoint_selection.json",
+      "sha256": "e2828ccfe4a495e0afba28d465de7adbba30f7a2c80d27a5049a111e4ae68377",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\experiment_manifest.json",
+      "sha256": "a14428fc79cc95263136daf8d4c7ac273535dd73b23d957a28f6951aad133b8d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\fixed_evaluation.csv",
+      "sha256": "d130ec1d1816d722d2d220ad0b44db75799dbf0290bcfeb729e74d0dbd70cf10",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\models\\action_environment.json",
+      "sha256": "b0d78892c72214f06a5a47f57adfa70d10636646c3421185f9223ea77a1b5259",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\run_summary.json",
+      "sha256": "9a57eafafb37e581603fbf266a8ccf591b193df0a2ab96d1304f5caa449b5ece",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\selected_checkpoint_per_seed.csv",
+      "sha256": "585653a2cf8991bdc48074c8c736879b248d4be1b09fa3e7a5a38c49a86369f3",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_05c7540f\\pilot_orchestration_NO_TRAINING\\training_log.csv",
+      "sha256": "05b286ba5bda2326be84a2d4b4dac595d8ac761c817e4c1f7dc154f809559fa5",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_1f55ce7e\\missing_results\\authority_decision.json",
+      "sha256": "507885cf9a00c8e820f17d9c9f1caf2378c36af61c59c03334d9971175845706",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\missing_results\\authority_decision.json",
+      "sha256": "9cf0c6b106d85013e691c77237d88fc44bf81cda200c0fce90d723416272bc58",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\checkpoint_selection.json",
+      "sha256": "35b9ad8c6ebfeb5f89b9dd65c8983d42553900c27c1902652355026c93b223d1",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\experiment_manifest.json",
+      "sha256": "2df5b092b4fe3bb1aea733e05653937a2f51af46fc8a7d36452e200738233af1",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\fixed_evaluation.csv",
+      "sha256": "d28e4eb4c7a70d67dac6a29583287f6762a3a6d1a68ab3ddf61047d237f46642",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\models\\action_environment.json",
+      "sha256": "b0d78892c72214f06a5a47f57adfa70d10636646c3421185f9223ea77a1b5259",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\run_summary.json",
+      "sha256": "f5b6239c4f6c86bb7bab48579dd14e1602eb0c100b220a6f2f033ba92b308d95",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\selected_checkpoint_per_seed.csv",
+      "sha256": "cdbf8ba144e5069811293ca61c1ec4047c20457964334b5cbc77584d0e47253b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_authority_no_training_7ddecbe9\\pilot_orchestration_NO_TRAINING\\training_log.csv",
+      "sha256": "d739577aaa7a15c3b0272198f7bad04551621f8b8e9ca85a2c7496cfbefa59ec",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_disturbance_scan_tmp\\scan\\disturbance_scale_summary.json",
+      "sha256": "8e1fe25bad01d251b1f493fd852ef3ad83111761cf29cce8da7a227c6fc6b138",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_01\\deterministic_vs_stochastic_eval.csv",
+      "sha256": "c7f3c3cb55d0383315a2050f4052423708f470b5f44f4aec3dc1bc74847b9e5f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_01\\summary.json",
+      "sha256": "b011f21462a84b85d8ff24537c64fde9492ec9f6c42c258b7227172bcfc7721c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_02\\deterministic_vs_stochastic_eval.csv",
+      "sha256": "c7f3c3cb55d0383315a2050f4052423708f470b5f44f4aec3dc1bc74847b9e5f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_02\\summary.json",
+      "sha256": "5807a6808d30d9c33bfb40e45f875e305cf9d0cc089a75918774bd6fbbb2a80e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_03\\deterministic_vs_stochastic_eval.csv",
+      "sha256": "c7f3c3cb55d0383315a2050f4052423708f470b5f44f4aec3dc1bc74847b9e5f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_03\\summary.json",
+      "sha256": "ba1687c878b20a5cb24f388b48490a91f8dfe7cb6fe5f8800ba20d3b88ab4436",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_04\\deterministic_vs_stochastic_eval.csv",
+      "sha256": "77fec5be363617670d09719bec6abada11e1dee201b7dc2fb9b4c794a43dfaf7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_04\\evaluation_state_contexts.json",
+      "sha256": "41ac30198f6c40432c1ed3e9862f39543d3e57d6f57aeb885230907943050e5e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_sac_optimization_audit_smoke_04\\summary.json",
+      "sha256": "1d546a6b7e6ce6486144a2e7a932361ffa97f52fc3f8d6c0bb31fa588f7df623",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\actor_action_statistics.csv",
+      "sha256": "642600ad8363953d21de59c15bbc421017972ccddd584a7c7010ce8975137526",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\cascade_analysis.json",
+      "sha256": "2fcedeaba9d2e0d7490d8680fa1d6a09d84cca803845f7ddc4e809b0f5a9582f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\diagnosis_findings.json",
+      "sha256": "2b865fbdd585763ab6e77c92a7dcd55b389c62d83783888c11af4b535d7fac96",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\diagnosis_manifest.json",
+      "sha256": "0a69b397ae34bfebb60e70e85e5894009f0f3cbb6b22a037a4eab8263db060e6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\diagnosis_results.json",
+      "sha256": "2479d99c0df0bf13f23146bc23b444791de849569eab65231faf519f8d99359b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\first_failure_trace.csv",
+      "sha256": "7d9773163dd81adce254224e36d974b75b8d029ad362bce56ceb0f742b5f7bda",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\residual_scale_per_seed.csv",
+      "sha256": "e8909104debb68fa75e090b72075def090fb647e00944d75a3235363abc77f7d",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\reward_component_audit.csv",
+      "sha256": "d2a8b7abb0eb7dca266eb9bcd549c1fa40ac2a37f04866be7f4f7bd1f9c92578",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\reward_components_per_step.csv",
+      "sha256": "317ec9e4f4680e38b781d968e412196b50fc76a9760defa504e1c2aabbeb45cd",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.00\\seed_420000.csv",
+      "sha256": "d9af748c0625938879d522865af3fbe58909b4ba465e33468db6d217de2ac57a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.00\\seed_420001.csv",
+      "sha256": "40699e81cb6ee2bb14c6785f83e13c0e3c3a67195487c40d976e868ecd604181",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.00\\seed_420002.csv",
+      "sha256": "0bb1feef39da9bbad89beb1730f24f2497fceeba28daf694696acad2b1bee47e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.05\\seed_420000.csv",
+      "sha256": "30699384191ddef45c84fffb51e98fbc0aa03d7fb897567587e34ab475a094bb",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.05\\seed_420001.csv",
+      "sha256": "4127f61b24ab1ed32794fb1444ac6339bc528aa2d80c87132ceefb8e241c4e0a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.05\\seed_420002.csv",
+      "sha256": "13593cccd8ca5b8351ff63c731b58dde3418815c2a5c2df63e6ca58e8834907e",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.10\\seed_420000.csv",
+      "sha256": "9ae69dc02adeaf7d9a40a42b612810a11bd7c65619791269f1409a960ece78e1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.10\\seed_420001.csv",
+      "sha256": "8682bb5967b2cfbe26a7c58f3583a679eba391a5085250533fc726f8aa417089",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.10\\seed_420002.csv",
+      "sha256": "00cd89ad91fca674a3a000674f32a1b299064972cf2b33b14ddce84c5c65dc35",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.20\\seed_420000.csv",
+      "sha256": "af86017eb9b1edf32f2ea88a34ceb389643d6a17982a60940d93ffe64e9a7dc9",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.20\\seed_420001.csv",
+      "sha256": "a7e4b5699943d3dcb24a51689aec83ca9723c6cad93efd8c77d4fcc439ff13d0",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.20\\seed_420002.csv",
+      "sha256": "6c9549fe12c4f925d82256809f3cc950aa763db70d8b335518ba350da2f9b780",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.30\\seed_420000.csv",
+      "sha256": "a5bc672e71e05fcf28c2db9e9066b180d907c44002663bb2444fc0a436d2e673",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.30\\seed_420001.csv",
+      "sha256": "d11cd1fdb0d6210f69d05d896f5b7fdf0c36844e13df13d627eedbe85d130113",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.30\\seed_420002.csv",
+      "sha256": "3b6e6593f89673b6375843928443a09668567dff75d9b2619ecff8663924e438",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.40\\seed_420000.csv",
+      "sha256": "811f613940d6d64cd3f238db24dc357d69da414f00c4bced9e0c7ef6b48c631a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.40\\seed_420001.csv",
+      "sha256": "bb1bffd4ffa83a72ee4d995b696564805606ca70a97e0053fba23e81e1750453",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.40\\seed_420002.csv",
+      "sha256": "755d18bbf7fe4c114ba75655f75b233e9943f92b8626f53e6477f27461cdf90b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.50\\seed_420000.csv",
+      "sha256": "dc1141906dd777c7f3b20b465736b56121acd48b038ce35dd09a27cae3e08175",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.50\\seed_420001.csv",
+      "sha256": "08b4250d663afdd4af0e4f73663901c646d82668238467e1cec279a7d3a74387",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.50\\seed_420002.csv",
+      "sha256": "97f3d03c22b624fa319412778297eac01d309deb044d2d6aad429f4da181fb5d",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.60\\seed_420000.csv",
+      "sha256": "06a4f15edd438d480c9f76023643b87a35cd4070fb2458ee616352209da18d2f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.60\\seed_420001.csv",
+      "sha256": "218d9c1f44372ceecef7eecb2b8ebc99c63da16b28893e65088009217e89885d",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.60\\seed_420002.csv",
+      "sha256": "8f624439bfd0663bf3ba052abc43bbc202c43fb0d89b20ebcb35851d355ba96f",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.75\\seed_420000.csv",
+      "sha256": "d608c5b5b43fb48ec735f7b6ebf0681f5741b01c5aaf9940b9af0b9ed4d484c6",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.75\\seed_420001.csv",
+      "sha256": "f33a5b80c233a69ad80a128179d4f989bc14c00a4248eb418a7181e2cf5b1b86",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_0.75\\seed_420002.csv",
+      "sha256": "3f32a0dff047d94b2ddf3a7f9e037cb6a7954378326959da2ec54504b717afd8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_1.00\\seed_420000.csv",
+      "sha256": "91fd872b8a50272fcee10bb408d8c937e3d7f1092e57a629832bcfa63da1a3ce",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_1.00\\seed_420001.csv",
+      "sha256": "f752de291ab23e24156738c8420c2aae4368fe96f955f9855123b9f4ce06c036",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\trajectories\\alpha_1.00\\seed_420002.csv",
+      "sha256": "d3b6865e2b116237ef7990a8f1b64ff13def614b20157ddfce5c1911af632981",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_failure_diagnosis_20\\X2_margin_statistics.csv",
+      "sha256": "7828a71623d7566ffc378be9123f8ba90c651b8d486543a717fc9beb3f9d0425",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\evaluation_abort.json",
+      "sha256": "b46fd8bc76d2f19fbc9a49236711e106c8c14ebe5156c7dc7b5d83fc8f5cc2dd",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\evaluation_failure_metrics.csv",
+      "sha256": "eaf655d12699ed4ce3a26c1d6f6d0aa793bb4a6c51c5e75a782b74e6d81505b2",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\experiment_manifest.json",
+      "sha256": "407c0164953d9da68ed2845050ddcab0f85c57c9d672a3880009240354fd2bf6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\fixed_evaluation.csv",
+      "sha256": "abb123e1fcac64891d0b5d7373b50fde6fd08532167ff0258eea7ef3bf8b48c3",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\run_summary.json",
+      "sha256": "6d0c3bdcf802faabba1bcca39539192c307dbcedf7b1bd6c2107db8af4fb08c4",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_06abf097\\training_log.csv",
+      "sha256": "86fe76be6be3901303eb093bf1b26e319bc5b23308166ea843922e1eeb0c2af1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\evaluation_abort.json",
+      "sha256": "63c9d33cf85e2d114d5500f77588e8fd2c769067049e1e943bdac08b3f503c35",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\evaluation_failure_metrics.csv",
+      "sha256": "cd63250f492f2d45e19629e708f6fe2763ba5152148a6eec0c7e52233d82023b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\fixed_evaluation.csv",
+      "sha256": "4c490440e0697d4b241724d1d6442b7ca317e0d739a6920f218c9e94519173ff",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\run_summary.json",
+      "sha256": "b080e268d4666b520dfd750e2066da6056d253030df927e6ca5d5c2f0133be57",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_11d49a34\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\evaluation_abort.json",
+      "sha256": "78a1cbc5623873f562756ee70c3886fb61985a70b8701024715d0ef323f84555",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\evaluation_failure_metrics.csv",
+      "sha256": "b6771fe5cdf79bbd21522b39370963d2d9c896b424c7a8130312bb72f0180056",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\fixed_evaluation.csv",
+      "sha256": "9358ad38172bea0aee33d83aff974d41dce7e907139f0df9f8a712e20a145a44",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\run_summary.json",
+      "sha256": "ad1f235f72166bf2bf04dc46271144968ee5fd28ae9ffb2ea74a8d0fab3663bf",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_73ca1f67\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\evaluation_abort.json",
+      "sha256": "644e30bbc87d02e331930af07fc8b887432dcdf681374e1302d850ddf9c00c4e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\evaluation_failure_metrics.csv",
+      "sha256": "0d1ce6f39f451a21f8dc8223b2ff2600667e7203c2bd4a2054f2b9604c73fea7",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\experiment_manifest.json",
+      "sha256": "407c0164953d9da68ed2845050ddcab0f85c57c9d672a3880009240354fd2bf6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\fixed_evaluation.csv",
+      "sha256": "133ab9c94585ee18775c9f1ebccc28b0fad3dbc2157c88f90033d0c90e8664e8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\run_summary.json",
+      "sha256": "56cd9ae2b11de32491ebf4476c6300de2a9b122fd268977314d83d7bafda1eb7",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_8c36aab5\\training_log.csv",
+      "sha256": "86fe76be6be3901303eb093bf1b26e319bc5b23308166ea843922e1eeb0c2af1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\evaluation_abort.json",
+      "sha256": "a71bd0229c4385232c7d48b017c38f457d1ddd4fb8b488780803bcb8cf3579ae",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\evaluation_failure_metrics.csv",
+      "sha256": "232a6d6d83ba712809479612631a04f4d1ff5d6de9623de302b0c6e412312ac8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\fixed_evaluation.csv",
+      "sha256": "232a6d6d83ba712809479612631a04f4d1ff5d6de9623de302b0c6e412312ac8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_98933cb1\\run_summary.json",
+      "sha256": "425eac3ccf69685aa87f8703b0336903754a38a35ff69465c3d29396cae4e471",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\evaluation_abort.json",
+      "sha256": "cb75450811c5c93b611023ad99ac33b11e3b1f0400634f3489650692de13a5fc",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\evaluation_failure_metrics.csv",
+      "sha256": "890bad72430d51604c46e1dda3ae4f556a5a22a2297d31e0a14d373fdb293f36",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\fixed_evaluation.csv",
+      "sha256": "890bad72430d51604c46e1dda3ae4f556a5a22a2297d31e0a14d373fdb293f36",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_b610b53b\\run_summary.json",
+      "sha256": "df511953f422a81237f0df9e006b325fbeb6bb2f93adb6d448ba569063f44197",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\evaluation_abort.json",
+      "sha256": "90531a9bee4d8f06eab95fb6b17958d47df205d3ec92a318bb9921d1c52f76ec",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\evaluation_failure_metrics.csv",
+      "sha256": "6e585cb0fd7505d32ed66fd6d87931afc1ca39bf7dbe8d0a263afee808c008ee",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\experiment_manifest.json",
+      "sha256": "407c0164953d9da68ed2845050ddcab0f85c57c9d672a3880009240354fd2bf6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\fixed_evaluation.csv",
+      "sha256": "6e585cb0fd7505d32ed66fd6d87931afc1ca39bf7dbe8d0a263afee808c008ee",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e3fa0243\\run_summary.json",
+      "sha256": "b18784ca89a9a4062baccc17ee0fe027fcf4b937d0e1704039c7ca33e17de321",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\evaluation_abort.json",
+      "sha256": "fe065d9cb94ab5180a73277d50b43012225e119ef16319cd0e6855e9e8090590",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\evaluation_failure_metrics.csv",
+      "sha256": "6aa602a4da32f66790673855b6f1f9d123d0b357bd53df2437631d7d9cf70760",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\experiment_manifest.json",
+      "sha256": "407c0164953d9da68ed2845050ddcab0f85c57c9d672a3880009240354fd2bf6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\fixed_evaluation.csv",
+      "sha256": "6aa602a4da32f66790673855b6f1f9d123d0b357bd53df2437631d7d9cf70760",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\fault_injection_evaluation_only_e5b019e6\\run_summary.json",
+      "sha256": "bdae33d57b6c3ef1cb2a8ccd19d4a6e3a6ab072a82189f06a75e3459a88e734f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\checkpoint_selection.json",
+      "sha256": "35f5408d55105ee4476b65e9861d7eac03aca16627ac368f491191de78c4e682",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\experiment_manifest.json",
+      "sha256": "91c96689a4c7285b70d6e01f96a09e6522946aaa7d3528dba24a9a20dadf23be",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\fixed_evaluation.csv",
+      "sha256": "b267a5816114be9491c6b3bb806668d7eebba5057d914ee72cf50e7f64b32121",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\run_summary.json",
+      "sha256": "838a3d461137a09d8156a7754236afe95aac7b762d0071354cb855464be9da8e",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\selected_checkpoint_per_seed.csv",
+      "sha256": "48e9d909569335015473bf087e1dcd875f5b01a518780c595c3929448321e694",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_78023270\\training_log.csv",
+      "sha256": "86fe76be6be3901303eb093bf1b26e319bc5b23308166ea843922e1eeb0c2af1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\checkpoint_selection.json",
+      "sha256": "35979dc150583b4b77237ed200232fbe8db0f74a2bb9d5fb4adc7b37d36495ec",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\experiment_manifest.json",
+      "sha256": "81fdd522cee22140ea62976305d444aa1951a4e3c4d897603df194edb6964799",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\fixed_evaluation.csv",
+      "sha256": "984d85aa2b6c0c7acec0d67dcae8f99b031ce9cecd28ef76c6ad525c0d66d45b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\run_summary.json",
+      "sha256": "6f50a241757955e78793d60a6066027fab2e6502cc3597482e5cda0f1ca83ef2",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\selected_checkpoint_per_seed.csv",
+      "sha256": "e6d1f05ba2ea96831b1f3434120478e633cdeabcb0b645347025fd5a85d18cbb",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_7a88e585\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\checkpoint_selection.json",
+      "sha256": "1dac5054c2c7fc4251465ed6fa1263323db787409c7716a6d69b2d4e73fa4b85",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\experiment_manifest.json",
+      "sha256": "f3a46fe8fce3f706a2434cddfc9e6b03ff44490f22121b235839e5f5eef27d95",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\fixed_evaluation.csv",
+      "sha256": "b267a5816114be9491c6b3bb806668d7eebba5057d914ee72cf50e7f64b32121",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\run_summary.json",
+      "sha256": "8487cf24e31e2f4f4ae354c4bf2b0af8a7192ffccef2be00999a22ccba88d03b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\selected_checkpoint_per_seed.csv",
+      "sha256": "48e9d909569335015473bf087e1dcd875f5b01a518780c595c3929448321e694",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report\\orchestration_evaluation_only_afb8de49\\training_log.csv",
+      "sha256": "86fe76be6be3901303eb093bf1b26e319bc5b23308166ea843922e1eeb0c2af1",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\evaluation_abort.json",
+      "sha256": "5339d54617004260f8be392604825ebc1bb2c5f5f72276e838c71215d6ccd393",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\evaluation_failure_metrics.csv",
+      "sha256": "9891bfaadef2ae7b65841e6edf32b15fa96c64acc6c911385a7c712742ff0e00",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\experiment_manifest.json",
+      "sha256": "0a65f453157792f68b74801bb87e13971d577abdf327cb9b0701435480fcf841",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\fixed_evaluation.csv",
+      "sha256": "9891bfaadef2ae7b65841e6edf32b15fa96c64acc6c911385a7c712742ff0e00",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_92a34d7f\\run_summary.json",
+      "sha256": "7b074fd8ee9a2b575335d70695f6987cb0ec31b7d76077a6a35ffa897bf4ce1d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\evaluation_abort.json",
+      "sha256": "80d299d63778793eec6defdc6f4b716dda42ec26ae42de6c3daef33d33c42aa3",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\evaluation_failure_metrics.csv",
+      "sha256": "6da4a1523506902d4567a68aa8a7cb22fa806cbc13a8f5caed26cc0224cfc649",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\experiment_manifest.json",
+      "sha256": "0a65f453157792f68b74801bb87e13971d577abdf327cb9b0701435480fcf841",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\fixed_evaluation.csv",
+      "sha256": "6da4a1523506902d4567a68aa8a7cb22fa806cbc13a8f5caed26cc0224cfc649",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_9eb420ae\\run_summary.json",
+      "sha256": "b0975c799e37864af5951c9ea915a6e88f24158979d519b021d32ac1d2bf70ff",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\evaluation_abort.json",
+      "sha256": "d8a13f5c6493ac6c261642f3cbc431d797a50d2cbbe2b11ccc92c4a4bdee713b",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\evaluation_failure_metrics.csv",
+      "sha256": "4b655c943ab3ee2d455e591aa069550dc334d52d35c78e58027bb8f6e2ae2448",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\experiment_manifest.json",
+      "sha256": "0a65f453157792f68b74801bb87e13971d577abdf327cb9b0701435480fcf841",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\fixed_evaluation.csv",
+      "sha256": "d859d9aada053a3f06cc9e4c437c8e99db630b7baf6e565394a43ad0b8ed8486",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\run_summary.json",
+      "sha256": "33b1e081cb7cf34155d31b7489d1f1dfbd9034c2db24df93ed2e995fdf2c04f2",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_cc3dd41e\\training_log.csv",
+      "sha256": "564669ee093e5acf0343e8ab8f1be9b0cf18abe5d3eaa26f2296ac0ed640bf67",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\evaluation_abort.json",
+      "sha256": "b6a97607b8630bccc51cb518bb39f0dd5e78e22c1df1fcd18bd56732671d588c",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\evaluation_failure_metrics.csv",
+      "sha256": "133361af51530b4744f117dd7066fb5b7f559d9eb6a77a4b55e4d8d070148802",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\experiment_manifest.json",
+      "sha256": "0a65f453157792f68b74801bb87e13971d577abdf327cb9b0701435480fcf841",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\fixed_evaluation.csv",
+      "sha256": "1e68cf5aac30601edb48b66f37009c7738070cc0b9033288b0aa6f8a31abbce6",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\run_summary.json",
+      "sha256": "3d454bd88c91d9d7d502b92f3ad8da95fd92be6a1f9fda556c91497a8a305b97",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\fault_injection_evaluation_only_ebcb25c5\\training_log.csv",
+      "sha256": "564669ee093e5acf0343e8ab8f1be9b0cf18abe5d3eaa26f2296ac0ed640bf67",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\checkpoint_selection.json",
+      "sha256": "777dc9e2b5ee762771395b2c895effae4013f871fa46e10c5b1e45a13677adff",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\experiment_manifest.json",
+      "sha256": "a162be3e1ce1df273ac8345a0bca6531c63205ee2ad0776df6049170da8c4009",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\fixed_evaluation.csv",
+      "sha256": "ab040f9ab0a89d3daf80a039e357529070be3409f4e22e936b3f30f86f926831",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\run_summary.json",
+      "sha256": "73b798743567898faf40e36432232ee65f74492ec5da9d19107675adb8c7734d",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\selected_checkpoint_per_seed.csv",
+      "sha256": "c59c90bb8699046c7d206205d970fd60057fd8ff6a2808bb03c1f0d082eb48be",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_1996ba3d\\orchestration_evaluation_only_dd50cf81\\training_log.csv",
+      "sha256": "564669ee093e5acf0343e8ab8f1be9b0cf18abe5d3eaa26f2296ac0ed640bf67",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\evaluation_abort.json",
+      "sha256": "f82641597256226f1bafc477efaf737dddd84dd3c66111274e038ae86197d576",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\evaluation_failure_metrics.csv",
+      "sha256": "cd63250f492f2d45e19629e708f6fe2763ba5152148a6eec0c7e52233d82023b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\fixed_evaluation.csv",
+      "sha256": "4c490440e0697d4b241724d1d6442b7ca317e0d739a6920f218c9e94519173ff",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\run_summary.json",
+      "sha256": "d723cd6f53f610b8019fcebcd23c6b043930b7858b5f28823f66b2da88eec4aa",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_4786db84\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\evaluation_abort.json",
+      "sha256": "a7aade603382a71d1e32221116fea012271b5e57ce4e414d46e95b22a554bfad",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\evaluation_failure_metrics.csv",
+      "sha256": "890bad72430d51604c46e1dda3ae4f556a5a22a2297d31e0a14d373fdb293f36",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\fixed_evaluation.csv",
+      "sha256": "890bad72430d51604c46e1dda3ae4f556a5a22a2297d31e0a14d373fdb293f36",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_8aad3a03\\run_summary.json",
+      "sha256": "34f409f05a89d69ba898480f8ce35cb6cdb6527c161042105eec1c942af1610f",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\evaluation_abort.json",
+      "sha256": "b2c91d5fd69ff5da280ec302aafc449ea5b3c0d3dec5fb0be53b51a18a85c6eb",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\evaluation_failure_metrics.csv",
+      "sha256": "b6771fe5cdf79bbd21522b39370963d2d9c896b424c7a8130312bb72f0180056",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\fixed_evaluation.csv",
+      "sha256": "9358ad38172bea0aee33d83aff974d41dce7e907139f0df9f8a712e20a145a44",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\run_summary.json",
+      "sha256": "fbd4642c224df117956b0e176a3d2ed4c578649760cffc6998e2f89e41afcad6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_b37879d4\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\checkpoint_selection.json",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\evaluation_abort.json",
+      "sha256": "fde6a1ec4ca65216283b6828537dd09f892a7c730e1e6313f95739439cc72cca",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\evaluation_failure_metrics.csv",
+      "sha256": "232a6d6d83ba712809479612631a04f4d1ff5d6de9623de302b0c6e412312ac8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\experiment_manifest.json",
+      "sha256": "ef199672859ccf93b86a8a1d0194f0f7129322f4286571ff91d149ae1e525e69",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\fixed_evaluation.csv",
+      "sha256": "232a6d6d83ba712809479612631a04f4d1ff5d6de9623de302b0c6e412312ac8",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\fault_injection_evaluation_only_e66d027d\\run_summary.json",
+      "sha256": "15b1660baa06c160d2f9a639c8f9b027ebab62a09d1708a1de39617943dde9e6",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\checkpoint_selection.json",
+      "sha256": "0ae84683a71d5cb780406f4da0796d5d9c05534b3f66c0a4bfe44a6188b8a634",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\experiment_manifest.json",
+      "sha256": "81fdd522cee22140ea62976305d444aa1951a4e3c4d897603df194edb6964799",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\fixed_evaluation.csv",
+      "sha256": "984d85aa2b6c0c7acec0d67dcae8f99b031ce9cecd28ef76c6ad525c0d66d45b",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\models\\action_environment.json",
+      "sha256": "2d8c90793dfec16847dd9f085e3676b14b28da9083936f09a63816d5aa6a41c8",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\run_summary.json",
+      "sha256": "029b6c70f9fde8836f875d992de5200101382accbf0380e3d81366ddf8111016",
+      "kind": "JSON execution metadata and nested seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\selected_checkpoint_per_seed.csv",
+      "sha256": "e6d1f05ba2ea96831b1f3434120478e633cdeabcb0b645347025fd5a85d18cbb",
+      "kind": "executed CSV seed fields"
+    },
+    {
+      "path": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\test_zanon2019_training_report_651b1416\\orchestration_evaluation_only_6aed33fe\\training_log.csv",
+      "sha256": "58f46c1827187f1d1e7502f5daf67edd4d27b3046e8f64f05bf7490be2bfd66a",
+      "kind": "executed CSV seed fields"
+    }
+  ],
+  "scope": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac",
+  "limitation": "no evidence of prior use in local artifacts; unseen external use cannot be ruled out",
+  "final_test_seeds": [
+    430000,
+    430001,
+    430002,
+    430003,
+    430004,
+    430005,
+    430006,
+    430007,
+    430008,
+    430009,
+    430010,
+    430011,
+    430012,
+    430013,
+    430014,
+    430015,
+    430016,
+    430017,
+    430018,
+    430019,
+    430020,
+    430021,
+    430022,
+    430023,
+    430024,
+    430025,
+    430026,
+    430027,
+    430028,
+    430029,
+    430030,
+    430031,
+    430032,
+    430033,
+    430034,
+    430035,
+    430036,
+    430037,
+    430038,
+    430039,
+    430040,
+    430041,
+    430042,
+    430043,
+    430044,
+    430045,
+    430046,
+    430047,
+    430048,
+    430049
+  ],
+  "training_seeds": [
+    42,
+    2027,
+    314159
+  ]
+}

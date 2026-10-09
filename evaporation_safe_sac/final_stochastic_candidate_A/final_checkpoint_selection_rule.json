@@ -1,0 +1,56 @@
+{
+  "version": "final_v1",
+  "created_before_final_test": true,
+  "validation_seed_list": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "learned_gate": "global_step >= manifest warmup_steps; all ten paired 1000-step validation realizations present",
+  "safety_gate": {
+    "physical_state_violation": 0,
+    "physical_input_violation": 0,
+    "QP_infeasible": 0,
+    "Omega_exit": 0
+  },
+  "economic_gate": {
+    "mean_economic_improvement_pct": "> 0",
+    "worst_seed_economic_improvement_pct": ">= 0"
+  },
+  "economic_formula": "100*(J_baseline-J_policy)/J_baseline; mean of paired per-seed gains",
+  "W_exceedance": "recorded diagnostic; never rejection condition",
+  "ranking_order": [
+    "ascending X2_IAE_ratio bands",
+    "descending minimum_X2_margin",
+    "descending p1_X2_margin",
+    "descending p5_X2_margin",
+    "ascending fraction_margin_lt_0p05",
+    "ascending fraction_margin_lt_0p10",
+    "ascending P2_IAE_ratio",
+    "ascending P2_ISE_ratio",
+    "ascending P2_std_ratio",
+    "ascending mean_TV_ratio",
+    "ascending mean_RMS_du_ratio",
+    "ascending boundary_occupancy_fraction",
+    "descending mean_economic_improvement_pct",
+    "ascending episode"
+  ],
+  "tie_tolerances": {
+    "X2_IAE_ratio_absolute_band": 0.01,
+    "other_ranking_fields": 0.0,
+    "economic_gate": 0.0
+  },
+  "band_definition": "Repeatedly take smallest remaining X2 IAE ratio r; band contains ratios <= r+0.01; sort band by remaining lexicographic fields. No pairwise chaining.",
+  "no_X2_ratio_hard_gate": true,
+  "no_eligible_status": "no_stable_positive_economic_safe_checkpoint",
+  "final_test_selection_allowed": false,
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "selector_source_sha256": "23f542a7c0e7c0f9ef995b563c21488c473272529a95d780b54ffbca8814cf52"
+}

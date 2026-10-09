@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "method": "V-representation exhaustive support + independent scipy HiGHS LP",
+  "numpy_version": "2.5.3",
+  "KZ_polygon_LP_min": [
+    -6.233117591563135,
+    -23.158177634938852
+  ],
+  "KZ_polygon_LP_max": [
+    7.719525595636856,
+    33.22532564479622
+  ],
+  "production_unchanged": true,
+  "no_rollouts": true
+}

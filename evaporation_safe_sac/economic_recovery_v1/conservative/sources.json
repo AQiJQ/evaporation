@@ -1,0 +1,4 @@
+{
+  "fixed_learning_sources": [],
+  "closed_loop_sources": "frozen_presentation only; NOT fixed learning or training log trajectories"
+}

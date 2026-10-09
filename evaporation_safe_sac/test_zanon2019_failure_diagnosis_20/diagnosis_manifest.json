@@ -1,0 +1,47 @@
+{
+  "run_dir": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000",
+  "actor": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_zanon2019_stochastic_seed42_300x1000\\models\\evaluation\\episode_0005_actor.pth",
+  "actor_sha256": "a8fe5e879e4a8057273ad97fbb3792ef8811ec4aa28f53dc9871b11933c5c4c6",
+  "steps": 20,
+  "seeds": [
+    420000,
+    420001,
+    420002
+  ],
+  "alphas": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.75,
+    1.0
+  ],
+  "weights_unchanged": {
+    "state_recovery": 5.501466348605391,
+    "P100_move": 108.11728453584045,
+    "F200_move": 81.880449071658,
+    "saturation": 3.666163865052666
+  },
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "training": false,
+  "supervisor": "unchanged Gm/Bj inactive in stochastic no-jump protocol, as in saved run",
+  "closed_loop": "same frozen neural parameters evaluated on each alpha's own state; not identical raw action time series across different states",
+  "safety_failures": "continued ONLY in isolated no-learning diagnosis to observe cascades; trainer unchanged and still stops",
+  "component_source": "current train.run_episode actual component records; replay RPI exclusion explicitly reconciled",
+  "source_hashes_before": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\config.py": "b76419bedc1157473738e81d2af0a561f760fd036137a279052b5879cf224627",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\control.py": "a634426695b504b3a94f6ca1c17dafeec9142b5849ee59cac3b8ea08614b542e",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\model.py": "0d1b153f4d5bc2beaeaba03a3890c8c49c1c70317f2d3077ae6f808a6ea5cea7",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\sac.py": "4de726380ae3d227a2153cb757365d3c53f322e325fc771fff23cf23a7ed69fb",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\train.py": "0649ad8649a555015e145d4a3846dcdfd19fe179f588ac37ae09b9b23c24d993",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\omega_interior_anchor.py": "d92a31d6f31621eecf6c4dfa1fdd92dcee0f0b6004bba1c53c077f3c30d6d86f",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\omega_feasible_normalized.py": "ea6ee2b4bd4439101e5e578573e1a52fc48da97748c996054dc27bf20379947f",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_benchmark.py": "730b153635b92a01aa1cd63543975226e945a292c51c2194d487cff72fc518b3",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\candidate_designs\\refine_1_X2_25.39000000_P2_50.12500000.npz": "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\Omega_anchor_B_vertices.csv": "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  }
+}

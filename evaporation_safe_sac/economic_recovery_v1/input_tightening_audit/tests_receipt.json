@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "main_tests": 194,
+  "skipped": [
+    {
+      "test": "setUpClass (evaporation.ecc2019_reproduction_tests.SolverTests)",
+      "reason": "Optional CasADi solver unavailable in this environment"
+    }
+  ],
+  "optional_CasADi_passed": true,
+  "optional_CasADi_tests": 3,
+  "integration_suites": [
+    "evaporation.test"
+  ],
+  "integration_error": null,
+  "production_hashes_unchanged": true,
+  "training_performed": false
+}

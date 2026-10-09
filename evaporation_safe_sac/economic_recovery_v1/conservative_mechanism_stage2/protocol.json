@@ -1,0 +1,77 @@
+{
+  "schema": "conservative_mechanism_stage2",
+  "original_protocol_sha256": "224ba20858e4679e362051b8aae6e04dd0a5d948037a4cf67a1fa073e3e5a49c",
+  "authorization": "latest human request explicitly prioritizes Conservative mechanism; Strong three-seed completion is deferred, not fabricated",
+  "phase_order": [
+    "baseline sweep",
+    "baseline-only selection freeze",
+    "penalty gate",
+    "finite actor-action oracle",
+    "training eligibility report"
+  ],
+  "deltas_X2": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2
+  ],
+  "P2_reference_fixed": 50.125,
+  "common_initial_state": [
+    25.39,
+    50.125
+  ],
+  "initial_condition_choice": "all sweep candidates and own paired oracle use the same Strong B initial state",
+  "reference_choice": "inherit preregistered fixed P2; exact nonlinear steady_input; no P2 optimization, K redesign or tightening relaxation",
+  "validation_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "steps": 1000,
+  "episodes_if_later_authorized": 100,
+  "dt_min": 0.016666666666666666,
+  "stochastic_residual_scale": 0.1,
+  "disturbance_variances": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "disturbance_choice": "implementation choice for reproduction: iid Gaussian literal variance, negative F1/X1 clip",
+  "margin_increase_tolerance": 0.0001,
+  "selection_rule": "first positive delta passing all reference/safety/numerical gates and increasing each of ten minimum X2 margins by >1e-4; aggregate minimum must also increase; no SAC or economic ranking",
+  "penalty_numerical_guard_abs": 0.00019999999999999998,
+  "penalty_guard_source": "two horizon sums of the existing audited_metrics absolute stage-cost check tolerance 1e-7; not a desired economic percent target",
+  "oracle_budget": 512,
+  "oracle_search_seed": 190019,
+  "oracle_segments": [
+    10,
+    5
+  ],
+  "oracle_label": "best economic improvement found by current finite search; never mathematical upper bound",
+  "economic_scale": 200.0,
+  "smoothness_scales": [
+    100.0,
+    100.0
+  ],
+  "target_regularizer_fraction": 0.05,
+  "economic_definition": "100*(ell_base-ell_SAC)/ell_base",
+  "cumulative_definition": "100*cumsum(base-SAC)/cumsum(base)",
+  "rolling20": "trailing full 20 steps; first 19 unavailable",
+  "physical_cost_unchanged": true,
+  "old_protocol_unchanged": true,
+  "final_test_performed": false,
+  "training_performed": false,
+  "source_hashes": {
+    "zanon2019_conservative_mechanism.py": "54e1be01c094e5fc1c0322bc36d12db94a9133ca1fbff0bb6476eff01258ec4e",
+    "zanon2019_conservative_mechanism_tests.py": "12e776ebcdfec7a9f9ac31beb2019a721131da04af80efccdcdc7b2d4ebd5caf"
+  }
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "suspected_issue": "Saved outer Z polygon membership vs infinite-sum support contract gap",
+    "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\omega_feasible_normalized.py",
+    "function": "FeasibleSetNormalizedController.act",
+    "line": 63,
+    "expression": "in_z = contains",
+    "expected_behavior": "If ALL saved polygon vertices are certified errors, tightening must cover their supports; otherwise clarify polygon is membership approximation/enclosure, not identical infinite RPI set.",
+    "actual_behavior": "Membership uses the saved outer polygon; tightening uses separate infinite-series/tail directional supports.",
+    "impact": "At a nominal input boundary plus the polygon extreme, P100 pre-clip robust bound may be exceeded by a small enclosure gap. Actual robust clip still enforces input bounds; this is not an observed closed-loop violation or a unit bug.",
+    "excess_physical": [
+      6.640700755955464e-05,
+      1.5148771126405336e-11
+    ],
+    "confidence": "high numerical evidence; safety-certificate interpretation requires review; no core repair authorized"
+  },
+  {
+    "suspected_issue": "Ambiguous U_minus_KZ labels actually denote U_R minus KZ",
+    "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\control.py",
+    "function": "build_safety_design",
+    "line": 875,
+    "expression": "diagnostics[\"u_minus_kz_upper_physical\"]",
+    "expected_behavior": "Distinguish global physical U=[100,400]^2 from local certified actual-input region U_R.",
+    "actual_behavior": "Saved U_minus_KZ names refer to the intersection with robust_input region before tightening.",
+    "impact": "Reporting/provenance ambiguity only; explains 216.303281 without any changed physical constraint.",
+    "confidence": "confirmed label ambiguity, not control-math bug"
+  }
+]

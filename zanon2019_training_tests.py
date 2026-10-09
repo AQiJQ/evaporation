@@ -27,7 +27,8 @@ class TrainingReportingTests(unittest.TestCase):
         cls.cfg, cls.model, cls.design, cls.omega, cls.domain, _ = make_setup(20, 42)
         cls.agent = make_agent(cls.cfg, "cpu")
         cls.agent.zero_initialize_residual_mean()
-        cls.out = Path(__file__).parent / "evaporation_safe_sac" / "test_zanon2019_training_report"
+        cls.out = Path(__file__).parent / "evaporation_safe_sac" / (
+            "test_zanon2019_training_report_" + uuid4().hex[:8])
         cls.evaluator = FixedPairedEvaluator(cls.cfg, cls.model, cls.design,
             cls.omega, cls.domain, "zanon2019_stochastic", [2, 1, 8, 5],
             20, 50, [420000, 420001, 420002], cls.out)

@@ -1,0 +1,35 @@
+{
+  "label": "ECC2019_reproduction_with_documented_assumptions",
+  "status": "naive_solver_smoke_NOT_RL_tuned",
+  "value": 1.3773821132153345,
+  "Q_at_V": 1.3773821436759328,
+  "action": [
+    191.71023575620035,
+    215.88825868203025
+  ],
+  "slack": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "PD": {
+    "passed": true,
+    "margins": [
+      0.999999,
+      0.999999,
+      0.999999,
+      0.999999,
+      0.0,
+      0.0,
+      74.999999,
+      39.999999
+    ],
+    "stage_min_eigenvalue": 1.0,
+    "terminal_min_eigenvalue": 1e-06,
+    "nominal_closed_loop_stability_proved": false
+  },
+  "Q_V_difference": 3.0460598265946714e-08,
+  "solver_status": "Solve_Succeeded",
+  "training_performed": false
+}

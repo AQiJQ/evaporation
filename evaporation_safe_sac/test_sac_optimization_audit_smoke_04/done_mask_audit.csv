@@ -1,0 +1,2 @@
+status,horizon_done,bootstrap_mask,terminated_vs_truncated,reward_normalization,target,interpretation
+source_verified_snapshot_unavailable,done=True at step999 in original 1000-step episodes,1-done,not separately represented,none beyond economic_scale=200 and fixed shaping,"r+gamma*(1-done)*(min(target_Q1,target_Q2)-alpha*logp)","consistent finite episodic terminal convention; if intended continuing-task truncation, no-bootstrap needs clarification, not an established bug"

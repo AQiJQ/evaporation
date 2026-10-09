@@ -1,0 +1,500 @@
+{
+  "F200_ref": 216.30328097756978,
+  "tightened_F200_upper": 216.30328098761106,
+  "raw_margin": 1.0041276254924014e-08,
+  "solver_tolerance": 1e-09,
+  "feasibility_tolerance": 1e-08,
+  "tolerance_units": "normalized input; input_scale_F200=100 physical units per normalized unit",
+  "solver_tolerance_F200_physical": 1.0000000000000001e-07,
+  "feasibility_tolerance_F200_physical": 1e-06,
+  "feasibility_semantics": "all(v_ref >= u_lower_tight - 1e-8) and all(v_ref <= u_upper_tight + 1e-8); raw physical margin separately reported",
+  "repeat_count": 29,
+  "min_recomputed_margin": 1.0041276254924014e-08,
+  "max_recomputed_margin": 1.0041276254924014e-08,
+  "mean_recomputed_margin": 1.0041276254924014e-08,
+  "feasible_count": 29,
+  "infeasible_count": 0,
+  "QP_init_feasible_count": 29,
+  "serialization_reload_consistent": true,
+  "steady_input_max_repeat_error": 0.0,
+  "repeated_feasible_infeasible_flip": false,
+  "numerically_stable": true,
+  "margin_exceeds_solver_tolerance_physical": false,
+  "backend": "unchanged NumPy float64 exact 2D active-set enumeration",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\.venv-cuda\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "numpy_version": "2.3.5",
+  "torch_version": "2.14.0+cu126",
+  "trials": [
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "same Windows process float64 repeat",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    },
+    {
+      "origin": "fresh Windows Python process",
+      "F200_ref": 216.30328097756978,
+      "raw_margin": 1.0041276254924014e-08,
+      "normalized_upper_residual": -1.0041264266466912e-10,
+      "steady_derivative_inf": 2.1316282072803005e-15,
+      "feasible": true,
+      "QP_init_feasible": true,
+      "reference_input_tightened": true,
+      "limiting_gates": [],
+      "F200_hex": "0x1.b09b47a4f0528p+7",
+      "state_hex": [
+        "0x1.9666666666667p+4",
+        "0x1.9110882812c1ap+5"
+      ]
+    }
+  ],
+  "constraints_changed": false,
+  "reference_changed": false,
+  "input_clamped": false,
+  "interpretation": "deterministic repeat/load/fresh-process stability only; near-zero input margin remains, no global-margin robustness claim",
+  "status": "stable_repeatability"
+}

@@ -1,0 +1,13 @@
+state_id,state_X2,state_P2,dQ_da0_at_zero,dQ_da1_at_zero,actual_return_direction_0,actual_return_direction_1,scope
+0,25.39,50.125,-3.8397162,0.12043846,0.003790052071973804,0.01298056539959802,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+46,25.356077233184042,50.176044990291345,-1.0829818,0.9148588,0.0006674510300754832,-0.004604543502487957,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+92,25.316542567758326,50.267878221052996,-2.629405,-2.1785839,-0.017278770775050134,0.032160609971299436,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+139,25.44821576444401,50.04591604422611,1.2417082,-0.1973561,0.06952494973174161,-0.066015758776512,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+185,25.336406381731532,50.11267009598079,-0.030605793,-2.3768325,-0.008694780622240716,0.04189968971934521,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+232,25.252537926146783,50.155273777771534,-1.1766113,0.11411166,0.06292431862032544,-0.14825281139312807,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+278,25.370900385735226,50.20033106288517,-0.8071387,-1.8867352,0.04745236869651137,-0.036093205378872284,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+325,25.395312398483593,50.094991268707176,-0.47878218,0.8488269,-0.002523109109626276,0.0037052720685650797,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+371,25.447473031826544,50.07351244371788,1.1983334,-3.2053628,0.019930787804540273,-0.035181301843742574,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+418,25.400636492155378,50.15651316849598,0.83439827,1.437717,-0.03880382988238651,-0.03555204355249231,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+464,25.299170608575206,50.16558101053111,-2.206863,1.0945394,0.04409458789691456,-0.09227352375096487,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"
+511,25.180279900347692,50.276970145829395,1.0719724,-1.8184872,0.015384076634179067,0.22004000561059556,"single-CRN local-direction diagnostic, not precise gradient or actor-error proof"

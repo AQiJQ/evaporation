@@ -1,0 +1,12 @@
+[
+  {
+    "episode": 0,
+    "total_training_reward": 0,
+    "mean_economic_improvement_pct": 0
+  },
+  {
+    "episode": 5,
+    "total_training_reward": -1,
+    "mean_economic_improvement_pct": -0.1
+  }
+]

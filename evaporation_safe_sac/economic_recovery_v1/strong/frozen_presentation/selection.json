@@ -1,0 +1,14 @@
+{
+  "episode": 100,
+  "training_seed": 42,
+  "validation_seed": 420000,
+  "status": "predeclared development presentation; not final selection",
+  "pair": "primary_strong_baseline",
+  "checkpoint_source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\models\\episode_0100_actor.pth",
+  "source_sha256": "1720aa431ff64414f6d3ed38d1de1b7768fefbfaeeea393d786ec872e5264007",
+  "frozen_actor_sha256": "1720aa431ff64414f6d3ed38d1de1b7768fefbfaeeea393d786ec872e5264007",
+  "checkpoint_protocol": "post-training episode100 development presentation only; NOT economic_first_final_v2",
+  "trajectory_source": "new paired rollout after policy freeze, never a training trajectory",
+  "protocol_sha256": "224ba20858e4679e362051b8aae6e04dd0a5d948037a4cf67a1fa073e3e5a49c",
+  "final_test_performed": false
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "zanon2019_alpha020_reward_scale_v1",
+  "source_directory": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\authority_cuda_seed42_100x1000\\outputs_zanon2019_alpha020_seed42_100x1000",
+  "context": {
+    "state_scale": [
+      15.0,
+      20.0
+    ],
+    "input_scale": [
+      100.0,
+      100.0
+    ],
+    "robust_economic_reference_state": [
+      25.39,
+      50.125
+    ],
+    "linearization_state": [
+      25.39,
+      50.125
+    ],
+    "linearization_input": [
+      194.86144296829238,
+      216.27665350522335
+    ],
+    "disturbance_nominal": [
+      10.0,
+      5.0,
+      40.0,
+      25.0
+    ],
+    "reward_cost_scale": 200.0,
+    "dt_min": 0.016666666666666666,
+    "geometry_sha256": [
+      "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+      "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+    ]
+  },
+  "stochastic_residual_scale": 0.2,
+  "calibration_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "reserved_final_test_seeds_used": false,
+  "baseline_means": {
+    "economic_reward_mean": 0.07822426706311447,
+    "mean_absolute_economic_reward": 0.9946118186175685,
+    "X2_loss": 8.558406651179345e-06,
+    "P2_loss": 1.1201557919857273e-05,
+    "state_recovery": 1.9759964571036618e-05,
+    "P100_move": 0.002323308534492908,
+    "F200_move": 0.00010864595600756441,
+    "saturation": 0.0
+  },
+  "old_weights": {
+    "state_recovery": 5.501466348605391,
+    "P100_move": 108.11728453584045,
+    "F200_move": 81.880449071658,
+    "saturation": 3.666163865052666
+  },
+  "calibrated_weights": {
+    "state_recovery": 5033.469645362784,
+    "P100_move": 21.40507392477374,
+    "F200_move": 457.7307132114145,
+    "saturation": 3.666163865052666
+  },
+  "target_fractions": {
+    "state_recovery": 0.1,
+    "P100_move": 0.05,
+    "F200_move": 0.05
+  },
+  "old_baseline_fractions": {
+    "state_recovery": 0.00010929769594764045,
+    "P100_move": 0.25255059832030763,
+    "F200_move": 0.008944172491418491,
+    "saturation": 0.0
+  },
+  "new_baseline_fractions": {
+    "state_recovery": 0.1,
+    "P100_move": 0.05,
+    "F200_move": 0.05,
+    "saturation": 0.0
+  },
+  "weight_multipliers": {
+    "state_recovery": 914.9323701014288,
+    "P100_move": 0.19798012886346622,
+    "F200_move": 5.590232081053069,
+    "saturation": 1.0
+  },
+  "saturation_status": "baseline unexcited; original saturation weight retained",
+  "scope": "implementation choice for reproduction; not specified in the paper",
+  "training_performed": false,
+  "limitations": [
+    "Squared shaping is a surrogate, not an IAE/TV constraint or economics guarantee",
+    "Historical CSV lacks some other penalties; economic-minus-four-shaping is NOT full return",
+    "Raw evaluation RPI penalties must not be confused with replay reward",
+    "Calibration uses validation realizations; final held-out test remains unused"
+  ],
+  "partial_objective_correlations_not_full_return": {
+    "old": {
+      "economic_improvement_percent": 0.7437828812788293,
+      "X2_IAE_ratio": 0.6942866030567652,
+      "F200_TV_ratio": -0.9250655453239817
+    },
+    "recalibrated": {
+      "economic_improvement_percent": 0.4520527895746124,
+      "X2_IAE_ratio": 0.3808033730143473,
+      "F200_TV_ratio": -0.9605301315558993
+    }
+  }
+}

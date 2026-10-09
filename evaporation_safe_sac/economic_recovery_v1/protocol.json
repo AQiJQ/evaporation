@@ -1,0 +1,104 @@
+{
+  "schema": "safe_sac_economic_recovery_v1",
+  "pairs": {
+    "strong": "primary_strong_baseline",
+    "conservative": "sensitivity_conservative_baseline"
+  },
+  "training_seeds": [
+    42,
+    2027,
+    314159
+  ],
+  "development_seeds": [
+    420000,
+    420001,
+    420002,
+    420003,
+    420004,
+    420005,
+    420006,
+    420007,
+    420008,
+    420009
+  ],
+  "representative_seed": 420000,
+  "episodes": 100,
+  "steps": 1000,
+  "dt_min": 0.016666666666666666,
+  "economic_scale": 200.0,
+  "stochastic_residual_scale": 0.1,
+  "disturbance_variances": [
+    2.0,
+    1.0,
+    8.0,
+    5.0
+  ],
+  "disturbance_choice": "implementation choice for reproduction: iid Gaussian literal variance, negative F1/X1 clip",
+  "strong_reference": [
+    25.39,
+    50.125
+  ],
+  "conservative_deltas_X2": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2
+  ],
+  "conservative_P2_fixed": 50.125,
+  "conservative_selection_rule": "first positive delta with all ten paired baseline minimum X2 margins increased by >1e-4; safety/reference gates pass; no economic ranking",
+  "margin_increment_guard": 0.0001,
+  "margin_guard_meaning": "observable numerical guard, not an engineering margin target",
+  "smoothness_calibration": "same 5% lambda=0.05*mean(abs(paired economic reward))/mean(excess applied squared move); same 69 archived excitation profiles, equal 1000-step weighting",
+  "conservative_excitation_choice": "replay the identical raw actor-action profiles at the new reference through the unchanged controller; not direct physical-q actions",
+  "strong_lambda_smooth": 17.613805207960148,
+  "smoothness_physical_scales": [
+    100.0,
+    100.0
+  ],
+  "instantaneous": "100*(ell_base-ell_SAC)/ell_base",
+  "raw_difference": "ell_SAC-ell_base",
+  "rolling20": "trailing full 20 steps; first 19 unavailable",
+  "cumulative": "100*cumsum(base-SAC)/cumsum(base)",
+  "win_fraction": "strict count(ell_SAC<ell_base)/1000",
+  "recovery": "100*(JC-JCSAC)/(JC-JS), defined only JC>JS",
+  "oracle_budget": 512,
+  "oracle_segments": [
+    10,
+    5
+  ],
+  "oracle_search_seed": 190019,
+  "oracle_status": "finite best-found estimate, NOT certified economic upper bound",
+  "presentation_checkpoint": {
+    "episode": 100,
+    "training_seed": 42,
+    "validation_seed": 420000,
+    "status": "predeclared development presentation; not final selection"
+  },
+  "final_selection_rule": "not locked; register after all six development training runs, before independent testing",
+  "phase_order": [
+    "strong metrics/tests/oracle/pilot/3seeds",
+    "conservative baseline sweep/freeze/oracle",
+    "conservative calibration/3seeds",
+    "development comparison"
+  ],
+  "frozen_geometry_sha256": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_certified_reference_margin_audit\\candidate_designs\\refine_1_X2_25.39000000_P2_50.12500000.npz": "6f2615d52f221a4de096760179e2f6750584f51ae131608235de4f96c2728af9",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\outputs_controlled_invariant_error_B\\Omega_anchor_B_vertices.csv": "60f32ee9237056486bfe7751d36dfa8571e64db1ca5998c1b3fb6bb7c0892f7b"
+  },
+  "strong_config_sha256": "25850320a763e2a125b81ab027c7ea008c593f84f838bbe85a6f13ae83e9d2c3",
+  "frozen_v2_sources": {
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2.py": "1fcb5df433a073887d4124fa9c3593645eebd39273d4d6bea80ad775c152033c",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_objective.py": "fe1f9ba0d7615d8b6f82652fd56dc96b99c6c0046438c65c8f30aa0dc6c26043",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_report.py": "5305d1d03127a3dbb0ad412cfbbac557a63f98ac5bf76b9c4a64da9cbfa1e654",
+    "C:\\Users\\cushy\\PycharmProjects\\evaporation\\zanon2019_paired_v2_tests.py": "a9ff0029d3e5f93f70f408478b16d14d5b3699b9d6e4d5ab1b6197179ac5dd3a"
+  },
+  "source_hashes": {
+    "zanon2019_economic_recovery.py": "fc85c8260290db10c2b08d935d31285f98ca4bf55560bc301a49a31af257fa47",
+    "zanon2019_economic_recovery_metrics.py": "3ea11340aaa6026480a4eb620da86074a3fc33eb1382b6db78738711df9d683d",
+    "zanon2019_economic_recovery_reference.py": "3406e3065ac0975ae20bcfda1b41e4e0b6a391c415cdf8fffbfe67fd4243aaed",
+    "zanon2019_economic_recovery_report.py": "cc5b496fc61ffa0a9eb1768547ec71d950f09e8edfcc3790f0aac8bb727703ca",
+    "zanon2019_economic_recovery_tests.py": "d12ca9e0d3fed79854c77264c9f1317512fe1b1f8e17bbef48c2edeabda8c7bd"
+  },
+  "final_test_performed": false
+}

@@ -1,0 +1,17 @@
+audit_configuration,P100_upper,F200_upper,P100_increase_vs_full,F200_increase_vs_full,rho_fixed,note,certified_for_production
+physical_only,400.0,400.0,166.34461171920762,150.47139336977665,1.1083984375,physical-only audit; not certified controller,False
+physical_plus_local_P100_window,233.65538828079238,400.0,0.0,150.47139336977665,1.1083984375,explicit P100 window only,False
+physical_plus_local_F200_window,400.0,249.52860663022335,166.34461171920762,0.0,1.1083984375,explicit F200 window only,False
+full_UR,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,"frozen scale, center and window",False
+remove_local_P100_upper,400.0,249.52860663022335,166.34461171920762,0.0,1.1083984375,isolated box facet removal,False
+remove_local_F200_upper,233.65538828079238,400.0,0.0,150.47139336977665,1.1083984375,isolated box facet removal,False
+remove_X2_facets,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_P2_facets,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_W_direct_term,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_Z_direct_term,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_S,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_Omega,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_predecessor,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+remove_Gm_Bj,233.65538828079238,249.52860663022335,0.0,0.0,1.1083984375,not present directly; rho held fixed; indirect scale-selection effect not quantified,False
+epsilon_local_P100_upper,233.65538928079238,249.52860663022335,9.999999974752427e-07,0.0,1.1083984375,only standalone RHS perturbed by 1e-06 physical units; no tolerance change,False
+epsilon_local_F200_upper,233.65538828079238,249.52860763022335,0.0,9.999999974752427e-07,1.1083984375,only standalone RHS perturbed by 1e-06 physical units; no tolerance change,False

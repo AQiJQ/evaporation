@@ -1,0 +1,768 @@
+{
+  "status": "COMPLETE",
+  "reconstruction_only": true,
+  "training": false,
+  "original_failed_scale_logs_archived": false,
+  "state": [
+    25.39,
+    50.125
+  ],
+  "seed": 42,
+  "initial_rho": 1.0,
+  "growth": 1.25,
+  "max_search_scale": 4.0,
+  "bisection_iterations": 8,
+  "tolerance": 1e-08,
+  "nonlinear_sampling": {
+    "random_samples": 10000,
+    "corners": "all X_R x U_R x D vertex combinations",
+    "rng": "seed + 81000 + attempt_index",
+    "claim": "finite sampling coverage, NOT continuous-domain nonlinear proof"
+  },
+  "acceptance": "all original _candidate_region_diagnostics and final evaluate_candidate gates",
+  "production_scale": 1.1083984375,
+  "distinction": "Original replay may redesign K/M/W/Z/S locally; sensitivity freezes them",
+  "attempts": [
+    {
+      "attempt": 1,
+      "scale": 1.0,
+      "state_region": [
+        [
+          25.0,
+          47.125
+        ],
+        [
+          27.39,
+          53.125
+        ]
+      ],
+      "input_region": [
+        [
+          159.86144296829238,
+          186.27665350522335
+        ],
+        [
+          229.86144296829238,
+          246.27665350522335
+        ]
+      ],
+      "w_hull_vertex_count": 15,
+      "max_residual_norm": 0.00021466497879631073,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9993877521249828,
+      "hinf_sampled_norm": 2201.4029003014807,
+      "rpi_area_physical": 0.35418849954094306,
+      "rpi_width_physical": [
+        0.663682325586258,
+        2.393273848237298
+      ],
+      "x_minus_z_lower_physical": [
+        25.38181035951002,
+        48.11717107291431
+      ],
+      "x_minus_z_upper_physical": [
+        27.108128033923762,
+        51.72389722467701
+      ],
+      "u_minus_kz_lower_physical": [
+        166.61821081672454,
+        195.54259556208493
+      ],
+      "u_minus_kz_upper_physical": [
+        221.19444442641492,
+        233.22423459835505
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.000545976032665433,
+          0.10039144635428458
+        ],
+        "below_upper": [
+          0.11454186892825075,
+          0.0799448612338505
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.03207447518008197,
+      "x_minus_z_area": 12.0602885250765,
+      "invariant_area": 11.939987147038854
+    },
+    {
+      "attempt": 2,
+      "scale": 1.25,
+      "state_region": [
+        [
+          25.0,
+          46.375
+        ],
+        [
+          27.89,
+          53.875
+        ]
+      ],
+      "input_region": [
+        [
+          151.11144296829238,
+          178.77665350522335
+        ],
+        [
+          238.61144296829238,
+          253.77665350522335
+        ]
+      ],
+      "w_hull_vertex_count": 15,
+      "max_residual_norm": 0.0003353522340959803,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": false,
+      "s_plus_z_contained": false,
+      "input_tube_contained": false,
+      "residual_membership_passed": false,
+      "safe_center_feasible": true,
+      "v_ref_feasible": false,
+      "verification_qp_feasible": false,
+      "residual_authority_feasible": false,
+      "minimum_residual_authority": 0.0,
+      "feasible": false,
+      "failure_reason": "invariant_feasible,v_ref_feasible,verification_qp_feasible,residual_authority_feasible"
+    },
+    {
+      "attempt": 3,
+      "scale": 1.125,
+      "state_region": [
+        [
+          25.0,
+          46.75
+        ],
+        [
+          27.64,
+          53.5
+        ]
+      ],
+      "input_region": [
+        [
+          155.48644296829238,
+          182.52665350522335
+        ],
+        [
+          234.23644296829238,
+          250.02665350522335
+        ]
+      ],
+      "w_hull_vertex_count": 18,
+      "max_residual_norm": 0.00027166021511647613,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": false,
+      "s_plus_z_contained": false,
+      "input_tube_contained": false,
+      "residual_membership_passed": false,
+      "safe_center_feasible": true,
+      "v_ref_feasible": false,
+      "verification_qp_feasible": false,
+      "residual_authority_feasible": false,
+      "minimum_residual_authority": 0.0,
+      "feasible": false,
+      "failure_reason": "invariant_feasible,v_ref_feasible,verification_qp_feasible,residual_authority_feasible"
+    },
+    {
+      "attempt": 4,
+      "scale": 1.0625,
+      "state_region": [
+        [
+          25.0,
+          46.9375
+        ],
+        [
+          27.515,
+          53.3125
+        ]
+      ],
+      "input_region": [
+        [
+          157.67394296829238,
+          184.40165350522335
+        ],
+        [
+          232.04894296829238,
+          248.15165350522335
+        ]
+      ],
+      "w_hull_vertex_count": 14,
+      "max_residual_norm": 0.0002423253939444471,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980446075716615,
+      "hinf_sampled_norm": 2998.500444045958,
+      "rpi_area_physical": 0.041161809807060454,
+      "rpi_width_physical": [
+        0.11307274702890616,
+        0.8343251303833443
+      ],
+      "x_minus_z_lower_physical": [
+        25.06590568977537,
+        47.25973044930892
+      ],
+      "x_minus_z_upper_physical": [
+        27.467832942746465,
+        52.80040531892557
+      ],
+      "u_minus_kz_lower_physical": [
+        163.28135135855322,
+        203.70345307725665
+      ],
+      "u_minus_kz_upper_physical": [
+        224.94993905666232,
+        217.66887184547315
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.02160628734830859,
+          0.14326347753455418
+        ],
+        "below_upper": [
+          0.1385221961830977,
+          0.13377026594627858
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.04022960372421698,
+      "x_minus_z_area": 13.31611277926896,
+      "invariant_area": 13.183284554295753
+    },
+    {
+      "attempt": 5,
+      "scale": 1.09375,
+      "state_region": [
+        [
+          25.0,
+          46.84375
+        ],
+        [
+          27.5775,
+          53.40625
+        ]
+      ],
+      "input_region": [
+        [
+          156.58019296829238,
+          183.46415350522335
+        ],
+        [
+          233.14269296829238,
+          249.08915350522335
+        ]
+      ],
+      "w_hull_vertex_count": 18,
+      "max_residual_norm": 0.0002567835170468227,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.049999999999999926,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980369585493017,
+      "hinf_sampled_norm": 2999.9974135453253,
+      "rpi_area_physical": 0.044983731895735735,
+      "rpi_width_physical": [
+        0.11974824924844503,
+        0.8764737484962449
+      ],
+      "x_minus_z_lower_physical": [
+        25.07002855252107,
+        47.17957599299701
+      ],
+      "x_minus_z_upper_physical": [
+        27.527780303272625,
+        52.865602244500764
+      ],
+      "u_minus_kz_lower_physical": [
+        162.50057662716424,
+        203.6954381502544
+      ],
+      "u_minus_kz_upper_physical": [
+        225.6285602858795,
+        216.74085087846163
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.02133142983192878,
+          0.14727120035014954
+        ],
+        "below_upper": [
+          0.1425186868848416,
+          0.13703011222503822
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.044983731895735735,
+      "x_minus_z_area": 13.974840974452658,
+      "invariant_area": 13.835441935732492
+    },
+    {
+      "attempt": 6,
+      "scale": 1.109375,
+      "state_region": [
+        [
+          25.0,
+          46.796875
+        ],
+        [
+          27.60875,
+          53.453125
+        ]
+      ],
+      "input_region": [
+        [
+          156.03331796829238,
+          182.99540350522335
+        ],
+        [
+          233.68956796829238,
+          249.55790350522335
+        ]
+      ],
+      "w_hull_vertex_count": 14,
+      "max_residual_norm": 0.00026416954585894547,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": false,
+      "s_plus_z_contained": false,
+      "input_tube_contained": false,
+      "residual_membership_passed": false,
+      "safe_center_feasible": true,
+      "v_ref_feasible": false,
+      "verification_qp_feasible": false,
+      "residual_authority_feasible": false,
+      "minimum_residual_authority": 0.0,
+      "feasible": false,
+      "failure_reason": "invariant_feasible,v_ref_feasible,verification_qp_feasible,residual_authority_feasible"
+    },
+    {
+      "attempt": 7,
+      "scale": 1.1015625,
+      "state_region": [
+        [
+          25.0,
+          46.8203125
+        ],
+        [
+          27.593125,
+          53.4296875
+        ]
+      ],
+      "input_region": [
+        [
+          156.30675546829238,
+          183.22977850522335
+        ],
+        [
+          233.41613046829238,
+          249.32352850522335
+        ]
+      ],
+      "w_hull_vertex_count": 16,
+      "max_residual_norm": 0.00026046345119179286,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980369585493017,
+      "hinf_sampled_norm": 2999.9974135453253,
+      "rpi_area_physical": 0.04663604607708034,
+      "rpi_width_physical": [
+        0.12199672841508766,
+        0.8957725292540184
+      ],
+      "x_minus_z_lower_physical": [
+        25.071040160068954,
+        47.16758764401386
+      ],
+      "x_minus_z_upper_physical": [
+        27.542168431653867,
+        52.88119011475983
+      ],
+      "u_minus_kz_lower_physical": [
+        162.33726842636946,
+        204.1379709014696
+      ],
+      "u_minus_kz_upper_physical": [
+        225.79392528929182,
+        216.50571876022823
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.02126398932873646,
+          0.14787061779930732
+        ],
+        "below_upper": [
+          0.14347789544359107,
+          0.13780950573799172
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.04663604607708034,
+      "x_minus_z_area": 14.119044598057803,
+      "invariant_area": 13.97820712819218
+    },
+    {
+      "attempt": 8,
+      "scale": 1.10546875,
+      "state_region": [
+        [
+          25.0,
+          46.80859375
+        ],
+        [
+          27.6009375,
+          53.44140625
+        ]
+      ],
+      "input_region": [
+        [
+          156.17003671829238,
+          183.11259100522335
+        ],
+        [
+          233.55284921829238,
+          249.44071600522335
+        ]
+      ],
+      "w_hull_vertex_count": 15,
+      "max_residual_norm": 0.0002623132284858697,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980369585493017,
+      "hinf_sampled_norm": 2999.9974135453253,
+      "rpi_area_physical": 0.047076648527055905,
+      "rpi_width_physical": [
+        0.12252810514556942,
+        0.8978911662638311
+      ],
+      "x_minus_z_lower_physical": [
+        25.07154873087862,
+        47.15404090087019
+      ],
+      "x_minus_z_upper_physical": [
+        27.549958125733053,
+        52.88896223460636
+      ],
+      "u_minus_kz_lower_physical": [
+        162.22705790234303,
+        203.91887565295207
+      ],
+      "u_minus_kz_upper_physical": [
+        225.87631630048446,
+        216.38684921770354
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.021230084608091872,
+          0.14854795495649034
+        ],
+        "below_upper": [
+          0.14399720838220353,
+          0.13819811173031812
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.047076648527055905,
+      "x_minus_z_area": 14.213482912282826,
+      "invariant_area": 14.0717034202328
+    },
+    {
+      "attempt": 9,
+      "scale": 1.107421875,
+      "state_region": [
+        [
+          25.0,
+          46.802734375
+        ],
+        [
+          27.60484375,
+          53.447265625
+        ]
+      ],
+      "input_region": [
+        [
+          156.10167734329238,
+          183.05399725522335
+        ],
+        [
+          233.62120859329238,
+          249.49930975522335
+        ]
+      ],
+      "w_hull_vertex_count": 17,
+      "max_residual_norm": 0.0002632405696657405,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980369585493017,
+      "hinf_sampled_norm": 2999.9974135453253,
+      "rpi_area_physical": 0.04752783668390925,
+      "rpi_width_physical": [
+        0.12313660225045853,
+        0.9032847016731177
+      ],
+      "x_minus_z_lower_physical": [
+        25.07180370820836,
+        47.15159629024702
+      ],
+      "x_minus_z_upper_physical": [
+        27.553510855957903,
+        52.892842838573905
+      ],
+      "u_minus_kz_lower_physical": [
+        162.18846610035715,
+        204.0617421372105
+      ],
+      "u_minus_kz_upper_physical": [
+        225.91743892585473,
+        216.3270884512014
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.02121308611944264,
+          0.1486701854876489
+        ],
+        "below_upper": [
+          0.14423405706386017,
+          0.1383921419286952
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.04752783668390925,
+      "x_minus_z_area": 14.248092595975207,
+      "invariant_area": 14.10596787233036
+    },
+    {
+      "attempt": 10,
+      "scale": 1.1083984375,
+      "state_region": [
+        [
+          25.0,
+          46.7998046875
+        ],
+        [
+          27.606796875,
+          53.4501953125
+        ]
+      ],
+      "input_region": [
+        [
+          156.06749765579238,
+          183.02470038022335
+        ],
+        [
+          233.65538828079238,
+          249.52860663022335
+        ]
+      ],
+      "w_hull_vertex_count": 13,
+      "max_residual_norm": 0.0002637048533860709,
+      "hinf_feasible": true,
+      "rpi_feasible": true,
+      "x_tightening_feasible": true,
+      "u_tightening_feasible": true,
+      "invariant_feasible": true,
+      "s_plus_z_contained": true,
+      "input_tube_contained": true,
+      "residual_membership_passed": true,
+      "safe_center_feasible": true,
+      "v_ref_feasible": true,
+      "verification_qp_feasible": true,
+      "residual_authority_feasible": true,
+      "minimum_residual_authority": 0.04999999999999994,
+      "feasible": true,
+      "failure_reason": "",
+      "reference_in_tightened_state_set": true,
+      "reference_in_controlled_invariant_set": true,
+      "closed_loop_spectral_radius": 0.9980369585493017,
+      "hinf_sampled_norm": 2999.9974135453253,
+      "rpi_area_physical": 0.049490558625138584,
+      "rpi_width_physical": [
+        0.12602180108237848,
+        0.9386575865178259
+      ],
+      "x_minus_z_lower_physical": [
+        25.071931369875486,
+        47.183048737816065
+      ],
+      "x_minus_z_upper_physical": [
+        27.55270644379311,
+        52.89478177629824
+      ],
+      "u_minus_kz_lower_physical": [
+        162.29349428749464,
+        206.03842545066712
+      ],
+      "u_minus_kz_upper_physical": [
+        225.9379820175207,
+        216.29712655338005
+      ],
+      "reference_tightened_state_margin_normalized": {
+        "above_lower": [
+          0.02120457534163432,
+          0.1470975631091967
+        ],
+        "below_upper": [
+          0.14418042958620716,
+          0.138489088814912
+        ]
+      },
+      "s_subset_tightened": true,
+      "rpi_area": 0.049103177319632395,
+      "x_minus_z_area": 14.19233615072261,
+      "invariant_area": 14.050767597619148
+    }
+  ],
+  "final": {
+    "stage": "reconstruction",
+    "X2": 25.39,
+    "P2": 50.125,
+    "steady_P100": 194.86144296829238,
+    "steady_F200": 216.27665350522335,
+    "steady_cost": 6233.557805145574,
+    "cost_increase": 23.173295569482434,
+    "cost_increase_percent": 0.3731378553735346,
+    "derivative_inf_norm": 7.105427357601002e-16,
+    "physical_state_feasible": true,
+    "physical_input_feasible": true,
+    "hinf_feasible": true,
+    "rpi_feasible": true,
+    "x_tightening_feasible": true,
+    "u_tightening_feasible": true,
+    "reference_in_tightened_state_set": true,
+    "invariant_feasible": true,
+    "reference_in_S": true,
+    "s_plus_z_contained": true,
+    "input_tube_contained": true,
+    "disturbance_bound_audit_passed": true,
+    "verification_qp_feasible": true,
+    "residual_authority_feasible": true,
+    "fully_certified": true,
+    "minimum_residual_authority": 0.04999999999999994,
+    "spectral_radius": 0.9980369585493017,
+    "hinf_sampled_norm": 2999.9974135453253,
+    "hinf_gamma": 3000.0,
+    "rpi_area": 0.049103177319632395,
+    "rpi_width_X2": 0.1260900628774849,
+    "rpi_width_P2": 0.9293049725687417,
+    "S_X2_lower": 25.073465826772143,
+    "S_P2_lower": 47.19439947342992,
+    "S_X2_upper": 27.541769104834046,
+    "S_P2_upper": 52.88687969759902,
+    "X_minus_Z_X2_lower": 25.07187520278607,
+    "X_minus_Z_P2_lower": 47.17967283761801,
+    "X_minus_Z_X2_upper": 27.552582014908587,
+    "X_minus_Z_P2_upper": 52.90075849004926,
+    "U_minus_KZ_P100_lower": 162.30054883782802,
+    "U_minus_KZ_F200_lower": 206.18287801690218,
+    "U_minus_KZ_P100_upper": 225.93592909494444,
+    "U_minus_KZ_F200_upper": 216.30328098761106,
+    "robust_region_scale": 1.1083984375,
+    "verification_qp_probe_count": 5,
+    "gain_seed": "configured_continuous_K",
+    "K_00": -29.57064040757147,
+    "K_01": -2.3531582700148315,
+    "K_10": -6.315841082069215,
+    "K_11": 10.996781923109713,
+    "elapsed_seconds": 1213.8554708957672,
+    "failure_reason": "",
+    "design_file": "reconstruction_X2_25.39000000_P2_50.12500000.npz"
+  },
+  "max_accepted_rho": 1.1083984375,
+  "selected_rho": 1.1083984375,
+  "matches_archived_selected_scale": true
+}

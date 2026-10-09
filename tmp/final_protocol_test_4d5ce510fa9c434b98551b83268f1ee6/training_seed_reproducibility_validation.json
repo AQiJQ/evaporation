@@ -1,0 +1,58 @@
+{
+  "successful_training_seeds": 0,
+  "completed_training_screening": false,
+  "case": "pending_training_completion",
+  "validation_only": true,
+  "independent_final_test_run": false,
+  "final_test_recommendation": "not yet; training pending",
+  "policies": [
+    {
+      "training_seed": 42,
+      "status": "training_pending",
+      "run_status": "training_pending",
+      "checkpoint_path": null,
+      "selected_checkpoint": null,
+      "checkpoint_sha256": null,
+      "checkpoint_episode": null,
+      "selected_episode": null,
+      "global_step": null,
+      "validation_metrics": null,
+      "eligible_final_checkpoint": false,
+      "selection_rule_version": "final_v1",
+      "best_empirical_safe_checkpoint": null,
+      "final_checkpoint": null
+    },
+    {
+      "training_seed": 2027,
+      "status": "training_pending",
+      "run_status": "training_pending",
+      "checkpoint_path": null,
+      "selected_checkpoint": null,
+      "checkpoint_sha256": null,
+      "checkpoint_episode": null,
+      "selected_episode": null,
+      "global_step": null,
+      "validation_metrics": null,
+      "eligible_final_checkpoint": false,
+      "selection_rule_version": "final_v1",
+      "best_empirical_safe_checkpoint": null,
+      "final_checkpoint": null
+    },
+    {
+      "training_seed": 314159,
+      "status": "training_pending",
+      "run_status": "training_pending",
+      "checkpoint_path": null,
+      "selected_checkpoint": null,
+      "checkpoint_sha256": null,
+      "checkpoint_episode": null,
+      "selected_episode": null,
+      "global_step": null,
+      "validation_metrics": null,
+      "eligible_final_checkpoint": false,
+      "selection_rule_version": "final_v1",
+      "best_empirical_safe_checkpoint": null,
+      "final_checkpoint": null
+    }
+  ]
+}

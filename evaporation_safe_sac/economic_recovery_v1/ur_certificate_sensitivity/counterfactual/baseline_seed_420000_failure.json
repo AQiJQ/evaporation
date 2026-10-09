@@ -1,0 +1,8 @@
+{
+  "candidate": "baseline",
+  "seed": 420000,
+  "status": "NUMERIC_FAIL",
+  "error": "KeyError('interior_anchor')",
+  "scope": "frozen_policy_geometry_sensitivity",
+  "evidence": null
+}

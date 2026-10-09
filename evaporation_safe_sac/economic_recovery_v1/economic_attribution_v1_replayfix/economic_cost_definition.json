@@ -1,0 +1,33 @@
+{
+  "file": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\model.py",
+  "function": "EvaporatorModel.economic_cost",
+  "line": 108,
+  "runtime_source": "    def economic_cost(self, state: np.ndarray, control: np.ndarray, disturbance: np.ndarray) -> float:\n        \"\"\"Stage cost from safe-rpi2020, using the model's algebraic flows.\"\"\"\n        flows = self.algebraic(state, control, disturbance)\n        return float(10.09 * (flows.f2 + self.cfg.recirculation_f3) + 600.0 * flows.f100 + 0.6 * control[1])\n",
+  "formula": "10.09*(F2+F3) + 600*F100 + 0.6*F200",
+  "components": {
+    "flow_F2": "10.09*F2",
+    "recirculation_F3": "10.09*F3",
+    "steam_F100": "600*F100",
+    "cooling_F200": "0.6*F200"
+  },
+  "coefficients": {
+    "flow": 10.09,
+    "steam": 600.0,
+    "cooling": 0.6
+  },
+  "F3": 50.0,
+  "variables": {
+    "X2": "actual product concentration",
+    "P2": "actual evaporator pressure",
+    "P100": "steam pressure; indirect through T100/Q100/F100/F4/F2",
+    "F200": "cooling flow; direct 0.6*F200",
+    "F2": "F1-F4",
+    "F3": "fixed recirculation flow",
+    "F100": "Q100/latent_steam"
+  },
+  "interpretation": "all three groups are positive operating costs; F2 term is not a product sales reward",
+  "unit": "not explicitly specified for the cost coefficients in runtime code; model cost units per stage",
+  "timing": "economic_cost(next_state, final_applied_control, current_disturbance); existing post-state convention",
+  "integration": "J=sum of 1000 existing stage costs, no new dt factor",
+  "training_reward_is_distinct": true
+}

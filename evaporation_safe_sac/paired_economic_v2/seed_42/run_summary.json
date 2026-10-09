@@ -1,0 +1,14 @@
+{
+  "run_state": "completed",
+  "completed_episodes": 100,
+  "global_step": 100000,
+  "max_action_collapse_fraction": 0.0,
+  "replay_decomposition_checked": true,
+  "no_nonfinite": true,
+  "failure": null,
+  "training_performed": true,
+  "final_test_performed": false,
+  "smoothness_config_sha256": "25850320a763e2a125b81ab027c7ea008c593f84f838bbe85a6f13ae83e9d2c3",
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "continue_to_next_seed": true
+}

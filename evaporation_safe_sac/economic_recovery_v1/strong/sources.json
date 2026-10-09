@@ -1,0 +1,11 @@
+{
+  "fixed_learning_sources": [
+    {
+      "training_seed": 42,
+      "source": "C:\\Users\\cushy\\PycharmProjects\\evaporation\\evaporation_safe_sac\\paired_economic_v2\\seed_42\\fixed_evaluation.csv",
+      "sha256": "275c499994bc6d4818468bdb296efc8045338a2b555849dc001e26ffdab20b11",
+      "read_only": true
+    }
+  ],
+  "closed_loop_sources": "frozen_presentation only; NOT fixed learning or training log trajectories"
+}

@@ -1,0 +1,12 @@
+{
+  "certification_status": "empirical_only_under_ECC2019_stochastic_disturbance",
+  "final_test_performed": false,
+  "frozen_config_consistency": true,
+  "all_pilots_completed": false,
+  "sweet_spot_alpha": null,
+  "selection_basis": "hierarchical validation candidate; review full Pareto trade-off and occupancy before extending",
+  "reason": "incomplete/aborted pilots or no eligible comparable joint candidate; no authority recommendation",
+  "automatically_extend_training": false,
+  "reward_change_evidence": "not inferred automatically",
+  "reference": "alpha=1 episode5 is failed 3-seed historical reference, not a 10-seed retrained pilot"
+}

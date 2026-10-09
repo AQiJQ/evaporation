@@ -1,0 +1,18 @@
+{
+  "source_sha256": "12537ac8e5fbd8ba2d38b64bf7319a4fc896b6f83f145f667963e18fb843b42a",
+  "excluded_helper_fields": [
+    "economic_reward_component",
+    "smoothness_regularization_component",
+    "lagrangian_constraint_component",
+    "total_training_reward",
+    "regularizer_fraction",
+    "regularizer_fraction_defined",
+    "sum_abs_economic_reward",
+    "smoothness_penalty_raw_total",
+    "joint_v2"
+  ],
+  "reason": "legacy full_metrics called at zero diagnostic weights; helper return is NOT actual frozen SAC training return",
+  "physical_economics": "Only nonlinear post-state economic cost and its components enter attribution",
+  "receipt_JSON_caveat": "per-path diagnostic receipts retain helper fields for provenance, not reward analysis",
+  "production_reward_unchanged": true
+}
